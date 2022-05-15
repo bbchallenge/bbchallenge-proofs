@@ -1,0 +1,113 @@
+\title{Correctness of the decider for cyclers\\bbchallenge}
+\author{
+        Tristan St\'{e}rin
+}
+
+\documentclass[a4paper,british]{article}
+\usepackage{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[margin=1in]{geometry}
+%\usepackage{subfig}
+\usepackage[hidelinks]{hyperref}
+\usepackage{subcaption} 
+\usepackage{tikz}
+
+\usepackage{algorithm}
+\usepackage[noend]{algpseudocode}
+
+\usepackage{graphicx}
+
+\usepackage{amsmath,amsfonts,amssymb,amsthm}
+
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+
+\newtheorem{observation}[theorem]{Observation}
+\newtheorem{example}[theorem]{Example}
+\newtheorem{remark}[theorem]{Remark}
+
+
+\usepackage{microtype,xspace,wrapfig,multicol} 
+\usepackage[textsize=tiny,color=lightgray]{todonotes} 
+\usepackage[normalem]{ulem} % sout
+
+\newcommand{\ts}[1]{{\color{red}#1}}
+\newcommand{\tsi}[1]{\todo[inline]{TS: #1}}
+\newcommand{\tsm}[1]{\todo{TS: #1}}
+\newcommand{\tss}[2]{{\ts{\sout{#1}}} {\ts{#2}}}
+\newcommand{\tabi}{\hspace{\algorithmicindent}}
+
+\begin{document}
+\date{}
+\maketitle
+
+\begin{abstract}
+        We give the pseudocode of the decider for the ``Cyclers'' family of bbchallenge and we prove its correctness. For more context please refer to \url{https://bbchallenge.org/}. The implementation of this decider is available at: \url{https://github.com/bbchallenge/bbchallenge-deciders/}.
+\end{abstract}
+
+\section{Pseudocode}
+
+The goal of this decider is to recognise Turing machines that cycle through the same configurations for ever where a configuration is defined by the 3-tuple: (i) state (ii) position of the head (iii) content of the memory tape. Such machines never halt. The method is simple: remember every configuration seen by a machine and return \texttt{true} if one is visited twice. A time limit (maximum number of steps) is also given for running the test in practice: the algorithm recognises any machine whose cycle fits within this limit\footnote{In practice, for machines with 5 states the decider was run with 1000 steps time limit.}.
+
+We assume that we are given a procedure \textbf{TuringMachineStep}(machine,configuration) which computes the next configuration of a machine from the given configuration or \textbf{nil} if the machine halts at that step.
+
+
+\begin{algorithm}
+        \caption{{\sc decider-cylers}}
+
+        \begin{algorithmic}[1]
+
+                \State \textbf{struct} Configuration \{
+                \State \tabi\textbf{int} state
+                \State \tabi\textbf{int} headPosition
+                \State \tabi\textbf{int $\boldsymbol{\to}$ int} tape
+                \State \}
+                \Procedure{{\sc decider-cylers}}{machine,timeLimit}
+                \State \textbf{Configuration} currConfiguration = \{.state = 0,$\,$.headPosition = 0,$\,$ .tape = \{0:0\}\}
+                \State \textbf{Set$\boldsymbol{<}$Configuration$\boldsymbol{>}$} configurationsSeen = \{\}
+                \State \textbf{int} currTime = 0
+
+                \While{currTime $<$ timeLimit}
+                \If{currConfiguration \textbf{in} configurationsSeen}
+                \State \textbf{return} true
+                \EndIf
+                \State configurationsSeen.\textbf{insert}(currConfiguration)
+
+                \State currConfiguration := \textbf{TuringMachineStep}(machine,currConfiguration)
+                \State currTime += 1
+
+
+                \If{currConfiguration == \textbf{nil}}
+                \State \textbf{return} false //machine has halted
+                \EndIf
+                \EndWhile
+
+                \State \textbf{return} false
+                \EndProcedure
+
+        \end{algorithmic}
+\end{algorithm}
+
+\section{Correctness}
+
+The set $\mathbb{N}$ denotes $\{0,1,2\dots\}$. The Turing machines that are studied in the context of bbchallenge use a binary alphabet and a single bi-infinite tape. A \textit{configuration} is defined by the 3-tuple: (i) state (ii) position of the head (iii) content of the memory tape. In the context of bbchallenge, \textit{the initial configuration} of a machine is always (i) state is 0, i.e. the first state to appear in the machine's description (ii) head's position is 0 (iii) the initial tape is all-0 -- i.e. each memory cell is containing 0. In one step, machine $\mathcal{M}$ transitions from configuration $c$ to $c'$ and we write $c \to_\mathcal{M} c'$. If the machine halts during that step we write $c \to_\mathcal{M} \bot$. By convention, $\bot \to_\mathcal{M} \bot$ is a valid transition for any machine $\mathcal{M}$.  The operator $\to_\mathcal{M}^n$ is $\to_\mathcal{M}$ applied $n\in\mathbb{N}$ times. We write $c \to c'$ when the machine is clear from context.
+
+\begin{theorem}\label{th:main}\normalfont Let $\mathcal{M}$ be a Turing machine and $t \in \mathbb{N}$ a time limit. Let $c_0$ be the initial configuration of the machine. There exists $i\in\mathbb{N}$ and $j\in\mathbb{N}$ such that $c_0 \to^i c_i \to^j c_i$ with $i+j \leq t$ if and only if {\sc decider-cyclers}($\mathcal{M}$,$t$) returns true.
+\end{theorem}
+\begin{proof}
+        This follows directly from the behavior of {\sc decider-cyclers}($\mathcal{M}$,$t$): all intermediate configurations below time $t$ are recorded and the algorithm returns true if and only if one is visited twice. This mathematically translates to
+        there exists $i\in\mathbb{N}$ and $j\in\mathbb{N}$ such that $c_0 \to^i c_i \to^j c_i$ with $i+j \leq t$, which is what we want.
+\end{proof}
+
+\begin{corollary}\normalfont
+        Let $\mathcal{M}$ be a Turing machine and $t \in \mathbb{N}$ a time limit. If {\sc decider-cyclers}($\mathcal{M}$,$t$) returns true then the behavior of $\mathcal{M}$ from all-0 tape has been decided: $\mathcal{M}$ does not halt.
+\end{corollary}
+\begin{proof}
+        By Theorem~\ref{th:main}, there exists $i\in\mathbb{N}$ and $j\in\mathbb{N}$ such that $c_0 \to^i c_i \to^j c_i$ with $i+j \leq t$. It follows that for all $k\in\mathbb{N}$, $c_0 \to^{i+kj} c_i$. The machine never halts as it will visit $c_i$ infinitely often.
+\end{proof}
+
+\end{document}

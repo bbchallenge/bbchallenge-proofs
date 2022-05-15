@@ -1,0 +1,10 @@
+{
+  "latex-workshop.latex.outDir": ".",
+  "editor.quickSuggestions": false,
+  "latex-workshop.latex.recipes": [
+    {
+      "name": "pdflatex × 2",
+      "tools": ["pdflatex", "pdflatex"]
+    }
+  ]
+}
