@@ -12,4 +12,4 @@ At the moment we focus on writing standard plain-English proofs but future work 
 
 ## PDFs
 
-This repository stores latex sources of the proofs only. Compiled proofs are available at http://docs.bbchallenge.org/bbchallenge-proofs
+This repository stores latex sources of the proofs only. The corresponding compiled PDFs are available at http://docs.bbchallenge.org/bbchallenge-proofs.
