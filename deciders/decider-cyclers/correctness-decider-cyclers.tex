@@ -77,7 +77,7 @@ We assume that we are given a procedure \textbf{TuringMachineStep}(machine,confi
                 \EndIf
                 \State configurationsSeen.\textbf{insert}(currConfiguration)
 
-                \State currConfiguration := \textbf{TuringMachineStep}(machine,currConfiguration)
+                \State currConfiguration = \textbf{TuringMachineStep}(machine,currConfiguration)
                 \State currTime += 1
 
 
