@@ -1,6 +1,6 @@
 # BBChallenge proofs
 
-For [The Busy Beaver Challenge](https://bbchallenge.org) to be successful there is a need to formally prove that its results are correct.
+For [The Busy Beaver Challenge](https://bbchallenge.org) to be successful there is a need for formal proofs of correctness.
 
 This includes:
 - Proving the correctness of [deciders](https://bbchallenge.org/method#deciders) (https://github.com/bbchallenge/bbchallenge-deciders)
