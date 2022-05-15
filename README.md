@@ -8,7 +8,7 @@ This includes:
 
 Please see our [reproducibility and verifiability statement](https://bbchallenge.org/method#reproducibility-and-verifiability-statement) for more.
 
-We store these proofs here.
+We elaborate and store these proofs here.
 
 ## PDFs
 
