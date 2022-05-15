@@ -16,4 +16,4 @@ This repository stores tex sources of the proofs only. The corresponding compile
 
 ## Future work: using theorem provers
 
-At the moment we focus on writing standard plain-English proofs but future work includes a translation to formal proof systems such as [lean](https://leanprover.github.io/) or [Coq](https://coq.inria.fr/).
+At the moment we focus on writing standard plain-English proofs but future work includes a translation to formal proof systems such as [Lean](https://leanprover.github.io/) or [Coq](https://coq.inria.fr/).
