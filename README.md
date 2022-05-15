@@ -10,10 +10,6 @@ Please see our [reproducibility and verifiability statement](https://bbchallenge
 
 We elaborate and store these proofs here.
 
-## PDFs
-
-This repository stores tex sources of the proofs only. The corresponding compiled PDFs are available at http://docs.bbchallenge.org/bbchallenge-proofs.
-
 ## Future work: using theorem provers
 
 At the moment we focus on writing standard plain-English proofs but future work includes a translation to formal proof systems such as [Lean](https://leanprover.github.io/) or [Coq](https://coq.inria.fr/).
