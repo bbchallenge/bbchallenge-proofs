@@ -10,7 +10,7 @@ Please see our [reproducibility and verifiability statement](https://bbchallenge
 
 ## PDFs
 
-This repository stores latex sources of the proofs only. The corresponding compiled PDFs are available at http://docs.bbchallenge.org/bbchallenge-proofs.
+This repository stores tex sources of the proofs only. The corresponding compiled PDFs are available at http://docs.bbchallenge.org/bbchallenge-proofs.
 
 ## Future work: using theorem provers
 
