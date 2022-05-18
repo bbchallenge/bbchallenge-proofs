@@ -1,4 +1,4 @@
-# BBChallenge proofs
+# bbchallenge's proofs
 
 For [The Busy Beaver Challenge](https://bbchallenge.org) to be successful we want to formally prove as many of the challenge's results as possible.
 
