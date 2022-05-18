@@ -1,0 +1,63 @@
+
+\section{Decider for ``Cyclers''}
+
+The goal of this decider is to recognise Turing machines that cycle through the same configurations forever. Such machines never halt. The method is simple: remember every configuration seen by a machine and return \texttt{true} if one is visited twice. A time limit (maximum number of steps) is also given for running the test in practice: the algorithm recognises any machine whose cycle fits within this limit\footnote{In practice, for machines with 5 states the decider was run with 1000 steps time limit.}.
+
+We assume that we are given a procedure \textbf{TuringMachineStep}(machine,configuration) which computes the next configuration of a Turing machine from the given configuration or \textbf{nil} if the machine halts at that step.
+
+\subsection{Pseudocode}
+
+\begin{algorithm}
+        \caption{{\sc decider-cylers}}
+
+        \begin{algorithmic}[1]
+
+                \State \textbf{struct} Configuration \{
+                \State \tabi\textbf{int} state
+                \State \tabi\textbf{int} headPosition
+                \State \tabi\textbf{int $\boldsymbol{\to}$ int} tape
+                \State \}
+                \Procedure{{\sc decider-cylers}}{machine,timeLimit}
+                \State \textbf{Configuration} currConfiguration = \{.state = 0,$\,$.headPosition = 0,$\,$ .tape = \{0:0\}\}
+                \State \textbf{Set$\boldsymbol{<}$Configuration$\boldsymbol{>}$} configurationsSeen = \{\}
+                \State \textbf{int} currTime = 0
+
+                \While{currTime $<$ timeLimit}
+                \If{currConfiguration \textbf{in} configurationsSeen}
+                \State \textbf{return} true
+                \EndIf
+                \State configurationsSeen.\textbf{insert}(currConfiguration)
+
+                \State currConfiguration = \textbf{TuringMachineStep}(machine,currConfiguration)
+                \State currTime += 1
+
+
+                \If{currConfiguration == \textbf{nil}}
+                \State \textbf{return} false //machine has halted
+                \EndIf
+                \EndWhile
+
+                \State \textbf{return} false
+                \EndProcedure
+
+        \end{algorithmic}
+\end{algorithm}
+
+\subsection{Correctness}
+
+
+
+\begin{theorem}\label{th:main}\normalfont Let $\mathcal{M}$ be a Turing machine and $t \in \mathbb{N}$ a time limit. Let $c_0$ be the initial configuration of the machine. There exists $i\in\mathbb{N}$ and $j\in\mathbb{N}$ such that $c_0 \to^i c_i \to^j c_i$ with $i+j \leq t$ if and only if {\sc decider-cyclers}($\mathcal{M}$,$t$) returns true.
+\end{theorem}
+\begin{proof}
+        This follows directly from the behavior of {\sc decider-cyclers}($\mathcal{M}$,$t$): all intermediate configurations below time $t$ are recorded and the algorithm returns true if and only if one is visited twice. This mathematically translates to
+        there exists $i\in\mathbb{N}$ and $j\in\mathbb{N}$ such that $c_0 \to^i c_i \to^j c_i$ with $i+j \leq t$, which is what we want.
+\end{proof}
+
+\begin{corollary}\normalfont
+        Let $\mathcal{M}$ be a Turing machine and $t \in \mathbb{N}$ a time limit. If {\sc decider-cyclers}($\mathcal{M}$,$t$) returns true then the behavior of $\mathcal{M}$ from all-0 tape has been decided: $\mathcal{M}$ does not halt.
+\end{corollary}
+\begin{proof}
+        By Theorem~\ref{th:main}, there exists $i\in\mathbb{N}$ and $j\in\mathbb{N}$ such that $c_0 \to^i c_i \to^j c_i$ with $i+j \leq t$. It follows that for all $k\in\mathbb{N}$, $c_0 \to^{i+kj} c_i$. The machine never halts as it will visit $c_i$ infinitely often.
+\end{proof}
+
