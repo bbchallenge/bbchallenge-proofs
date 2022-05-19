@@ -21,7 +21,7 @@ Figure~\ref{fig:cyclers} gives the space-time diagrams of the 30 first iteration
 \newpage
 \subsection{Pseudocode}
 
-We assume that we are given a procedure \textbf{TuringMachineStep}(machine,configuration) which computes the next configuration of a Turing machine from the given configuration or \textbf{nil} if the machine halts at that step.
+We assume that we are given a Turing Machine type \textbf{TM} that encodes the transition table of a machine as well as a procedure \textbf{TuringMachineStep}(machine,configuration) which computes the next configuration of a Turing machine from the given configuration or \textbf{nil} if the machine halts at that step.
 
 \begin{algorithm}
         \caption{{\sc decider-cylers}}\label{alg:cyclers}
@@ -31,9 +31,9 @@ We assume that we are given a procedure \textbf{TuringMachineStep}(machine,confi
                 \State \textbf{struct} Configuration \{
                 \State \tabi\textbf{int} state
                 \State \tabi\textbf{int} headPosition
-                \State \tabi\textbf{int $\boldsymbol{\vdash}$ int} tape
+                \State \tabi\textbf{int $\boldsymbol{\to}$ int} tape
                 \State \}
-                \Procedure{{\sc decider-cylers}}{machine,timeLimit}
+                \Procedure{\textbf{bool} {\sc decider-cylers}}{\textbf{TM} machine,\textbf{int} timeLimit}
                 \State \textbf{Configuration} currConfiguration = \{.state = 0,$\,$.headPosition = 0,$\,$ .tape = \{0:0\}\}
                 \State \textbf{Set$\boldsymbol{<}$Configuration$\boldsymbol{>}$} configurationsSeen = \{\}
                 \State \textbf{int} currTime = 0
@@ -49,7 +49,7 @@ We assume that we are given a procedure \textbf{TuringMachineStep}(machine,confi
 
 
                 \If{currConfiguration == \textbf{nil}}
-                \State \textbf{return} false //machine has halted
+                \State \textbf{return} false //machine has halted, it is not a Cycler
                 \EndIf
                 \EndWhile
 
@@ -63,17 +63,17 @@ We assume that we are given a procedure \textbf{TuringMachineStep}(machine,confi
 
 
 
-\begin{theorem}\label{th:main}\normalfont Let $\mathcal{M}$ be a Turing machine and $t \in \mathbb{N}$ a time limit. Let $c_0$ be the initial configuration of the machine. There exists $i\in\mathbb{N}$ and $j\in\mathbb{N}$ such that $c_0 \vdash^i c_i \vdash^j c_i$ with $i+j \leq t$ if and only if {\sc decider-cyclers}($\mathcal{M}$,$t$) returns true.
+\begin{theorem}\label{th:cyclers}\normalfont Let $\mathcal{M}$ be a Turing machine and $t \in \mathbb{N}$ a time limit. Let $c_0$ be the initial configuration of the machine. There exists $i\in\mathbb{N}$ and $j\in\mathbb{N}$ such that $c_0 \vdash^i c_i \vdash^j c_i$ with $i+j \leq t$ if and only if {\sc decider-cyclers}($\mathcal{M}$,$t$) returns \texttt{true} (Algorithm~\ref{alg:cyclers}).
 \end{theorem}
 \begin{proof}
-        This follows directly from the behavior of {\sc decider-cyclers}($\mathcal{M}$,$t$): all intermediate configurations below time $t$ are recorded and the algorithm returns true if and only if one is visited twice. This mathematically translates to
+        This follows directly from the behavior of {\sc decider-cyclers}($\mathcal{M}$,$t$): all intermediate configurations below time $t$ are recorded and the algorithm returns \texttt{true} if and only if one is visited twice. This mathematically translates to
         there exists $i\in\mathbb{N}$ and $j\in\mathbb{N}$ such that $c_0 \vdash^i c_i \vdash^j c_i$ with $i+j \leq t$, which is what we want. Index $i$ corresponds to the first time that $c_i$ is seen (l.13 in Algorithm~\ref{alg:cyclers}) while index $j$ corresponds to the second time that $c_i$ is seen (l.11 in Algorithm~\ref{alg:cyclers}).
 \end{proof}
 
 \begin{corollary}\normalfont
-        Let $\mathcal{M}$ be a Turing machine and $t \in \mathbb{N}$ a time limit. If {\sc decider-cyclers}($\mathcal{M}$,$t$) returns true then the behavior of $\mathcal{M}$ from all-0 tape has been decided: $\mathcal{M}$ does not halt.
+        Let $\mathcal{M}$ be a Turing machine and $t \in \mathbb{N}$ a time limit. If {\sc decider-cyclers}($\mathcal{M}$,$t$) returns \texttt{true} then the behavior of $\mathcal{M}$ from all-0 tape has been decided: $\mathcal{M}$ does not halt.
 \end{corollary}
 \begin{proof}
-        By Theorem~\ref{th:main}, there exists $i\in\mathbb{N}$ and $j\in\mathbb{N}$ such that $c_0 \vdash^i c_i \vdash^j c_i$ with $i+j \leq t$. It follows that for all $k\in\mathbb{N}$, $c_0 \vdash^{i+kj} c_i$. The machine never halts as it will visit $c_i$ infinitely often.
+        By Theorem~\ref{th:cyclers}, there exists $i\in\mathbb{N}$ and $j\in\mathbb{N}$ such that $c_0 \vdash^i c_i \vdash^j c_i$ with $i+j \leq t$. It follows that for all $k\in\mathbb{N}$, $c_0 \vdash^{i+kj} c_i$. The machine never halts as it will visit $c_i$ infinitely often.
 \end{proof}
 
