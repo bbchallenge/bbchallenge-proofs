@@ -33,6 +33,7 @@ We assume that we are given a Turing Machine type \textbf{TM} that encodes the t
                 \State \tabi\textbf{int} headPosition
                 \State \tabi\textbf{int $\boldsymbol{\to}$ int} tape
                 \State \}
+                \State 
                 \Procedure{\textbf{bool} {\sc decider-cylers}}{\textbf{TM} machine,\textbf{int} timeLimit}
                 \State \textbf{Configuration} currConfiguration = \{.state = 0,$\,$.headPosition = 0,$\,$ .tape = \{0:0\}\}
                 \State \textbf{Set$\boldsymbol{<}$Configuration$\boldsymbol{>}$} configurationsSeen = \{\}

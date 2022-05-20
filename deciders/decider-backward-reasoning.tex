@@ -43,4 +43,71 @@ Backward reasoning, as described in \cite{Marxen_1998}, takes a different approa
 
 Figure~\ref{fig:backward-reasoning} illustrates this idea on bbchallenge's machine \#55,897,188. From the space-time diagram, the \textit{forward} behavior of the machine from all-0 tape looks to be extremely complex, Figure~\ref{fig:backward-reasoning}a. However, by reconstructing the sequence of transitions that would lead to the halting configuration (reading a 0 in state \textcolor{colorC}{C}), we reach a contradiction in only 3 steps, Figure~\ref{fig:backward-reasoning}c. Indeed, the only way to reach state  \textcolor{colorC}{C} is to come from the right in state \textcolor{colorB}{B} where we read a 0. The only way to reach state \textcolor{colorB}{B} is to com from left in state  \textcolor{colorA}{A} where we read a 0. However, the transition table (Figure~\ref{fig:backward-reasoning}b) is instructing us to write a 1 in that case, which is not consistent with the 0 that we assumed was at position in order for the machine to halt.
 
-Backward reasoning in the case of Figure~\ref{fig:backward-reasoning} was particularly simple because there was only one possible previous configuration for each backward step -- e.g. there is only one transition that can reach state \textcolor{colorC}{C} and same for state \textcolor{colorB}{B}. In general, this is not the case and the structure created by backward reasoning is a tree of configurations instead of just a chain. If all the leaves of a backward reasoning tree of depth $D$ reach a contradiction, we know that if the machine runs for $D+1$ steps from all-0 tape then the machine cannot reach a halting configuration and thus does not halt.
+Backward reasoning in the case of Figure~\ref{fig:backward-reasoning} was particularly simple because there was only one possible previous configuration for each backward step -- e.g. there is only one transition that can reach state \textcolor{colorC}{C} and same for state \textcolor{colorB}{B}. In general, this is not the case and the structure created by backward reasoning is a tree of configurations instead of just a chain. If all the leaves of a backward reasoning tree of depth $D$ reach a contradiction, we know that if the machine runs for $D$ steps from all-0 tape then the machine cannot reach a halting configuration and thus does not halt.
+
+\subsection{Pseudocode}
+
+\begin{algorithm}
+  \caption{{\sc decider-backward-reasoning}}\label{alg:backward-reasoning}
+
+  \begin{algorithmic}[1]
+    \State{\textbf{const int} RIGHT, LEFT = 0, 1}
+    \State \textbf{struct} Transition \{
+      \State \tabi\textbf{int} state
+      \State \tabi\textbf{int} read
+      \State \tabi\textbf{int} write
+      \State \tabi\textbf{int} move
+      \State \}
+          \State \textbf{struct} Configuration \{
+          \State \tabi\textbf{int} state
+          \State \tabi\textbf{int} headPosition
+          \State \tabi\textbf{int $\boldsymbol{\to}$ int} tape
+          \State \tabi\textbf{int} depth
+          \State \}
+          \State \textbf{struct Halt} \{ \textbf{int} depth \}
+          \State \textbf{const Halt} Halt = \{.depth=0\}
+          \State
+          
+          \Procedure{\textbf{Configuration} {\sc apply-transition-backwards}}{\textbf{Configuration} conf,\textbf{Transition} t}
+          \State \textbf{int} reversedHeadMoveOffset = (t.move == RIGHT) ? -1 : 1
+          \State \textbf{int} previousPosition = conf.headPosition+reversedHeadMoveOffset
+          \State // Backward contradiction spotted
+          \If{conf.tape[previousPosition] != t.write}
+          \State \textbf{return} \textbf{nil}
+          \EndIf
+          \State // Building the previous configuration
+          \State \textbf{Configuration} previousConf = \{.state = t.state, .depth = conf.depth + 1, .tape = conf.tape\}
+          \State previousConf.headPosition = previousPosition
+          \State previousConf.tape[previousPosition] = t.read
+          \State \textbf{return} previousConf
+          \EndProcedure
+          \Procedure{\textbf{bool} {\sc decider-backward-reasoning}}{\textbf{TM} machine,\textbf{int} maxDepth}
+          
+          \State \textbf{Stack$\boldsymbol{<}$Configuration $|$ Halt$\boldsymbol{>}$} configurationStack
+          \State configurationStack.\textbf{push}(Halt)
+
+          \While{!configurationStack.\textbf{empty}() \textbf{ and }configurationStack.\textbf{top}().depth $<$ maxDepth}
+          \State \textbf{Configuration} currConf = configurationStack.\textbf{pop}()
+          \State \textbf{List$\boldsymbol{<}$Configuration$\boldsymbol{>}$} confList = []
+          \If{currConf == Halt}
+          confList = {\sc get-transitions-reaching-halt}(machine)
+          \Else \ confList = {\sc get-transitions-reaching-state}(machine,currConf.state)
+          \EndIf
+          \For{\textbf{Transition} transition \textbf{in} confList}
+          \State \textbf{Configuration} previousConf = {\sc apply-transition-backwards}(currConf, transition)
+          \State // If no contradiction
+          \If{previousConf != \textbf{nil}}
+          \State configurationStack.\textbf{push}(previousConf)
+          \EndIf
+          \EndFor
+          \EndWhile
+
+          \State // Returns true iff all leaves at depth maxDepth reached a contradiction
+          \State \textbf{return} configurationStack.\textbf{empty}()
+          \EndProcedure
+
+  \end{algorithmic}
+\end{algorithm}
+
+
+\subsection{Correctness}
