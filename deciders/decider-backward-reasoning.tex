@@ -61,8 +61,7 @@ Backward reasoning in the case of Figure~\ref{fig:backward-reasoning} was partic
           \State \tabi\textbf{int $\boldsymbol{\to}$ int} tape
           \State \tabi\textbf{int} depth
           \State \}
-          \State \textbf{struct Halt} \{ \textbf{int} depth \}
-          \State \textbf{const Halt} Halt = \{.depth=0\}
+         
           \State
           
           \Procedure{\textbf{Configuration} {\sc apply-transition-backwards}}{\textbf{Configuration} conf,\textbf{Transition} t}
@@ -80,19 +79,20 @@ Backward reasoning in the case of Figure~\ref{fig:backward-reasoning} was partic
           \State
           \Procedure{\textbf{bool} {\sc decider-backward-reasoning}}{\textbf{TM} machine,\textbf{int} maxDepth}
           
-          \State \textbf{Stack$\boldsymbol{<}$Configuration $|$ Halt$\boldsymbol{>}$} configurationStack
-          \State configurationStack.\textbf{push}(Halt)
-          \State \textbf{Set$\boldsymbol{<}$Configuration $|$ Halt$\boldsymbol{>}$} configurationsSeen = \{\}
+          \State \textbf{Stack$\boldsymbol{<}$Configuration$\boldsymbol{>}$} configurationStack
+          \For{\textbf{int} (state,read) \textbf{in} {\sc get-undefined-transitions}(machine)}
+          \State \textbf{Configuration} haltingConfiguration = \{.state = state,.depth=0,.headPosition = 0\}
+          \State haltingConfiguration.tape = \{0: read\}
+          \State configurationStack.\textbf{push}(haltingConfiguration)
+          \EndFor
+          \State \textbf{Set$\boldsymbol{<}$Configuration$\boldsymbol{>}$} configurationsSeen = \{\}
           \While{!configurationStack.\textbf{empty}() \textbf{ and }configurationStack.\textbf{top}().depth $<$ maxDepth}
           \State \textbf{Configuration} currConf = configurationStack.\textbf{pop}()
           \If{currConf \textbf{in} configurationsSeen} \textbf{continue} \EndIf
           \State configurationsSeen.\textbf{insert}(currConf)
           \State \textbf{List$\boldsymbol{<}$Configuration$\boldsymbol{>}$} confList = []
-          \If{currConf == Halt}
-          confList = {\sc get-transitions-reaching-halt}(machine)
-          \Else \ confList = {\sc get-transitions-reaching-state}(machine,currConf.state)
-          \EndIf
-          \For{\textbf{Transition} transition \textbf{in} confList}
+          
+          \For{\textbf{Transition} transition \textbf{in} {\sc get-transitions-reaching-state}(machine,currConf.state)}
           \State \textbf{Configuration} previousConf = {\sc apply-transition-backwards}(currConf, transition)
           \State // If no contradiction
           \If{previousConf != \textbf{nil}}
@@ -101,12 +101,12 @@ Backward reasoning in the case of Figure~\ref{fig:backward-reasoning} was partic
           \EndFor
           \EndWhile
 
-          \State // Returns true iff all leaves at depth maxDepth reached a contradiction
+          \State // Returns true iff all leaves at depth $\leq$ maxDepth reached a contradiction
           \State \textbf{return} configurationStack.\textbf{empty}()
           \EndProcedure
 
   \end{algorithmic}
 \end{algorithm}
 
-
+We assume that we are given routine {\sc get-undefined-transitions}(machine) which returns the list of (state,readSymbol) pairs of all the undefined transitions in the machine's transition table, for instance [(\textcolor{colorC}{C},0)] for the machine of Figure~\ref{fig:backward-reasoning}b. We also assume that we are given routine {\sc get-transitions-reaching-state}(machine,targetState) which returns the list of all machine's transitions that go to the specified target state, for instance [(\textcolor{colorA}{A},1,0LD),(\textcolor{colorC}{C},1,1LD),(D,1,1LD)] for target state D in the machine of Figure~\ref{fig:backward-reasoning}b. These two routines contain very minimal logic as they only lookup in the description of the machine for the required information.
 \subsection{Correctness}
