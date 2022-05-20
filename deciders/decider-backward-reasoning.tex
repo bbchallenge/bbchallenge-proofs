@@ -68,7 +68,7 @@ Backward reasoning in the case of Figure~\ref{fig:backward-reasoning} was partic
           \State \textbf{int} reversedHeadMoveOffset = (t.move == RIGHT) ? -1 : 1
           \State \textbf{int} previousPosition = conf.headPosition+reversedHeadMoveOffset
           \State // Backward contradiction spotted
-          \If{conf.tape[previousPosition] != t.write}
+          \If{previousPosition \textbf{in} conf.tape \textbf{and} conf.tape[previousPosition] != t.write}
           \State \textbf{return} \textbf{nil}
           \EndIf
           \State \textbf{Configuration} previousConf = \{.state = t.state, .depth = conf.depth + 1, .tape = conf.tape\}
@@ -109,4 +109,29 @@ Backward reasoning in the case of Figure~\ref{fig:backward-reasoning} was partic
 \end{algorithm}
 
 We assume that we are given routine {\sc get-undefined-transitions}(machine) which returns the list of (state,readSymbol) pairs of all the undefined transitions in the machine's transition table, for instance [(\textcolor{colorC}{C},0)] for the machine of Figure~\ref{fig:backward-reasoning}b. We also assume that we are given routine {\sc get-transitions-reaching-state}(machine,targetState) which returns the list of all machine's transitions that go to the specified target state, for instance [(\textcolor{colorA}{A},1,0LD),(\textcolor{colorC}{C},1,1LD),(D,1,1LD)] for target state D in the machine of Figure~\ref{fig:backward-reasoning}b. These two routines contain very minimal logic as they only lookup in the description of the machine for the required information.
+
 \subsection{Correctness}
+
+\begin{theorem}\label{th:backward-reasoning}\normalfont
+  Let $\mathcal{M}$ be a Turing machine and $D\in\mathbb{N}$.
+  Then, {\sc decider-backward-reasoning}($\mathcal{M}$,$D$) returns \texttt{true} if and only if no undefined transition of $\mathcal{M}$ can be reached in more than $D$ steps.
+\end{theorem}
+\begin{proof}
+The tree of backward configurations is maintained in a DFS fashion through a stack (Algorithm~\ref{alg:backward-reasoning}, l.24). Initially, the stack is filled with the configurations where only one tape cell is defined and state is set such that the corresponding transition is undefined (i.e. the machine halts after that step), l.25-28. 
+
+Then, the main loop runs until either (a) the stack is empty or (b) maximum depth has been reached, l.30. Note that running the algorithm with increased maximum depth increases its chances to contradict all branches of the backward simulation tree. At each step of loop, we remove the current configuration from the stack and we try to apply all the transitions that leads to its state backwards by calling routine {\sc apply-transition-backwards}(configuration, transition).
+
+The only case where it is not possible to apply a transition backwards, i.e. the case where a contradiction is reached is when the tape symbol at the position where the transition comes from (i.e. to the right if transition movement is left and vice-versa) is defined but is not equal to the write instruction of the transition. Indeed, that means that the future (i.e. previous backward steps) is not consistent the current transition's write instruction. This logic is checked l.16. Otherwise, we can construct the previous configuration (i.e. next backward step) and augment depth by 1. We then stack this configuration in the main routine (l.39).
+
+The algorithm returns \texttt{true} if and only if the stack ever becomes empty which means that all leaves of the backward simulation tree of depth $D$ have reached a contradiction and thus, no undefined transition of the machine is reachable in more than $D$ steps.
+
+This pseudocode contains a slight optimisation with the use of set \texttt{configurationSeen} (l.29). This set racks configurations which would have already been seen in different branches of the tree in order not traverse them twice (l.32-33). While not needed in theory, this optimisation is useful in practice, especially at large depths (e.g. $D=300$).
+\end{proof}
+
+\begin{corollary}\normalfont
+  Let $\mathcal{M}$ be a Turing machine and $D\in\mathbb{N}$. If {\sc decider-backward-reasoning}($\mathcal{M}$,$D$) returns \texttt{true} and machine $\mathcal{M}$ can run $D$ steps from all-0 tape without halting then the behavior of $\mathcal{M}$ from all-0 tape has been decided: $\mathcal{M}$ does not halt.
+\end{corollary}
+\begin{proof}
+By Theorem~\ref{th:backward-reasoning} we know that no undefined transition of $\mathcal{M}$ can be reached in more than $D$ steps. Hence, if machine $\mathcal{M}$ can run $D$ steps from all-0 tape without halting, it will be able to run the next $D+1^{\text{th}}$ step. From there, the machine cannot halt or it would contradict the fact that halting trajectories have at most $D$ steps. Hence, $\mathcal{M}$ does not halt from all-0 tape.
+\end{proof}
+
