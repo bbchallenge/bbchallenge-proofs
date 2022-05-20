@@ -135,3 +135,8 @@ This pseudocode contains a slight optimisation with the use of set \texttt{confi
 By Theorem~\ref{th:backward-reasoning} we know that no undefined transition of $\mathcal{M}$ can be reached in more than $D$ steps. Hence, if machine $\mathcal{M}$ can run $D$ steps from all-0 tape without halting, it will be able to run the next $D+1^{\text{th}}$ step. From there, the machine cannot halt or it would contradict the fact that halting trajectories have at most $D$ steps. Hence, $\mathcal{M}$ does not halt from all-0 tape.
 \end{proof}
 
+\subsection{Results}
+
+The decider was coded in \texttt{golang} and is accessible at this link: \url{https://github.com/bbchallenge/bbchallenge-deciders/blob/main/decider-backward-reasoning}. Note that collaborative work allowed to find a bug in the initial algorithm that was implemented\footnote{Thanks to collaborators \url{https://github.com/atticuscull} and \url{https://github.com/modderme123}.}.
+
+The decider decided 2,243,340 machines, out of 3,574,222 machines that were left after deciders for ``Cyclers'' and ``Translated Cyclers'' (Section~\ref{sec:cyclers} and Section~\ref{th:translated-cyclers}). Maximum depth was set to 300. More information about these results are available at: \url{https://discuss.bbchallenge.org/t/decider-backward-reasoning/35}.
