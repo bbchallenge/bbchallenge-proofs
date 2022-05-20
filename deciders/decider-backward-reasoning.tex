@@ -1,0 +1,46 @@
+\section{Decider for backward reasoning}\label{sec:backward-reasoning}
+
+\begin{figure}
+  \centering
+  \begin{subfigure}[m]{0.45\textwidth}
+      \centering
+      \includegraphics[width=\textwidth]{space-time-diagrams/backward_reasoning_55897188.png}
+      \caption{10,000-step space-time diagram of bbchalenge's machine \#55,897,188. \url{https://bbchallenge.org/55897188}}
+      \label{fig:y equals x}
+  \end{subfigure}
+  \hfill
+  \begin{subfigure}[m]{0.45\textwidth}
+      \centering
+      \begin{tabular}{lll}
+        & 0   & 1   \\
+      \textcolor{colorA}{A} & 1R\textcolor{colorB}{B} & 0LD \\
+      \textcolor{colorB}{B} & 1L\textcolor{colorC}{C} & 0RE \\
+      \textcolor{colorC}{C} & - - - & 1LD \\
+      D & 1LA & 1LD \\
+      E & 1RA & 0RA
+      \end{tabular}
+      
+      
+      \caption{Transition table of machine \#55,897,188.}
+      
+  \end{subfigure}
+  
+  \begin{subfigure}[m]{1\textwidth}
+    \vspace{5ex}
+    \centering
+    \includegraphics[width=0.9\textwidth]{backward-reasoning.pdf}
+    
+    \caption{Contradiction reached after 3 backward steps: machine \#55,897,188 does cannot reach its halting configuration hence it does not halt.}
+    
+\end{subfigure}
+  
+     \caption{Applying backward reasoning on bbchallenge's machine \#55,897,188. (a) 10,000-step space-time diagram of machine \#55,897,188. The \textit{forward} behavior of the machine looks very complex. (b) Transition table. (c) We are able to deduce that the machine will never halt thanks to only 3 backward reasoning steps: because a contradiction is met, it is impossible to reach the halting configuration in more than 3 steps -- and, by (a), the machine can do at least 20,000 without halting.}
+     \label{fig:backward-reasoning}
+\end{figure}
+
+
+Backward reasoning, as described in \cite{Marxen_1998}, takes a different approach than what has been done with deciders in Sections~\ref{sec:cyclers} and \ref{sec:translated-cyclers}. Indeed, instead of trying to recognise a particular kind of machine's behavior, the idea of backward reasoning is to show that, independently of the machine's behavior, the halting configurations are not reachable. In order to do so, the decider simulates the machine \textit{backwards} from halting configurations until it reaches some obvious contradiction. 
+
+Figure~\ref{fig:backward-reasoning} illustrates this idea on bbchallenge's machine \#55,897,188. From the space-time diagram, the \textit{forward} behavior of the machine from all-0 tape looks to be extremely complex, Figure~\ref{fig:backward-reasoning}a. However, by reconstructing the sequence of transitions that would lead to the halting configuration (reading a 0 in state \textcolor{colorC}{C}), we reach a contradiction in only 3 steps, Figure~\ref{fig:backward-reasoning}c. Indeed, the only way to reach state  \textcolor{colorC}{C} is to come from the right in state \textcolor{colorB}{B} where we read a 0. The only way to reach state \textcolor{colorB}{B} is to com from left in state  \textcolor{colorA}{A} where we read a 0. However, the transition table (Figure~\ref{fig:backward-reasoning}b) is instructing us to write a 1 in that case, which is not consistent with the 0 that we assumed was at position in order for the machine to halt.
+
+Backward reasoning in the case of Figure~\ref{fig:backward-reasoning} was particularly simple because there was only one possible previous configuration for each backward step -- e.g. there is only one transition that can reach state \textcolor{colorC}{C} and same for state \textcolor{colorB}{B}. In general, this is not the case and the structure created by backward reasoning is a tree of configurations instead of just a chain. If all the leaves of a backward reasoning tree of depth $D$ reach a contradiction, we know that if the machine runs for $D+1$ steps from all-0 tape then the machine cannot reach a halting configuration and thus does not halt.
