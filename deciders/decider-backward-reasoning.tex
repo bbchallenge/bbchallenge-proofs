@@ -75,12 +75,12 @@ Backward reasoning in the case of Figure~\ref{fig:backward-reasoning} was partic
           \If{conf.tape[previousPosition] != t.write}
           \State \textbf{return} \textbf{nil}
           \EndIf
-          \State // Building the previous configuration
           \State \textbf{Configuration} previousConf = \{.state = t.state, .depth = conf.depth + 1, .tape = conf.tape\}
           \State previousConf.headPosition = previousPosition
           \State previousConf.tape[previousPosition] = t.read
           \State \textbf{return} previousConf
           \EndProcedure
+          \State
           \Procedure{\textbf{bool} {\sc decider-backward-reasoning}}{\textbf{TM} machine,\textbf{int} maxDepth}
           
           \State \textbf{Stack$\boldsymbol{<}$Configuration $|$ Halt$\boldsymbol{>}$} configurationStack
