@@ -53,10 +53,7 @@ Backward reasoning in the case of Figure~\ref{fig:backward-reasoning} was partic
   \begin{algorithmic}[1]
     \State{\textbf{const int} RIGHT, LEFT = 0, 1}
     \State \textbf{struct} Transition \{
-      \State \tabi\textbf{int} state
-      \State \tabi\textbf{int} read
-      \State \tabi\textbf{int} write
-      \State \tabi\textbf{int} move
+      \State \tabi\textbf{int} state, read, write, move
       \State \}
           \State \textbf{struct} Configuration \{
           \State \tabi\textbf{int} state
@@ -85,9 +82,11 @@ Backward reasoning in the case of Figure~\ref{fig:backward-reasoning} was partic
           
           \State \textbf{Stack$\boldsymbol{<}$Configuration $|$ Halt$\boldsymbol{>}$} configurationStack
           \State configurationStack.\textbf{push}(Halt)
-
+          \State \textbf{Set$\boldsymbol{<}$Configuration $|$ Halt$\boldsymbol{>}$} configurationsSeen = \{\}
           \While{!configurationStack.\textbf{empty}() \textbf{ and }configurationStack.\textbf{top}().depth $<$ maxDepth}
           \State \textbf{Configuration} currConf = configurationStack.\textbf{pop}()
+          \If{currConf \textbf{in} configurationsSeen} \textbf{continue} \EndIf
+          \State configurationsSeen.\textbf{insert}(currConf)
           \State \textbf{List$\boldsymbol{<}$Configuration$\boldsymbol{>}$} confList = []
           \If{currConf == Halt}
           confList = {\sc get-transitions-reaching-halt}(machine)
