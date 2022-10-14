@@ -56,9 +56,9 @@
 \maketitle
 
 \begin{abstract}
-        The Busy Beaver Challenge (or bbchallenge) aims at collaboratively solving the following conjecture: ``BB(5) = 47,176,870'' [Aaronson, 2020]\nocite{BusyBeaverFrontier}. This goal amounts to decide whether or not 88,664,064 Turing machines with 5-state halt or not -- starting from all-0 tape. In order to decide the behavior of these machines we write \textit{deciders}. A decider is a program that takes as input a Turing machine and outputs \texttt{true} if it is able to tell whether the machine halts or not. Each decider is specialised in recognising a particular type of behavior that can be decided. 
-        
-        In this document we are concerned with proving the correctness of these deciders programs. More context and information about this methodology are available at \url{https://bbchallenge.org}.
+  The Busy Beaver Challenge (or bbchallenge) aims at collaboratively solving the following conjecture: ``BB(5) = 47,176,870'' [Aaronson, 2020]\nocite{BusyBeaverFrontier}. This goal amounts to decide whether or not 88,664,064 Turing machines with 5-state halt or not -- starting from all-0 tape. In order to decide the behavior of these machines we write \textit{deciders}. A decider is a program that takes as input a Turing machine and outputs \texttt{true} if it is able to tell whether the machine halts or not. Each decider is specialised in recognising a particular type of behavior that can be decided.
+
+  In this document we are concerned with proving the correctness of these deciders programs. More context and information about this methodology are available at \url{https://bbchallenge.org}.
 \end{abstract}
 \tableofcontents
 
@@ -67,17 +67,17 @@
 \begin{table}[h!]
   \centering
   \begin{tabular}{lll}
-    & 0   & 1   \\
-  A & 1RB & 1LC \\
-  B & 1RC & 1RB \\
-  C & 1RD & 0LE \\
-  D & 1LA & 1LD \\
-  E & - - - & 0LE
+      & 0     & 1   \\
+    A & 1RB   & 1LC \\
+    B & 1RC   & 1RB \\
+    C & 1RD   & 0LE \\
+    D & 1LA   & 1LD \\
+    E & - - - & 0LA
   \end{tabular}
   \caption{Transition table of the current 5-state busy beaver champion: it halts after 47,176,870 steps.\\\url{https://bbchallenge.org/1RB1LC1RC1RB1RD0LE1LA1LD---0LA&status=halt}}
-  \end{table}\label{table:bb5}
+\end{table}\label{table:bb5}
 
-The set $\mathbb{N}$ denotes $\{0,1,2\dots\}$. 
+The set $\mathbb{N}$ denotes $\{0,1,2\dots\}$.
 
 \paragraph*{Turing machines.}The Turing machines that are studied in the context of bbchallenge use a binary alphabet and a single bi-infinite tape. Machine transitions are either undefined (in which case the machine halts) or given by (a) a symbol to write (b) a direction to move (right or left) and (c) a state to go to. Table~\ref{table:bb5} gives the transition table of the current 5-state busy beaver champion. The machine halts after 47,176,870 steps (starting from all-0 tape) when it reads a 0 in state E, which is undefined.
 
