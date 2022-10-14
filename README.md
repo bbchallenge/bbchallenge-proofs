@@ -13,3 +13,11 @@ We elaborate and store these proofs here.
 ## Future work: using theorem provers
 
 At the moment we focus on writing standard plain-English proofs but future work includes a translation to formal proof systems such as [Lean](https://leanprover.github.io/) or [Coq](https://coq.inria.fr/).
+
+## License
+
+This work is licensed under a
+Creative Commons Attribution 4.0 International License.
+
+You should have received a copy of the license along with this
+work. If not, see <http://creativecommons.org/licenses/by/4.0/>.
