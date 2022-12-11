@@ -1,0 +1,671 @@
+% !TEX root = ./correctness-deciders.tex
+\section{Decider for finite automata reduction}\label{sec:finite-automata-reduction}
+\usetikzlibrary {automata, positioning}
+
+\begin{figure}
+  \centering
+  \begin{subfigure}[m]{0.125\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{space-time-diagrams/finite-automata-reduction-counter4.pdf}
+    \caption{Space-time diagram: the descendants of a 4-state TM's initial configuration.}
+    \label{fig:far_spacetime}
+  \end{subfigure}
+  \hfill
+  \parbox{0.2\textwidth}{
+  \begin{subfigure}[t]{0.2\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{space-time-diagrams/finite-automata-reduction-counter4-halt.pdf}
+    \caption{The same TM halts in these configurations.}
+    \label{fig:far_spacetime_halt}
+  \end{subfigure}
+  \vspace{0.23\textheight}
+
+  \begin{subfigure}[b]{0.2\textwidth}
+    \centering
+    \begin{tabular}{lll}
+      & 0                   & 1                                                 \\
+      \textcolor{colorA}{A} & 1R\textcolor{colorB}{B} & 0L\textcolor{colorD}{D} \\
+      \textcolor{colorB}{B} & 1L\textcolor{colorC}{C} & 1R\textcolor{colorA}{A} \\
+      \textcolor{colorC}{C} & 0R\textcolor{colorB}{B} & 0L\textcolor{colorC}{C} \\
+      \textcolor{colorD}{D} & - - -                   & 1L\textcolor{colorA}{A} \\
+    \end{tabular}
+    \caption{Transition table.}
+    \label{fig:far_transitions}
+  \end{subfigure}
+  }
+  \hfill
+  \begin{subfigure}[m]{0.62\textwidth}
+  \begin{tikzpicture}[shorten >=1pt]
+    \node[state,initial above] (0) at (-2, 2) {0};
+    \node[state]           (1) at (-2, -2) {1};
+    \node[state,accepting] (H) at (2, 4) {$\bot$};
+    \node[state]           (0A) at (0, 2) {0A};
+    \node[state,accepting] (0D) at (4, 2) {0D};
+    \node[state]           (0B) at (2, 0) {0B};
+    \node[state]           (0C) at (4, 0) {0C};
+    \node[state]           (1C) at (2, -2.5) {1C};
+    \node[state]           (1B) at (0, -4) {1B};
+    \node[state]           (1A) at (4, -4) {1A};
+    \node[state,accepting] (1D) at (5.5, -2) {1D};
+
+    \path[->]  (0)  edge [loop right]       node {$0$} (0)
+                    edge                    node [right] {$1$} (1)
+               (1)  edge [bend left=15]     node [above left] {$0|1$} (0)
+               (0A) edge                    node [right] {$0$} (1B)
+                    edge                    node [above] {$1$} (H)
+               (0C) edge                    node [above] {$0$} (0B)
+                    edge                    node [right] {$1$} (1A)
+               (0D) edge                    node [above] {$0$} (H)
+                    edge                    node [above] {$1$} (0A)
+                    edge [bend left]        node [left] {$1$} (1A)
+               (1A) edge                    node [above] {$1$} (1B)
+               (1B) edge                    node [above left] {$0$} (0B)
+                    edge [loop left]        node {$0$} (1B)
+                    edge [bend left]        node [right] {$1$} (0A)
+               (1C) edge                    node [below right] {$0|1$} (0B)
+               (1D) edge [bend right=48]    node [left] {$0|1$} (H)
+               (H)  edge [loop above]       node {$0|1$} (H)
+               (0)  edge [dotted,bend left] node {\textcolor{colorA}{A}} (0A)
+                    edge [dotted]           node {\textcolor{colorB}{B}} (0B)
+                    edge [dotted]           node {\textcolor{colorC}{C}} (0C)
+                    edge [dotted,bend left] node {\textcolor{colorD}{D}} (0D)
+               (1)  edge [dotted]           node {\textcolor{colorB}{B}} (1B)
+                    edge [dotted]           node {\textcolor{colorA}{A}} (1A)
+                    edge [dotted]           node {\textcolor{colorC}{C}} (1C)
+                    edge [dotted]           node {\textcolor{colorD}{D}} (1D);
+    \path[<->] (0B) edge                    node [above right] {$0|1$} (1A);
+  \end{tikzpicture}
+  \caption{Diagram of a Nondeterministic Finite Automaton recognizing all rows of (\ref{fig:far_spacetime_halt}) but none of (\ref{fig:far_spacetime}).}
+  \label{fig:far_nfa}
+  \end{subfigure}
+  \bigskip
+
+  \begin{subfigure}{\textwidth}
+    \usetikzlibrary{chains,fit,shapes}
+    \begin{tikzpicture}
+      \tikzstyle{tmtape}=[draw,minimum size=15mm]
+      \tikzstyle{tmhead}=[arrow box,draw,minimum size=10mm,arrow box arrows={east:3mm, west:3mm},minimum height=5mm]
+      \tikzstyle{fastate}=[draw,minimum size=10mm,minimum height=64pt]
+      \begin{scope}[start chain=1 going right,node distance=0]
+        \node [on chain=1,tmtape,draw=none] (--) {Tape: \dots};
+        \node [on chain=1,tmtape] (-2) {0};
+        \node [on chain=1,tmtape] (-1) {0};
+        \node [on chain=1,tmtape] (-0) {0};
+        \node [on chain=1,tmtape] (+1) {0};
+        \node [on chain=1,tmtape] (+2) {1};
+        \node [on chain=1,tmtape] (+3) {1};
+        \node [on chain=1,tmtape] (+4) {0};
+        \node [on chain=1,tmtape] (+5) {0};
+        \node [on chain=1,tmtape,draw=none] (++) {$\dots$};
+      \end{scope}
+      \node [tmhead,yshift=-3mm] at (-0.south) (+0) {\textcolor{colorA}{A}};
+
+      \begin{scope}[start chain=2 going right,node distance=5mm]
+        \node [on chain=2,fastate,draw=none,below=of --,xshift=-.5cm,yshift=-5mm] (a--) {Scan: \dots};
+        \node [on chain=2,fastate] (a-2) {0};
+        \node [on chain=2,fastate] (a-1) {0};
+        \node [on chain=2,fastate,minimum height=24pt,yshift=18pt] (a-0) {0};
+        \node [below=of a-0,fastate,minimum height=24pt] (a+0) {0A};
+        \node [on chain=2,fastate,yshift=-18pt] (a+1) {1B};
+        \node [on chain=2,fastate] (a+2) {$\begin{aligned}&\textrm{0B}\\|&\textrm{1B}\end{aligned}$};
+        \node [on chain=2,fastate] (a+3) {$\begin{aligned}&\bot\\|&\textrm{0B}\\|&\textrm{1B}\end{aligned}$};
+        \node [on chain=2,fastate] (a+4) {$\begin{aligned}&\bot\\|&\textrm{0B}\\|&\textrm{1A}\\|&\textrm{1B}\end{aligned}$};
+        \node [on chain=2,fastate] (a+5) {$\begin{aligned}&\bot\\|&\textrm{0B}\\|&\textrm{1A}\\|&\textrm{1B}\end{aligned}$};
+        \node [on chain=2,fastate,draw=none] (a++) {$\dots$};
+      \end{scope}
+
+      \path (a-2) edge [dashed] (-2.west)
+                (a-1) edge [dashed] (-1.west)
+                (a-0) edge [dashed,bend left] (-0.west)
+                (a+0) edge [dashed,bend right] (+0.south)
+                (a+1) edge [dashed] (+1.west)
+                (a+2) edge [dashed] (+2.west)
+                (a+3) edge [dashed] (+3.west)
+                (a+4) edge [dashed] (+4.west)
+                (a+5) edge [dashed] (+5.west);
+          \draw[->] (a--) -- (a-2) -- (a-1) -- (a-0) -- (a+0) -- (a+1) -- (a+2) -- (a+3) -- (a+4) -- (a+5) -- (a++);
+    \end{tikzpicture}
+    \caption{An NFA with transitions (\ref{fig:far_nfa}), scanning the top row of (\ref{fig:far_spacetime_halt}), stays in ``accepted'' state
+      $\bot|\textrm{0B}|\textrm{1A}|\textrm{1B}$.}
+    \label{fig:far_scan}
+  \end{subfigure}
+
+  \caption{Reducing a machine (\url{https://bbchallenge.org/1RB0LD_1LC1RA_0RB0LC_---1LA}) to a finite automata problem.
+    (a) A space-time diagram of the machine, which runs forever as a ``counter''. Diagram rows depict \emph{non-halting} configurations.
+    (b) With an alternate initial configuration, the machine halts, so these rows depict \emph{halting} configurations.
+    (c) Transition table for the TM.
+    (d) Transition diagram for a tape-scanning NFA.
+    (e) To scan the top row of (\ref{fig:far_spacetime_halt}) with NFA (\ref{fig:far_nfa}), turn the TM configuration into a finite word
+        (truncating the infinite 0-strings at some point and writing the head's state \emph{before} the bit it's on).
+        If the NFA recognizes all halting configurations (independent of 0-padding) but not the initial configuration, then the TM cannot halt.}
+  \label{fig:finite-automata-reduction}
+\end{figure}
+
+
+\subsection{Halt-recognizing automata}
+\label{far-defs-recognizer}
+As a generalization of backward reasoning, we can try to recognize eventually-halting configurations using finite automata, as in figure \ref{fig:finite-automata-reduction}.
+A recognizer with no false negatives, and with the initial configuration as a negative, would be a non-halting proof.
+We now seek criteria sufficient to preclude false negatives.
+
+We may define an NFA (with $n$ states) in linear-algebraic terms:
+States and sets thereof are row vectors $q\in M_{1,n}$.
+A designated $q_0\in M_{1,n}$ is the initial state.
+Transitions are matrices $T_\gamma\in M_{n,n}$ for each $\gamma\in\{0,1,A,\ldots,E\}$, taking $q$ to $qT_\gamma$.
+The acceptance condition is $q\cdot a\ne 0$ defined by a column vector $a\in M_{n,1}$.
+For words $u=\gamma_1\dots\gamma_\ell$, the condition is $q_0 T_u a\ne 0$, where $T_u\mathrel{\mathop:}=T_{\gamma_1}\dots T_{\gamma_\ell}$.
+\todo{JEB: Citation needed? \href{https://planetmath.org/matrixcharacterizationsofautomata}{LINK}}
+
+This is most natural with matrices over the Boolean domain $\mathbf{2}$, with operations $+=\operatorname{OR}$ and $\cdot=\operatorname{AND}$.
+\todo{JEB: Citation needed? \href{https://en.wikipedia.org/wiki/Two-element_Boolean_algebra}{LINK}}
+
+Let's adopt that convention, and also define the $\preceq$ relation on same-size matrices: $m\preceq m'$ if $m_{ij}\le m'_{ij}$ element-wise,
+that is, if the second matrix has at least the same 1-entries as the first matrix.
+
+We wish to apply the NFA to TM configurations.
+As in figure \ref{fig:far_scan}, we form a word from a finite segment of the tape (which includes the head and all nonzero bits), writing the head's state before the bit it's on.
+Acceptance condition $q_0 T_u a\ne 0$ is now well-defined, provided that:
+\begin{align}
+  q_0 T_0 &= q_0
+  \label{far-cond-leading-0}
+  \\
+  T_0 a &= a
+  \label{far-cond-trailing-0}
+\end{align}
+
+Let $f,t$ denote TM states (the ``from'' and ``to'' states in a TM transition), and $r,w,b$ denote bits (a bit ``read'', a bit ``written'', and just a bit).
+Our goal of recognizing all eventually-halting configurations is, by induction, met if we ensure that $c\vdash\bot\implies\operatorname{accept(c)}$
+and $c_1\vdash c_2\land\operatorname{accept(c_2)}\implies\operatorname{accept}(c_1)$.
+This expands to the following conditions:
+\begin{align*}
+  \forall u_1,u_2\in\mathbf{2}^*: q_0 T_{u_1} T_f T_r T_{u_2} a \ne 0,\;& \text{if $\ldots fr\ldots\vdash\bot$ is a halt rule}
+  \\
+  \forall u_1,u_2\in\mathbf{2}^*: q_0 T_{u_1} T_t T_b T_w T_{u_2} a \ne 0 \implies q_0 T_{u_1} T_b T_f T_r T_{u_2} a \ne 0,\;& \text{if $\ldots bfr\ldots\vdash\ldots tbw\ldots$ is a left rule}
+  \\
+  \forall u_1,u_2\in\mathbf{2}^*: q_0 T_{u_1} T_w T_t T_{u_2} a \ne 0 \implies q_0 T_{u_1} T_f T_r T_{u_2} a \ne 0,\;& \text{if $\ldots fr\ldots\vdash\ldots wt\ldots$ is a right rule}
+\end{align*}
+
+These conditions are unwieldy. Let's seek stronger (thus still sufficient) conditions which are simpler.
+
+For left/right rules, simply require $T_t T_b T_w\preceq T_b T_f T_r$ and $T_w T_t\preceq T_f T_r$, respectively.
+
+To simplify the halt-rule condition:
+assert the sub-expression $q_0 T_{u_1}$ is never zero,
+and (for $q$ a nonzero combination of such vectors and $fr\vdash\bot$ a halt rule)
+$q T_f T_r$ is a vector $q'$ satisfying $\forall u_2\in\mathbf{2}^*: q' T_{u_2} a\ne 0$.
+
+Going further: define an \emph{accepted steady state} $s$ to be a vector such that $sa\ne 0$, $s T_0\succeq s$, and $s T_1\succeq s$.
+Given such $s$, $q'\succeq s\implies \forall u_2\in\mathbf{2}^*: q'T_{u_2}a\ne 0$.
+
+We have shown:
+
+\begin{theorem}
+  \label{far-main-theorem}
+  Machine $\mathcal{M}$ doesn't halt if there are an NFA $(q_0, \{T_\gamma\}, a)$ and vector $s$ satisfying the below:
+  \begin{align}
+    \label{far-cond-first}
+    q_0 T_0 &= q_0
+    &&\text{(leading zeros ignored)}
+    \tag{\ref{far-cond-leading-0}}
+    \\
+    T_0 a &= a
+    &&\text{(trailing zeros ignored)}
+    \tag{\ref{far-cond-trailing-0}}
+    \\
+    q_0 T_A a &= 0
+    &&\text{(initial configuration rejected)}
+    \label{far-cond-reject-start}
+    \\
+    sa &\ne 0
+    &&\text{($s$ is accepted)}
+    \label{far-cond-ass-accepted}
+    \\
+    sT_0,sT_1 &\succeq s
+    &&\text{($s$ is a steady state)}
+    \label{far-cond-ass-steady}
+    \\
+    \forall u\in\mathbf{2}^*: q_0 T_u &\ne 0
+    &&\text{(0-,1- transitions are \textbf{total} up to the head)}
+    \label{far-cond-total}
+    \\
+    \forall q\in\operatorname{span}\{q_0T_u\}-\{0\}: q T_f T_r &\succeq s
+    &&\text{if $\ldots fr\ldots\vdash_\mathcal{M}\bot$ is a halt rule}
+    \label{far-cond-halt}
+    \\
+    T_b T_f T_r &\succeq T_t T_b T_w
+    &&\text{if $\ldots bfr\ldots\vdash_\mathcal{M}\ldots tbw\ldots$ is a left rule}
+    \label{far-cond-left}
+    \\
+    T_f T_r &\succeq T_w T_t
+    &&\text{if $\ldots fr\ldots\vdash_\mathcal{M}\ldots wt\ldots$ is a right rule}
+    %\label{far-cond-right}
+    \label{far-cond-last}
+  \end{align}
+\end{theorem}
+
+This main theorem opens up a few avenues.
+The general next step is to impose more structure on the NFA, so that a subset of \eqref{far-cond-first}--\eqref{far-cond-last} is automatically satisfied and it's easier to search for recognizers.
+Let's take a detour to review \emph{deterministic finite automata} (DFA), which are simpler and satisfy totality \eqref{far-cond-total}.
+
+
+\subsection{Deterministic finite automata}
+\label{far-defs-dfa}
+Textbooks\todo{JEB: cite} define \emph{deterministic} finite automata (on the binary alphabet, with acceptance unspecified) as tuples $(Q, \delta, q_0)$ of: a finite set $Q$ (states), a $q_0\in Q$ (initial state), and $\delta: Q\times\mathbf{2}\to Q$ (transition function).
+Though NFAs generalize DFAs, they can be emulated by (exponentially larger) power-set DFAs.
+
+To put this definition in the linear-algebraic framework:
+identify $q_0\in Q$ with $0\in [n]\mathrel{\mathop:}=\{0,\ldots,n-1\}$;
+represent states $q$ with elementary row vectors $\langle q\vert$;
+define transition matrices $T_b$ via $\langle q\vert T_b = \langle \delta(q, b)\vert$.
+
+As we did for transition matrices, extend $\delta$ to words: $\delta(q,\epsilon)=q$, $\delta(q,ub)=\delta(\delta(q,u),b)$.
+
+Given a DFA on $[n]$, call its \emph{transition table} the list $(\delta(0,0),\delta(0,1),\ldots,\delta(n-1,0),\delta(n-1,1))$.
+
+Call $\{\delta(q_0,u): u\in\mathbf{2}^*\}$ the set of \emph{reachable} states.
+
+When building a larger recognizer,
+we expect no benefit from considering DFAs which just relabel others or add unreachable states.
+So motivated, we define a canonical form for DFAs:
+enumerate the reachable states via breadth-first search from $q_0$,
+producing $f:[n]=\mathrel{\mathop:}Q_\textsf{cf}\to Q$.
+Explicitly,
+ $f(0)=q_0$ and $f(k)$ is the first of
+ $\delta(f(0),0), \delta(f(0),1), \ldots, \delta(f(k-1),0), \delta(f(k-1),1)$ not in $f([k])$,
+ valid until $f([k])$ is closed under transitions.
+This induces $\delta_\textsf{cf}(q,b)\mapsto f^{-1}(f(q), b)$.
+(Warning: this definition is not standard.)
+
+\begin{lemma}
+  \label{far-dfa-canonical form}
+  In a DFA with $(Q,q_0)=([n],0)$, the following are equivalent:
+  \begin{enumerate}
+    \item it's in canonical form ($Q_\textsf{cf}\to Q$ is the identity)
+          and ignores leading zeros (equation \eqref{far-cond-leading-0} or $\delta(0,0)=0$);
+    \item its transition table includes each of $0,\ldots,n-1$, whose first appearances occur in order,
+          and with each $q\in(0,n)$ appearing before the $\delta(q,0)$ position;
+    \item the sequence $\{m_k \mathrel{\mathop:}= \max\{\delta(q,b): 2q+b\le k\}\}_{k=0}^{2n-1}$ of cumulative maxima runs from $0$ to $n-1$ in steps of $0$ or $1$,
+          with $m_{2q-1}\ge q$ for $0<q<n$.
+  \end{enumerate}
+\end{lemma}
+\proof
+\begin{description}
+  \item[$1\iff 2$:]
+    We prove a partial version by induction:
+    the DFA ignores leading zeros and $f(q)=q$ for $q\le k$,
+    iff $0,\ldots,k$ have ordered first appearances in the transition table
+     which precede appearances of any $q>k$
+     and occur before the $\delta(k,0)$ position if $k>0$.
+    In case $k=0$, the DFA ignores leading zeros iff $0$ comes first in the transition table by definition.
+    (The other conditions are vacuous.)
+    In case the claim holds for preceding $k$, $f(k)$ is by definition the first number outside of $f([k])=[k]$ in the transition table---if any---and the inductive step follows.
+  \item[$2\iff 3$:]
+    If the first appearances of $0,\ldots,n-1$ appear in order, any value at its first index is the largest so far, so $m_k$ takes the same values. The sequence $m_k$ is obviously nondecreasing, so to be gap-free it can only grow in steps of 0 or 1.
+    Conversely, if $m_k$ runs from $0$ to $n-1$ in steps of $0$ or $1$, each value $q\in [n]$ must appear in the table at the first index $k$ for which $m_k=q$, and all preceding values in the transition table must be strictly less.
+
+    In case these equivalent conditions are true, that last observation shows that $q$ appears before the $\delta(q,0)$ position iff $m_k$ reaches $q$ by index $k=2q-1$, or equivalently $m_{2q-1}\ge q$.
+\qed
+\end{description}
+
+\begin{corollary}
+  $\{t_k\}_{k=0}^\ell$ ($\ell<2n$) is a prefix of a canonical, leading-zero-ignoring, $n$-state DFA transition table iff
+  $m_k \mathrel{\mathop:}= \max\{t_j\}_{j=0}^k$ runs from $0$ to $m_{\ell-1}<n$ in steps of $0$ or $1$, and $m_{2q-1}\ge q$ where defined.
+\end{corollary}
+\proof
+If $\ell=2n-1$, $\{m_k\}$ grows to exactly $n-1$ (since $m_{2(n-1)-1}\ge n-1$), and lemma \ref{far-dfa-canonical form} applies.
+Otherwise, we may extend the sequence with $t_{\ell+1}=\min(m_\ell+1,n-1)$, the same conditions apply.
+\qed
+
+So, Algorithm \ref{alg:search-dfa} searches such DFAs incrementally (avoiding partial DFAs already deemed unworkable).
+
+\begin{algorithm}
+  \caption{{\sc search-dfa}}\label{alg:search-dfa}
+
+  \begin{algorithmic}[1]
+    \State \textbf{enum} CheckResult \{MORE, SKIP, STOP\}
+    \Statex
+    \Procedure{\textbf{bool} {\sc search-dfa}}{\textbf{int} n, \textbf{function$\boldsymbol<$List$\boldsymbol<$int$\boldsymbol>$}, CheckResult$\boldsymbol>$ check}
+    \Require{$\operatorname{check}(t)\ne\textrm{MORE}$ if $t$ is a complete (length-$2n$) table}
+
+      \State \textbf{int} k = 1, t[$2*n$] = $[0,\ldots,0]$, m[$2*n$] = $[0,\ldots,0]$
+      \State CheckResult state = $\operatorname{check}([0])$
+      \Loop
+        \If{state == MORE}
+          \State \textbf{int} q\_new = m[k-1] + 1
+          \State t[k] = (q\_new $<$ \textrm{n} \textbf{and} 2*q\_new-1 == k) ? q\_new : 0
+        \ElsIf{state == SKIP}
+          \Repeat
+          \If{k $\le$ 1}
+            \Return false
+          \EndIf
+          \State k -= 1
+          \Until{t[k] $\le$ m[k-1] \textbf{and} t[k] $<$ n-1}
+          \State t[k] += 1
+        \Else\;\Return true
+        \EndIf
+        \State m[k] = max(m[k-1], t[k])
+        \State k += 1
+        \State state = check(length-k prefix of t)
+      \EndLoop
+    \EndProcedure
+
+  \end{algorithmic}
+\end{algorithm}
+
+
+\subsection{Search algorithm: direct}
+\label{far-algo-direct}
+Let's pick up the thread from \S\ref{far-defs-recognizer}, % Alternatively: to specailizing Theorem \ref{far-main-theorem}
+and add more structure to the NFA $(q_0, \{T_\gamma\}, a)$.
+First, let's have separate states for scanning each side of the tape:
+assume state space $\mathbf{2}^l \oplus \mathbf{2}^d$,
+initial state $\begin{bmatrix}q_0&0\end{bmatrix}$,
+transitions
+ $T_b=\begin{bmatrix}L_b&0\\0&R_b\end{bmatrix}$ ($b\in\{0,1\}$) and
+ $T_f=\begin{bmatrix}0&M_f\\0&0\end{bmatrix}$ ($f\in\{A,\ldots,E\}$),
+and acceptance $\begin{bmatrix}0\\a\end{bmatrix}$.
+
+Next, let's designate a ``halt'' state $\bot$, and corresponding basis vector $\langle\bot\vert\in\mathbf{2}^d$.
+Let $s=0\oplus\langle\bot\vert$.
+
+Also designate independent basis vectors for each $\langle i\vert M_f$ ($i\in[l]$, $f\in\{A,\ldots,E\}$).
+Call them $\langle i,f\vert$.
+\todo{JEB: So many assumptions! Without loss of generality, in fact. Would a pause to prove that distract or clarify?}
+
+Finally, let's have $(q_0,\{L_b\})$ come from a DFA that ignores leading zeros.
+That ensures \eqref{far-cond-leading-0} and \eqref{far-cond-total}.
+
+We seek a ``direct'' algorithm which searches DFAs and solves for $a$ and $R$ if possible.
+
+A helpful property of standard basis vectors is: the condition $\langle i\vert m\succeq v$ is equivalent to $m\succeq\vert i\rangle v$.
+
+This lets us re-express conditions \eqref{far-cond-ass-steady} and \eqref{far-cond-halt}--\eqref{far-cond-last}:
+\begin{align}
+  R_r &\succeq \vert\bot\rangle \langle\bot\vert
+  &&\text{for }r\in\{0,1\}
+  \tag{\ref{far-cond-ass-steady}'}
+  \\
+  \forall i\in[l]: R_r &\succeq \vert i,f\rangle \langle\bot\vert
+  &&\text{if $\ldots fr\ldots\vdash_\mathcal{M}\bot$ is a halt rule}
+  \tag{\ref{far-cond-halt}'}
+  \\
+  \forall i\in[l]: R_r &\succeq \vert\delta(i,b),f\rangle \langle i,t\vert R_b R_w
+  &&\text{if $\ldots bfr\ldots\vdash_\mathcal{M}\ldots tbw\ldots$ is a left rule}
+  \tag{\ref{far-cond-left}'}
+  \\
+  \forall i\in[l]: R_r &\succeq \vert i,f\rangle \langle \delta(i,w),t\vert
+  &&\text{if $\ldots fr\ldots\vdash_\mathcal{M}\ldots wt\ldots$ is a right rule}
+  %\label{far-cond-right}
+  \tag{\ref{far-cond-last}'}
+\end{align}
+
+There's a unique minimal (w.r.t $\preceq$) solution to this system of inequalities and a clear way to compute it: initialize $R_0$, $R_1$ to zero,
+then set entries to 1 as these 4 inequalities demand until a fixed point is reached.
+Note that the $R_0$ and $R_1$ values so produced are an increasing function of the matrices $\{L_b\}$, or of $\delta$ when it's viewed as a partial function (ordered by extension).
+
+The remaining conditions of Theorem \ref{far-main-theorem} are \eqref{far-cond-trailing-0}--\eqref{far-cond-ass-accepted}, the conditions on acceptance.
+\eqref{far-cond-reject-start} is the ``negative'' condition $\langle 0,A\vert \cdot a=0$.
+The others translate to $a\succeq\vert\bot\rangle$ and $a=R_0 a$.
+From (\ref{far-cond-ass-steady}'), we see the sequence $\vert\bot\rangle\preceq R_0\vert\bot\rangle\preceq R_0^2\vert\bot\rangle\preceq\dots$ is increasing, this pair of conditions also has a minimal fixed-point solution.
+The minimal solution satisfies \eqref{far-cond-reject-start} if anything does.
+Since the fixed point of $R_0^k \vert\bot\rangle$ increases with $R$, the fixed-point solution for $R$ also suffices if anything does.
+Since that increases under partial-DFA extensions, we can check partial DFAs for violations of \eqref{far-cond-reject-start}.
+And so we obtain a complete decider in Algorithm \ref{alg:finite-automata-reduction-direct}.
+A slight elaboration allows for checking a specific $L$ instead of all DFAs, and for returning the recognizer.
+
+\begin{algorithm}
+  \caption{{\sc decider-finite-automata-reduction-direct}}\label{alg:finite-automata-reduction-direct}
+
+  \begin{algorithmic}[1]
+    \Procedure{\textbf{bool} {\sc decider-finite-automata-direct}}{\textbf{TM} machine, \textbf{int} n, \textbf{bool} left\_to\_right}
+      \If{\textbf{not} left\_to\_right} replace TM with its mirror-image
+      \EndIf
+      \State \textbf{Matrix$\boldsymbol<$bool}, $5*n+1, 5*n+1\boldsymbol>$ $\textrm{R}[2*n+1][2]$ = $[[0,0],\ldots,[0,0]]$
+      \State \textbf{ColVector$\boldsymbol<$bool}, $5*n+1\boldsymbol>$ $a[2*n+1]$ = 0
+      % The next line is a hacky attempt at a full-line comment:
+      \State \(\triangleright\) Note about indexing: for $\langle i,f\vert$ use index $5*i+f$, and for $\langle\bot\vert$, use index $5*n$.
+      \State Initialize R[0] using (\ref{far-cond-ass-steady}') and (\ref{far-cond-halt}')
+      \State Initialize a[0] = $\vert\bot\rangle$
+      \Procedure{{\rm CheckResult} {\sc check}}{List$\boldsymbol<$int$\boldsymbol>$ L}
+        \State R[L.\textbf{length}()], a[L.\textbf{length}()] = R[L.\textbf{length}()-1], a[L.\textbf{length}()-1]
+        \State Increase R[L.\textbf{length}()] using (\ref{far-cond-last}'), with $(i,w)=\operatorname{divmod}(\textrm{L.\textbf{length}()-1}, 2)$
+        \Repeat
+          \State Increase R[L.\textbf{length}()] using (\ref{far-cond-left}'), restricted to $2*i+b<\textrm{L.\textbf{length}()}$
+        \Until{R[L.\textbf{length}()] stops changing}
+        \Repeat
+          \State a[L.\textbf{length}()] = R[L.\textbf{length}()][0] * a[L.\textbf{length}()]
+        \Until{a[L.\textbf{length}()] stops changing}
+        \If{$\langle\bot\vert\cdot a\ne 0$}
+          \Return SKIP
+        \ElsIf{L.\textbf{length}() == 2*n}
+          \Return STOP
+        \Else\;\Return MORE
+        \EndIf
+      \EndProcedure
+      \State \Return \Call{search-dfa}{check}
+    \EndProcedure
+  \end{algorithmic}
+\end{algorithm}
+
+
+\subsection{Search algorithm: meet-in-the-middle DFA}
+\label{far-algo-mtim_dfa}
+A symmetric recognizer construction has also shown good results.
+Again, pass the left half-tape through a DFA with $l$ states.
+Imagine a DFA with $d$ states scanning the (strict) right half-tape right-to-left.
+
+\begin{remark}
+Our definitions require a left-to-right scan direction.
+Any NFA $(\langle 0\vert, \{R_b\})$ can be transposed.
+(Transposing transition matrices reverses the arrows in the diagram, as with graph adjacency matrices.)
+We can shoehorn this into the preceding framework by making an accept state from R's transposed initial state $\vert 0\rangle$,
+ defining middle transitions $M_{fr}$ for the configuration's head state/bit,
+ superposing all states of R to get our $s$ vector,
+ and trying to satisfy conditions like
+  $\langle 0\vert M_{A0} \vert 0\rangle = 0$, $M_{fr}=\sum_L \vert q\rangle\langle s\vert$ (for halt rules),
+  $L_b M_{fr} \succeq M_{tb} R^T_w$ (for left rules),
+  $M_{fr} R^T_b \succeq L_w M_{tb}$ (for right rules).
+What follows is more intuitive.
+\todo{JEB: Is this remark needed?}
+\end{remark}
+
+\begin{figure}
+  \begin{tikzpicture}[shorten >=1pt, shorten <=1pt]]
+    % The commented code below turns this into a complete NFA diagram, if the 2nd "initial above" also becomes "accepting".
+    \node[state,initial above] (0L) at (-2, 2) {$0_L$};
+    \node[state]           (1L) at (-2, -2) {$1_L$};
+    \node[state,initial above] (0R) at (10, 0) {$0_R$};
+    \node[state]           (1R) at (8, 0) {$1_R$};
+    \node[state]           (2R) at (6, 0) {$2_R$};
+    \node[state]           (3R) at (4, 0) {$3_R$};
+    \node[state]           (4R) at (2, 2) {$4_R$};
+    \node[state]           (5R) at (2, -2) {$5_R$};
+    %\node[state]           (mid)at (0, 0) {Censored};
+
+    \path[->]  (0L)  edge [loop left]        node {$0$} (0L)
+                     edge                    node [right] {$1$} (1L)
+                     %edge                    (mid)
+               (1L)  edge [bend left=15]     node [left] {$0|1$} (0L)
+                     %edge                    (mid)
+  %; \path[-]   (mid) edge (5R) edge (4R) edge [dotted] (3R)
+  %; \path[<-]
+               (0R)  edge [loop right]       node {$0$} (0R)
+                     edge                    node [above] {$1$} (1R)
+               (1R)  edge [bend right]       node [below] {$0$} (0R)
+                     edge                    node [above] {$1$} (2R)
+               (2R)  edge [loop above]       node {$0$} (2R)
+                     edge                    node [above] {$1$} (3R)
+               (3R)  edge                    node [above left] {$1$} (5R)
+               (4R)  edge [bend right=15]    node [below left] {$1$} (3R)
+               (5R)  edge [loop right]       node {$0|1$} (5R)
+  ;
+  \path[<->]   (3R)  edge                    node [above right] {$0$} (4R);
+  \end{tikzpicture}
+  \caption{This pair of DFAs can also recognize halting configurations for the TM of figure \ref{fig:finite-automata-reduction}.
+           Configurations are classified by their head state, head bit, and the two half-tapes (processed outside-in by the DFAs.)}
+  \label{fig:far_mitm_dfa}
+\end{figure}
+
+As in Figure \ref{fig:far_mitm_dfa}, let's consider the DFAs on their own terms.
+Each one partitions its input into a family of regular languages (one per state).
+Accounting for the head state/bit and right half-tape, we obtain $l\cdot 5\cdot 2\cdot d$ classes of TM configuration.
+Propose a recognizer which distils this classification into a result.
+We'll work out conditions for a good ``accepted'' set $A\subseteq[l]\times\{A,\ldots,E\}\times\mathbf{2}\times[d]$.
+If they're satisfiable, even if we don't prove the scheme sound, we can feed the left DFA into Algorithm \ref{alg:finite-automata-reduction-direct} to check the result.
+
+Despite the new setting, we can write out closure conditions analogous to \S\ref{far-defs-recognizer}'s, each $\forall i\in[l],j\in[d]$:
+\begin{align}
+  &(i,f,r,j)\in A
+  &&\text{if $\ldots fr\ldots\vdash_\mathcal{M}\bot$ is a halt rule}
+  \tag{\ref{far-cond-halt}''}
+  \\
+  (i, t, b, \delta_R(j,w))\in A \implies& (\delta_L(i,b), f, r, j)\in A
+  &&\text{if $\ldots bfr\ldots\vdash_\mathcal{M}\ldots tbw\ldots$ is a left rule}
+  \tag{\ref{far-cond-left}''}
+  \\
+  (\delta_L(i,w), t, b, j)\in A \implies& (i, f, r, \delta_R(j,b))\in A
+  &&\text{if $\ldots frb\ldots\vdash_\mathcal{M}\ldots wtb\ldots$ is a right rule}
+  %\label{far-cond-right}
+  \tag{\ref{far-cond-last}''}
+\end{align}
+
+The goal, analogous to \eqref{far-cond-reject-start}, is $(0, A, 0, 0)\notin A$.
+
+We could now search all DFA pairs, checking if the smallest $A$ closed under (\ref{far-cond-halt}'')--(\ref{far-cond-last}'') rejects $(0,A,0,0)$.
+However, to get decent performance, we must express the above as a boolean satisfiability ({\sc sat}) problem.
+
+Other lessons learned in practice:
+it was most effective to use the same state count on both sides ($l=d=n$),
+and it was decisively faster to impose the canonical form restrictions of Lemma \ref{far-dfa-canonical form}.
+
+Algorithm \ref{alg:finite-automata-reduction-mitm_dfa} shows how this works.
+Here especially, actual code can vary from the given pseudocode:
+\begin{itemize}
+  \item If {\sc sat} solvers use integers for literals (variables and their negations), one needn't ``allocate variables''.
+  \item It may be possible to simplify by adding propositional variables for more edge cases.
+  \item The ``outcomes are mutually exclusive'' condition may be represented differently.
+  \item Checking a solution is valid needn't involve Algorithm \ref{alg:finite-automata-reduction-direct}, if the author proves more.
+\end{itemize}
+
+\begin{algorithm}
+  \caption{{\sc decider-finite-automata-reduction-MitM-DFA}}\label{alg:finite-automata-reduction-mitm_dfa}
+
+  \begin{algorithmic}[1]
+    \Procedure{\textbf{bool} {\sc decider-finite-MitM-DFA}}{\textbf{TM} machine, \textbf{int} n}
+      % The next line is a hacky attempt at a full-line comment:
+      \State \(\triangleright\) Allocate variables.
+      \State\textbf{Map$\boldsymbol<$tuple, int$\boldsymbol>$} tk\_eq, tk\_le, mk\_eq, A
+      \ForAll{$(\textrm{lr}, \textrm{k}, \textrm{y})\in[2]\times[n]\times[2*n]\times[n+1]$}
+        \If{(k, y) == (0, 0)}
+          tk\_eq[lr, k, y] = true
+        \ElsIf{$0\le y\le\min(k,n-1)$}
+          tk\_eq[lr, k, y] = \Call{new-variable}{}
+        \Else\;
+          tk\_eq[lr, k, y] = false
+        \EndIf
+
+        \If{$y\le 0$}
+          tk\_le[lr, k, y] = tk\_eq[lr, k, y]
+        \ElsIf{$0\le y\le\min(k-1,n-2)$}
+          tk\_le[lr, k, y] = \Call{new-variable}{}
+        \Else\;
+          tk\_le[lr, k, y] = true
+        \EndIf
+
+        \If{(k, y) == (2*n-1, n-1)}
+          mk\_eq[lr, k, y] = true
+        \ElsIf{\textbf{not} $\left\lceil\frac{k}{2}\right\rceil\le y<\min(n,k+1)$}
+          mk\_eq[lr, k, y] = false
+        \ElsIf{$\min(n, k+1)-((k+1)/2) \le 1$}
+          mk\_eq[lr, k, y] = true
+        \Else\;
+          mk\_eq[lr, k, y] = \Call{new-variable}{}
+        \EndIf
+      \EndFor
+
+      \ForAll{$(\textrm{i}, \textrm{f}, \textrm{r}, \textrm{j})\in[n]\times[5]\times[2]\times[n]$}
+        \If{(k, y) == (2*n-1, n-1)}
+          A[i, f, r, j] = false
+        \Else\;
+          A[i, f, r, j] = \Call{new-variable}{}
+        \EndIf
+      \EndFor
+
+      % The next line is a hacky attempt at a full-line comment:
+      \State \(\triangleright\) Transition validity: outcomes are mutually exclusive.
+      \ForAll{$(\textrm{lr}, k, \textrm{y})\in[2]\times[2*n]\times[n]$}
+        \State \Call{new-clause}{$\textrm{tk\_eq}(\textrm{lr}, k, y)\implies \textrm{tk\_le}(\textrm{lr}, k, y)$}
+        \State \Call{new-clause}{$\textrm{tk\_le}(\textrm{lr}, k, y)\implies \textrm{tk\_le}(\textrm{lr}, k, y+1)$}
+        \State \Call{new-clause}{$\textrm{tk\_eq}(\textrm{lr}, k, y+1)\implies \neg\textrm{tk\_le}(\textrm{lr}, k, y)$}
+      \EndFor
+      \State \(\triangleright\) Transition validity: an outcome occurs.
+      \ForAll{$(\textrm{lr}, k)\in[2]\times\{1,\ldots,2*n-1\}$}
+         \Call{new-clause}{$\bigvee_{y=0}^{\min(k,n-1)} \textrm{tk\_eq}(\textrm{lr}, k, y)$}
+      \EndFor
+
+      % The next line is a hacky attempt at a full-line comment:
+      \State \(\triangleright\) Closure conditions.
+      \ForAll{$(i,j,(f,r))\in[n]^2\times$\Call{halt-rules}{machine}}
+        \State\Call{new-clause}{$A[i, f, r, j]$}
+      \EndFor
+      \ForAll{$(i,j,\textrm{ib},\textrm{jw},(f,r,w,L,t))\in[n]^4\times$\Call{left-rules}{machine}}
+        \State\Call{new-clause}{$
+          \textrm{tk\_eq}[L, i, b, \textrm{ib}]
+          \land \textrm{tk\_eq}[R, j, w, \textrm{jw}]
+          \land A[i, t, b, \textrm{jw}]
+          \implies A[\textrm{ib}, f, r, j]
+        $}
+      \EndFor
+      \ForAll{$(i,j,\textrm{iw},\textrm{jb},(f,r,w,R,t))\in[n]^4\times$\Call{right-rules}{machine}}
+        \State\Call{new-clause}{$
+          \textrm{tk\_eq}[R, j, b, \textrm{jb}]
+          \land \textrm{tk\_eq}[L, i, w, \textrm{iw}]
+          \land A[\textrm{iw}, t, b, j]
+          \implies A[i, f, r, \textrm{jb}]
+        $}
+      \EndFor
+
+      % The next line is a hacky attempt at a full-line comment:
+      \State \(\triangleright\) DFA is in canonical form (Lemma \ref{far-dfa-canonical form}).
+      \ForAll{$(\textrm{lr},k)\in[2]\times\{1,\ldots,2*n-1\}$}
+        \For{$m=\lfloor k/2\rfloor,\ldots,\min(n, k)$}
+          \State\Call{new-clause}{$\textrm{mk\_eq}(\textrm{lr}, k-1, m) \implies \textrm{tk\_le}(\textrm{lr}, k, m+1)$}
+          \State\Call{new-clause}{$\textrm{mk\_eq}(\textrm{lr}, k-1, m) \land \textrm{tk\_le}(\textrm{lr}, k, m) \implies \textrm{mk\_eq}(\textrm{lr}, k, m)$}
+          \State\Call{new-clause}{$\textrm{mk\_eq}(\textrm{lr}, k-1, m) \land \textrm{tk\_eq}(\textrm{lr}, k, m+1) \implies \textrm{mk\_eq}(\textrm{lr}, k, m+1)$}
+        \EndFor
+      \EndFor
+
+      \If{\Call{check-sat}{}}
+        \State Assert L DFA from the model proves the machine using Algorithm \ref{alg:finite-automata-reduction-direct}.
+        \State \Return true
+      \Else\;\Return false
+      \EndIf
+    \EndProcedure
+  \end{algorithmic}
+\end{algorithm}
+
+
+\subsection{Correctness}
+Our implementation takes a brutally simple approach to correctness:
+independent of the proof-search algorithm, it checks the recognizer it returns satisfies \eqref{far-cond-first}--\eqref{far-cond-last}.
+By theorem \ref{far-main-theorem}, this prevents false proofs.
+
+
+\subsection{Results}
+\todo[inline]{JEB: TBD. If accepted/merged, update repo link, state the parameters, summarize the progress.}
+The decider was coded in \texttt{Rust} and is accessible at this link: \url{https://github.com/UncombedCoconut/bbchallenge-deciders/tree/finite-automata-reduction/decider-finite-automata-reduction}.
+
+It uses Kissat\cite{Biere_2020} as its \textsc{SAT} solver.
+
+More information about these results are available at: \url{https://discuss.bbchallenge.org/t/decider-finite-automata-reduction/123}.
+
+\subsection{Related research}
+This section's core idea---\emph{Closed Tape Languages}---is folklore, described in Shawn Ligocki's blog (\url{https://www.sligocki.com/2022/06/10/ctl.html}) and credited to H. Marxen in collaboration with J. Buntrock.
+
+The ``direct'' algorithm of \S \ref{far-algo-direct} was first found by applying \cite{BEM_1997}.
+Rough sketch: treat a TM as a two-stack machine (one per side of the tape).
+Fix a DFA classifying left half-tape configurations.
+Form a ``quotient'' of $\mathcal{M}$ in which stack values are replaced by corresponding DFA states.
+The many-to-one mapping of configurations induces a mapping of transitions, leaving us with a nondeterministic one-stack machine.
+The algorithm of \cite{BEM_1997} solves reachability for its halt-configurations.
+This perspective was dropped in favour of a more direct approach, but it can be useful when probing the limits of this technique.
