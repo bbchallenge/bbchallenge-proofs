@@ -2,7 +2,7 @@
 
 \section{Halting Segment}\label{sec:halting-segment}
 
-\paragraph{Acknowledgement.} Sincere thanks to bbchallenge's contributor Iijil who initially presented this method and the first implementation\footnote{See: \url{https://discuss.bbchallenge.org/t/decider-halting-segment}.}. Other contributors have contributed to this method by producing alternative implementations (see Section~\ref{sec:hs-implem}) or discussing and writing the formal proof presented here: Mateusz Naściszewski (Mateon1), Nathan Fenner, Tony Guilfoyle and cosmo.
+\paragraph{Acknowledgement.} Sincere thanks to bbchallenge's contributor Iijil who initially presented this method and the first implementation\footnote{See: \url{https://discuss.bbchallenge.org/t/decider-halting-segment}.}. Other contributors have contributed to this method by producing alternative implementations (see Section~\ref{sec:hs-implem}) or discussing and writing the formal proof presented here: Mateusz Naściszewski (Mateon1), Nathan Fenner, Tony Guilfoyle, Justin Blanchard and cosmo.
 
 \subsection{Overview}
 
@@ -21,7 +21,7 @@ Figure~\ref{fig:hs} gives the \HS graph of the 3-state machine\footnote{We chose
 
   \item Initial nodes (blue outline) correspond to all sgement configurations that match the initial configuration of the machine (all-0 tape and state A), there are $n+2$ initial nodes with $n$ the size of the segment. Halting nodes (red outline) give the segment configurations where the machine has halted together with the halting transition that was used, for instance, in Figure~\ref{fig:hs}, the leftmost halting node \texttt{$\bot$ C1 [-] 0 0 -} signifies that the machine has halted ($\bot$), using halting transition \texttt{C1} (reading a 1 in state C), to the left of the segment which contains \texttt{0 0}.
 
-  \item Nodes with a circle shape correspond to segment configurations where the tape's head is \textbf{inside} the segment. Such nodes only have one child which correspond to the next machine configuration.
+  \item Nodes with a circle shape correspond to segment configurations where the tape's head is \textbf{inside} the segment. Such nodes only have one child, which corresponds to the next machine configuration.
 
   \item Nodes with a diamond shape correspond to segment configurations where the head is \textbf{outside} the segment, these nodes may have several children corresponding to all the ways that the head, in the current state, can stay outside of the segment or enter it back. For instance, the leftmost node in blue and diamond shape in Figure~\ref{fig:hs}, \texttt{A [-] 0 0 -}, has 4 children: \texttt{B [-] 0 0 -} and \texttt{B - [0] 0 -} and \texttt{C [-] 0 0 -} and \texttt{C - [0] 0 -}. This is because the transitions of the machine in state A are \texttt{1RB} and \texttt{1RC} and that the move \texttt{R} allows either to enter the segment back or to continue being out of it (if the head is far from the segment's left frontier). Note that the write symbol \texttt{1} of the transitions are ignored since we do not keep track of the tape outside of the segment.
 
