@@ -1,7 +1,11 @@
 \newcommand{\HS}{Halting Segment\xspace}
 
 \section{Halting Segment}\label{sec:halting-segment}
+
+\paragraph{Acknowledgement.} Sincere thanks to bbchallenge's contributor Iijil who initially presented this method and the first implementation\footnote{See: \url{https://discuss.bbchallenge.org/t/decider-halting-segment}.}. Other contributors have contributed to this method by producing alternative implementations (see Section~\ref{sec:hs-implem}) or discussing and writing the formal proof presented here: Mateusz Naściszewski (Mateon1), Nathan Fenner, Tony Guilfoyle and cosmo.
+
 \subsection{Overview}
+
 \begin{figure}[h!]
   \centering
   \includegraphics[width=1\textwidth]{halting-segment.pdf}
@@ -73,3 +77,21 @@ Interestingly, \HS is the method that was used by Newcomb Greenleaf to prove\foo
 \begin{remark}
   \normalfont Some non-halting machines cannot be decided using \HS for any segment size. Such a machine is for instance \url{https://bbchallenge.org/1RB---_1LC0RB_1LB1LA}.
 \end{remark}
+
+\subsection{Implementations and results}\label{sec:hs-implem}
+
+
+Here are the implementations of the method that were realised:
+
+\begin{enumerate}
+  \item Iijil's who originally proposed the method, \url{https://github.com/bbchallenge/bbchallenge-deciders/tree/main/decider-halting-segment}, and was independently reproduced by cosmo \url{https://github.com/bbchallenge/bbchallenge-deciders/tree/main/decider-halting-segment-reproduction}
+  \item Mateusz Naściszewski (Mateon1)'s: \url{https://gist.github.com/mateon1/7f5e10169abbb50d1537165c6e71733b}
+  \item Nathan Fenner's which has the interesting feature of being written in a language for formal verification (Dafny): \url{https://github.com/Nathan-Fenner/bbchallenge-dafny-deciders/blob/main/halting-segment.dfy}
+  \item Tony Guilfoyle: \url{https://github.com/TonyGuil/bbchallenge/tree/main/HaltingSegments}
+\end{enumerate}
+
+We will be only discussing the details and results of Iijil's implementation (1) as it was the first implementation to be proposed and that it also was reproduced independently with exactly matching results.
+
+In this implementation, the \HS graph is constructed for all odd segment sizes up to size $n_\text{max}$ backwards from the halting node (one per halting transition) where the head's position is at the center of the tape. Also, the construction is a bit weaker to what is presented here since the information of state is not stored for nodes where the head is outside the segment which results in less machines decided than if it was.
+
+Nonetheless, results are impressive, for $n_\texttt{max} = 13$, the method decides 1,012,659 machines out of the 1,538,624 remaining after backward reasoning (see Section~\ref{sec:backward-reasoning-results}). Hence, after \HS, we have 525,965 machines left to be decided.
