@@ -31,7 +31,7 @@ Interestingly, \HS is the method that was used by Newcomb Greenleaf to prove\foo
 \subsection{Formal proof}
 
 \begin{definition}[Segment configurations]\label{def:hs-conf}\normalfont
-  Let $n \in \N = \{0, 1, 2 \dots\}$ a natural number called \textit{segment size}. A \textit{segment configuration} is a 3-tuple: (i) state, (ii) $w \in \{0,1\}^n$ which is the segment's content and (iii) the position of the machine's head is an integer $p \in \llbracket -1, n \rrbracket$ where positions $\llbracket 0,n \llbracket$ correspond to the interior of the segment, position $-1$ to outside to the left and $n$ outside to the right. \textit{Halting segment configurations} are segment configurations where the state is $\bot$ and with an additional information (iv) of which halting transition of the machine has been used to halt.
+  Let $n \in \N = \{0, 1, 2 \dots\}$ a natural number called \textit{segment size}. A \textit{segment configuration} is a 3-tuple: (i) state, (ii) $w \in \{0,1\}^n$ which is the segment's content and (iii) the position of the machine's head is an integer $p \in \llbracket -1, n \rrbracket$ where positions $\llbracket 0,n \llbracket$ correspond to the interior of the segment, position $-1$ for outside to the left and $n$ for outside to the right. \textit{Halting segment configurations} are segment configurations where the state is $\bot$ and with an additional information (iv) of which halting transition of the machine has been used to halt.
 \end{definition}
 
 \begin{example}\normalfont
@@ -58,3 +58,10 @@ Interestingly, \HS is the method that was used by Newcomb Greenleaf to prove\foo
 \begin{theorem}[\HS]\label{th:hs}\normalfont
   Let $\mathcal{M}$ be a Turing machine and $n \in \N$ a segment size. Let $G$ be the \HS graph for $\mathcal{M}$ and $n$ (Definition~\ref{def:hs-graph}). If $\mathcal{M}$ halts in halting transition $T$ when started from state A and all-0 tape, then $G$ must contain a halting node for transition $T$ for each of the $n+2$ possible values of the head's position $p \in \llbracket -1, n \rrbracket$.
 \end{theorem}
+\begin{proof}
+
+\end{proof}
+
+\begin{remark}
+  \normalfont Some non-halting machines cannot be decided using \HS for any segment size. Such a machine is for instance \url{https://bbchallenge.org/1RB---_1LC0RB_1LB1LA}.
+\end{remark}
