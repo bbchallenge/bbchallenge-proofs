@@ -1,21 +1,21 @@
-\section{Decider for ``Cyclers''}\label{sec:cyclers}
+\section{Cyclers}\label{sec:cyclers}
 
 \begin{figure}[h!]
-\centering
-\includegraphics[width=0.4\textwidth]{space-time-diagrams/cycler_279081.pdf}
-\hspace{2ex}
-\includegraphics[width=0.4\textwidth]{space-time-diagrams/cycler_4239083.pdf}
-\caption{Space-time diagrams of the 30 first steps of bbchallenge's machines \#279,081 (left) and \#4,239,083 (right) which are both ``Cyclers'': they eventually repeat the same configuration for ever. \\
-Access the machines at \url{https://bbchallenge/279081} and 
-\url{https://bbchallenge/4239083}.}\label{fig:cyclers}
+        \centering
+        \includegraphics[width=0.4\textwidth]{space-time-diagrams/cycler_279081.pdf}
+        \hspace{2ex}
+        \includegraphics[width=0.4\textwidth]{space-time-diagrams/cycler_4239083.pdf}
+        \caption{Space-time diagrams of the 30 first steps of bbchallenge's machines \#279,081 (left) and \#4,239,083 (right) which are both ``Cyclers'': they eventually repeat the same configuration for ever. \\
+                Access the machines at \url{https://bbchallenge/279081} and
+                \url{https://bbchallenge/4239083}.}\label{fig:cyclers}
 \end{figure}
 
 The goal of this decider is to recognise Turing machines that cycle through the same configurations for ever. Such machines never halt. The method is simple: remember every configuration seen by a machine and return \texttt{true} if one is visited twice. A time limit (maximum number of steps) is also given for running the test in practice: the algorithm recognises any machine whose cycle fits within this limit\footnote{In practice, for machines with 5 states the decider was run with 1000 steps time limit.}.
 
 
 \begin{example}\normalfont
-Figure~\ref{fig:cyclers} gives the space-time diagrams of the 30 first iterations of two ``Cyclers'' machines: bbchallenge's machines \#279,081 (left) and \#4,239,083 (right). Refer to \url{https://bbchallenge/279081} and 
-\url{https://bbchallenge/4239083} for their transition tables. From these space-time diagrams we see that the machines eventually repeat the same configuration.
+        Figure~\ref{fig:cyclers} gives the space-time diagrams of the 30 first iterations of two ``Cyclers'' machines: bbchallenge's machines \#279,081 (left) and \#4,239,083 (right). Refer to \url{https://bbchallenge/279081} and
+        \url{https://bbchallenge/4239083} for their transition tables. From these space-time diagrams we see that the machines eventually repeat the same configuration.
 \end{example}
 
 \newpage
@@ -33,7 +33,7 @@ We assume that we are given a Turing Machine type \textbf{TM} that encodes the t
                 \State \tabi\textbf{int} headPosition
                 \State \tabi\textbf{int $\boldsymbol{\to}$ int} tape
                 \State \}
-                \State 
+                \State
                 \Procedure{\textbf{bool} {\sc decider-cylers}}{\textbf{TM} machine,\textbf{int} timeLimit}
                 \State \textbf{Configuration} currConfiguration = \{.state = 0,$\,$.headPosition = 0,$\,$ .tape = \{0:0\}\}
                 \State \textbf{Set$\boldsymbol{<}$Configuration$\boldsymbol{>}$} configurationsSeen = \{\}

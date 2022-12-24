@@ -1,3 +1,6 @@
 {
-  "latex-workshop.latex.outDir": "."
+  "latex-workshop.latex.outDir": ".",
+  "editor.quickSuggestions": {
+    "other": "off"
+  }
 }

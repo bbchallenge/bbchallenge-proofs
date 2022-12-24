@@ -29,15 +29,15 @@
      inkscape:deskcolor="#d1d1d1"
      inkscape:document-units="pt"
      showgrid="false"
-     inkscape:zoom="1.2815014"
-     inkscape:cx="461.17779"
-     inkscape:cy="702.69137"
+     inkscape:zoom="2.5630029"
+     inkscape:cx="970.15108"
+     inkscape:cy="696.64378"
      inkscape:window-width="1920"
      inkscape:window-height="1027"
      inkscape:window-x="0"
      inkscape:window-y="27"
      inkscape:window-maximized="1"
-     inkscape:current-layer="g10465" />
+     inkscape:current-layer="svg445" />
   <polygon
      fill="#ffffff"
      stroke="transparent"
@@ -439,13 +439,6 @@
   <text
      text-anchor="middle"
      x="339.92508"
-     y="262.20001"
-     font-family="Times, serif"
-     font-size="14px"
-     id="text202">⊥</text>
-  <text
-     text-anchor="middle"
-     x="339.92508"
      y="277.20001"
      font-family="Times, serif"
      font-size="14px"
@@ -648,13 +641,6 @@
   <text
      text-anchor="middle"
      x="1256.925"
-     y="262.20001"
-     font-family="Times, serif"
-     font-size="14px"
-     id="text310">⊥</text>
-  <text
-     text-anchor="middle"
-     x="1256.925"
      y="277.20001"
      font-family="Times, serif"
      font-size="14px"
@@ -854,13 +840,6 @@
      points="851,0 919,-38 851,-76 783,-38 "
      id="polygon416"
      transform="translate(3.9250523,528)" />
-  <text
-     text-anchor="middle"
-     x="854.92505"
-     y="486.20001"
-     font-family="Times, serif"
-     font-size="14px"
-     id="text418">⊥</text>
   <text
      text-anchor="middle"
      x="854.92505"
@@ -1146,5 +1125,59 @@
         </g>
       </g>
     </g>
+  </g>
+  <g
+     id="g16833-4"
+     transform="translate(-521.00777,-223.64068)">
+    <text
+       text-anchor="middle"
+       x="866.01837"
+       y="486.004"
+       font-family="Times, serif"
+       font-size="14px"
+       id="text349-6-9">C1</text>
+    <text
+       text-anchor="middle"
+       x="851.92505"
+       y="486.20001"
+       font-family="Times, serif"
+       font-size="14px"
+       id="text418-0">⊥</text>
+  </g>
+  <g
+     id="g17965"
+     transform="translate(-2.9183673)">
+    <text
+       text-anchor="middle"
+       x="1265.2976"
+       y="263.4986"
+       font-family="Times, serif"
+       font-size="14px"
+       id="text349-6-9-9">C1</text>
+    <text
+       text-anchor="middle"
+       x="1251.2042"
+       y="263.69461"
+       font-family="Times, serif"
+       font-size="14px"
+       id="text418-0-1">⊥</text>
+  </g>
+  <g
+     id="g17986"
+     transform="translate(-2.4090595)">
+    <text
+       text-anchor="middle"
+       x="862.78827"
+       y="487.17429"
+       font-family="Times, serif"
+       font-size="14px"
+       id="text349-6-9-7">C1</text>
+    <text
+       text-anchor="middle"
+       x="848.69495"
+       y="487.3703"
+       font-family="Times, serif"
+       font-size="14px"
+       id="text418-0-7">⊥</text>
   </g>
 </svg>
