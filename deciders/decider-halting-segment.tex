@@ -81,17 +81,17 @@ Interestingly, \HS is the method that was used by Newcomb Greenleaf to prove\foo
 \subsection{Implementations and results}\label{sec:hs-implem}
 
 
-Here are the implementations of the method that were realised:
+Here are the implementations of the method that were realised, almost all of them construct the \HS graph from the halting nodes (backward implementation) instead than from the initial nodes (forward implementation):
 
 \begin{enumerate}
-  \item Iijil's who originally proposed the method, \url{https://github.com/bbchallenge/bbchallenge-deciders/tree/main/decider-halting-segment}, and was independently reproduced by cosmo \url{https://github.com/bbchallenge/bbchallenge-deciders/tree/main/decider-halting-segment-reproduction}
-  \item Mateusz Naściszewski (Mateon1)'s: \url{https://gist.github.com/mateon1/7f5e10169abbb50d1537165c6e71733b}
-  \item Nathan Fenner's which has the interesting feature of being written in a language for formal verification (Dafny): \url{https://github.com/Nathan-Fenner/bbchallenge-dafny-deciders/blob/main/halting-segment.dfy}
-  \item Tony Guilfoyle: \url{https://github.com/TonyGuil/bbchallenge/tree/main/HaltingSegments}
+  \item Iijil's who originally proposed the method, \url{https://github.com/bbchallenge/bbchallenge-deciders/tree/main/decider-halting-segment}, and was independently reproduced by cosmo \url{https://github.com/bbchallenge/bbchallenge-deciders/tree/main/decider-halting-segment-reproduction} (backward implementation)
+  \item Mateusz Naściszewski (Mateon1)'s: \url{https://gist.github.com/mateon1/7f5e10169abbb50d1537165c6e71733b} (forward implementation)
+  \item Nathan Fenner's which has the interesting feature of being written in a language for formal verification (Dafny): \url{https://github.com/Nathan-Fenner/bbchallenge-dafny-deciders/blob/main/halting-segment.dfy} (backward implementation)
+  \item Tony Guilfoyle: \url{https://github.com/TonyGuil/bbchallenge/tree/main/HaltingSegments} (backward implementation)
 \end{enumerate}
 
 We will be only discussing the details and results of Iijil's implementation (1) as it was the first implementation to be proposed and that it also was reproduced independently with exactly matching results.
 
-In this implementation, the \HS graph is constructed for all odd segment sizes up to size $n_\text{max}$ backwards from the halting node (one per halting transition) where the head's position is at the center of the tape. Also, the construction is a bit weaker to what is presented here since the information of state is not stored for nodes where the head is outside the segment which results in less machines decided than if it was.
+This implementation is a bit different from what is presented in this document because the \HS graph is constructed backward (i.e. from the halting nodes instead than from the initial nodes). Also, the method adopts a lazy strategy consisting in testing only odd segment sizes (up to size $n_\text{max}$) and placing the head's position at the center of the tape. Finally, the information of state is not stored for nodes where the head is outside the segment. These implementation choices make the implementation a bit weaker than what was presented here.
 
 Nonetheless, results are impressive, for $n_\texttt{max} = 13$, the method decides 1,012,659 machines out of the 1,538,624 remaining after backward reasoning (see Section~\ref{sec:backward-reasoning-results}). Hence, after \HS, we have 525,965 machines left to be decided.
