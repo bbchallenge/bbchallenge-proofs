@@ -1,7 +1,7 @@
 % !TEX root = ./correctness-deciders.tex
 \title{Correctness of bbchallenge's deciders}
 \author{
-        Tristan St\'{e}rin, Alexandre Jouandin and Sébastien Ohleyer
+        bbchallenge's contributors
 }
 
 \documentclass[a4paper,british]{article}
@@ -36,12 +36,15 @@
 \usepackage{microtype,xspace,wrapfig,multicol} 
 \usepackage[textsize=tiny,color=lightgray]{todonotes} 
 \usepackage[normalem]{ulem} % sout
+\usepackage{stmaryrd}
 
 \newcommand{\ts}[1]{{\color{red}#1}}
 \newcommand{\tsi}[1]{\todo[inline]{TS: #1}}
 \newcommand{\tsm}[1]{\todo{TS: #1}}
 \newcommand{\tss}[2]{{\ts{\sout{#1}}} {\ts{#2}}}
 \newcommand{\tabi}{\hspace{\algorithmicindent}}
+
+\newcommand{\N}{\mathbb{N}}
 
 \usepackage{xcolor}
 
@@ -93,6 +96,7 @@ We write $c_1 \vdash \bot$ if the machine halts after executing one computation 
 \input{decider-cyclers.tex}
 \input{decider-translated-cyclers.tex}
 \input{decider-backward-reasoning.tex}
+\input{decider-halting-segment.tex}
 
 \bibliographystyle{abbrv}
 \bibliography{correctness-deciders}
