@@ -105,26 +105,26 @@
         \node [on chain=2,fastate,draw=none,below=of --,xshift=-.5cm,yshift=-5mm] (a--) {Scan: \dots};
         \node [on chain=2,fastate] (a-2) {0};
         \node [on chain=2,fastate] (a-1) {0};
-        \node [on chain=2,fastate,minimum height=24pt,yshift=18pt] (a-0) {0};
-        \node [below=of a-0,fastate,minimum height=24pt] (a+0) {0A};
-        \node [on chain=2,fastate,yshift=-18pt] (a+1) {1B};
-        \node [on chain=2,fastate] (a+2) {$\begin{aligned}&\textrm{0B}\\|&\textrm{1B}\end{aligned}$};
+        \node [on chain=2,fastate,minimum height=24pt,yshift=-18pt] (a-0) {0A};
+        \node [above=of a-0,fastate,minimum height=24pt] (a+0) {1B};
+        \node [on chain=2,fastate,yshift=18pt] (a+1) {$\begin{aligned}&\textrm{0B}\\|&\textrm{1B}\end{aligned}$};
+        \node [on chain=2,fastate] (a+2) {$\begin{aligned}&\textrm{0A}\\|&\textrm{1A}\end{aligned}$};
         \node [on chain=2,fastate] (a+3) {$\begin{aligned}&\bot\\|&\textrm{0B}\\|&\textrm{1B}\end{aligned}$};
         \node [on chain=2,fastate] (a+4) {$\begin{aligned}&\bot\\|&\textrm{0B}\\|&\textrm{1A}\\|&\textrm{1B}\end{aligned}$};
         \node [on chain=2,fastate] (a+5) {$\begin{aligned}&\bot\\|&\textrm{0B}\\|&\textrm{1A}\\|&\textrm{1B}\end{aligned}$};
         \node [on chain=2,fastate,draw=none] (a++) {$\dots$};
       \end{scope}
 
-      \path (a-2) edge [dashed] (-2.west)
-                (a-1) edge [dashed] (-1.west)
-                (a-0) edge [dashed,bend left] (-0.west)
-                (a+0) edge [dashed,bend right] (+0.south)
-                (a+1) edge [dashed] (+1.west)
-                (a+2) edge [dashed] (+2.west)
-                (a+3) edge [dashed] (+3.west)
-                (a+4) edge [dashed] (+4.west)
-                (a+5) edge [dashed] (+5.west);
-          \draw[->] (a--) -- (a-2) -- (a-1) -- (a-0) -- (a+0) -- (a+1) -- (a+2) -- (a+3) -- (a+4) -- (a+5) -- (a++);
+      \path (a--) edge node [above] {$0$} (a-2)
+            (a-2) edge node [above] {$0$} (a-1)
+            (a-1) edge node [above] {$A$} (a-0)
+            (a-0) edge node [right] {$0$} (a+0)
+            (a+0) edge node [above] {$0$} (a+1)
+            (a+1) edge node [above] {$1$} (a+2)
+            (a+2) edge node [above] {$1$} (a+3)
+            (a+3) edge node [above] {$0$} (a+4)
+            (a+4) edge node [above] {$0$} (a+5)
+            (a+5) edge                    (a++);
     \end{tikzpicture}
     \caption{An NFA with transitions (\ref{fig:far_nfa}), scanning the top row of (\ref{fig:far_spacetime_halt}), stays in ``accepted'' state
       $\bot|\textrm{0B}|\textrm{1A}|\textrm{1B}$.}
