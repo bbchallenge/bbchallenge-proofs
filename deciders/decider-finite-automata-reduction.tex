@@ -145,8 +145,8 @@
 \subsection{Halt-recognizing automata}
 \label{far-defs-recognizer}
 As a generalization of backward reasoning, we can try to recognize eventually-halting configurations using finite automata, as in figure \ref{fig:finite-automata-reduction}\tsm{A bit too brief, it is quite vague (even to the informed reader) how "recognizing eventually-halting configurations using finite automata" relates or generalises BR.}.
-A recognizer with no false negatives, and with the initial configuration as a negative, would be a non-halting proof.
-We now seek criteria sufficient to preclude false negatives.
+\tss{A recognizer of with no false negatives, and with the initial configuration as a negative, would be a non-halting proof.}{For a given Turing machine, we aim at building a finite-state machine that recognises at least all eventually-halting configurations. That way, if it does not recognise the initial configuration then we know that the Turing machine does not halt.}
+We now seek criteria sufficient to preclude false negatives, \ts{i.e. avoiding that the finite-state machine would miss some eventually-halting configurations}.
 
 We may define an NFA (with $n$ states) in linear-algebraic terms:
 States and sets thereof are row vectors $q\in M_{1,n}$.
