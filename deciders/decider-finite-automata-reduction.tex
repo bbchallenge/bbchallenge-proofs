@@ -149,7 +149,7 @@ As a generalization of backward reasoning, we can try to recognize eventually-ha
 \tss{A recognizer of with no false negatives, and with the initial configuration as a negative, would be a non-halting proof.}{For a given Turing machine, we aim at building a finite-state machine that recognises at least all eventually-halting configurations. That way, if it does not recognise the initial configuration then we know that the Turing machine does not halt.}
 We now seek criteria sufficient to preclude false negatives, \ts{i.e. avoiding that the finite-state machine would miss some eventually-halting configurations}.
 
-We may define \tss{an NFA}{a Non-deterministic Finite Automaton (\textbf{NFA})} \tss{(with $n$ states)}{with $n$ states} in linear-algebraic terms:
+We may define a Nondeterministic Finite Automaton (\textbf{NFA}) with $n$ states in linear-algebraic terms:
 States and sets thereof are row vectors $q\in M_{1,n}$.
 A designated $q_0\in M_{1,n}$ is the initial state.
 Transitions are matrices $T_\gamma\in M_{n,n}$ for each $\gamma\in\{0,1,A,\ldots,E\}$, taking $q$ to $qT_\gamma$.
@@ -157,17 +157,16 @@ The acceptance condition is $q\cdot a\ne 0$ defined by a column vector $a\in M_{
 For words $u=\gamma_1\dots\gamma_\ell$, the condition is $q_0 T_u a\ne 0$, where $T_u\mathrel{\mathop:}=T_{\gamma_1}\dots T_{\gamma_\ell}$.
 \todo{JEB: Citation needed? \href{https://planetmath.org/matrixcharacterizationsofautomata}{LINK}}
 
-This is most natural with matrices over the Boolean domain $\mathbf{2}$, with operations \tss{$+=\operatorname{OR}$ and $\cdot=\operatorname{AND}$}{$\operatorname{OR}$ and $\operatorname{AND}$ respectively for $+$ and $\cdot$ operations}.
+This is most natural with matrices over the Boolean domain $\mathbf{2}$, with operations $\operatorname{OR}$ and $\operatorname{AND}$ respectively for $+$ and $\cdot$.
 \todo{JEB: Citation needed? \href{https://en.wikipedia.org/wiki/Two-element_Boolean_algebra}{LINK}}
-
 Let's adopt that convention, and also define the $\preceq$ relation on same-size matrices: $m\preceq m'$ if $m_{ij}\le m'_{ij}$ element-wise,
 that is, if the second matrix has at least the same 1-entries as the first matrix.
 
-We wish to apply \tss{the}{an} NFA to TM configurations.
+We wish to apply an NFA to TM configurations.
 \tss{As in figure \ref{fig:far_scan}, we form a word from a finite segment of the tape (which includes the head and all nonzero bits), writing the head's state before the bit it's on.}{
 We only work with configurations that have finitely many nonzero symbols on the tape. Define the \textit{support of a configuration} to be any finite tape segment that includes all the nonzero bits of the configuration. 
 We form words by concatenating the tape symbols of the support and writing the head's state before the bit it's on. For instance, the word associated to the tape depicted in Figure~\ref{fig:far_scan} reads \texttt{00A001100}.}
-Acceptance condition $q_0 T_u a\ne 0$ is \tss{now}{} well-defined, provided that:
+Acceptance condition $q_0 T_u a\ne 0$ is well-defined, provided that:
 \begin{align}
   q_0 T_0 &= q_0
   \label{far-cond-leading-0}
