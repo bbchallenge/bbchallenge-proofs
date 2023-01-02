@@ -148,7 +148,7 @@ As a generalization of backward reasoning, we can try to recognize eventually-ha
 \tss{A recognizer of with no false negatives, and with the initial configuration as a negative, would be a non-halting proof.}{For a given Turing machine, we aim at building a finite-state machine that recognises at least all eventually-halting configurations. That way, if it does not recognise the initial configuration then we know that the Turing machine does not halt.}
 We now seek criteria sufficient to preclude false negatives, \ts{i.e. avoiding that the finite-state machine would miss some eventually-halting configurations}.
 
-We may define \tss{an NFA}{a Non-deterministic Finite Automaton (\textbf{NFA})} (with $n$ states) in linear-algebraic terms:
+We may define \tss{an NFA}{a Non-deterministic Finite Automaton (\textbf{NFA})} \tss{(with $n$ states)}{with $n$ states} in linear-algebraic terms:
 States and sets thereof are row vectors $q\in M_{1,n}$.
 A designated $q_0\in M_{1,n}$ is the initial state.
 Transitions are matrices $T_\gamma\in M_{n,n}$ for each $\gamma\in\{0,1,A,\ldots,E\}$, taking $q$ to $qT_\gamma$.
