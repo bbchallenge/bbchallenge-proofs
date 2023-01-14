@@ -437,7 +437,7 @@ A slight elaboration allows for checking a specific $L$ instead of all DFAs, and
         \Repeat
           \State a[L.\textbf{length}()] = R[L.\textbf{length}()][0] * a[L.\textbf{length}()]
         \Until{a[L.\textbf{length}()] stops changing}
-        \If{$\langle\bot\vert\cdot a\ne 0$}
+        \If{$\langle 0,A\vert\cdot a\ne 0$}
           \Return SKIP
         \ElsIf{L.\textbf{length}() == 2*n}
           \Return STOP
