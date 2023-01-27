@@ -177,7 +177,7 @@ Acceptance condition $q_0 T_u a\ne 0$ is well-defined, provided that:
 
 Let $f,t$ denote TM states (the ``from'' and ``to'' states in a TM transition), and $r,w,b$ denote bits (a bit ``read'', a bit ``written'', and just a bit).
 Our goal of recognizing all eventually-halting configurations is, by induction, met if we ensure that $c\vdash\bot\implies\operatorname{accept(c)}$
-and $c_1\vdash c_2\land\operatorname{accept(c_2)}\implies\operatorname{accept}(c_1)$.
+and $(c_1\vdash c_2)\land\operatorname{accept(c_2)}\implies\operatorname{accept}(c_1)$.
 This expands to the following conditions:
 \begin{align*}
   \forall u_1,u_2\in\mathbf{2}^*: q_0 T_{u_1} T_f T_r T_{u_2} a \ne 0,\;& \text{if $\ldots fr\ldots\vdash\bot$ is a halt rule}
@@ -377,7 +377,7 @@ Call them $\langle i,f\vert$.
 Finally, let's have $(q_0,\{L_b\})$ come from a DFA that ignores leading zeros.
 That ensures \eqref{far-cond-leading-0} and \eqref{far-cond-total}.
 
-We seek a ``direct'' algorithm which searches DFAs and solves for $a$ and $R$ if possible.
+We seek a ``direct'' algorithm which searches DFAs and solves \eqref{far-cond-first}--\eqref{far-cond-last} for $a$, $R_0$, $R_1$ if possible.
 
 A helpful property of standard basis vectors is: the condition $\langle i\vert m\succeq v$ is equivalent to $m\succeq\vert i\rangle v$.
 
