@@ -213,9 +213,9 @@ c\vdash\bot &\implies \hat{c} \in \mathcal{L}\\
 \ts{With $c, c_1, c_2$ configurations of the TM with finite support and $\hat{c}, \hat{c}_1, \hat{c}_2$ their associated finite word as described above. Let $f,t \in \{A,B,C,D,E\}$ denote TM states (the ``from'' and ``to'' states in a TM transition), and $r,w,b \in \{0,1\}$ denote bits (a bit ``read'', a bit ``written'', and just a bit), then the above conditions turn into:}
 
 \begin{align*}
-  \forall u_1,u_2\in\mathbf{2}^*: \; u_1 \, f \, r \, u_2 \in \mathcal{L},\;& \text{if $(f,r) \to \bot$ is a halting transition of $\mathcal{M}$}
+  \forall u,z\in\mathbf{2}^*: \; ufrz \in \mathcal{L},\;& \text{if $(f,r) \to \bot$ is a halting transition of $\mathcal{M}$}
   \\
-  \forall u_1,u_2\in\mathbf{2}^*: u_1 \,  t\, b\, w \, u_2 \in \mathcal{L} \implies u_1 \, b \, f \, r \, u_2 \in \mathcal{L},\;& \text{if $(f,r) \to (t,w,\text{left})$ is a transition of $\mathcal{M}$}
+  \forall u,z\in\mathbf{2}^*,\,\forall b \in \mathbf{2}: utbwz \in \mathcal{L} \implies ubfrz \in \mathcal{L},\;& \text{if $(f,r) \to (t,w,\text{left})$ is a transition of $\mathcal{M}$}
   \\
   \forall u_1,u_2\in\mathbf{2}^*: q_0 T_{u_1} T_w T_t T_{u_2} a = 1 \implies q_0 T_{u_1} T_f T_r T_{u_2} a = 1,\;& \text{if $\ldots fr\ldots\vdash\ldots wt\ldots$ is a right rule}
 \end{align*}
