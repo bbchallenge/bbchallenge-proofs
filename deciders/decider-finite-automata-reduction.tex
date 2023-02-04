@@ -186,13 +186,11 @@ Since we only work with configurations that have finitely many nonzero symbols o
 
 \ts{Let $\mathcal{L}$ be the regular language recognised by the NFA that we wish to construct for a given TM. Since the support of a configuration can contain as many leading or trailing 0s as wanted, it is natural that we ask the following conditions:
 
-\begin{align}
+\begin{align*}
   u \in \mathcal{L} \Rightarrow 0u \in \mathcal{L} && \text{(leading zeros ignored)}
-  \label{far-cond-leading-0}
   \\
   u \in \mathcal{L} \Rightarrow u0 \in \mathcal{L} && \text{(trailing zeros ignored)}
-  \label{far-cond-trailing-0}
-\end{align}
+\end{align*}
 
 }
 
