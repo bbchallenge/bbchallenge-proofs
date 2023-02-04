@@ -220,13 +220,15 @@ c\vdash\bot &\implies \hat{c} \in \mathcal{L}\\
   \forall u,z\in\mathbf{2}^*,\,\forall b \in \mathbf{2}: u w t z \in \mathcal{L} \implies u f r z \in \mathcal{L},\;& \text{if $(f,r) \to (t,w,\text{right})$ is a transition of $\mathcal{M}$}
 \end{align*}
 
-% \begin{align*}
-%   \forall u_1,u_2\in\mathbf{2}^*: \; u_1 \, f \, r \, u_2 \in \mathcal{L},\;& \text{if $(f,r)$ is a halting transition of $\mathcal{M}$}
-%   \\
-%   \forall u_1,u_2\in\mathbf{2}^*: q_0 T_{u_1} T_t T_b T_w T_{u_2} a \ne 0 \implies q_0 T_{u_1} T_b T_f T_r T_{u_2} a \ne 0,\;& \text{if $\ldots bfr\ldots\vdash\ldots tbw\ldots$ is a left rule}
-%   \\
-%   \forall u_1,u_2\in\mathbf{2}^*: q_0 T_{u_1} T_w T_t T_{u_2} a \ne 0 \implies q_0 T_{u_1} T_f T_r T_{u_2} a \ne 0,\;& \text{if $\ldots fr\ldots\vdash\ldots wt\ldots$ is a right rule}
-% \end{align*}
+Which algebraically becomes:
+
+\begin{align*}
+  \forall u_1,u_2\in\mathbf{2}^*: \; u_1 \, f \, r \, u_2 \in \mathcal{L},\;& \text{if $(f,r)$ is a halting transition of $\mathcal{M}$}
+  \\
+  \forall u_1,u_2\in\mathbf{2}^*: q_0 T_{u_1} T_t T_b T_w T_{u_2} a \ne 0 \implies q_0 T_{u_1} T_b T_f T_r T_{u_2} a \ne 0,\;& \text{if $\ldots bfr\ldots\vdash\ldots tbw\ldots$ is a left rule}
+  \\
+  \forall u_1,u_2\in\mathbf{2}^*: q_0 T_{u_1} T_w T_t T_{u_2} a \ne 0 \implies q_0 T_{u_1} T_f T_r T_{u_2} a \ne 0,\;& \text{if $\ldots fr\ldots\vdash\ldots wt\ldots$ is a right rule}
+\end{align*}
 
 These conditions are unwieldy. Let's seek stronger (thus still sufficient) conditions which are simpler.
 
