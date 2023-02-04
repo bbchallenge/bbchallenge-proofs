@@ -1,6 +1,10 @@
 {
   "latex-workshop.latex.outDir": ".",
-  "editor.quickSuggestions": false,
+  "editor.quickSuggestions": {
+    "comments": "off",
+    "strings": "off",
+    "other": "off"
+  },
   "latex-workshop.latex.recipes": [
     {
       "name": "pdflatex",
