@@ -166,7 +166,7 @@ One important aspect of the technique is that, given a Turing machine and its co
 \tss{A recognizer of with no false negatives, and with the initial configuration as a negative, would be a non-halting proof.}{For a given Turing machine, we aim at building a finite-state machine that recognises at least all eventually-halting configurations. That way, if it does not recognise the initial configuration then we know that the Turing machine does not halt from it.}
 \tss{We now seek criteria sufficient to preclude false negatives, \ts{i.e. avoiding that the finite-state machine would miss some eventually-halting configurations}.}{}
 
-\newcommand{\M}{\mathcal{M}}
+\newcommand{\M}{M}
 
 We may define a Nondeterministic Finite Automaton (\textbf{NFA}) \ts{over alphabet $\mathcal{A}$} with $n$ states, in linear-algebraic terms \ts{in the Boolean domain $\mathbf{2} = \{0,1\}$} with operations $\operatorname{OR}$ and $\operatorname{AND}$ respectively for $+$ and $\cdot \;$. 
 \ts{Let $\M_{m,n}$ be the set of such Boolean matrices with $m$ rows and $n$ columns. States of the NFA are numbered between 1 and $n$ and state $i$ is represented by the Boolean row vector $e_i \in \M_{1,n}$ with only one entry set to 1 at the $i^\text{th}$ position. Sets of states are represented by Boolean row vectors $q\in M_{1,n}$.} A designated $q_0\in \M_{1,n}$ \tss{is the initial state}{represents the set of initial states of the NFA}.
@@ -203,12 +203,17 @@ Since we only work with configurations that have finitely many nonzero symbols o
   \label{far-cond-trailing-0}
 \end{align}
 
-Let $f,t$ denote TM states (the ``from'' and ``to'' states in a TM transition), and $r,w,b$ denote bits (a bit ``read'', a bit ``written'', and just a bit).
-Our goal of recognizing all eventually-halting configurations is, by induction, met if we ensure that $c\vdash\bot\implies\operatorname{accept(c)}$
-and $(c_1\vdash c_2)\land\operatorname{accept(c_2)}\implies\operatorname{accept}(c_1)$.
-This expands to the following conditions:
+\ts{Then, we want our NFA's language $\mathcal{L}$ to include all eventually-halting configurations of a given Turing machine $\mathcal{M}$.  Inductively, we want that:}
+
 \begin{align*}
-  \forall u_1,u_2\in\mathbf{2}^*: q_0 T_{u_1} T_f T_r T_{u_2} a \ne 0,\;& \text{if $\ldots fr\ldots\vdash\bot$ is a halt rule}
+c\vdash\bot &\implies \hat{c} \in \mathcal{L}\\
+(c_1\vdash c_2)\land \hat{c}_2 \in \mathcal{L}&\implies\hat{c}_1 \in \mathcal{L} 
+\end{align*}
+
+\ts{With $c, c_1, c_2$ configurations of the TM with finite support and $\hat{c}, \hat{c}_1, \hat{c}_2$ their associated finite word as described above. Algebraically, it turns into, with $f,t \in \{A,B,C,D,E\}$ denoting TM states (the ``from'' and ``to'' states in a TM transition), and $r,w,b \in \{0,1\}$ denoting bits (a bit ``read'', a bit ``written'', and just a bit):}
+
+\begin{align*}
+  \forall u_1,u_2\in\mathbf{2}^*: \; u_1 \, f \, r \, u_2 \in \mathcal{L},\;& \text{if $(f,r)$ is a halting transition of $\mathcal{M}$}
   \\
   \forall u_1,u_2\in\mathbf{2}^*: q_0 T_{u_1} T_t T_b T_w T_{u_2} a \ne 0 \implies q_0 T_{u_1} T_b T_f T_r T_{u_2} a \ne 0,\;& \text{if $\ldots bfr\ldots\vdash\ldots tbw\ldots$ is a left rule}
   \\
