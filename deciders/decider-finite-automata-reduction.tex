@@ -163,27 +163,40 @@ One important aspect of the technique is that, given a Turing machine and its co
 \subsection{Halt-recognizing automata}
 \label{far-defs-recognizer}
 \tss{As a generalization of backward reasoning, we can try to recognize eventually-halting configurations using finite automata, as in figure \ref{fig:finite-automata-reduction}}{}.
-\tss{A recognizer of with no false negatives, and with the initial configuration as a negative, would be a non-halting proof.}{For a given Turing machine, we aim at building a finite-state machine that recognises at least all eventually-halting configurations. That way, if it does not recognise the initial configuration then we know that the Turing machine does not halt.}
-We now seek criteria sufficient to preclude false negatives, \ts{i.e. avoiding that the finite-state machine would miss some eventually-halting configurations}.
+\tss{A recognizer of with no false negatives, and with the initial configuration as a negative, would be a non-halting proof.}{For a given Turing machine, we aim at building a finite-state machine that recognises at least all eventually-halting configurations. That way, if it does not recognise the initial configuration then we know that the Turing machine does not halt from it.}
+\tss{We now seek criteria sufficient to preclude false negatives, \ts{i.e. avoiding that the finite-state machine would miss some eventually-halting configurations}.}{}
 
-We may define a Nondeterministic Finite Automaton (\textbf{NFA}) with $n$ states in linear-algebraic terms:
-States and sets thereof are row vectors $q\in M_{1,n}$.
-A designated $q_0\in M_{1,n}$ is the initial state.
-Transitions are matrices $T_\gamma\in M_{n,n}$ for each $\gamma\in\{0,1,A,\ldots,E\}$, taking $q$ to $qT_\gamma$.
-The acceptance condition is $q\cdot a\ne 0$ defined by a column vector $a\in M_{n,1}$.
-For words $u=\gamma_1\dots\gamma_\ell$, the condition is $q_0 T_u a\ne 0$, where $T_u\mathrel{\mathop:}=T_{\gamma_1}\dots T_{\gamma_\ell}$.
-\todo{JEB: Citation needed? \href{https://planetmath.org/matrixcharacterizationsofautomata}{LINK}}
+\newcommand{\M}{\mathcal{M}}
 
-This is most natural with matrices over the Boolean domain $\mathbf{2}$, with operations $\operatorname{OR}$ and $\operatorname{AND}$ respectively for $+$ and $\cdot$.
-\todo{JEB: Citation needed? \href{https://en.wikipedia.org/wiki/Two-element_Boolean_algebra}{LINK}}
-Let's adopt that convention, and also define the $\preceq$ relation on same-size matrices: $m\preceq m'$ if $m_{ij}\le m'_{ij}$ element-wise,
+We may define a Nondeterministic Finite Automaton (\textbf{NFA}) \ts{over alphabet $\mathcal{A}$} with $n$ states, in linear-algebraic terms \ts{in the Boolean domain $\mathbf{2} = \{0,1\}$} with operations $\operatorname{OR}$ and $\operatorname{AND}$ respectively for $+$ and $\cdot \;$. 
+\ts{Let $\M_{m,n}$ be the set of such Boolean matrices with $m$ rows and $n$ columns. States of the NFA are numbered between 1 and $n$ and state $i$ is represented by the Boolean row vector $e_i \in \M_{1,n}$ with only one entry set to 1 at the $i^\text{th}$ position. Sets of states are represented by Boolean row vectors $q\in M_{1,n}$.} A designated $q_0\in \M_{1,n}$ \tss{is the initial state}{represents the set of initial states of the NFA}.
+Transitions are matrices $T_\gamma\in \M_{n,n}$ for each \tss{$\gamma\in\{0,1,A,\ldots,E\}$}{$\gamma\in\mathcal{A}$}, taking $q$ to $qT_\gamma$.
+\tss{The acceptance condition is $q\cdot a = 1$ defined by a column vector $a\in \M_{n,1}$.}{A word $u=\gamma_1\dots\gamma_\ell \in \mathcal{A}^*$ is accepted by the NFA iff one of its execution traces by the NFA reaches an accepting state, which translates to $q_0 T_u a = 1$ with $a\in \M_{1,n}$ representing the set of accepting states.\todo{JEB: Citation needed? \href{https://en.wikipedia.org/wiki/Two-element_Boolean_algebra}{LINK}}}
+
+\begin{example}
+TODO
+\end{example}
+
+Let's define the $\preceq$ relation on same-size matrices: $m\preceq m'$ if $m_{ij}\le m'_{ij}$ element-wise,
 that is, if the second matrix has at least the same 1-entries as the first matrix.
 
-We wish to apply an NFA to TM configurations.
+\tss{We wish to apply an NFA to TM configurations.}{We wish to describe Turing machine configurations with finite words that will be read by our NFAs.}
 \tss{As in figure \ref{fig:far_scan}, we form a word from a finite segment of the tape (which includes the head and all nonzero bits), writing the head's state before the bit it's on.}{
-We only work with configurations that have finitely many nonzero symbols on the tape. Define the \textit{support of a configuration} to be any finite tape segment that includes all the nonzero bits of the configuration. 
-We form words by concatenating the tape symbols of the support and writing the head's state before the bit it's on. For instance, the word associated to the tape depicted in Figure~\ref{fig:far_scan} reads \texttt{00A001100}.}
-Acceptance condition $q_0 T_u a\ne 0$ is well-defined, provided that:
+Since we only work with configurations that have finitely many nonzero symbols on the tape we can transform a Turing machine configuration's with a word in the alphabet $\{0,1,A,B,C,D,E\}$ that will describe the support of the configuration (i.e. any segment of the machine's tape that contains at least all non-zero cells) and write the head's state before the bit it's on. For instance, the word associated to the configuration depicted in Figure~\ref{fig:far_scan} is \texttt{00A001100}.}
+
+\ts{Let $\mathcal{L}$ be the regular language that we wish to construct for a given TM. Since the support of a configuration can contain as many leading or trailing 0s as wanted, it is natural that we ask the following conditions:
+
+\begin{align}
+  u \in \mathcal{L} \Rightarrow 0u \in \mathcal{L} && \text{(leading zeros ignored)}
+  \label{far-cond-leading-0}
+  \\
+  u \in \mathcal{L} \Rightarrow u0 \in \mathcal{L} && \text{(trailing zeros ignored)}
+  \label{far-cond-trailing-0}
+\end{align}
+
+}
+
+\tss{Acceptance condition $q_0 T_u a\ne 0$ is well-defined, provided that}{We translated these into the following stronger conditions on the transition matrix $T_0 \in \M_{n,n}$}:
 \begin{align}
   q_0 T_0 &= q_0
   \label{far-cond-leading-0}
