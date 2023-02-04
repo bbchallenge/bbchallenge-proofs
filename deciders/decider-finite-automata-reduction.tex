@@ -1,20 +1,15 @@
 % !TEX root = ./correctness-deciders.tex
 \section{Finite automata reduction}\label{sec:finite-automata-reduction}
 
-\subsection{\ts{Method overview}}
+\subsection{Method overview}
 
-\ts{The core idea of the method presented in this Section is to find, for a given Turing machine, a regular language that describes at least all of the machine's eventually-halting configurations -- with finite support\footnote{By finite support, we mean tapes that contain finitely many 1s, i.e. that are prefixed and suffixed by infinitely many 0s.}. Then, we only have to test that the initial all-0 configuration is not part of the language to deduce that the machine does not halt from it. 
+The core idea of the method presented in this Section is to find, for a given Turing machine, a regular language that describes at least all of the machine's eventually-halting configurations\ts{ -- with finite support\footnote{By finite support, we mean tapes that contain finitely many 1s, i.e. that are prefixed and suffixed by infinitely many 0s.}}. Then, we only have to test that the initial all-0 configuration is not part of the language to deduce that the machine does not halt from it.
 
 This idea has been explored by other authors under the name Closed Tape Languages (CTL) as described in Shawn Ligocki's blog (\url{https://www.sligocki.com/2022/06/10/ctl.html}) and credited to H. Marxen in collaboration with J. Buntrock.
 
-Here, we develop an original technique, based on the algebraic description of Non-deterministic Finite Automata (NFA), for finding the regular language associated to a machine's eventually halting configurations.
+Here, we develop an original technique, based on the algebraic description of Nondeterministic Finite Automata (NFA), for finding the regular language associated to a machine's eventually halting configurations.
 
-One important aspect of the technique is that, given a Turing machine and its constructed NFA -- if found --, it is a \textbf{simple} task to verify that the NFA's language does indeed recognise at least all eventually-halting configurations of the machine. 
-}
-
-
-
-
+One important aspect of the technique is that, given a Turing machine and its constructed NFA---if found---it is a \textbf{simple} task to verify that the NFA's language does indeed recognise at least all eventually-halting configurations of the machine.
 
 
 \usetikzlibrary {automata, positioning}
@@ -162,8 +157,8 @@ One important aspect of the technique is that, given a Turing machine and its co
 
 \subsection{Halt-recognizing automata}
 \label{far-defs-recognizer}
-\tss{As a generalization of backward reasoning, we can try to recognize eventually-halting configurations using finite automata, as in figure \ref{fig:finite-automata-reduction}}{}.
-\tss{A recognizer of with no false negatives, and with the initial configuration as a negative, would be a non-halting proof.}{For a given Turing machine, we aim at building a finite-state machine that recognises at least all eventually-halting configurations. That way, if it does not recognise the initial configuration then we know that the Turing machine does not halt from it.}
+For a given Turing machine, we aim at building a finite-state machine that recognises at least all eventually-halting configurations. That way, if it does not recognise the initial configuration then we know that the Turing machine does not halt from it.
+\tss{as in figure \ref{fig:finite-automata-reduction}}{}.
 \tss{We now seek criteria sufficient to preclude false negatives, \ts{i.e. avoiding that the finite-state machine would miss some eventually-halting configurations}.}{}
 
 \newcommand{\M}{M}
@@ -705,8 +700,6 @@ It uses Kissat\cite{Biere_2020} as its \textsc{SAT} solver.
 More information about these results are available at: \url{https://discuss.bbchallenge.org/t/decider-finite-automata-reduction/123}.
 
 \subsection{Related research}
-This section's core idea---\emph{Closed Tape Languages}---is folklore, described in Shawn Ligocki's blog (\url{https://www.sligocki.com/2022/06/10/ctl.html}) and credited to H. Marxen in collaboration with J. Buntrock.
-
 The ``direct'' algorithm of \S \ref{far-algo-direct} was first found by applying \cite{BEM_1997}.
 Rough sketch: treat a TM as a two-stack machine (one per side of the tape).
 Fix a DFA classifying left half-tape configurations.
