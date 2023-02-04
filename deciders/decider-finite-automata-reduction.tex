@@ -175,9 +175,12 @@ TODO
 Let's define the $\preceq$ relation on same-size matrices: $m\preceq m'$ if $m_{ij}\le m'_{ij}$ element-wise,
 that is, if the second matrix has at least the same 1-entries as the first matrix.
 
-\tss{We wish to apply an NFA to TM configurations.}{We wish to describe Turing machine configurations with finite words that will be read by our NFAs.}
-\tss{As in figure \ref{fig:far_scan}, we form a word from a finite segment of the tape (which includes the head and all nonzero bits), writing the head's state before the bit it's on.}{
-Since we only work with configurations that have finitely many nonzero symbols on the tape we can transform a Turing machine configuration's with a word in the alphabet $\{0,1,A,B,C,D,E\}$ that will describe the support of the configuration (i.e. any segment of the machine's tape that contains at least all non-zero cells) and write the head's state before the bit it's on. For instance, the word associated to the configuration depicted in Figure~\ref{fig:far_scan} is \texttt{00A001100}.}
+We wish to describe Turing machine configurations with finite words, which will be read by our NFAs.
+Since we only work with configurations that have finitely many nonzero symbols on the tape,
+we can transform a Turing machine configuration into a word in the alphabet $\{0,1,A,B,C,D,E\}$
+that will describe \ts{the support of the configuration (i.e.} any segment of the machine's tape that contains at least all non-zero cells\ts{)}
+and write the head's state before the bit it's on.
+For instance, the word associated to the configuration depicted in Figure~\ref{fig:far_scan} is \texttt{00A001100}.
 
 \ts{Let $\mathcal{L}$ be the regular language recognised by the NFA that we wish to construct for a given TM. Since the support of a configuration can contain as many leading or trailing 0s as wanted, it is natural that we ask the following conditions:
 
