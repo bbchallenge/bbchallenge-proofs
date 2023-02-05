@@ -229,19 +229,19 @@ Which algebraically becomes:
 
 These conditions are unwieldy. Let's seek stronger (thus still sufficient) conditions which are simpler.
 
-For left/right rules, simply require $T_t T_b T_w\preceq T_b T_f T_r$ and $T_w T_t\preceq T_f T_r$, respectively.
+For \tss{left/right rules}{machine transitions going left/right}, simply require $T_t T_b T_w\preceq T_b T_f T_r$ and $T_w T_t\preceq T_f T_r$, respectively.
 
-To simplify the halt-rule condition:
-assert the sub-expression $q_0 T_{u_1}$ is never zero,
-and (for $q$ a nonzero combination of such vectors and $fr\vdash\bot$ a halt rule)
-$q T_f T_r$ is a vector $q'$ satisfying $\forall u_2\in\mathbf{2}^*: q' T_{u_2} a\ne 0$.
+To simplify \tss{the halt-rule condition}{condition for halting machine transitions}:
+assert \ts{that for all $u \in \mathbf{2}^*$}, the sub-expression $q_0 T_{u}$ is \tss{never}{not} zero \ts{(this means that reading 0 and 1 from the initial states must always lead to some state\footnote{This assertion is not limiting since if it is not met by some NFA, adding an additional sink state to the NFA will not change the recognised language and will satisfy the assertion.})},
+and \tss{(for $q$ a nonzero combination of such vectors and $fr\vdash\bot$ a halt rule)}{that $q_0 T_{u} T_f T_r$}
+is a vector $q'$ satisfying $\forall z\in\mathbf{2}^*: q' T_{z} a = 1$ \ts{(this means that the NFA will accept any word containing a halting transition independently of the bits written after the machine's head)}.
 
-Going further: define an \emph{accepted steady state} $s$ to be a vector such that $sa\ne 0$, $s T_0\succeq s$, and $s T_1\succeq s$.
-Given such $s$, $q'\succeq s\implies \forall u_2\in\mathbf{2}^*: q'T_{u_2}a\ne 0$.
+Going further: define an \emph{accepted steady state} $s$ to be a vector such that $sa = 1$, $s T_0\succeq s$, and $s T_1\succeq s$.
+Given such $s$ \ts{we have}, $q'\succeq s\implies \forall z\in\mathbf{2}^*: q'T_{z}a = 1$.
 
 We have shown:
 
-\begin{theorem}
+\begin{theorem}\normalfont
   \label{far-main-theorem}
   Machine $\mathcal{M}$ doesn't halt if there are an NFA $(q_0, \{T_\gamma\}, a)$ and vector $s$ satisfying the below:
   \begin{align}
@@ -258,7 +258,7 @@ We have shown:
     &&\text{(initial configuration rejected)}
     \label{far-cond-reject-start}
     \\
-    sa &\ne 0
+    sa &= 1
     &&\text{($s$ is accepted)}
     \label{far-cond-ass-accepted}
     \\
@@ -266,20 +266,20 @@ We have shown:
     &&\text{($s$ is a steady state)}
     \label{far-cond-ass-steady}
     \\
-    \forall u\in\mathbf{2}^*: q_0 T_u &\ne 0
+    \forall u\in\mathbf{2}^*: q_0 T_u &\neq 0
     &&\text{(0-,1- transitions are \textbf{total} up to the head)}
     \label{far-cond-total}
     \\
-    \forall q\in\operatorname{span}\{q_0T_u\}-\{0\}: q T_f T_r &\succeq s
-    &&\text{if $\ldots fr\ldots\vdash_\mathcal{M}\bot$ is a halt rule}
+    \forall u\in\mathbf{2}^*: q_0T_u T_f T_r &\succeq s
+    &&\text{if $(f,r) \to \bot$ is a halting transition of $\mathcal{M}$}
     \label{far-cond-halt}
     \\
     T_b T_f T_r &\succeq T_t T_b T_w
-    &&\text{if $\ldots bfr\ldots\vdash_\mathcal{M}\ldots tbw\ldots$ is a left rule}
+    &&\text{if $(f,r) \to (t,w,\text{left})$ is a transition of $\mathcal{M}$}
     \label{far-cond-left}
     \\
     T_f T_r &\succeq T_w T_t
-    &&\text{if $\ldots fr\ldots\vdash_\mathcal{M}\ldots wt\ldots$ is a right rule}
+    &&\text{if $(f,r) \to (t,w,\text{right})$ is a transition of $\mathcal{M}$}
     %\label{far-cond-right}
     \label{far-cond-last}
   \end{align}
