@@ -3,13 +3,13 @@
 
 \subsection{Method overview}
 
-The core idea of the method presented in this Section is to find, for a given Turing machine, a regular language that describes \jbs{at least all}{the set (or a superset)} of the machine's eventually-halting configurations\ts{ -- with finite support\footnote{By finite support, we mean tapes that contain finitely many 1s, i.e. that are prefixed and suffixed by infinitely many 0s.}}. Then, we only have to test that the initial all-0 configuration is not part of the language to deduce that the machine does not halt from it.
+The core idea of the method presented in this Section is to find, for a given Turing machine, a regular language that describes the set (or a superset) of the machine's eventually-halting configurations\ts{ -- with finite support\footnote{By finite support, we mean tapes that contain finitely many 1s, i.e. that are prefixed and suffixed by infinitely many 0s.}}. Then, we only have to test that the initial all-0 configuration is not part of the language to deduce that the machine does not halt from it.
 
 This idea has been explored by other authors under the name Closed Tape Languages (CTL) as described in S. Ligocki's blog (\url{https://www.sligocki.com/2022/06/10/ctl.html}) and credited to H. Marxen in collaboration with J. Buntrock.
 
 Here, we develop an original technique, based on the algebraic description of Nondeterministic Finite Automata (NFA), for finding the regular language associated to a machine's eventually halting configurations.
 
-One important aspect of the technique is that, given a Turing machine and its constructed NFA---if found---it is a \jbs{\textbf{simple}}{computationally simple} task to verify that the NFA's language does indeed recognise \jbs{at least }all eventually-halting configurations of the machine.
+One important aspect of the technique is that, given a Turing machine and its constructed NFA---if found---it is a computationally simple task to verify that the NFA's language does indeed recognise all eventually-halting configurations of the machine.
 
 
 \usetikzlibrary {automata, positioning}
