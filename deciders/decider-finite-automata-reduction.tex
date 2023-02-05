@@ -242,14 +242,14 @@ assert \ts{that for all $u \in \mathbf{2}^*$}, the sub-expression $q_0 T_{u}$ is
 and \tss{(for $q$ a nonzero combination of such vectors and $fr\vdash\bot$ a halt rule)}{that $q_0 T_{u} T_f T_r$}
 is a vector $q'$ satisfying $\forall z\in\mathbf{2}^*: q' T_{z} a = 1$ \ts{(this means that the NFA will accept any word containing a halting transition independently of the bits written after the machine's head)}.
 
-Going further: define an \emph{accepted steady state} $s$ to be a vector such that $sa = 1$, $s T_0\succeq s$, and $s T_1\succeq s$.
+Going further: define an \emph{accepted steady state}\tsm{I have an issue with using the word state for \textit{steady state} here, since $s$ is a set of NFA states. This issue of using the word state to mean a set of states arises at other points of the text.} $s$ to be a \ts{row} vector such that $sa = 1$, $s T_0\succeq s$, and $s T_1\succeq s$.
 Given such $s$ \ts{we have}, $q'\succeq s\implies \forall z\in\mathbf{2}^*: q'T_{z}a = 1$.
 
 We have shown:
 
 \begin{theorem}\normalfont
   \label{far-main-theorem}
-  Machine $\mathcal{M}$ doesn't halt if there are an NFA $(q_0, \{T_\gamma\}, a)$ and vector $s$ satisfying the below:
+  Machine $\mathcal{M}$ doesn't halt if there are an NFA $(q_0, \{T_\gamma\}, a)$ and \ts{row} vector $s$ satisfying the below:
   \begin{align}
     \label{far-cond-first}
     q_0 T_0 &= q_0
