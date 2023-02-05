@@ -163,10 +163,16 @@ For a given Turing machine, we aim at building a finite-state machine that recog
 
 \newcommand{\M}{M}
 
-We may define a Nondeterministic Finite Automaton (\textbf{NFA}) \ts{over alphabet $\mathcal{A}$} with $n$ states, in linear-algebraic terms \ts{in the Boolean domain $\mathbf{2} = \{0,1\}$} with operations $\operatorname{OR}$ and $\operatorname{AND}$ respectively for $+$ and $\cdot \;$. 
-\ts{Let $\M_{m,n}$ be the set of such Boolean matrices with $m$ rows and $n$ columns. States of the NFA are numbered between 1 and $n$ and state $i$ is represented by the Boolean row vector $e_i \in \M_{1,n}$ with only one entry set to 1 at the $i^\text{th}$ position. Sets of states are represented by Boolean row vectors $q\in M_{1,n}$.} A designated $q_0\in \M_{1,n}$ \tss{is the initial state}{represents the set of initial states of the NFA}.
-Transitions are matrices $T_\gamma\in \M_{n,n}$ for each \tss{$\gamma\in\{0,1,A,\ldots,E\}$}{$\gamma\in\mathcal{A}$}, taking $q$ to $qT_\gamma$.
-\tss{The acceptance condition is $q\cdot a = 1$ defined by a column vector $a\in \M_{n,1}$.}{A word $u=\gamma_1\dots\gamma_\ell \in \mathcal{A}^*$ is accepted by the NFA iff one of its execution traces by the NFA reaches an accepting state, which translates to $q_0 T_u a = 1$ with $a\in \M_{1,n}$ representing the set of accepting states.\todo{JEB: Citation needed? \href{https://en.wikipedia.org/wiki/Two-element_Boolean_algebra}{LINK}}}
+
+\ts{Let $\M_{m,n}$ be the set of matrices with $m$ rows and $n$ columns over the Boolean domain $\mathbf{2} = \{0,1\}$ where operations $+$ and $\cdot$ are respectively implemented by $\operatorname{OR}$ and $\operatorname{AND}$.}
+
+We may define a Nondeterministic Finite Automaton (\textbf{NFA}) with $n$ states and alphabet $\mathcal{A}$ \ts{as a tuple $(q_0, \{T_\gamma \; | \; \gamma \in \mathcal{A}\}, a)$} where $q_0 \in \M_{1,n}$ and $a \in \M_{n,1}$ respectively represent the initial and accepting states of the NFA, and where transitions are matrices $T_\gamma\in \M_{n,n}$ for each \tss{$\gamma\in\{0,1,A,\ldots,E\}$}{$\gamma\in\mathcal{A}$}. A word $u=\gamma_1\dots\gamma_\ell \in \mathcal{A}^*$ is accepted by the NFA iff one of its execution traces by the NFA reaches an accepting state, which translates to $q_0 T_u a = 1$. \todo{JEB: Citation needed? \href{https://en.wikipedia.org/wiki/Two-element_Boolean_algebra}{LINK}}
+
+
+
+
+
+
 
 \begin{example}
 TODO
