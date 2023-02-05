@@ -185,7 +185,7 @@ We wish to describe Turing machine configurations with finite words, which will 
 Since we only work with configurations that have finitely many nonzero symbols on the tape,
 we can transform a Turing machine configuration into a word in the alphabet $\{0,1,A,B,C,D,E\}$
 that will describe any segment of the machine's tape that contains at least all nonzero cells and write the head's state before the bit it's on.
-For instance, the word associated to the configuration depicted in Figure~\ref{fig:far_scan} is \texttt{00A001100}. \ts{We call \texttt{00A001100} a \texit{finite word-representation} of the configuration depicted in Figure~\ref{fig:far_scan}. Note that we can add arbitrarily many leading or trailing 0s to \texttt{00A001100} without changing the configuration that it is representing. Hence, if we call $\mathcal{L}$ the regular language of the NFA that we wish to construct to recognise the eventually-halting configurations of a given TM, it is natural that we ask the following:
+For instance, the word associated to the configuration depicted in Figure~\ref{fig:far_scan} is \texttt{00A001100}. \ts{We call \texttt{00A001100} a \textit{finite word-representation} of the configuration depicted in Figure~\ref{fig:far_scan}. Note that we can add arbitrarily many leading or trailing 0s to \texttt{00A001100} without changing the configuration that it is representing. Hence, if we call $\mathcal{L}$ the regular language of the NFA that we wish to construct to recognise the eventually-halting configurations of a given TM, it is natural that we ask the following:
 
 \begin{align*}
   u \in \mathcal{L} \Rightarrow 0u \in \mathcal{L} && \text{(leading zeros ignored)}
