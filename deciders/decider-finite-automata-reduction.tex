@@ -187,7 +187,7 @@ we can transform a Turing machine configuration into a word in the alphabet $\{0
 that will describe any segment of the machine's tape that contains at least all nonzero cells and write the head's state before the bit it's on.
 For instance, the word associated to the configuration depicted in Figure~\ref{fig:far_scan} is \texttt{00A001100}.
 
-\ts{Let $\mathcal{L}$ be the regular language recognised by the NFA that we wish to construct for a given TM. Since the support of a configuration can contain as many leading or trailing 0s as wanted, it is natural that we ask the following conditions:
+\ts{Let $\mathcal{L}$ be the regular language recognised by the NFA that we wish to construct for a given TM. Because we work with TM configurations with finite support, as many leading and trailing 0s can be added to the finite word-representation of a configuration without changing the configuration that it is representing. Hence, it is natural that we ask the following for $\mathcal{L}$:
 
 \begin{align*}
   u \in \mathcal{L} \Rightarrow 0u \in \mathcal{L} && \text{(leading zeros ignored)}
