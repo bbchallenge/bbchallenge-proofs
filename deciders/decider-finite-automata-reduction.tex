@@ -251,13 +251,6 @@ These are implied by the following, generally stronger, conditions on the transi
 \end{align}
 
 
-
-
-
-
-% Let's define the $\preceq$ relation on same-size matrices: $m\preceq m'$ if $m_{ij}\le m'_{ij}$ element-wise,
-% that is, if the second matrix has at least the same 1-entries as the first matrix.
-
 \ts{Then, we want our NFA's language $\mathcal{L}$ to include all eventually-halting configurations of a given Turing machine $\mathcal{M}$.  Inductively, we want that:}
 \begin{align*}
 c\vdash\bot &\implies \hat{c} \in \mathcal{L}\\
@@ -282,18 +275,20 @@ Which algebraically becomes:
   \forall u,z\in\mathbf{2}^*,\,\forall b \in \mathbf{2}: q_0 T_{u} T_w T_t T_{z} a = 1 \implies q_0 T_{u} T_f T_r T_{z} a = 1,\;& \text{if $(f,r) \to (t,w,\text{right})$ is a transition of $\mathcal{M}$}
 \end{align*}
 
-These conditions are unwieldy. Let's seek stronger (thus still sufficient) conditions which are simpler.
+These conditions are unwieldy. Let's seek stronger (thus still sufficient) conditions which are simpler:
 
-For machine transitions going left/right, simply require $T_t T_b T_w\preceq T_b T_f T_r$ and $T_w T_t\preceq T_f T_r$, respectively.
+\begin{itemize}
 
-To simplify the condition for halting machine transitions:
+\item For machine transitions going left/right, simply require $T_t T_b T_w\preceq T_b T_f T_r$ and $T_w T_t\preceq T_f T_r$, respectively \ts{with $\preceq$ the following relation on same-size matrices: $M\preceq M'$ if $M_{ij}\le M'_{ij}$ element-wise, that is, if the second matrix has at least the same 1-entries as the first matrix.}
+
+\item To simplify the condition for halting machine transitions:
 assert that for all $u \in \mathbf{2}^*$, the sub-expression $q_0 T_{u}$ is not zero \ts{(this means that reading 0 and 1 from the initial states must always lead to some state\footnote{This assertion is not limiting since if it is not met by some NFA, adding an additional sink state to the NFA will not change the recognised language and will satisfy the assertion.})},
 and \tss{(for $q$ a nonzero combination of such vectors and $fr\vdash\bot$ a halt rule)}{that $q_0 T_{u} T_f T_r$}
 is a vector $q'$ satisfying $\forall z\in\mathbf{2}^*: q' T_{z} a = 1$ \ts{(this means that the NFA will accept any word containing a halting transition independently of the bits written after the machine's head)}.
 
 Going further: define an \emph{accepted steady state}\tsm{I have an issue with using the word state for \textit{steady state} here, since $s$ is a set of NFA states. This issue of using the word state to mean a set of states arises at other points of the text.} $s$ to be a row vector such that $sa = 1$, $s T_0\succeq s$, and $s T_1\succeq s$.
 Given such $s$, we have $q'\succeq s\implies \forall z\in\mathbf{2}^*: q'T_{z}a = 1$.
-
+\end{itemize}
 We have shown:
 
 \begin{theorem}\normalfont
