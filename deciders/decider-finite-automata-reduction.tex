@@ -156,21 +156,15 @@ One important aspect of the technique is that, given a Turing machine and its co
 
 
 \subsection{Halt-recognizing automata}
+\newcommand{\M}{M}
 \label{far-defs-recognizer}
-For a given Turing machine, we aim at building a finite-state machine that recognises at least all eventually-halting configurations. That way, if it does not recognise the initial configuration then we know that the Turing machine does not halt from it.
+For a given Turing machine, we aim at building an NFA that recognises at least all eventually-halting configurations. That way, if it does not recognise the initial configuration then we know that the Turing machine does not halt from it.
 \tss{as in figure \ref{fig:finite-automata-reduction}}{}.
 \tss{We now seek criteria sufficient to preclude false negatives, \ts{i.e. avoiding that the finite-state machine would miss some eventually-halting configurations}.}{}
 
-\newcommand{\M}{M}
 
-Let  $\mathbf{2}$ denote the Boolean semiring $\{0,1\}$ with operations $+$ and $\cdot$ respectively implemented by $\operatorname{OR}$ and $\operatorname{AND}$.
-Let $\M_{m,n}$ be the set of matrices with $m$ rows and $n$ columns over $\mathbf{2}$.
-
-We may define a Nondeterministic Finite Automaton (\textbf{NFA}) with $n$ states and alphabet $\mathcal{A}$ as a tuple $(q_0, \{T_\gamma\}_\gamma \in \mathcal{A}, a)$ where $q_0 \in \M_{1,n}$ and $a \in \M_{n,1}$ respectively represent the initial states and accepting states of the NFA. (i.e. if the $i^\text{th}$ state of the NFA is an initial state then the $i^\text{th}$ entry of $q_0$ is set to 1 and the rest are 0, and the $i^\text{th}$ entry of $a$ is set to 1 if and only if the $i^\text{th}$ state of the NFA is accepting), and where transitions are matrices $T_\gamma\in \M_{n,n}$ for each $\gamma\in\mathcal{A}$. A word $u=\gamma_1\dots\gamma_\ell \in \mathcal{A}^*$ \ts{is accepted by the NFA iff one of its execution traces by the NFA reaches an accepting state}, which algebraically translates to $q_0 T_u a = 1$. \todo{JEB: Citation needed? \href{https://en.wikipedia.org/wiki/Two-element_Boolean_algebra}{LINK}}
-
-
-
-
+Let's first recall how Nondeterministic Finite Automta (NFA) can be described using linear algebra. Let $\mathbf{2}$ denote the Boolean semiring $\{0,1\}$ with operations $+$ and $\cdot$ respectively implemented by $\operatorname{OR}$ and $\operatorname{AND}$.
+Let $\M_{m,n}$ be the set of matrices with $m$ rows and $n$ columns over $\mathbf{2}$. We may define a Nondeterministic Finite Automaton (\textbf{NFA}) with $n$ states and alphabet $\mathcal{A}$ as a tuple $(q_0, \{T_\gamma\}_\gamma \in \mathcal{A}, a)$ where $q_0 \in \M_{1,n}$ and $a \in \M_{n,1}$ respectively represent the initial states and accepting states of the NFA. (i.e. if the $i^\text{th}$ state of the NFA is an initial state then the $i^\text{th}$ entry of $q_0$ is set to 1 and the rest are 0, and the $i^\text{th}$ entry of $a$ is set to 1 if and only if the $i^\text{th}$ state of the NFA is accepting), and where transitions are matrices $T_\gamma\in \M_{n,n}$ for each $\gamma\in\mathcal{A}$. A word $u=\gamma_1\dots\gamma_\ell \in \mathcal{A}^*$ \ts{is accepted by the NFA iff there exists a path from an initial state to an accepting state that is labelled by the symbols of $u$}, which algebraically translates to $q_0 T_u a = 1$. \todo{JEB: Citation needed? \href{https://en.wikipedia.org/wiki/Two-element_Boolean_algebra}{LINK}}
 
 
 
@@ -178,16 +172,20 @@ We may define a Nondeterministic Finite Automaton (\textbf{NFA}) with $n$ states
 TODO
 \end{example}
 
-Let's define the $\preceq$ relation on same-size matrices: $m\preceq m'$ if $m_{ij}\le m'_{ij}$ element-wise,
-that is, if the second matrix has at least the same 1-entries as the first matrix.
 
-We wish to describe Turing machine configurations with finite words, which will be read by our NFAs.
-Since we only work with configurations that have finitely many nonzero symbols on the tape,
-we can transform a Turing machine configuration into a word in the alphabet $\{0,1,A,B,C,D,E\}$
-that will describe any segment of the machine's tape that contains at least all nonzero cells and write the head's state before the bit it's on.
-For instance, the word associated to the configuration depicted in Figure~\ref{fig:far_scan} is \texttt{00A001100}.
-We call \texttt{00A001100} a \textit{finite word-representation} of the configuration depicted in Figure~\ref{fig:far_scan}. Note that, since we work with configurations that have finite support, we can add arbitrarily many leading or trailing 0s to \texttt{00A001100} without changing the configuration that it is representing. Hence, if $\mathcal{L}$ is the regular language of the NFA that we wish to construct to recognise the eventually-halting configurations of a given TM, it is natural that we ask the following:
+\ts{Now, we describe how we transform Turing machine configurations that finitely many 1s into finite words that will be read by our NFA. First recall that a Turing machine configuration is defined by the 3-tuple: (i) state in which the machine is (ii) position of the head (iii) content of the memory tape, see Section~\ref{sec:conventions}. Then, a word-representation of a configuration is defined by:
 
+\begin{definition}[Word-representations of a configuration]\label{def:wordc}\normalfont
+Let $c$ be a Turing machine configuration with finite support, i.e. there are finitely many 1s on the memory tape of the configuration. A word-representation of the configuration $c$ is a word $\hat{c}$ constructed by concatenating (from left to right) the symbols of any finite region of the tape that contains all the 1s and, adding the head's state (a letter between A and E in the case of 5-state TMs) right before the tape symbol its currently reading. 
+\end{definition}
+
+\begin{example}\normalfont
+A word-representation of the configuration depicted in Figure~\ref{fig:far_scan} is $\hat{c} = \texttt{00A001100}$.
+\end{example}
+
+}
+
+\ts{Note that two word-representations of the same configuration will only differ in the number of leading and trailing 0s that they have.} Hence, if $\mathcal{L}$ is the regular language of the NFA that we wish to construct to recognise the eventually-halting configurations of a given TM, it is natural that we ask the following:
 \begin{align*}
   u \in \mathcal{L} \iff 0u \in \mathcal{L} && \text{(leading zeros ignored)}
   \\
@@ -203,15 +201,21 @@ These are implied by the following, generally stronger, conditions on the transi
   \label{far-cond-trailing-0}
 \end{align}
 
-\ts{Then, we want our NFA's language $\mathcal{L}$ to include all eventually-halting configurations of a given Turing machine $\mathcal{M}$.  Inductively, we want that:}
 
+
+
+
+
+% Let's define the $\preceq$ relation on same-size matrices: $m\preceq m'$ if $m_{ij}\le m'_{ij}$ element-wise,
+% that is, if the second matrix has at least the same 1-entries as the first matrix.
+
+\ts{Then, we want our NFA's language $\mathcal{L}$ to include all eventually-halting configurations of a given Turing machine $\mathcal{M}$.  Inductively, we want that:}
 \begin{align*}
 c\vdash\bot &\implies \hat{c} \in \mathcal{L}\\
 (c_1\vdash c_2)\land \hat{c}_2 \in \mathcal{L}&\implies\hat{c}_1 \in \mathcal{L}
 \end{align*}
 
 \ts{With $c, c_1, c_2$ configurations of the TM (with finite support) and $\hat{c}, \hat{c}_1, \hat{c}_2$ any of their finite word-representations as defined above. Let $f,t \in \{A,B,C,D,E\}$ denote TM states (the ``from'' and ``to'' states in a TM transition), and $r,w,b \in \{0,1\}$ denote bits (a bit ``read'', a bit ``written'', and just a bit), then the above conditions turn into:}
-
 \begin{align*}
   \forall u,z\in\mathbf{2}^*: \; ufrz \in \mathcal{L},\;& \text{if $(f,r) \to \bot$ is a halting transition of $\mathcal{M}$}
   \\
@@ -221,7 +225,6 @@ c\vdash\bot &\implies \hat{c} \in \mathcal{L}\\
 \end{align*}
 
 Which algebraically becomes:
-
 \begin{align*}
   \forall u,z\in\mathbf{2}^*: \; q_0 T_u T_f T_r T_z a = 1 \;& \text{if $(f,r) \to \bot$ is a halting transition of $\mathcal{M}$}
   \\
