@@ -476,16 +476,30 @@ The structure described above is followed by the NFA depicted in Figure~\ref{fig
 \end{example}
 
 This structure might seem arbitrary but it has a very nice property that we demonstrate in this section: once a DFA is chosen for the left-hand side of the tape, there is at most one right-hand side NFA (minimal for $\succeq$) such that the overall NFA satisfies Theorem~\ref{far-main-theorem}. Hence we can use our efficient DFA-search algorithm of Section~\ref{far-defs-dfa} to enumerate left-hand side DFA and for each of them, compute its associated right-hand side NFA (if it exists) until we find such a pair satisfying Theorem~\ref{far-main-theorem}.
+
+Let's rewrite the above points algebraically:
+
+
+\begin{enumerate}
+\item We write the state space of the NFA as the direct sum $\mathbf{2}^l \oplus \mathbf{2}^d$ with $l$ the number of states of the left-hand side DFA and $d$ the number of states of the right-hand side NFA. Initial state is $\begin{bmatrix}q_0&0\end{bmatrix}$ with $q_0 \in \mathbf{2}^l$,
+transitions
+ $T_b=\begin{bmatrix}L_b&0\\0&R_b\end{bmatrix}$ ($b\in\{0,1\}$) with $L_b \in \M_{l,l},\, R_b \in \M_{d,d}$ and
+ $T_f=\begin{bmatrix}0&M_f\\0&0\end{bmatrix}$ ($f\in\{A,\ldots,E\}$) with $M_f \in \M_{l,d}$,
+and acceptance $\begin{bmatrix}0&a\end{bmatrix}$ with $a \in \M_{1,d}$.
+\item 
+
+\end{enumerate}
+
 }
 
 
-First, let's have separate states for scanning each side of the tape:
-assume state space $\mathbf{2}^l \oplus \mathbf{2}^d$,
-initial state $\begin{bmatrix}q_0&0\end{bmatrix}$,
-transitions
- $T_b=\begin{bmatrix}L_b&0\\0&R_b\end{bmatrix}$ ($b\in\{0,1\}$) and
- $T_f=\begin{bmatrix}0&M_f\\0&0\end{bmatrix}$ ($f\in\{A,\ldots,E\}$),
-and acceptance $\begin{bmatrix}0\\a\end{bmatrix}$.
+% First, let's have separate states for scanning each side of the tape:
+% assume state space $\mathbf{2}^l \oplus \mathbf{2}^d$,
+% initial state $\begin{bmatrix}q_0&0\end{bmatrix}$,
+% transitions
+%  $T_b=\begin{bmatrix}L_b&0\\0&R_b\end{bmatrix}$ ($b\in\{0,1\}$) and
+%  $T_f=\begin{bmatrix}0&M_f\\0&0\end{bmatrix}$ ($f\in\{A,\ldots,E\}$),
+% and acceptance $\begin{bmatrix}0\\a\end{bmatrix}$.
 
 Next, let's designate a ``halt'' state $\bot$, and corresponding basis vector $\langle\bot\vert\in\mathbf{2}^d$.
 Let $s=0\oplus\langle\bot\vert$.
