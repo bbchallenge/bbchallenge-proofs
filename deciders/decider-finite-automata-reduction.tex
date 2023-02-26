@@ -475,7 +475,7 @@ and add more structure to our NFA \ts{in order to design an efficient search alg
 The structure described above is followed by the NFA depicted in Figure~\ref{fig:far_nfa}.
 \end{example}
 
-This structure might seem arbitrary but it has a very nice property that we demonstrate in this section: once a DFA is chosen for the left-hand side of the tape, there is a unique NFA that can be computed in hopes of sastisfying Theorem~\ref{far-main-theorem}. Hence we can use our efficient DFA-search algorithm of Section~\ref{far-defs-dfa} to enumerate left-hand side DFA and for each of them, compute the uniquely associated right-hand side NFA until we find such a pair that fully satisfies Theorem~\ref{far-main-theorem}.
+This structure might seem arbitrary but it has a very nice property that we demonstrate in this section: once a DFA is chosen for the left-hand side of the tape, there is a unique right-hand side NFA that can be computed in hopes of sastisfying Theorem~\ref{far-main-theorem}. Hence we can use our efficient DFA-search algorithm of Section~\ref{far-defs-dfa} to enumerate left-hand side DFA and for each of them, compute the uniquely associated right-hand side NFA until we find such a pair that fully satisfies Theorem~\ref{far-main-theorem}.
 }
 
 
