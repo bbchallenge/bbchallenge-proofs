@@ -464,8 +464,8 @@ and add more structure to our NFA \ts{in order to design an efficient search alg
 
 \begin{enumerate}
 
-  \item The NFA will be constructed from two sub-NFAs: one NFA responsible for handling the left-hand side of the tape (i.e. before reading the tape-head state) and one NFA for handling the right-hand side of the tape (i.e. after reading the tape-head state). 
-  \item The sub-NFA for the left-hand side of the tape will be a DFA.
+  \item The NFA is constructed from two sub-NFAs: one NFA responsible for handling the left-hand side of the tape (i.e. before reading the tape-head state) and one NFA for handling the right-hand side of the tape (i.e. after reading the tape-head state). 
+  \item The sub-NFA for the left-hand side of the tape is a DFA.
   \item Edges labelled by tape-head state are only those that start in the left-hand side DFA and end in the right-hand side NFA. Furthermore, we require that no such two edges reach the same state in the right-hand side NFA. Hence, the right-hand side NFA has at least $5l$ states with $l$ the number of states of the left-hand side DFA.
   \item In fact, we require that the rihgt-hand side NFA has exactly $5l+1$ states with the extra state named $\bot$.
 
