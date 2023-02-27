@@ -157,7 +157,7 @@ One important aspect of the technique is that, given a Turing machine and its co
 
 \subsection{Halt-recognizing automata}
 \newcommand{\M}{\mathcal{M}}
-\newcommand{\T}{^t}
+\newcommand{\T}{^T}
 \newcommand{\row}{\text{row}}
 \label{far-defs-recognizer}
 For a given Turing machine, we aim at building an NFA that recognises at least all eventually-halting configurations. That way, if it does not recognise the initial configuration then we know that the Turing machine does not halt from it.
@@ -467,8 +467,8 @@ and add more structure to our NFA \ts{in order to design an efficient search alg
 
   \item The NFA is constructed from two sub-NFAs: one NFA responsible for handling the left-hand side of the tape (i.e. before reading the tape-head state) and one NFA for handling the right-hand side of the tape (i.e. after reading the tape-head state). 
   \item The sub-NFA for the left-hand side of the tape is a DFA.
-  \item Edges labelled by tape-head state are only those that start in the left-hand side DFA and end in the right-hand side NFA. Furthermore, we require that no such two edges reach the same state in the right-hand side NFA. Hence, the right-hand side NFA has at least $5l$ states with $l$ the number of states of the left-hand side DFA.
-  \item In fact, we require that the rihgt-hand side NFA has exactly $5l+1$ states with the extra state named $\bot$.
+  \item Edges labelled by a tape-head state are only those that start in the left-hand side DFA and end in the right-hand side NFA. Furthermore, we require that no such two edges reach the same state in the right-hand side NFA. Hence, the right-hand side NFA has at least $5l$ states with $l$ the number of states of the left-hand side DFA.
+  \item In fact, we require that the right-hand side NFA has exactly $5l+1$ states with the extra state named $\bot$.
 
 \end{enumerate}
 
@@ -487,32 +487,30 @@ transitions
  $T_b=\begin{bmatrix}L_b&0\\0&R_b\end{bmatrix}$ ($b\in\{0,1\}$) with $L_b \in \M_{l,l},\, R_b \in \M_{d,d}$ and
  $T_f=\begin{bmatrix}0&M_f\\0&0\end{bmatrix}$ ($f\in\{A,\ldots,E\}$) with $M_f \in \M_{l,d}$,
 and acceptance $\begin{bmatrix}0&a\end{bmatrix}$ with $a \in \M_{1,d}$.
-\item $(q_0,\{L_0, L_1\})$ comes from a DFA with transition function $\delta: [l] \times \{0,1\} \to [l]$ that ignores leading zeros (i.e. the DFA has an edge labelled 0 coming from and to state $q_0$). That ensures \eqref{far-cond-leading-0} of Theorem~\ref{far-main-theorem}.
-\item Row vectors of matrices $M_f$ (with $f\in\{A,\ldots,E\}$) are the basis row vectors $e_0,\, \dots,\, e_{5l}$.
+\item $(q_0,\{L_0, L_1\})$ comes from a DFA with transition function $\delta: [l] \times \{0,1\} \to [l]$ (with $[l]$ the set $\{0,\dots,l-1\}$) that ignores leading zeros (i.e. the DFA has an edge labelled 0 coming from and to state $q_0$). That ensures \eqref{far-cond-leading-0} of Theorem~\ref{far-main-theorem}.
+\item Row vectors of matrices $M_f$ (with $f\in\{A,\ldots,E\}$) are the basis row vectors $e_0,\, \dots,\, e_{5l}$ (basis vector $e_i$ has its $i^\text{th}$ entry set to 1 and the other entries set to 0).\label{pt:basis}
 \item The right-hand side NFA has a halt state $\bot$ and $e_{5l+1} = e_\bot$ is its corresponding basis row vector.
 
 \end{enumerate}
 
-Theorem~\ref{far-main-theorem} requires that we have a \textit{steady state-set} s (see Section~\ref{far-defs-recognizer}), which we give \textit{ad-hoc}: $s=0\oplus e_\bot$. We seek a ``direct'' algorithm which searches left-hand side DFAs and then finds an associated right-hand side NFA by solving Theorem~\ref{far-main-theorem} \eqref{far-cond-first}--\eqref{far-cond-last} for $a$, $R_0$, $R_1$ if possible.
+We seek a ``direct'' algorithm which searches left-hand side DFAs and then finds an associated right-hand side NFA by solving Theorem~\ref{far-main-theorem} \eqref{far-cond-first}--\eqref{far-cond-last} for $a$, $R_0$, $R_1$ if possible.
 
-A helpful property of standard basis vectors is: the condition $\row_i(M) \succeq v$ with $\row_i(M)$ the $i^\text{th}$ row of matrix $M$ and $v$ some row vector, is equivalent to $M\succeq e_i\T v$.
-
-This lets us re-express conditions \eqref{far-cond-ass-steady} and \eqref{far-cond-halt}--\eqref{far-cond-last}:
+A helpful property of standard basis vectors is: the condition $\row_i(M) \succeq v$ with $\row_i(M)$ the $i^\text{th}$ row of matrix $M$ and $v$ some row vector, is equivalent to $M\succeq e_i\T v$. It is because of this property that we asked that row vectors of matrices $M_f$ are basis vectors (Point~\ref{pt:basis} above). Indeed, it crucially lets us re-express conditions \eqref{far-cond-ass-steady}--\eqref{far-cond-last} of Theorem~\ref{far-main-theorem} in the following way, where we set $s=0\oplus e_\bot$:
 \begin{align}
   R_r &\succeq (e_\bot)^{\T}e_\bot
   &&\text{for }r\in\{0,1\}
   \tag{\ref{far-cond-ass-steady}'}
   \\
-  \forall i\in[l]: R_r &\succeq (\row_i(M_f))^{\T}e_\bot
+  \forall i\in[l]: R_r &\succeq \row_i(M_f)^{\T}e_\bot
   &&\text{if $(f,r) \to \bot$ is a halting transition of $\mathcal{M}$}
   \tag{\ref{far-cond-halt}'}
   \\
   \forall i\in[l]: R_r &\succeq  
-  (\row_{\delta(i,b)}(M_f))^{\T} \row_i(M_t)R_b R_w
+  \row_{\delta(i,b)}(M_f)^{\T} \row_i(M_t)R_b R_w
   &&\text{if $(f,r) \to (t,w,\text{left})$ is a transition of $\mathcal{M}$}
   \tag{\ref{far-cond-left}'}
   \\
-  \forall i\in[l]: R_r &\succeq (\row_i(M_f))^{\T} (\row_{\delta(i,w)}(M_t))^{\T}
+  \forall i\in[l]: R_r &\succeq \row_i(M_f)^{\T} \row_{\delta(i,w)}(M_t)^{\T}
   &&\text{if $(f,r) \to (t,w,\text{right})$ is a transition of $\mathcal{M}$}
   %\label{far-cond-right}
   \tag{\ref{far-cond-last}'}
