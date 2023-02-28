@@ -589,14 +589,24 @@ then set entries to 1 as these 4 inequalities demand until \tss{a fixed point is
 
   Similarly, there is a unique minimal (w.r.t $\preceq$) solution to this system which is found by initially setting $a_0 = e_\bot$ then iterating $a_{k+1} = a_{k} R_0$ until a fixed point is reached which gives the value of $a$, satisfying (\ref{far-cond-trailing-0}') and (\ref{far-cond-ass-accepted}'). Indeed, from (\ref{far-cond-ass-steady}'), we see that the sequence $e_\bot \preceq e_\bot R_0\preceq e_\bot R_0^2 \preceq\dots$ is increasing -- notice that $R_0 \succeq (e_\bot)^{\T} e_\bot$ is equivalent to $e_\bot R_0 \succeq e_\bot$ and that if $M \preceq M'$ then for all $M''$ (of compatible dimension) we have $M M'' \preceq M' M''$ -- hence it reaches a fixed point, which satisfies (\ref{far-cond-trailing-0}') and (\ref{far-cond-ass-accepted}').
 
+  The last condition from Theorem~\ref{far-main-theorem} that we need to satisfy is \eqref{far-cond-reject-start} (rejection of the initial configuration), which translates to:
+  \begin{align}
+    \row_0 (M_A) a^{\T} & =0
+                        & \tag{\ref{far-cond-reject-start}'}
+  \end{align}
+
+  By minimality, a solution of (\ref{far-cond-trailing-0}') and (\ref{far-cond-ass-accepted}') will satisfy (\ref{far-cond-reject-start}') if and only if the minimal solution exhibited above does. Hence, we check (\ref{far-cond-reject-start}') for the minimal $a$ that we constructed and there are two cases:
+
+  \begin{itemize}
+    \item If $a$ satisfies (\ref{far-cond-reject-start}') then we have found an NFA satisfying Theorem~\ref{far-main-theorem} and we can conclude that the Turing machine does not halt.
+    \item If $a$ does not satisfy (\ref{far-cond-reject-start}') then we cannot conclude and we continue our search for an appropriate left-hand side DFA.
+  \end{itemize}
+
   % From (\ref{far-cond-ass-steady})', we see that the sequence $e_\bot \preceq e_\bot R_0\preceq e_\bot R_0^2 \preceq\dots$ is increasing -- indeed, notice that $R_0 \succeq (e_\bot)^{\T} e_\bot$ is equivalent to $e_\bot R_0 \succeq e_\bot$ and that is $M \preceq M'$ then for all $M''$ (of compatible dimension) we have $M M'' \preceq M' M''$. Hence, the sequence $(e_\bot R_0^k)_{k\in\mathbb{N}}$ eventually reaches a fixed point, call it $a$, which satisfies (\ref{far-cond-trailing-0}') and (\ref{far-cond-ass-accepted}').
 
 
 
-  % \\
-  %   \row_0 (M_A) a^{\T} & =0
-  %                       &
-  %   \tag{\ref{far-cond-reject-start}'}
+
 }
 
 \begin{algorithm}
