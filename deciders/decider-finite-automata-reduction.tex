@@ -563,7 +563,7 @@ and add more structure to our NFA \ts{in order to design an efficient search alg
 % \end{align}
 
 There's a unique minimal (w.r.t $\preceq$) solution to this system of inequalities and a clear way to compute it: initialize $R_0$, $R_1$ to zero,
-then set entries to 1 as these 4 inequalities demand until a fixed point is reached \ts{-- inequality \ref{far-cond-left}' is the only one that does not have a constant right-hand side and which requires iterative search for the solution}.
+then set entries to 1 as these 4 inequalities demand until a fixed point is reached \ts{-- inequality \ref{far-cond-left}' is the only one that does not have a constant right-hand side and which requires an iterative process to reach the solution}.
 
 % Note that the $R_0$ and $R_1$ values so produced are an increasing function of the matrices $\{L_b\}$, or of $\delta$ when it's viewed as a partial function (ordered by extension).
 
@@ -579,16 +579,16 @@ then set entries to 1 as these 4 inequalities demand until a fixed point is reac
 
 \ts{The remaining conditions of Theorem \ref{far-main-theorem} are \eqref{far-cond-trailing-0}, \eqref{far-cond-ass-accepted} and \eqref{far-cond-reject-start}, they respectively translate to:
   \begin{align}
-    a R_0 = a
-     &
+    a R_0               & = a
+                        &
     \tag{\ref{far-cond-trailing-0}'}
     \\
-    a\succeq e_{\bot}
-     &
+    a                   & \succeq e_{\bot}
+                        &
     \tag{\ref{far-cond-ass-accepted}'}
     \\
-    \row_0 (M_A) a^{\T} =0
-     &
+    \row_0 (M_A) a^{\T} & =0
+                        &
     \tag{\ref{far-cond-reject-start}'}
   \end{align}
 
