@@ -495,7 +495,7 @@ and add more structure to our NFA \ts{in order to design an efficient search alg
 
   We seek a ``direct'' algorithm which searches left-hand side DFAs and then finds an associated right-hand side NFA by solving Theorem~\ref{far-main-theorem} \eqref{far-cond-first}--\eqref{far-cond-last} for $R_0$, $R_1$, and $a$ if possible.
 
-  A helpful property of standard basis vectors is: the condition $\row_i(M) \succeq v$ with $\row_i(M)$ the $i^\text{th}$ row of matrix $M$ and $v$ some row vector, is equivalent to $M\succeq e_i\T v$. we asked that row vectors of matrices $M_f$ are basis vectors (Point~\ref{pt:basis} above) because of this property as it crucially lets us re-express conditions \eqref{far-cond-ass-steady}--\eqref{far-cond-last} of Theorem~\ref{far-main-theorem} in the following way, where we set $s=0\oplus e_\bot$:
+  A helpful property of standard basis vectors is: the condition $\row_i(M) \succeq v$ with $\row_i(M)$ the $i^\text{th}$ row of matrix $M$ and $v$ some row vector, is equivalent to $M\succeq e_i\T v$. We asked that row vectors of matrices $M_f$ are basis vectors (Point~\ref{pt:basis} above) because of this property as it crucially lets us re-express conditions \eqref{far-cond-ass-steady}--\eqref{far-cond-last} of Theorem~\ref{far-main-theorem} in the following way, where we set $s=0\oplus e_\bot$:
   \begin{align}
     R_r                                            & \succeq (e_\bot)^{\T}e_\bot
                                                    &                                                  & \text{for }r\in\{0,1\}
@@ -563,7 +563,7 @@ and add more structure to our NFA \ts{in order to design an efficient search alg
 % \end{align}
 
 There's a unique minimal (w.r.t $\preceq$) solution to this system of inequalities and a clear way to compute it: initialize $R_0$, $R_1$ to zero,
-then set entries to 1 as these 4 inequalities demand until \tss{a fixed point is reached}{$R_0$ and $R_1$ stop changing} \ts{-- inequality \ref{far-cond-left}' is the only one that does not have a constant right-hand side and which requires an iterative process to reach the solution}.
+then set entries to 1 as these 4 inequalities demand until \tss{a fixed point is reached}{$R_0$ and $R_1$ stop changing} \ts{-- inequality \ref{far-cond-left}' is the only one that does not have a constant right-hand side and which requires an iterative process to reach the solution. Now that we have found $R_0$ and $R_1$ we need to find the set of accepting states, given by $\begin{bmatrix}0&a\end{bmatrix}$ with $a \in \M_{1,d}$.}
 
 % Note that the $R_0$ and $R_1$ values so produced are an increasing function of the matrices $\{L_b\}$, or of $\delta$ when it's viewed as a partial function (ordered by extension).
 
@@ -577,24 +577,27 @@ then set entries to 1 as these 4 inequalities demand until \tss{a fixed point is
 % And so we obtain a complete decider in Algorithm \ref{alg:finite-automata-reduction-direct}.
 % A slight elaboration allows for checking a specific $L$ instead of all DFAs, and for returning the recognizer.
 
-\ts{The remaining conditions of Theorem \ref{far-main-theorem} are \eqref{far-cond-trailing-0}, \eqref{far-cond-ass-accepted} and \eqref{far-cond-reject-start}, they respectively translate to:
+\ts{Conditions \eqref{far-cond-trailing-0}, \eqref{far-cond-ass-accepted} of Theorem \ref{far-main-theorem}   translate to:
   \begin{align}
-    a R_0               & = a
-                        &
+    a R_0 & = a
+          &
     \tag{\ref{far-cond-trailing-0}'}
     \\
-    a                   & \succeq e_{\bot}
-                        &
+    a     & \succeq e_{\bot}
+          &
     \tag{\ref{far-cond-ass-accepted}'}
-    \\
-    \row_0 (M_A) a^{\T} & =0
-                        &
-    \tag{\ref{far-cond-reject-start}'}
   \end{align}
 
 
 
+  % From (\ref{far-cond-ass-steady})', we see that the sequence $e_\bot \preceq e_\bot R_0\preceq e_\bot R_0^2 \preceq\dots$ is increasing -- indeed, notice that $R_0 \succeq (e_\bot)^{\T} e_\bot$ is equivalent to $e_\bot R_0 \succeq e_\bot$ and that is $M \preceq M'$ then for all $M''$ (of compatible dimension) we have $M M'' \preceq M' M''$. Hence, the sequence $(e_\bot R_0^k)_{k\in\mathbb{N}}$ eventually reaches a fixed point, call it $a$, which satisfies (\ref{far-cond-trailing-0}') and (\ref{far-cond-ass-accepted}').
 
+
+
+  % \\
+  %   \row_0 (M_A) a^{\T} & =0
+  %                       &
+  %   \tag{\ref{far-cond-reject-start}'}
 }
 
 \begin{algorithm}
