@@ -497,21 +497,21 @@ and add more structure to our NFA \ts{in order to design an efficient search alg
 
   A helpful property of standard basis vectors is: the condition $\row_i(M) \succeq v$ with $\row_i(M)$ the $i^\text{th}$ row of matrix $M$ and $v$ some row vector, is equivalent to $M\succeq e_i\T v$. we asked that row vectors of matrices $M_f$ are basis vectors (Point~\ref{pt:basis} above) because of this property as it crucially lets us re-express conditions \eqref{far-cond-ass-steady}--\eqref{far-cond-last} of Theorem~\ref{far-main-theorem} in the following way, where we set $s=0\oplus e_\bot$:
   \begin{align}
-    R_r                  & \succeq (e_\bot)^{\T}e_\bot
-                         &                                                  & \text{for }r\in\{0,1\}
+    R_r                                            & \succeq (e_\bot)^{\T}e_\bot
+                                                   &                                                  & \text{for }r\in\{0,1\}
     \tag{\ref{far-cond-ass-steady}'}
     \\
-    \forall i\in[l]: R_r & \succeq \row_i(M_f)^{\T}e_\bot
-                         &                                                  & \text{if $(f,r) \to \bot$ is a halting transition of $\mathcal{M}$}
+    \forall i\in[l]: R_r                           & \succeq \row_i(M_f)^{\T}e_\bot
+                                                   &                                                  & \text{if $(f,r) \to \bot$ is a halting transition of $\mathcal{M}$}
     \tag{\ref{far-cond-halt}'}
     \\
-    \forall i\in[l]: R_r & \succeq
+    \forall b \in \mathbf{2}, \forall i\in[l]: R_r & \succeq
     \row_{\delta(i,b)}(M_f)^{\T} \row_i(M_t)R_b R_w
-                         &                                                  & \text{if $(f,r) \to (t,w,\text{left})$ is a transition of $\mathcal{M}$}
+                                                   &                                                  & \text{if $(f,r) \to (t,w,\text{left})$ is a transition of $\mathcal{M}$}
     \tag{\ref{far-cond-left}'}
     \\
-    \forall i\in[l]: R_r & \succeq \row_i(M_f)^{\T} \row_{\delta(i,w)}(M_t)
-                         &                                                  & \text{if $(f,r) \to (t,w,\text{right})$ is a transition of $\mathcal{M}$}
+    \forall i\in[l]: R_r                           & \succeq \row_i(M_f)^{\T} \row_{\delta(i,w)}(M_t)
+                                                   &                                                  & \text{if $(f,r) \to (t,w,\text{right})$ is a transition of $\mathcal{M}$}
     %\label{far-cond-right}
     \tag{\ref{far-cond-last}'}
   \end{align}
