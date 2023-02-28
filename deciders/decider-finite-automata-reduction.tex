@@ -24,72 +24,72 @@ One important aspect of the technique is that, given a Turing machine and its co
   \end{subfigure}
   \hfill
   \parbox{0.2\textwidth}{
-  \begin{subfigure}[t]{0.2\textwidth}
-    \centering
-    \includegraphics[width=\textwidth]{space-time-diagrams/finite-automata-reduction-counter4-halt.pdf}
-    \caption{The same TM halts in these configurations.}
-    \label{fig:far_spacetime_halt}
-  \end{subfigure}
-  \vspace{0.23\textheight}
+    \begin{subfigure}[t]{0.2\textwidth}
+      \centering
+      \includegraphics[width=\textwidth]{space-time-diagrams/finite-automata-reduction-counter4-halt.pdf}
+      \caption{The same TM halts in these configurations.}
+      \label{fig:far_spacetime_halt}
+    \end{subfigure}
+    \vspace{0.23\textheight}
 
-  \begin{subfigure}[b]{0.2\textwidth}
-    \centering
-    \begin{tabular}{lll}
-      & 0                   & 1                                                 \\
-      \textcolor{colorA}{A} & 1R\textcolor{colorB}{B} & 0L\textcolor{colorD}{D} \\
-      \textcolor{colorB}{B} & 1L\textcolor{colorC}{C} & 1R\textcolor{colorA}{A} \\
-      \textcolor{colorC}{C} & 0R\textcolor{colorB}{B} & 0L\textcolor{colorC}{C} \\
-      \textcolor{colorD}{D} & - - -                   & 1L\textcolor{colorA}{A} \\
-    \end{tabular}
-    \caption{Transition table.}
-    \label{fig:far_transitions}
-  \end{subfigure}
+    \begin{subfigure}[b]{0.2\textwidth}
+      \centering
+      \begin{tabular}{lll}
+                              & 0                       & 1                       \\
+        \textcolor{colorA}{A} & 1R\textcolor{colorB}{B} & 0L\textcolor{colorD}{D} \\
+        \textcolor{colorB}{B} & 1L\textcolor{colorC}{C} & 1R\textcolor{colorA}{A} \\
+        \textcolor{colorC}{C} & 0R\textcolor{colorB}{B} & 0L\textcolor{colorC}{C} \\
+        \textcolor{colorD}{D} & - - -                   & 1L\textcolor{colorA}{A} \\
+      \end{tabular}
+      \caption{Transition table.}
+      \label{fig:far_transitions}
+    \end{subfigure}
   }
   \hfill
   \begin{subfigure}[m]{0.62\textwidth}
-  \begin{tikzpicture}[shorten >=1pt]
-    \node[state,initial above] (0) at (-2, 2) {0};
-    \node[state]           (1) at (-2, -2) {1};
-    \node[state,accepting] (H) at (2, 4) {$\bot$};
-    \node[state]           (0A) at (0, 2) {0A};
-    \node[state,accepting] (0D) at (4, 2) {0D};
-    \node[state]           (0B) at (2, 0) {0B};
-    \node[state]           (0C) at (4, 0) {0C};
-    \node[state]           (1C) at (2, -2.5) {1C};
-    \node[state]           (1B) at (0, -4) {1B};
-    \node[state]           (1A) at (4, -4) {1A};
-    \node[state,accepting] (1D) at (5.5, -2) {1D};
+    \begin{tikzpicture}[shorten >=1pt]
+      \node[state,initial above] (0) at (-2, 2) {0};
+      \node[state]           (1) at (-2, -2) {1};
+      \node[state,accepting] (H) at (2, 4) {$\bot$};
+      \node[state]           (0A) at (0, 2) {0A};
+      \node[state,accepting] (0D) at (4, 2) {0D};
+      \node[state]           (0B) at (2, 0) {0B};
+      \node[state]           (0C) at (4, 0) {0C};
+      \node[state]           (1C) at (2, -2.5) {1C};
+      \node[state]           (1B) at (0, -4) {1B};
+      \node[state]           (1A) at (4, -4) {1A};
+      \node[state,accepting] (1D) at (5.5, -2) {1D};
 
-    \path[->]  (0)  edge [loop right]       node {$0$} (0)
-                    edge                    node [right] {$1$} (1)
-               (1)  edge [bend left=15]     node [above left] {$0|1$} (0)
-               (0A) edge                    node [right] {$0$} (1B)
-                    edge                    node [above,rotate=60] {$1$} (H)
-               (0C) edge                    node [above] {$0$} (0B)
-                    edge                    node [right] {$1$} (1A)
-               (0D) edge                    node [above,rotate=300] {$0$} (H)
-                    edge                    node [above] {$1$} (0A)
-                    edge [bend left]        node [left] {$1$} (1A)
-               (1A) edge                    node [above] {$1$} (1B)
-               (1A) edge [bend right=15]    node [above,rotate=300] {$0|1$} (0B)
-               (0B) edge [bend right=5]     node [above,rotate=300] {$0|1$} (1A)
-               (1B) edge                    node [above right,rotate=60] {$0$} (0B)
-                    edge [loop left]        node {$0$} (1B)
-                    edge [bend left]        node [right] {$1$} (0A)
-               (1C) edge                    node [above right,rotate=270] {$0|1$} (0B)
-               (1D) edge [bend right=48]    node [below,rotate=300] {$0|1$} (H)
-               (H)  edge [loop above]       node {$0|1$} (H)
-               (0)  edge [dotted,bend left] node {\textcolor{colorA}{A}} (0A)
-                    edge [dotted]           node [left] {\textcolor{colorB}{B}} (0B)
-                    edge [dotted]           node {\textcolor{colorC}{C}} (0C)
-                    edge [dotted,bend left] node [right] {\textcolor{colorD}{D}} (0D)
-               (1)  edge [dotted]           node {\textcolor{colorB}{B}} (1B)
-                    edge [dotted]           node {\textcolor{colorA}{A}} (1A)
-                    edge [dotted]           node [left] {\textcolor{colorC}{C}} (1C)
-                    edge [dotted]           node [left] {\textcolor{colorD}{D}} (1D);
-  \end{tikzpicture}
-  \caption{Diagram of a Nondeterministic Finite Automaton recognizing all rows of (\ref{fig:far_spacetime_halt}) but none of (\ref{fig:far_spacetime}).}
-  \label{fig:far_nfa}
+      \path[->]  (0)  edge [loop right]       node {$0$} (0)
+      edge                    node [right] {$1$} (1)
+      (1)  edge [bend left=15]     node [above left] {$0|1$} (0)
+      (0A) edge                    node [right] {$0$} (1B)
+      edge                    node [above,rotate=60] {$1$} (H)
+      (0C) edge                    node [above] {$0$} (0B)
+      edge                    node [right] {$1$} (1A)
+      (0D) edge                    node [above,rotate=300] {$0$} (H)
+      edge                    node [above] {$1$} (0A)
+      edge [bend left]        node [left] {$1$} (1A)
+      (1A) edge                    node [above] {$1$} (1B)
+      (1A) edge [bend right=15]    node [above,rotate=300] {$0|1$} (0B)
+      (0B) edge [bend right=5]     node [above,rotate=300] {$0|1$} (1A)
+      (1B) edge                    node [above right,rotate=60] {$0$} (0B)
+      edge [loop left]        node {$0$} (1B)
+      edge [bend left]        node [right] {$1$} (0A)
+      (1C) edge                    node [above right,rotate=270] {$0|1$} (0B)
+      (1D) edge [bend right=48]    node [below,rotate=300] {$0|1$} (H)
+      (H)  edge [loop above]       node {$0|1$} (H)
+      (0)  edge [dotted,bend left] node {\textcolor{colorA}{A}} (0A)
+      edge [dotted]           node [left] {\textcolor{colorB}{B}} (0B)
+      edge [dotted]           node {\textcolor{colorC}{C}} (0C)
+      edge [dotted,bend left] node [right] {\textcolor{colorD}{D}} (0D)
+      (1)  edge [dotted]           node {\textcolor{colorB}{B}} (1B)
+      edge [dotted]           node {\textcolor{colorA}{A}} (1A)
+      edge [dotted]           node [left] {\textcolor{colorC}{C}} (1C)
+      edge [dotted]           node [left] {\textcolor{colorD}{D}} (1D);
+    \end{tikzpicture}
+    \caption{Diagram of a Nondeterministic Finite Automaton recognizing all rows of (\ref{fig:far_spacetime_halt}) but none of (\ref{fig:far_spacetime}).}
+    \label{fig:far_nfa}
   \end{subfigure}
   \bigskip
 
@@ -128,15 +128,15 @@ One important aspect of the technique is that, given a Turing machine and its co
       \end{scope}
 
       \path (a--) edge node [above] {$0$} (a-2)
-            (a-2) edge node [above] {$0$} (a-1)
-            (a-1) edge node [above] {$A$} (a-0)
-            (a-0) edge node [right] {$0$} (a+0)
-            (a+0) edge node [above] {$0$} (a+1)
-            (a+1) edge node [above] {$1$} (a+2)
-            (a+2) edge node [above] {$1$} (a+3)
-            (a+3) edge node [above] {$0$} (a+4)
-            (a+4) edge node [above] {$0$} (a+5)
-            (a+5) edge                    (a++);
+      (a-2) edge node [above] {$0$} (a-1)
+      (a-1) edge node [above] {$A$} (a-0)
+      (a-0) edge node [right] {$0$} (a+0)
+      (a+0) edge node [above] {$0$} (a+1)
+      (a+1) edge node [above] {$1$} (a+2)
+      (a+2) edge node [above] {$1$} (a+3)
+      (a+3) edge node [above] {$0$} (a+4)
+      (a+4) edge node [above] {$0$} (a+5)
+      (a+5) edge                    (a++);
     \end{tikzpicture}
     \caption{An NFA with transitions (\ref{fig:far_nfa}), scanning the top row of (\ref{fig:far_spacetime_halt}), stays in ``accepted'' state
       $\bot|\textrm{0B}|\textrm{1A}|\textrm{1B}$.}
@@ -149,8 +149,8 @@ One important aspect of the technique is that, given a Turing machine and its co
     (c) Transition table for the TM.
     (d) Transition diagram for a tape-scanning NFA.
     (e) To scan the top row of (\ref{fig:far_spacetime_halt}) with NFA (\ref{fig:far_nfa}), turn the TM configuration into a finite word
-        (truncating the infinite 0-strings at some point and writing the head's state \emph{before} the bit it's on).
-        If the NFA recognizes all halting configurations (independent of 0-padding) but not the initial configuration, then the TM cannot halt.}
+    (truncating the infinite 0-strings at some point and writing the head's state \emph{before} the bit it's on).
+    If the NFA recognizes all halting configurations (independent of 0-padding) but not the initial configuration, then the TM cannot halt.}
   \label{fig:finite-automata-reduction}
 \end{figure}
 
@@ -169,125 +169,125 @@ Let's first recall how Nondeterministic Finite Automta (\textbf{NFA}) can be des
 Let $\M_{m,n}$ be the set of matrices with $m$ rows and $n$ columns over $\mathbf{2}$. We may define a Nondeterministic Finite Automaton (NFA) with $n$ states and alphabet $\mathcal{A}$ as a tuple $(q_0, \{T_\gamma\}_{\gamma \in \mathcal{A}}, a)$ where $q_0 \in \M_{1,n}$ and $a \in \M_{1,n}$ respectively represent the initial states and accepting states of the NFA. (i.e. if the $i^\text{th}$ state of the NFA is an initial state then the $i^\text{th}$ entry of $q_0$ is set to 1 and the rest are 0, and the $i^\text{th}$ entry of $a$ is set to 1 if and only if the $i^\text{th}$ state of the NFA is accepting), and where transitions are matrices $T_\gamma\in \M_{n,n}$ for each $\gamma\in\mathcal{A}$ \ts{(i.e. the entry $(i,j)$ of matrix $T_\gamma$ is set to 1 iff the NFA transitions from state $i$ to state $j$ when reading $\gamma$)}. A word $u=\gamma_1\dots\gamma_\ell \in \mathcal{A}^*$ \ts{is accepted by the NFA iff there exists a path from an initial state to an accepting state that is labelled by the symbols of $u$}, which algebraically translates to $q_0 T_u a\T = 1$ with $a\T \in \M_{n,1}$ the transposition of $a$. \todo{JEB: Citation needed? \href{https://en.wikipedia.org/wiki/Two-element_Boolean_algebra}{LINK}}
 
 \begin{figure}
-\begin{center}
-  \begin{tikzpicture}[scale=0.2]
-  \tikzstyle{every node}+=[inner sep=0pt]
-  \draw [black] (32.4,-20.7) circle (3);
-  \draw (32.4,-20.7) node {$X$};
-  \draw [black] (19.9,-32.9) circle (3);
-  \draw (19.9,-32.9) node {$Y$};
-  \draw [black] (19.9,-32.9) circle (2.4);
-  \draw [black] (43.9,-32.9) circle (3);
-  \draw (43.9,-32.9) node {$Z$};
-  \draw [black] (43.9,-32.9) circle (2.4);
-  \draw [black] (12.2,-32.9) -- (16.9,-32.9);
-  \fill [black] (16.9,-32.9) -- (16.1,-32.4) -- (16.1,-33.4);
-  \draw [black] (32.4,-13.6) -- (32.4,-17.7);
-  \fill [black] (32.4,-17.7) -- (32.9,-16.9) -- (31.9,-16.9);
-  \draw [black] (31.917,-23.654) arc (-16.01031:-75.38142:12.771);
-  \fill [black] (31.92,-23.65) -- (31.22,-24.28) -- (32.18,-24.56);
-  \draw (29.58,-29.75) node [below] {$\alpha$};
-  \draw [black] (20.894,-35.718) arc (47.15723:-240.84277:2.25);
-  \draw (18.84,-40.19) node [below] {$\alpha$};
-  \fill [black] (18.27,-35.4) -- (17.36,-35.65) -- (18.09,-36.33);
-  \draw [black] (20.283,-29.932) arc (165.64786:102.96041:12.277);
-  \fill [black] (29.42,-21.01) -- (28.53,-20.7) -- (28.76,-21.68);
-  \draw (22.58,-23.71) node [above] {$\beta$};
-  \draw [black] (34.46,-22.88) -- (41.84,-30.72);
-  \fill [black] (41.84,-30.72) -- (41.66,-29.79) -- (40.93,-30.48);
-  \draw (37.62,-28.27) node [left] {$\beta$};
-  \draw [black] (34.454,-18.529) arc (164.32314:-123.67686:2.25);
-  \draw (39.49,-17.55) node [right] {$\beta$};
-  \fill [black] (35.37,-21.01) -- (36.01,-21.71) -- (36.28,-20.74);
-  \draw [black] (45.807,-35.201) arc (67.3925:-220.6075:2.25);
-  \draw (46.66,-40.1) node [below] {$\alpha,\beta$};
-  \fill [black] (43.23,-35.81) -- (42.47,-36.36) -- (43.39,-36.74);
-  \draw [black] (41.27,-34.338) arc (-65.18014:-114.81986:22.321);
-  \fill [black] (22.53,-34.34) -- (23.05,-35.13) -- (23.47,-34.22);
-  \draw (31.9,-36.9) node [below] {$\alpha$};
-  \end{tikzpicture}
+  \begin{center}
+    \begin{tikzpicture}[scale=0.2]
+      \tikzstyle{every node}+=[inner sep=0pt]
+      \draw [black] (32.4,-20.7) circle (3);
+      \draw (32.4,-20.7) node {$X$};
+      \draw [black] (19.9,-32.9) circle (3);
+      \draw (19.9,-32.9) node {$Y$};
+      \draw [black] (19.9,-32.9) circle (2.4);
+      \draw [black] (43.9,-32.9) circle (3);
+      \draw (43.9,-32.9) node {$Z$};
+      \draw [black] (43.9,-32.9) circle (2.4);
+      \draw [black] (12.2,-32.9) -- (16.9,-32.9);
+      \fill [black] (16.9,-32.9) -- (16.1,-32.4) -- (16.1,-33.4);
+      \draw [black] (32.4,-13.6) -- (32.4,-17.7);
+      \fill [black] (32.4,-17.7) -- (32.9,-16.9) -- (31.9,-16.9);
+      \draw [black] (31.917,-23.654) arc (-16.01031:-75.38142:12.771);
+      \fill [black] (31.92,-23.65) -- (31.22,-24.28) -- (32.18,-24.56);
+      \draw (29.58,-29.75) node [below] {$\alpha$};
+      \draw [black] (20.894,-35.718) arc (47.15723:-240.84277:2.25);
+      \draw (18.84,-40.19) node [below] {$\alpha$};
+      \fill [black] (18.27,-35.4) -- (17.36,-35.65) -- (18.09,-36.33);
+      \draw [black] (20.283,-29.932) arc (165.64786:102.96041:12.277);
+      \fill [black] (29.42,-21.01) -- (28.53,-20.7) -- (28.76,-21.68);
+      \draw (22.58,-23.71) node [above] {$\beta$};
+      \draw [black] (34.46,-22.88) -- (41.84,-30.72);
+      \fill [black] (41.84,-30.72) -- (41.66,-29.79) -- (40.93,-30.48);
+      \draw (37.62,-28.27) node [left] {$\beta$};
+      \draw [black] (34.454,-18.529) arc (164.32314:-123.67686:2.25);
+      \draw (39.49,-17.55) node [right] {$\beta$};
+      \fill [black] (35.37,-21.01) -- (36.01,-21.71) -- (36.28,-20.74);
+      \draw [black] (45.807,-35.201) arc (67.3925:-220.6075:2.25);
+      \draw (46.66,-40.1) node [below] {$\alpha,\beta$};
+      \fill [black] (43.23,-35.81) -- (42.47,-36.36) -- (43.39,-36.74);
+      \draw [black] (41.27,-34.338) arc (-65.18014:-114.81986:22.321);
+      \fill [black] (22.53,-34.34) -- (23.05,-35.13) -- (23.47,-34.22);
+      \draw (31.9,-36.9) node [below] {$\alpha$};
+    \end{tikzpicture}
   \end{center}
   \caption{\ts{Example Nondeterministic Finite Automaton (NFA) with 3 states X,Y and Z, alphabet $\mathcal{A} = \{\alpha,\beta\}$, initial states X and Y, and accepting states Y and Z. The linear-algebra representation of this NFA is given in Example~\ref{ex:nfa}. Example accepted words are: $\alpha$, $\alpha\beta$, $\alpha\alpha\beta\beta$. Example rejected words are: $\beta$, $\beta\alpha$, $\beta\beta\alpha\beta$.}}\label{fig:example_nfa}
 \end{figure}
 \ts{
-\begin{example}\label{ex:nfa}\normalfont
-The NFA depicted in Figure~\ref{fig:example_nfa}, with states X, Y, Z and alphabet $\alpha=\{\alpha,\beta\}$, is algebraically encoded as follows: $q_0 = (1,1,0)$, $a=(0,1,1)$, $T_\alpha=\begin{bmatrix}
-  0 & 0 & 0 \\
-  1 & 1 & 0 \\
-  0 & 1 & 1 
-  \end{bmatrix}$ and $T_\beta= \begin{bmatrix}
-    1 & 0 & 1 \\
-    1 & 0 & 0 \\
-    0 & 0 & 1 
-    \end{bmatrix}$. The reader can check that words $\alpha$, $\alpha\beta$ and, $\alpha\alpha\beta\beta$ are accepted, i.e. $q_0T_\alpha a\T = 1$, $q_0T_\alpha T_\beta a\T = 1$ and, $q_0T_\alpha T_\alpha T_\beta T_\beta a \T = 1$. But, words $\beta$, $\beta\alpha$ and $\beta\beta\alpha\beta$ are rejected, i.e. $q_0T_\beta a\T = 0$, $q_0T_\beta T_\alpha a\T = 0$ and, $q_0T_\beta T_\beta T_\alpha T_\beta a \T = 0$.
-\end{example}
+  \begin{example}\label{ex:nfa}\normalfont
+    The NFA depicted in Figure~\ref{fig:example_nfa}, with states X, Y, Z and alphabet $\alpha=\{\alpha,\beta\}$, is algebraically encoded as follows: $q_0 = (1,1,0)$, $a=(0,1,1)$, $T_\alpha=\begin{bmatrix}
+        0 & 0 & 0 \\
+        1 & 1 & 0 \\
+        0 & 1 & 1
+      \end{bmatrix}$ and $T_\beta= \begin{bmatrix}
+        1 & 0 & 1 \\
+        1 & 0 & 0 \\
+        0 & 0 & 1
+      \end{bmatrix}$. The reader can check that words $\alpha$, $\alpha\beta$ and, $\alpha\alpha\beta\beta$ are accepted, i.e. $q_0T_\alpha a\T = 1$, $q_0T_\alpha T_\beta a\T = 1$ and, $q_0T_\alpha T_\alpha T_\beta T_\beta a \T = 1$. But, words $\beta$, $\beta\alpha$ and $\beta\beta\alpha\beta$ are rejected, i.e. $q_0T_\beta a\T = 0$, $q_0T_\beta T_\alpha a\T = 0$ and, $q_0T_\beta T_\beta T_\alpha T_\beta a \T = 0$.
+  \end{example}
 }
 
 \ts{Now, we describe how we transform Turing machine configurations that finitely many 1s into finite words that will be read by our NFA. First recall that a Turing machine configuration is defined by the 3-tuple: (i) state in which the machine is (ii) position of the head (iii) content of the memory tape, see Section~\ref{sec:conventions}. Then, a word-representation of a configuration is defined by:
 
-\begin{definition}[Word-representations of a configuration]\label{def:wordc}\normalfont
-Let $c$ be a Turing machine configuration with finite support, i.e. there are finitely many 1s on the memory tape of the configuration. A word-representation of the configuration $c$ is a word $\hat{c}$ constructed by concatenating (from left to right) the symbols of any finite region of the tape that contains all the 1s and, adding the head's state (a letter between A and E in the case of 5-state TMs) just before the tape symbol its currently reading. 
-\end{definition}
+  \begin{definition}[Word-representations of a configuration]\label{def:wordc}\normalfont
+    Let $c$ be a Turing machine configuration with finite support, i.e. there are finitely many 1s on the memory tape of the configuration. A word-representation of the configuration $c$ is a word $\hat{c}$ constructed by concatenating (from left to right) the symbols of any finite region of the tape that contains all the 1s and, adding the head's state (a letter between A and E in the case of 5-state TMs) just before the tape symbol its currently reading.
+  \end{definition}
 
-\begin{example}\normalfont
-A word-representation of the configuration depicted in Figure~\ref{fig:far_scan} is $\hat{c} = \texttt{00A001100}$.
-\end{example}
+  \begin{example}\normalfont
+    A word-representation of the configuration depicted in Figure~\ref{fig:far_scan} is $\hat{c} = \texttt{00A001100}$.
+  \end{example}
 
 }
 
 \ts{Note that two word-representations of the same configuration will only differ in the number of leading and trailing 0s that they have.} Hence, if $\mathcal{L}$ is the regular language of the NFA that we wish to construct to recognise the eventually-halting configurations of a given TM, it is natural that we ask the following:
 \begin{align*}
-  u \in \mathcal{L} \iff 0u \in \mathcal{L} && \text{(leading zeros ignored)}
+  u \in \mathcal{L} \iff 0u \in \mathcal{L} &  & \text{(leading zeros ignored)}
   \\
-  u \in \mathcal{L} \iff u0 \in \mathcal{L} && \text{(trailing zeros ignored)}
+  u \in \mathcal{L} \iff u0 \in \mathcal{L} &  & \text{(trailing zeros ignored)}
 \end{align*}
 
 These are implied by the following, generally stronger, conditions on the transition matrix $T_0 \in \M_{n,n}$:
 \begin{align}
-  q_0 T_0 &= q_0
+  q_0 T_0 & = q_0
   \label{far-cond-leading-0}
   \\
-  T_0 a &= a
+  a T_0   & = a
   \label{far-cond-trailing-0}
 \end{align}
 
 
 \ts{Then, we want our NFA's language $\mathcal{L}$ to include all eventually-halting configurations of a given Turing machine $\mathcal{M}$.  Inductively, we want that:}
 \begin{align*}
-c\vdash\bot &\implies \hat{c} \in \mathcal{L}\\
-(c_1\vdash c_2)\land \hat{c}_2 \in \mathcal{L}&\implies\hat{c}_1 \in \mathcal{L}
+  c\vdash\bot                                    & \implies \hat{c} \in \mathcal{L}  \\
+  (c_1\vdash c_2)\land \hat{c}_2 \in \mathcal{L} & \implies\hat{c}_1 \in \mathcal{L}
 \end{align*}
 
 \ts{With $c, c_1, c_2$ configurations of the TM (with finite support) and $\hat{c}, \hat{c}_1, \hat{c}_2$ any of their finite word-representations as defined above. Let $f,t \in \{A,B,C,D,E\}$ denote TM states (the ``from'' and ``to'' states in a TM transition), and $r,w,b \in \{0,1\}$ denote bits (a bit ``read'', a bit ``written'', and just a bit), then the above conditions turn into:}
 \begin{align*}
-  \forall u,z\in\mathbf{2}^*: \; ufrz \in \mathcal{L},\;& \text{if $(f,r) \to \bot$ is a halting transition of $\mathcal{M}$}
+  \forall u,z\in\mathbf{2}^*: \; ufrz \in \mathcal{L},\;                                                             & \text{if $(f,r) \to \bot$ is a halting transition of $\mathcal{M}$}
   \\
-  \forall u,z\in\mathbf{2}^*,\,\forall b \in \mathbf{2}: utbwz \in \mathcal{L} \implies ubfrz \in \mathcal{L},\;& \text{if $(f,r) \to (t,w,\text{left})$ is a transition of $\mathcal{M}$}
+  \forall u,z\in\mathbf{2}^*,\,\forall b \in \mathbf{2}: utbwz \in \mathcal{L} \implies ubfrz \in \mathcal{L},\;     & \text{if $(f,r) \to (t,w,\text{left})$ is a transition of $\mathcal{M}$}
   \\
-  \forall u,z\in\mathbf{2}^*,\,\forall b \in \mathbf{2}: u w t z \in \mathcal{L} \implies u f r z \in \mathcal{L},\;& \text{if $(f,r) \to (t,w,\text{right})$ is a transition of $\mathcal{M}$}
+  \forall u,z\in\mathbf{2}^*,\,\forall b \in \mathbf{2}: u w t z \in \mathcal{L} \implies u f r z \in \mathcal{L},\; & \text{if $(f,r) \to (t,w,\text{right})$ is a transition of $\mathcal{M}$}
 \end{align*}
 
 Which algebraically becomes:
 \begin{align*}
-  \forall u,z\in\mathbf{2}^*: \; q_0 T_u T_f T_r T_z a\T = 1 \;& \text{if $(f,r) \to \bot$ is a halting transition of $\mathcal{M}$}
+  \forall u,z\in\mathbf{2}^*: \; q_0 T_u T_f T_r T_z a\T = 1 \;                                                                              & \text{if $(f,r) \to \bot$ is a halting transition of $\mathcal{M}$}
   \\
-  \forall u,z\in\mathbf{2}^*,\,\forall b \in \mathbf{2}: q_0 T_{u} T_t T_b T_w T_{z} a\T = 1 \implies q_0 T_{u} T_b T_f T_r T_{z} a\T = 1,\;& \text{if $(f,r) \to (t,w,\text{left})$ is a transition of $\mathcal{M}$}
+  \forall u,z\in\mathbf{2}^*,\,\forall b \in \mathbf{2}: q_0 T_{u} T_t T_b T_w T_{z} a\T = 1 \implies q_0 T_{u} T_b T_f T_r T_{z} a\T = 1,\; & \text{if $(f,r) \to (t,w,\text{left})$ is a transition of $\mathcal{M}$}
   \\
-  \forall u,z\in\mathbf{2}^*,\,\forall b \in \mathbf{2}: q_0 T_{u} T_w T_t T_{z} a\T = 1 \implies q_0 T_{u} T_f T_r T_{z} a\T = 1,\;& \text{if $(f,r) \to (t,w,\text{right})$ is a transition of $\mathcal{M}$}
+  \forall u,z\in\mathbf{2}^*,\,\forall b \in \mathbf{2}: q_0 T_{u} T_w T_t T_{z} a\T = 1 \implies q_0 T_{u} T_f T_r T_{z} a\T = 1,\;         & \text{if $(f,r) \to (t,w,\text{right})$ is a transition of $\mathcal{M}$}
 \end{align*}
 
 These conditions are unwieldy. Let's seek stronger (thus still sufficient) conditions which are simpler:
 
 \begin{itemize}
 
-\item For machine transitions going left/right, simply require $T_t T_b T_w\preceq T_b T_f T_r$ and $T_w T_t\preceq T_f T_r$, respectively \ts{with $\preceq$ the following relation on same-size matrices: $M\preceq M'$ if $M_{ij}\le M'_{ij}$ element-wise, that is, if the second matrix has at least the same 1-entries as the first matrix.}
+  \item For machine transitions going left/right, simply require $T_t T_b T_w\preceq T_b T_f T_r$ and $T_w T_t\preceq T_f T_r$, respectively \ts{with $\preceq$ the following relation on same-size matrices: $M\preceq M'$ if $M_{ij}\le M'_{ij}$ element-wise, that is, if the second matrix has at least the same 1-entries as the first matrix.}
 
-\item To simplify the condition for halting machine transitions: define an \emph{accepted steady state\ts{-set}}\tsm{I have an issue with using the word state for \textit{steady state} here, since $s$ is a set of NFA states. This issue of using the word state to mean a set of states arises at other points of the text.} $s$ to be a row vector such that $sa\T = 1$, $s T_0\succeq s$, and $s T_1\succeq s$. Given such $s$, we have that: $\forall q\in\M_{1,n}\; q \succeq s\implies \forall z\in\mathbf{2}^*: qT_{z}a\T = 1$. \ts{Assuming that such $s$ exists we can simply require: $\forall u\in\mathbf{2}^*: q_0T_u T_f T_r \succeq s$ which is stronger than $\forall u,z\in\mathbf{2}^*: \; q_0 T_u T_f T_r T_z a\T = 1$ with $(f,r) \to \bot$ a halting transition\footnote{\ts{Note that our new condition $\forall u\in\mathbf{2}^*: q_0T_u T_f T_r \succeq s$ requires that $\forall u\in\mathbf{2}^*: q_0T_u \neq 0$, i.e. that reading 0 and 1 from the initial states must always lead to some state. This assertion is not limiting since if it is not met by some NFA, adding an additional sink state to the NFA will not change the recognised language and will satisfy the assertion.}}.}
-% assert that for all $u \in \mathbf{2}^*$, the sub-expression $q_0 T_{u}$ is not zero \ts{(this means that reading 0 and 1 from the initial states must always lead to some state\footnote{This assertion is not limiting since if it is not met by some NFA, adding an additional sink state to the NFA will not change the recognised language and will satisfy the assertion.})},
-% and \tss{(for $q$ a nonzero combination of such vectors and $fr\vdash\bot$ a halt rule)}{that $q_0 T_{u} T_f T_r$}
-% is a vector $q'$ satisfying $\forall z\in\mathbf{2}^*: q' T_{z} a = 1$ \ts{(this means that the NFA will accept any word containing a halting transition independently of the bits written after the machine's head)}.
- 
-% Given such $s$, we have $q'\succeq s\implies \forall z\in\mathbf{2}^*: q'T_{z}a = 1$. 
+  \item To simplify the condition for halting machine transitions: define an \emph{accepted steady state\ts{-set}}\tsm{I have an issue with using the word state for \textit{steady state} here, since $s$ is a set of NFA states. This issue of using the word state to mean a set of states arises at other points of the text.} $s$ to be a row vector such that $sa\T = 1$, $s T_0\succeq s$, and $s T_1\succeq s$. Given such $s$, we have that: $\forall q\in\M_{1,n}\; q \succeq s\implies \forall z\in\mathbf{2}^*: qT_{z}a\T = 1$. \ts{Assuming that such $s$ exists we can simply require: $\forall u\in\mathbf{2}^*: q_0T_u T_f T_r \succeq s$ which is stronger than $\forall u,z\in\mathbf{2}^*: \; q_0 T_u T_f T_r T_z a\T = 1$ with $(f,r) \to \bot$ a halting transition\footnote{\ts{Note that our new condition $\forall u\in\mathbf{2}^*: q_0T_u T_f T_r \succeq s$ requires that $\forall u\in\mathbf{2}^*: q_0T_u \neq 0$, i.e. that reading 0 and 1 from the initial states must always lead to some state. This assertion is not limiting since if it is not met by some NFA, adding an additional sink state to the NFA will not change the recognised language and will satisfy the assertion.}}.}
+        % assert that for all $u \in \mathbf{2}^*$, the sub-expression $q_0 T_{u}$ is not zero \ts{(this means that reading 0 and 1 from the initial states must always lead to some state\footnote{This assertion is not limiting since if it is not met by some NFA, adding an additional sink state to the NFA will not change the recognised language and will satisfy the assertion.})},
+        % and \tss{(for $q$ a nonzero combination of such vectors and $fr\vdash\bot$ a halt rule)}{that $q_0 T_{u} T_f T_r$}
+        % is a vector $q'$ satisfying $\forall z\in\mathbf{2}^*: q' T_{z} a = 1$ \ts{(this means that the NFA will accept any word containing a halting transition independently of the bits written after the machine's head)}.
+
+        % Given such $s$, we have $q'\succeq s\implies \forall z\in\mathbf{2}^*: q'T_{z}a = 1$. 
 \end{itemize}
 We have shown:
 
@@ -296,60 +296,60 @@ We have shown:
   Machine $\mathcal{M}$ doesn't halt if there are an NFA $(q_0, \{T_\gamma\}, a)$ and row vector $s$ satisfying the below:
   \begin{align}
     \label{far-cond-first}
-    q_0 T_0 &= q_0
-    &&\text{(leading zeros ignored)}
+    q_0 T_0                                  & = q_0
+                                             &                     & \text{(leading zeros ignored)}
     \tag{\ref{far-cond-leading-0}}
     \\
-    T_0 a &= a
-    &&\text{(trailing zeros ignored)}
+    a T_0                                    & = a
+                                             &                     & \text{(trailing zeros ignored)}
     \tag{\ref{far-cond-trailing-0}}
     \\
-    sa\T &= 1
-    &&\text{($s$ is accepted)}
+    sa\T                                     & = 1
+                                             &                     & \text{($s$ is accepted)}
     \label{far-cond-ass-accepted}
     \\
-    sT_0,sT_1 &\succeq s
-    &&\text{($s$ is a steady state)}
+    sT_0,sT_1                                & \succeq s
+                                             &                     & \text{($s$ is a steady state)}
     \label{far-cond-ass-steady}
     \\
-    \forall u\in\mathbf{2}^*: q_0T_u T_f T_r &\succeq s
-    &&\text{if $(f,r) \to \bot$ is a halting transition of $\mathcal{M}$}
+    \forall u\in\mathbf{2}^*: q_0T_u T_f T_r & \succeq s
+                                             &                     & \text{if $(f,r) \to \bot$ is a halting transition of $\mathcal{M}$}
     \label{far-cond-halt}
     \\
-    T_b T_f T_r &\succeq T_t T_b T_w
-    &&\text{if $(f,r) \to (t,w,\text{left})$ is a transition of $\mathcal{M}$}
+    T_b T_f T_r                              & \succeq T_t T_b T_w
+                                             &                     & \text{if $(f,r) \to (t,w,\text{left})$ is a transition of $\mathcal{M}$}
     \label{far-cond-left}
     \\
-    T_f T_r &\succeq T_w T_t
-    &&\text{if $(f,r) \to (t,w,\text{right})$ is a transition of $\mathcal{M}$}
+    T_f T_r                                  & \succeq T_w T_t
+                                             &                     & \text{if $(f,r) \to (t,w,\text{right})$ is a transition of $\mathcal{M}$}
     %\label{far-cond-right}
     \label{far-cond-last}
     \\
-    q_0 T_A a\T &= 0
-    &&\text{(initial configuration rejected)}
+    q_0 T_A a\T                              & = 0
+                                             &                     & \text{(initial configuration rejected)}
     \label{far-cond-reject-start}
   \end{align}
 \end{theorem}
 
 \ts{
-\begin{remark}[Verification]\normalfont
-  Theorem~\ref{far-main-theorem} has the nice property of being quite suited for the purpose of \textit{verification}: given a TM, an NFA and a vector $s$, the task of verifying that equations \eqref{far-cond-first}--\eqref{far-cond-last} hold -- ignoring equation \eqref{far-cond-halt} -- and thus that the TM does not halt, is computationally simple. Equation~\eqref{far-cond-halt} will be dealt with thanks to extra structure that we will require on our NFA, see Section~\ref{far-algo-direct}.
-\end{remark}
+  \begin{remark}[Verification]\normalfont
+    Theorem~\ref{far-main-theorem} has the nice property of being quite suited for the purpose of \textit{verification}: given a TM, an NFA and a vector $s$, the task of verifying that equations \eqref{far-cond-first}--\eqref{far-cond-last} hold -- ignoring equation \eqref{far-cond-halt} -- and thus that the TM does not halt, is computationally simple. Equation~\eqref{far-cond-halt} will be dealt with thanks to extra structure that we will require on our NFA, see Section~\ref{far-algo-direct}.
+  \end{remark}
 }
 
 \tss{}{This main theorem opens up a few avenues. The general next step is to impose more structure on the NFA, so that a subset of \eqref{far-cond-first}--\eqref{far-cond-last} is automatically satisfied and it's easier to search for recognizers.
 }
 \ts{Now, we need to design efficient search algorithms that will enumerate NFA until they find one that satisfies Theorem~\ref{far-main-theorem} for a given TM. For that search to be feasible, we impose more structure on the NFA so that (a) there are fewer of them to enumerate and (b) so that a subset of \eqref{far-cond-first}--\eqref{far-cond-last} is automatically satisfied.
 
-We present two such search algorithms, the first one, called \textit{direct} in Section~\ref{far-algo-direct} and the second one called \textit{meet-in-the-middle} in Section~\ref{far-algo-mtim_dfa}.
+  We present two such search algorithms, the first one, called \textit{direct} in Section~\ref{far-algo-direct} and the second one called \textit{meet-in-the-middle} in Section~\ref{far-algo-mtim_dfa}.
 
-Both search algorithms rely on an efficient search algorithm for \emph{deterministic finite automata} (DFA), which we give in Section~\ref{far-defs-dfa}.
+  Both search algorithms rely on an efficient search algorithm for \emph{deterministic finite automata} (DFA), which we give in Section~\ref{far-defs-dfa}.
 }
 
 
 
 \tss{
-Let's take a detour to review \emph{deterministic finite automata} (DFA), which are simpler and satisfy totality \eqref{far-cond-total}.}{}
+  Let's take a detour to review \emph{deterministic finite automata} (DFA), which are simpler and satisfy totality \eqref{far-cond-total}.}{}
 
 
 \subsection{Deterministic finite automata}
@@ -374,9 +374,9 @@ So motivated, we define a canonical form for DFAs:
 enumerate the reachable states via breadth-first search from $q_0$,
 producing $f:[n]=\mathrel{\mathop:}Q_\textsf{cf}\to Q$.
 Explicitly,
- $f(0)=q_0$ and $f(k)$ is the first of
- $\delta(f(0),0), \delta(f(0),1), \ldots, \delta(f(k-1),0), \delta(f(k-1),1)$ not in $f([k])$,
- valid until $f([k])$ is closed under transitions.
+$f(0)=q_0$ and $f(k)$ is the first of
+$\delta(f(0),0), \delta(f(0),1), \ldots, \delta(f(k-1),0), \delta(f(k-1),1)$ not in $f([k])$,
+valid until $f([k])$ is closed under transitions.
 This induces $\delta_\textsf{cf}(q,b)\mapsto f^{-1}(f(q), b)$.
 (Warning: this definition is not standard.)
 
@@ -395,20 +395,20 @@ This induces $\delta_\textsf{cf}(q,b)\mapsto f^{-1}(f(q), b)$.
 \proof
 \begin{description}
   \item[$1\iff 2$:]
-    We prove a partial version by induction:
-    the DFA ignores leading zeros and $f(q)=q$ for $q\le k$,
-    iff $0,\ldots,k$ have ordered first appearances in the transition table
-     which precede appearances of any $q>k$
-     and occur before the $\delta(k,0)$ position if $k>0$.
-    In case $k=0$, the DFA ignores leading zeros iff $0$ comes first in the transition table by definition.
-    (The other conditions are vacuous.)
-    In case the claim holds for preceding $k$, $f(k)$ is by definition the first number outside of $f([k])=[k]$ in the transition table---if any---and the inductive step follows.
+        We prove a partial version by induction:
+        the DFA ignores leading zeros and $f(q)=q$ for $q\le k$,
+        iff $0,\ldots,k$ have ordered first appearances in the transition table
+        which precede appearances of any $q>k$
+        and occur before the $\delta(k,0)$ position if $k>0$.
+        In case $k=0$, the DFA ignores leading zeros iff $0$ comes first in the transition table by definition.
+        (The other conditions are vacuous.)
+        In case the claim holds for preceding $k$, $f(k)$ is by definition the first number outside of $f([k])=[k]$ in the transition table---if any---and the inductive step follows.
   \item[$2\iff 3$:]
-    If the first appearances of $0,\ldots,n-1$ appear in order, any value at its first index is the largest so far, so $m_k$ takes the same values. The sequence $m_k$ is obviously nondecreasing, so to be gap-free it can only grow in steps of 0 or 1.
-    Conversely, if $m_k$ runs from $0$ to $n-1$ in steps of $0$ or $1$, each value $q\in [n]$ must appear in the table at the first index $k$ for which $m_k=q$, and all preceding values in the transition table must be strictly less.
+        If the first appearances of $0,\ldots,n-1$ appear in order, any value at its first index is the largest so far, so $m_k$ takes the same values. The sequence $m_k$ is obviously nondecreasing, so to be gap-free it can only grow in steps of 0 or 1.
+        Conversely, if $m_k$ runs from $0$ to $n-1$ in steps of $0$ or $1$, each value $q\in [n]$ must appear in the table at the first index $k$ for which $m_k=q$, and all preceding values in the transition table must be strictly less.
 
-    In case these equivalent conditions are true, that last observation shows that $q$ appears before the $\delta(q,0)$ position iff $m_k$ reaches $q$ by index $k=2q-1$, or equivalently $m_{2q-1}\ge q$.
-\qed
+        In case these equivalent conditions are true, that last observation shows that $q$ appears before the $\delta(q,0)$ position iff $m_k$ reaches $q$ by index $k=2q-1$, or equivalently $m_{2q-1}\ge q$.
+        \qed
 \end{description}
 
 \begin{corollary}
@@ -431,26 +431,26 @@ So, Algorithm \ref{alg:search-dfa} searches such DFAs incrementally (avoiding pa
     \Procedure{\textbf{bool} {\sc search-dfa}}{\textbf{int} n, \textbf{function$\boldsymbol<$List$\boldsymbol<$int$\boldsymbol>$}, CheckResult$\boldsymbol>$ check}
     \Require{$\operatorname{check}(t)\ne\textrm{MORE}$ if $t$ is a complete (length-$2n$) table}
 
-      \State \textbf{int} k = 1, t[$2*n$] = $[0,\ldots,0]$, m[$2*n$] = $[0,\ldots,0]$
-      \State CheckResult state = $\operatorname{check}([0])$
-      \Loop
-        \If{state == MORE}
-          \State \textbf{int} q\_new = m[k-1] + 1
-          \State t[k] = (q\_new $<$ \textrm{n} \textbf{and} 2*q\_new-1 == k) ? q\_new : 0
-        \ElsIf{state == SKIP}
-          \Repeat
-          \If{k $\le$ 1}
-            \Return false
-          \EndIf
-          \State k -= 1
-          \Until{t[k] $\le$ m[k-1] \textbf{and} t[k] $<$ n-1}
-          \State t[k] += 1
-        \Else\;\Return true
-        \EndIf
-        \State m[k] = max(m[k-1], t[k])
-        \State k += 1
-        \State state = check(length-k prefix of t)
-      \EndLoop
+    \State \textbf{int} k = 1, t[$2*n$] = $[0,\ldots,0]$, m[$2*n$] = $[0,\ldots,0]$
+    \State CheckResult state = $\operatorname{check}([0])$
+    \Loop
+    \If{state == MORE}
+    \State \textbf{int} q\_new = m[k-1] + 1
+    \State t[k] = (q\_new $<$ \textrm{n} \textbf{and} 2*q\_new-1 == k) ? q\_new : 0
+    \ElsIf{state == SKIP}
+    \Repeat
+    \If{k $\le$ 1}
+    \Return false
+    \EndIf
+    \State k -= 1
+    \Until{t[k] $\le$ m[k-1] \textbf{and} t[k] $<$ n-1}
+    \State t[k] += 1
+    \Else\;\Return true
+    \EndIf
+    \State m[k] = max(m[k-1], t[k])
+    \State k += 1
+    \State state = check(length-k prefix of t)
+    \EndLoop
     \EndProcedure
 
   \end{algorithmic}
@@ -459,62 +459,62 @@ So, Algorithm \ref{alg:search-dfa} searches such DFAs incrementally (avoiding pa
 
 \subsection{Search algorithm \ts{I}: direct}
 \label{far-algo-direct}
-Let's pick up the thread from \S\ref{far-defs-recognizer}, 
+Let's pick up the thread from \S\ref{far-defs-recognizer},
 and add more structure to our NFA \ts{in order to design an efficient search algorithm for Theorem~\ref{far-main-theorem}}. \ts{We are going to constrain our NFA in the following way:
 
 
-\begin{enumerate}
+  \begin{enumerate}
 
-  \item The NFA is constructed from two sub-NFAs: one NFA responsible for handling the left-hand side of the tape (i.e. before reading the tape-head state) and one NFA for handling the right-hand side of the tape (i.e. after reading the tape-head state). 
-  \item The sub-NFA for the left-hand side of the tape is a DFA.
-  \item Edges labelled by a tape-head state are only those that start in the left-hand side DFA and end in the right-hand side NFA. Furthermore, we require that no such two edges reach the same state in the right-hand side NFA. Hence, the right-hand side NFA has at least $5l$ states with $l$ the number of states of the left-hand side DFA.
-  \item In fact, we require that the right-hand side NFA has exactly $5l+1$ states with the extra state named $\bot$.
+    \item The NFA is constructed from two sub-NFAs: one NFA responsible for handling the left-hand side of the tape (i.e. before reading the tape-head state) and one NFA for handling the right-hand side of the tape (i.e. after reading the tape-head state).
+    \item The sub-NFA for the left-hand side of the tape is a DFA.
+    \item Edges labelled by a tape-head state are only those that start in the left-hand side DFA and end in the right-hand side NFA. Furthermore, we require that no such two edges reach the same state in the right-hand side NFA. Hence, the right-hand side NFA has at least $5l$ states with $l$ the number of states of the left-hand side DFA.
+    \item In fact, we require that the right-hand side NFA has exactly $5l+1$ states with the extra state named $\bot$.
 
-\end{enumerate}
+  \end{enumerate}
 
-\begin{example}\normalfont 
-The structure described above is followed by the NFA depicted in Figure~\ref{fig:far_nfa}.
-\end{example}
+  \begin{example}\normalfont
+    The structure described above is followed by the NFA depicted in Figure~\ref{fig:far_nfa}.
+  \end{example}
 
-This structure might seem arbitrary but it has a very nice property that we demonstrate in this section: once a DFA is chosen for the left-hand side of the tape, there is at most one right-hand side NFA (minimal for $\succeq$) such that the overall NFA satisfies Theorem~\ref{far-main-theorem}. Hence we can use our efficient DFA-search algorithm of Section~\ref{far-defs-dfa} to enumerate left-hand side DFA and for each of them, compute its associated right-hand side NFA (if it exists) until we find such a pair satisfying Theorem~\ref{far-main-theorem}.
+  This structure might seem arbitrary but it has a very nice property that we demonstrate in this section: once a DFA is chosen for the left-hand side of the tape, there is at most one right-hand side NFA (minimal for $\succeq$) such that the overall NFA satisfies Theorem~\ref{far-main-theorem}. Hence we can use our efficient DFA-search algorithm of Section~\ref{far-defs-dfa} to enumerate left-hand side DFA and for each of them, compute its associated right-hand side NFA (if it exists) until we find such a pair satisfying Theorem~\ref{far-main-theorem}.
 
-Let's rewrite the above structural points algebraically:
+  Let's rewrite the above structural points algebraically:
 
 
-\begin{enumerate}
-\item We write the state space of the NFA as the direct sum $\mathbf{2}^l \oplus \mathbf{2}^d$ with $l$ the number of states of the left-hand side DFA and $d=5l+1$ the number of states of the right-hand side NFA. Initial state is $\begin{bmatrix}q_0&0\end{bmatrix}$ with $q_0 \in \mathbf{2}^l$,
-transitions
- $T_b=\begin{bmatrix}L_b&0\\0&R_b\end{bmatrix}$ ($b\in\{0,1\}$) with $L_b \in \M_{l,l},\, R_b \in \M_{d,d}$ and
- $T_f=\begin{bmatrix}0&M_f\\0&0\end{bmatrix}$ ($f\in\{A,\ldots,E\}$) with $M_f \in \M_{l,d}$,
-and acceptance $\begin{bmatrix}0&a\end{bmatrix}$ with $a \in \M_{1,d}$.
-\item $(q_0,\{L_0, L_1\})$ comes from a DFA with transition function $\delta: [l] \times \{0,1\} \to [l]$ (with $[l]$ the set $\{0,\dots,l-1\}$) that ignores leading zeros (i.e. the DFA has an edge labelled 0 coming from and to state $q_0$). That ensures \eqref{far-cond-leading-0} of Theorem~\ref{far-main-theorem}.
-\item Row vectors of matrices $M_f$ (with $f\in\{A,\ldots,E\}$) are the basis row vectors $e_0,\, \dots,\, e_{5l}$ (basis vector $e_i$ has its $i^\text{th}$ entry set to 1 and the other entries set to 0).\label{pt:basis}
-\item The right-hand side NFA has a halt state $\bot$ and $e_{5l+1} = e_\bot$ is its corresponding basis row vector.
+  \begin{enumerate}
+    \item We write the state space of the NFA as the direct sum $\mathbf{2}^l \oplus \mathbf{2}^d$ with $l$ the number of states of the left-hand side DFA and $d=5l+1$ the number of states of the right-hand side NFA. Initial state is $\begin{bmatrix}q_0&0\end{bmatrix}$ with $q_0 \in \mathbf{2}^l$,
+          transitions
+          $T_b=\begin{bmatrix}L_b&0\\0&R_b\end{bmatrix}$ ($b\in\{0,1\}$) with $L_b \in \M_{l,l},\, R_b \in \M_{d,d}$ and
+          $T_f=\begin{bmatrix}0&M_f\\0&0\end{bmatrix}$ ($f\in\{A,\ldots,E\}$) with $M_f \in \M_{l,d}$,
+          and acceptance $\begin{bmatrix}0&a\end{bmatrix}$ with $a \in \M_{1,d}$.
+    \item $(q_0,\{L_0, L_1\})$ comes from a DFA with transition function $\delta: [l] \times \{0,1\} \to [l]$ (with $[l]$ the set $\{0,\dots,l-1\}$) that ignores leading zeros (i.e. the DFA has an edge labelled 0 coming from and to state $q_0$). That ensures \eqref{far-cond-leading-0} of Theorem~\ref{far-main-theorem}.
+    \item Row vectors of matrices $M_f$ (with $f\in\{A,\ldots,E\}$) are the basis row vectors $e_0,\, \dots,\, e_{5l} \in \M_{1,d}$ (basis vector $e_i$ has its $i^\text{th}$ entry set to 1 and the other entries set to 0).\label{pt:basis}
+    \item The right-hand side NFA has a halt state $\bot$ and $e_{5l+1} = e_\bot$ is its corresponding basis row vector.
 
-\end{enumerate}
+  \end{enumerate}
 
-We seek a ``direct'' algorithm which searches left-hand side DFAs and then finds an associated right-hand side NFA by solving Theorem~\ref{far-main-theorem} \eqref{far-cond-first}--\eqref{far-cond-last} for $a$, $R_0$, $R_1$ if possible.
+  We seek a ``direct'' algorithm which searches left-hand side DFAs and then finds an associated right-hand side NFA by solving Theorem~\ref{far-main-theorem} \eqref{far-cond-first}--\eqref{far-cond-last} for $a$, $R_0$, $R_1$ if possible.
 
-A helpful property of standard basis vectors is: the condition $\row_i(M) \succeq v$ with $\row_i(M)$ the $i^\text{th}$ row of matrix $M$ and $v$ some row vector, is equivalent to $M\succeq e_i\T v$. It is because of this property that we asked that row vectors of matrices $M_f$ are basis vectors (Point~\ref{pt:basis} above). Indeed, it crucially lets us re-express conditions \eqref{far-cond-ass-steady}--\eqref{far-cond-last} of Theorem~\ref{far-main-theorem} in the following way, where we set $s=0\oplus e_\bot$:
-\begin{align}
-  R_r &\succeq (e_\bot)^{\T}e_\bot
-  &&\text{for }r\in\{0,1\}
-  \tag{\ref{far-cond-ass-steady}'}
-  \\
-  \forall i\in[l]: R_r &\succeq \row_i(M_f)^{\T}e_\bot
-  &&\text{if $(f,r) \to \bot$ is a halting transition of $\mathcal{M}$}
-  \tag{\ref{far-cond-halt}'}
-  \\
-  \forall i\in[l]: R_r &\succeq  
-  \row_{\delta(i,b)}(M_f)^{\T} \row_i(M_t)R_b R_w
-  &&\text{if $(f,r) \to (t,w,\text{left})$ is a transition of $\mathcal{M}$}
-  \tag{\ref{far-cond-left}'}
-  \\
-  \forall i\in[l]: R_r &\succeq \row_i(M_f)^{\T} \row_{\delta(i,w)}(M_t)
-  &&\text{if $(f,r) \to (t,w,\text{right})$ is a transition of $\mathcal{M}$}
-  %\label{far-cond-right}
-  \tag{\ref{far-cond-last}'}
-\end{align}
+  A helpful property of standard basis vectors is: the condition $\row_i(M) \succeq v$ with $\row_i(M)$ the $i^\text{th}$ row of matrix $M$ and $v$ some row vector, is equivalent to $M\succeq e_i\T v$. It is because of this property that we asked that row vectors of matrices $M_f$ are basis vectors (Point~\ref{pt:basis} above). Indeed, it crucially lets us re-express conditions \eqref{far-cond-ass-steady}--\eqref{far-cond-last} of Theorem~\ref{far-main-theorem} in the following way, where we set $s=0\oplus e_\bot$:
+  \begin{align}
+    R_r                  & \succeq (e_\bot)^{\T}e_\bot
+                         &                                                  & \text{for }r\in\{0,1\}
+    \tag{\ref{far-cond-ass-steady}'}
+    \\
+    \forall i\in[l]: R_r & \succeq \row_i(M_f)^{\T}e_\bot
+                         &                                                  & \text{if $(f,r) \to \bot$ is a halting transition of $\mathcal{M}$}
+    \tag{\ref{far-cond-halt}'}
+    \\
+    \forall i\in[l]: R_r & \succeq
+    \row_{\delta(i,b)}(M_f)^{\T} \row_i(M_t)R_b R_w
+                         &                                                  & \text{if $(f,r) \to (t,w,\text{left})$ is a transition of $\mathcal{M}$}
+    \tag{\ref{far-cond-left}'}
+    \\
+    \forall i\in[l]: R_r & \succeq \row_i(M_f)^{\T} \row_{\delta(i,w)}(M_t)
+                         &                                                  & \text{if $(f,r) \to (t,w,\text{right})$ is a transition of $\mathcal{M}$}
+    %\label{far-cond-right}
+    \tag{\ref{far-cond-last}'}
+  \end{align}
 
 
 }
@@ -563,51 +563,70 @@ A helpful property of standard basis vectors is: the condition $\row_i(M) \succe
 % \end{align}
 
 There's a unique minimal (w.r.t $\preceq$) solution to this system of inequalities and a clear way to compute it: initialize $R_0$, $R_1$ to zero,
-then set entries to 1 as these 4 inequalities demand until a fixed point is reached \ts{-- inequality \ref{far-cond-left}' is the only one that does not have a constant right-hand side and which requires iterative search for the solution}. 
+then set entries to 1 as these 4 inequalities demand until a fixed point is reached \ts{-- inequality \ref{far-cond-left}' is the only one that does not have a constant right-hand side and which requires iterative search for the solution}.
+
+% Note that the $R_0$ and $R_1$ values so produced are an increasing function of the matrices $\{L_b\}$, or of $\delta$ when it's viewed as a partial function (ordered by extension).
+
+% The remaining conditions of Theorem \ref{far-main-theorem} are \eqref{far-cond-trailing-0}--\eqref{far-cond-ass-accepted}, the conditions on acceptance.
+% \eqref{far-cond-reject-start} is the ``negative'' condition $\langle 0,A\vert \cdot a=0$.
+% The others translate to $a\succeq\vert\bot\rangle$ and $a=R_0 a$.
+% From (\ref{far-cond-ass-steady}'), we see the sequence $\vert\bot\rangle\preceq R_0\vert\bot\rangle\preceq R_0^2\vert\bot\rangle\preceq\dots$ is increasing, this pair of conditions also has a minimal fixed-point solution.
+% The minimal solution satisfies \eqref{far-cond-reject-start} if anything does.
+% Since the fixed point of $R_0^k \vert\bot\rangle$ increases with $R$, the fixed-point solution for $R$ also suffices if anything does.
+% Since that increases under partial-DFA extensions, we can check partial DFAs for violations of \eqref{far-cond-reject-start}.
+% And so we obtain a complete decider in Algorithm \ref{alg:finite-automata-reduction-direct}.
+% A slight elaboration allows for checking a specific $L$ instead of all DFAs, and for returning the recognizer.
+
+\ts{The remaining conditions of Theorem \ref{far-main-theorem} are \eqref{far-cond-trailing-0}, \eqref{far-cond-ass-accepted} and \eqref{far-cond-reject-start}, they respectively translate to:
+  \begin{align}
+    a R_0 = a
+     &
+    \tag{\ref{far-cond-trailing-0}'}
+    \\
+    a\succeq e_{\bot}
+     &
+    \tag{\ref{far-cond-ass-accepted}'}
+    \\
+    \row_0 (M_A) a^{\T} =0
+     &
+    \tag{\ref{far-cond-reject-start}'}
+  \end{align}
 
 
-Note that the $R_0$ and $R_1$ values so produced are an increasing function of the matrices $\{L_b\}$, or of $\delta$ when it's viewed as a partial function (ordered by extension).
 
-The remaining conditions of Theorem \ref{far-main-theorem} are \eqref{far-cond-trailing-0}--\eqref{far-cond-ass-accepted}, the conditions on acceptance.
-\eqref{far-cond-reject-start} is the ``negative'' condition $\langle 0,A\vert \cdot a=0$.
-The others translate to $a\succeq\vert\bot\rangle$ and $a=R_0 a$.
-From (\ref{far-cond-ass-steady}'), we see the sequence $\vert\bot\rangle\preceq R_0\vert\bot\rangle\preceq R_0^2\vert\bot\rangle\preceq\dots$ is increasing, this pair of conditions also has a minimal fixed-point solution.
-The minimal solution satisfies \eqref{far-cond-reject-start} if anything does.
-Since the fixed point of $R_0^k \vert\bot\rangle$ increases with $R$, the fixed-point solution for $R$ also suffices if anything does.
-Since that increases under partial-DFA extensions, we can check partial DFAs for violations of \eqref{far-cond-reject-start}.
-And so we obtain a complete decider in Algorithm \ref{alg:finite-automata-reduction-direct}.
-A slight elaboration allows for checking a specific $L$ instead of all DFAs, and for returning the recognizer.
+
+}
 
 \begin{algorithm}
   \caption{{\sc decider-finite-automata-reduction-direct}}\label{alg:finite-automata-reduction-direct}
 
   \begin{algorithmic}[1]
     \Procedure{\textbf{bool} {\sc decider-finite-automata-direct}}{\textbf{TM} machine, \textbf{int} n, \textbf{bool} left\_to\_right}
-      \If{\textbf{not} left\_to\_right} replace TM with its mirror-image
-      \EndIf
-      \State \textbf{Matrix$\boldsymbol<$bool}, $5*n+1, 5*n+1\boldsymbol>$ $\textrm{R}[2*n+1][2]$ = $[[0,0],\ldots,[0,0]]$
-      \State \textbf{ColVector$\boldsymbol<$bool}, $5*n+1\boldsymbol>$ $a[2*n+1]$ = 0
-      % The next line is a hacky attempt at a full-line comment:
-      \State \(\triangleright\) Note about indexing: for $\langle i,f\vert$ use index $5*i+f$, and for $\langle\bot\vert$, use index $5*n$.
-      \State Initialize R[0] using (\ref{far-cond-ass-steady}') and (\ref{far-cond-halt}')
-      \State Initialize a[0] = $\vert\bot\rangle$
-      \Procedure{{\rm CheckResult} {\sc check}}{List$\boldsymbol<$int$\boldsymbol>$ L}
-        \State R[L.\textbf{length}()], a[L.\textbf{length}()] = R[L.\textbf{length}()-1], a[L.\textbf{length}()-1]
-        \State Increase R[L.\textbf{length}()] using (\ref{far-cond-last}'), with $(i,w)=\operatorname{divmod}(\textrm{L.\textbf{length}()-1}, 2)$
-        \Repeat
-          \State Increase R[L.\textbf{length}()] using (\ref{far-cond-left}'), restricted to $2*i+b<\textrm{L.\textbf{length}()}$
-        \Until{R[L.\textbf{length}()] stops changing}
-        \Repeat
-          \State a[L.\textbf{length}()] = R[L.\textbf{length}()][0] * a[L.\textbf{length}()]
-        \Until{a[L.\textbf{length}()] stops changing}
-        \If{$\langle 0,A\vert\cdot a\ne 0$}
-          \Return SKIP
-        \ElsIf{L.\textbf{length}() == 2*n}
-          \Return STOP
-        \Else\;\Return MORE
-        \EndIf
-      \EndProcedure
-      \State \Return \Call{search-dfa}{check}
+    \If{\textbf{not} left\_to\_right} replace TM with its mirror-image
+    \EndIf
+    \State \textbf{Matrix$\boldsymbol<$bool}, $5*n+1, 5*n+1\boldsymbol>$ $\textrm{R}[2*n+1][2]$ = $[[0,0],\ldots,[0,0]]$
+    \State \textbf{ColVector$\boldsymbol<$bool}, $5*n+1\boldsymbol>$ $a[2*n+1]$ = 0
+    % The next line is a hacky attempt at a full-line comment:
+    \State \(\triangleright\) Note about indexing: for $\langle i,f\vert$ use index $5*i+f$, and for $\langle\bot\vert$, use index $5*n$.
+    \State Initialize R[0] using (\ref{far-cond-ass-steady}') and (\ref{far-cond-halt}')
+    \State Initialize a[0] = $\vert\bot\rangle$
+    \Procedure{{\rm CheckResult} {\sc check}}{List$\boldsymbol<$int$\boldsymbol>$ L}
+    \State R[L.\textbf{length}()], a[L.\textbf{length}()] = R[L.\textbf{length}()-1], a[L.\textbf{length}()-1]
+    \State Increase R[L.\textbf{length}()] using (\ref{far-cond-last}'), with $(i,w)=\operatorname{divmod}(\textrm{L.\textbf{length}()-1}, 2)$
+    \Repeat
+    \State Increase R[L.\textbf{length}()] using (\ref{far-cond-left}'), restricted to $2*i+b<\textrm{L.\textbf{length}()}$
+    \Until{R[L.\textbf{length}()] stops changing}
+    \Repeat
+    \State a[L.\textbf{length}()] = R[L.\textbf{length}()][0] * a[L.\textbf{length}()]
+    \Until{a[L.\textbf{length}()] stops changing}
+    \If{$\langle 0,A\vert\cdot a\ne 0$}
+    \Return SKIP
+    \ElsIf{L.\textbf{length}() == 2*n}
+    \Return STOP
+    \Else\;\Return MORE
+    \EndIf
+    \EndProcedure
+    \State \Return \Call{search-dfa}{check}
     \EndProcedure
   \end{algorithmic}
 \end{algorithm}
@@ -620,18 +639,18 @@ Again, pass the left half-tape through a DFA with $l$ states.
 Imagine a DFA with $d$ states scanning the (strict) right half-tape right-to-left.
 
 \begin{remark}
-Our definitions require a left-to-right scan direction.
-Any NFA $(\langle 0\vert, \{R_b\})$ can be transposed.
-(Transposing transition matrices reverses the arrows in the diagram, as with graph adjacency matrices.)
-We can shoehorn this into the preceding framework by making an accept state from R's transposed initial state $\vert 0\rangle$,
- defining middle transitions $M_{fr}$ for the configuration's head state/bit,
- superposing all states of R to get our $s$ vector,
- and trying to satisfy conditions like
+  Our definitions require a left-to-right scan direction.
+  Any NFA $(\langle 0\vert, \{R_b\})$ can be transposed.
+  (Transposing transition matrices reverses the arrows in the diagram, as with graph adjacency matrices.)
+  We can shoehorn this into the preceding framework by making an accept state from R's transposed initial state $\vert 0\rangle$,
+  defining middle transitions $M_{fr}$ for the configuration's head state/bit,
+  superposing all states of R to get our $s$ vector,
+  and trying to satisfy conditions like
   $\langle 0\vert M_{A0} \vert 0\rangle = 0$, $M_{fr}=\sum_L \vert q\rangle\langle s\vert$ (for halt rules),
   $L_b M_{fr} \succeq M_{tb} R^T_w$ (for left rules),
   $M_{fr} R^T_b \succeq L_w M_{tb}$ (for right rules).
-What follows is more intuitive.
-\todo{JEB: Is this remark needed?}
+  What follows is more intuitive.
+  \todo{JEB: Is this remark needed?}
 \end{remark}
 
 \begin{figure}
@@ -648,26 +667,26 @@ What follows is more intuitive.
     %\node[state]           (mid)at (0, 0) {Censored};
 
     \path[->]  (0L)  edge [loop left]        node {$0$} (0L)
-                     edge                    node [right] {$1$} (1L)
-                     %edge                    (mid)
-               (1L)  edge [bend left=15]     node [left] {$0|1$} (0L)
-                     %edge                    (mid)
-  %; \path[-]   (mid) edge (5R) edge (4R) edge [dotted] (3R)
-  %; \path[<-]
-               (0R)  edge [loop right]       node {$0$} (0R)
-                     edge                    node [above] {$1$} (1R)
-               (1R)  edge [bend right]       node [below] {$0$} (0R)
-                     edge                    node [above] {$1$} (2R)
-               (2R)  edge [loop above]       node {$0$} (2R)
-                     edge                    node [above] {$1$} (3R)
-               (3R)  edge                    node [above left] {$1$} (5R)
-               (4R)  edge [bend right=15]    node [below left] {$1$} (3R)
-               (5R)  edge [loop right]       node {$0|1$} (5R)
-  ;
-  \path[<->]   (3R)  edge                    node [above right] {$0$} (4R);
+    edge                    node [right] {$1$} (1L)
+    %edge                    (mid)
+    (1L)  edge [bend left=15]     node [left] {$0|1$} (0L)
+    %edge                    (mid)
+    %; \path[-]   (mid) edge (5R) edge (4R) edge [dotted] (3R)
+    %; \path[<-]
+    (0R)  edge [loop right]       node {$0$} (0R)
+    edge                    node [above] {$1$} (1R)
+    (1R)  edge [bend right]       node [below] {$0$} (0R)
+    edge                    node [above] {$1$} (2R)
+    (2R)  edge [loop above]       node {$0$} (2R)
+    edge                    node [above] {$1$} (3R)
+    (3R)  edge                    node [above left] {$1$} (5R)
+    (4R)  edge [bend right=15]    node [below left] {$1$} (3R)
+    (5R)  edge [loop right]       node {$0|1$} (5R)
+    ;
+    \path[<->]   (3R)  edge                    node [above right] {$0$} (4R);
   \end{tikzpicture}
   \caption{This pair of DFAs can also recognize halting configurations for the TM of figure \ref{fig:finite-automata-reduction}.
-           Configurations are classified by their head state, head bit, and the two half-tapes (processed outside-in by the DFAs.)}
+    Configurations are classified by their head state, head bit, and the two half-tapes (processed outside-in by the DFAs.)}
   \label{fig:far_mitm_dfa}
 \end{figure}
 
@@ -680,16 +699,16 @@ If they're satisfiable, even if we don't prove the scheme sound, we can feed the
 
 Despite the new setting, we can write out closure conditions analogous to \S\ref{far-defs-recognizer}'s, each $\forall i\in[l],j\in[d]$:
 \begin{align}
-  &(i,f,r,j)\in A
-  &&\text{if $\ldots fr\ldots\vdash_\mathcal{M}\bot$ is a halt rule}
+                                         & (i,f,r,j)\in A
+                                         &                               & \text{if $\ldots fr\ldots\vdash_\mathcal{M}\bot$ is a halt rule}
   \tag{\ref{far-cond-halt}''}
   \\
-  (i, t, b, \delta_R(j,w))\in A \implies& (\delta_L(i,b), f, r, j)\in A
-  &&\text{if $\ldots bfr\ldots\vdash_\mathcal{M}\ldots tbw\ldots$ is a left rule}
+  (i, t, b, \delta_R(j,w))\in A \implies & (\delta_L(i,b), f, r, j)\in A
+                                         &                               & \text{if $\ldots bfr\ldots\vdash_\mathcal{M}\ldots tbw\ldots$ is a left rule}
   \tag{\ref{far-cond-left}''}
   \\
-  (\delta_L(i,w), t, b, j)\in A \implies& (i, f, r, \delta_R(j,b))\in A
-  &&\text{if $\ldots frb\ldots\vdash_\mathcal{M}\ldots wtb\ldots$ is a right rule}
+  (\delta_L(i,w), t, b, j)\in A \implies & (i, f, r, \delta_R(j,b))\in A
+                                         &                               & \text{if $\ldots frb\ldots\vdash_\mathcal{M}\ldots wtb\ldots$ is a right rule}
   %\label{far-cond-right}
   \tag{\ref{far-cond-last}''}
 \end{align}
@@ -717,94 +736,94 @@ Here especially, actual code can vary from the given pseudocode:
 
   \begin{algorithmic}[1]
     \Procedure{\textbf{bool} {\sc decider-finite-MitM-DFA}}{\textbf{TM} machine, \textbf{int} n}
-      % The next line is a hacky attempt at a full-line comment:
-      \State \(\triangleright\) Allocate variables.
-      \State\textbf{Map$\boldsymbol<$tuple, int$\boldsymbol>$} tk\_eq, tk\_le, mk\_eq, A
-      \ForAll{$(\textrm{lr}, \textrm{k}, \textrm{y})\in[2]\times[n]\times[2*n]\times[n+1]$}
-        \If{(k, y) == (0, 0)}
-          tk\_eq[lr, k, y] = true
-        \ElsIf{$0\le y\le\min(k,n-1)$}
-          tk\_eq[lr, k, y] = \Call{new-variable}{}
-        \Else\;
-          tk\_eq[lr, k, y] = false
-        \EndIf
+    % The next line is a hacky attempt at a full-line comment:
+    \State \(\triangleright\) Allocate variables.
+    \State\textbf{Map$\boldsymbol<$tuple, int$\boldsymbol>$} tk\_eq, tk\_le, mk\_eq, A
+    \ForAll{$(\textrm{lr}, \textrm{k}, \textrm{y})\in[2]\times[n]\times[2*n]\times[n+1]$}
+    \If{(k, y) == (0, 0)}
+    tk\_eq[lr, k, y] = true
+    \ElsIf{$0\le y\le\min(k,n-1)$}
+    tk\_eq[lr, k, y] = \Call{new-variable}{}
+    \Else\;
+    tk\_eq[lr, k, y] = false
+    \EndIf
 
-        \If{$y\le 0$}
-          tk\_le[lr, k, y] = tk\_eq[lr, k, y]
-        \ElsIf{$0\le y\le\min(k-1,n-2)$}
-          tk\_le[lr, k, y] = \Call{new-variable}{}
-        \Else\;
-          tk\_le[lr, k, y] = true
-        \EndIf
+    \If{$y\le 0$}
+    tk\_le[lr, k, y] = tk\_eq[lr, k, y]
+    \ElsIf{$0\le y\le\min(k-1,n-2)$}
+    tk\_le[lr, k, y] = \Call{new-variable}{}
+    \Else\;
+    tk\_le[lr, k, y] = true
+    \EndIf
 
-        \If{(k, y) == (2*n-1, n-1)}
-          mk\_eq[lr, k, y] = true
-        \ElsIf{\textbf{not} $\left\lceil\frac{k}{2}\right\rceil\le y<\min(n,k+1)$}
-          mk\_eq[lr, k, y] = false
-        \ElsIf{$\min(n, k+1)-((k+1)/2) \le 1$}
-          mk\_eq[lr, k, y] = true
-        \Else\;
-          mk\_eq[lr, k, y] = \Call{new-variable}{}
-        \EndIf
-      \EndFor
+    \If{(k, y) == (2*n-1, n-1)}
+    mk\_eq[lr, k, y] = true
+    \ElsIf{\textbf{not} $\left\lceil\frac{k}{2}\right\rceil\le y<\min(n,k+1)$}
+    mk\_eq[lr, k, y] = false
+    \ElsIf{$\min(n, k+1)-((k+1)/2) \le 1$}
+    mk\_eq[lr, k, y] = true
+    \Else\;
+    mk\_eq[lr, k, y] = \Call{new-variable}{}
+    \EndIf
+    \EndFor
 
-      \ForAll{$(\textrm{i}, \textrm{f}, \textrm{r}, \textrm{j})\in[n]\times[5]\times[2]\times[n]$}
-        \If{(k, y) == (2*n-1, n-1)}
-          A[i, f, r, j] = false
-        \Else\;
-          A[i, f, r, j] = \Call{new-variable}{}
-        \EndIf
-      \EndFor
+    \ForAll{$(\textrm{i}, \textrm{f}, \textrm{r}, \textrm{j})\in[n]\times[5]\times[2]\times[n]$}
+    \If{(k, y) == (2*n-1, n-1)}
+    A[i, f, r, j] = false
+    \Else\;
+    A[i, f, r, j] = \Call{new-variable}{}
+    \EndIf
+    \EndFor
 
-      % The next line is a hacky attempt at a full-line comment:
-      \State \(\triangleright\) Transition validity: outcomes are mutually exclusive.
-      \ForAll{$(\textrm{lr}, k, \textrm{y})\in[2]\times[2*n]\times[n]$}
-        \State \Call{new-clause}{$\textrm{tk\_eq}(\textrm{lr}, k, y)\implies \textrm{tk\_le}(\textrm{lr}, k, y)$}
-        \State \Call{new-clause}{$\textrm{tk\_le}(\textrm{lr}, k, y)\implies \textrm{tk\_le}(\textrm{lr}, k, y+1)$}
-        \State \Call{new-clause}{$\textrm{tk\_eq}(\textrm{lr}, k, y+1)\implies \neg\textrm{tk\_le}(\textrm{lr}, k, y)$}
-      \EndFor
-      \State \(\triangleright\) Transition validity: an outcome occurs.
-      \ForAll{$(\textrm{lr}, k)\in[2]\times\{1,\ldots,2*n-1\}$}
-         \Call{new-clause}{$\bigvee_{y=0}^{\min(k,n-1)} \textrm{tk\_eq}(\textrm{lr}, k, y)$}
-      \EndFor
+    % The next line is a hacky attempt at a full-line comment:
+    \State \(\triangleright\) Transition validity: outcomes are mutually exclusive.
+    \ForAll{$(\textrm{lr}, k, \textrm{y})\in[2]\times[2*n]\times[n]$}
+    \State \Call{new-clause}{$\textrm{tk\_eq}(\textrm{lr}, k, y)\implies \textrm{tk\_le}(\textrm{lr}, k, y)$}
+    \State \Call{new-clause}{$\textrm{tk\_le}(\textrm{lr}, k, y)\implies \textrm{tk\_le}(\textrm{lr}, k, y+1)$}
+    \State \Call{new-clause}{$\textrm{tk\_eq}(\textrm{lr}, k, y+1)\implies \neg\textrm{tk\_le}(\textrm{lr}, k, y)$}
+    \EndFor
+    \State \(\triangleright\) Transition validity: an outcome occurs.
+    \ForAll{$(\textrm{lr}, k)\in[2]\times\{1,\ldots,2*n-1\}$}
+    \Call{new-clause}{$\bigvee_{y=0}^{\min(k,n-1)} \textrm{tk\_eq}(\textrm{lr}, k, y)$}
+    \EndFor
 
-      % The next line is a hacky attempt at a full-line comment:
-      \State \(\triangleright\) Closure conditions.
-      \ForAll{$(i,j,(f,r))\in[n]^2\times$\Call{halt-rules}{machine}}
-        \State\Call{new-clause}{$A[i, f, r, j]$}
-      \EndFor
-      \ForAll{$(i,j,\textrm{ib},\textrm{jw},(f,r,w,L,t))\in[n]^4\times$\Call{left-rules}{machine}}
-        \State\Call{new-clause}{$
-          \textrm{tk\_eq}[L, i, b, \textrm{ib}]
-          \land \textrm{tk\_eq}[R, j, w, \textrm{jw}]
-          \land A[i, t, b, \textrm{jw}]
-          \implies A[\textrm{ib}, f, r, j]
-        $}
-      \EndFor
-      \ForAll{$(i,j,\textrm{iw},\textrm{jb},(f,r,w,R,t))\in[n]^4\times$\Call{right-rules}{machine}}
-        \State\Call{new-clause}{$
-          \textrm{tk\_eq}[R, j, b, \textrm{jb}]
-          \land \textrm{tk\_eq}[L, i, w, \textrm{iw}]
-          \land A[\textrm{iw}, t, b, j]
-          \implies A[i, f, r, \textrm{jb}]
-        $}
-      \EndFor
+    % The next line is a hacky attempt at a full-line comment:
+    \State \(\triangleright\) Closure conditions.
+    \ForAll{$(i,j,(f,r))\in[n]^2\times$\Call{halt-rules}{machine}}
+    \State\Call{new-clause}{$A[i, f, r, j]$}
+    \EndFor
+    \ForAll{$(i,j,\textrm{ib},\textrm{jw},(f,r,w,L,t))\in[n]^4\times$\Call{left-rules}{machine}}
+    \State\Call{new-clause}{$
+        \textrm{tk\_eq}[L, i, b, \textrm{ib}]
+        \land \textrm{tk\_eq}[R, j, w, \textrm{jw}]
+        \land A[i, t, b, \textrm{jw}]
+        \implies A[\textrm{ib}, f, r, j]
+      $}
+    \EndFor
+    \ForAll{$(i,j,\textrm{iw},\textrm{jb},(f,r,w,R,t))\in[n]^4\times$\Call{right-rules}{machine}}
+    \State\Call{new-clause}{$
+        \textrm{tk\_eq}[R, j, b, \textrm{jb}]
+        \land \textrm{tk\_eq}[L, i, w, \textrm{iw}]
+        \land A[\textrm{iw}, t, b, j]
+        \implies A[i, f, r, \textrm{jb}]
+      $}
+    \EndFor
 
-      % The next line is a hacky attempt at a full-line comment:
-      \State \(\triangleright\) DFA is in canonical form (Lemma \ref{far-dfa-canonical form}).
-      \ForAll{$(\textrm{lr},k)\in[2]\times\{1,\ldots,2*n-1\}$}
-        \For{$m=\lfloor k/2\rfloor,\ldots,\min(n, k)$}
-          \State\Call{new-clause}{$\textrm{mk\_eq}(\textrm{lr}, k-1, m) \implies \textrm{tk\_le}(\textrm{lr}, k, m+1)$}
-          \State\Call{new-clause}{$\textrm{mk\_eq}(\textrm{lr}, k-1, m) \land \textrm{tk\_le}(\textrm{lr}, k, m) \implies \textrm{mk\_eq}(\textrm{lr}, k, m)$}
-          \State\Call{new-clause}{$\textrm{mk\_eq}(\textrm{lr}, k-1, m) \land \textrm{tk\_eq}(\textrm{lr}, k, m+1) \implies \textrm{mk\_eq}(\textrm{lr}, k, m+1)$}
-        \EndFor
-      \EndFor
+    % The next line is a hacky attempt at a full-line comment:
+    \State \(\triangleright\) DFA is in canonical form (Lemma \ref{far-dfa-canonical form}).
+    \ForAll{$(\textrm{lr},k)\in[2]\times\{1,\ldots,2*n-1\}$}
+    \For{$m=\lfloor k/2\rfloor,\ldots,\min(n, k)$}
+    \State\Call{new-clause}{$\textrm{mk\_eq}(\textrm{lr}, k-1, m) \implies \textrm{tk\_le}(\textrm{lr}, k, m+1)$}
+    \State\Call{new-clause}{$\textrm{mk\_eq}(\textrm{lr}, k-1, m) \land \textrm{tk\_le}(\textrm{lr}, k, m) \implies \textrm{mk\_eq}(\textrm{lr}, k, m)$}
+    \State\Call{new-clause}{$\textrm{mk\_eq}(\textrm{lr}, k-1, m) \land \textrm{tk\_eq}(\textrm{lr}, k, m+1) \implies \textrm{mk\_eq}(\textrm{lr}, k, m+1)$}
+    \EndFor
+    \EndFor
 
-      \If{\Call{check-sat}{}}
-        \State Assert L DFA from the model proves the machine using Algorithm \ref{alg:finite-automata-reduction-direct}.
-        \State \Return true
-      \Else\;\Return false
-      \EndIf
+    \If{\Call{check-sat}{}}
+    \State Assert L DFA from the model proves the machine using Algorithm \ref{alg:finite-automata-reduction-direct}.
+    \State \Return true
+    \Else\;\Return false
+    \EndIf
     \EndProcedure
   \end{algorithmic}
 \end{algorithm}
