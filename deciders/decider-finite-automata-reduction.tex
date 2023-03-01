@@ -244,12 +244,15 @@ Let $\M_{m,n}$ be the set of matrices with $m$ rows and $n$ columns over $\mathb
 
 These are implied by the following, generally stronger, conditions on the transition matrix $T_0 \in \M_{n,n}$:
 \begin{align}
-  q_0 T_0 & = q_0
+  q_0 T_0    & = q_0
   \label{far-cond-leading-0}
   \\
-  a T_0   & = a
+  T_0 a^{\T} & = a^{\T}
   \label{far-cond-trailing-0}
 \end{align}
+
+
+\ts{Note that Condition~\ref{far-cond-trailing-0}, $T_0 a^{\T} = a^{\T}$, asks that for all accepting states of the NFA, reading a 0 is possible and leads to an accepting states. Indeed, $T_0 a^{\T}$ describes the set of NFA states that reach the set of accepting states $a$ after reading a $0$.}
 
 
 \ts{Then, we want our NFA's language $\mathcal{L}$ to include all eventually-halting configurations of a given Turing machine $\mathcal{M}$.  Inductively, we want that:}
@@ -300,7 +303,7 @@ We have shown:
                                              &                     & \text{(leading zeros ignored)}
     \tag{\ref{far-cond-leading-0}}
     \\
-    a T_0                                    & = a
+    T_0a^{\T}                                & = a^{\T}
                                              &                     & \text{(trailing zeros ignored)}
     \tag{\ref{far-cond-trailing-0}}
     \\
@@ -578,16 +581,16 @@ then set entries to 1 as these 4 inequalities demand until \tss{a fixed point is
   % A slight elaboration allows for checking a specific $L$ instead of all DFAs, and for returning the recognizer.
   Conditions \eqref{far-cond-trailing-0}, \eqref{far-cond-ass-accepted} of Theorem \ref{far-main-theorem}   translate to:
   \begin{align}
-    a R_0 & = a
-          &
+    R_0 a^{\T} & = a^{\T}
+               &
     \tag{\ref{far-cond-trailing-0}'}
     \\
-    a     & \succeq e_{\bot}
-          &
+    a          & \succeq e_{\bot}
+               &
     \tag{\ref{far-cond-ass-accepted}'}
   \end{align}
 
-  Similarly, there is a unique minimal (w.r.t $\preceq$) solution to this system which is found by initially setting $a_0 = e_\bot$ then iterating $a_{k+1} = a_{k} R_0$ until a fixed point is reached which gives the value of $a$, satisfying (\ref{far-cond-trailing-0}') and (\ref{far-cond-ass-accepted}'). Indeed, from (\ref{far-cond-ass-steady}'), we see that the sequence $e_\bot \preceq e_\bot R_0\preceq e_\bot R_0^2 \preceq\dots$ is increasing -- notice that $R_0 \succeq (e_\bot)^{\T} e_\bot$ is equivalent to $e_\bot R_0 \succeq e_\bot$ and that if $M \preceq M'$ then for all $M''$ (of compatible dimension) we have $M M'' \preceq M' M''$ -- hence it reaches a fixed point, which satisfies (\ref{far-cond-trailing-0}') and (\ref{far-cond-ass-accepted}').
+  Similarly, there is a unique minimal (w.r.t $\preceq$) solution to this system which is found by initially setting $a_0 = e_\bot$ then iterating $a_{k+1} = (R_0 a_{k}^{\T})^{\T}$ until a fixed point is reached which gives the value of $a$, satisfying (\ref{far-cond-trailing-0}') and (\ref{far-cond-ass-accepted}'). Indeed, from (\ref{far-cond-ass-steady}'), we see that the sequence $e_\bot^{\T} \preceq  R_0 e_\bot^{\T}\preceq R_0^2 e_\bot^{\T}  \preceq\dots$ is increasing hence it reaches a fixed point, which satisfies (\ref{far-cond-trailing-0}') and (\ref{far-cond-ass-accepted}').
 
   The last condition from Theorem~\ref{far-main-theorem} that we need to satisfy is \eqref{far-cond-reject-start} (rejection of the initial configuration), which translates to:
   \begin{align}
