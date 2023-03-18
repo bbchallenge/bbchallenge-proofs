@@ -347,9 +347,10 @@ Now, we want to design an efficient search algorithm that will, for a given TM, 
 
 \subsection{Search algorithm: direct FAR algorithm}
 \label{far-algo-direct}
-Let's add more structure to our NFA \ts{in order to design an efficient search algorithm for Theorem~\ref{far-main-theorem}}. \ts{We are going to constrain our NFA in the following way:
 
+We design an efficient search algorithm for Theorem~\ref{far-main-theorem} that we call the \textit{direct FAR algorithm}. We start by adding more structure to our NFAs as follows:
 
+\ts{
   \begin{enumerate}
 
     \item The NFA is constructed from two sub-NFAs: one NFA responsible for handling the left-hand side of the tape (i.e. before reading the tape-head state) and one NFA for handling the right-hand side of the tape (i.e. after reading the tape-head state).
