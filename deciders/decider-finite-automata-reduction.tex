@@ -488,8 +488,8 @@ This efficient pruning technique completes the method, shown below as Algorithm 
 
 \subsection{Deterministic finite automata}
 \label{far-defs-dfa}
-Textbooks\todo{JEB: cite} define \emph{deterministic} finite automata (on the binary alphabet, with acceptance unspecified) as tuples $(Q, \delta, q_0)$ of: a finite set $Q$ (states), a $q_0\in Q$ (initial state), and $\delta: Q\times\mathbf{2}\to Q$ (transition function).
-Though NFAs generalize DFAs, they can be emulated by (exponentially larger) power-set DFAs.
+Textbooks define \emph{deterministic} finite automata (on the binary alphabet, with acceptance unspecified) as tuples $(Q, \delta, q_0)$ of: a finite set $Q$ (states), a $q_0\in Q$ (initial state), and $\delta: Q\times\mathbf{2}\to Q$ (transition function).
+Though NFAs generalize DFAs, they can be emulated by (exponentially larger) power-set DFAs. \cite{Sipser}
 
 To put this definition in the linear-algebraic framework:
 identify $q_0\in Q$ with $0\in [n]\mathrel{\mathop:}=\{0,\ldots,n-1\}$;
