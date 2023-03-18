@@ -354,14 +354,14 @@ We design an efficient search algorithm for Theorem~\ref{far-main-theorem} that 
   \begin{enumerate}
 
     \item The NFA is constructed from two sub-NFAs: one NFA responsible for handling the left-hand side of the tape (i.e. before reading the tape-head state) and one NFA for handling the right-hand side of the tape (i.e. after reading the tape-head state).
-    \item The sub-NFA for the left-hand side of the tape is a DFA.
-    \item Edges labelled by a tape-head state are only those that start in the left-hand side DFA and end in the right-hand side NFA. Furthermore, we require that no such two edges reach the same state in the right-hand side NFA. Hence, the right-hand side NFA has at least $5l$ states with $l$ the number of states of the left-hand side DFA.
+    \item The sub-NFA for the left-hand side of the tape is a Deterministic Finite Automaton (DFA).
+    \item Edges labelled by a tape-head state are only those that start in the left-hand side DFA and end in the right-hand side NFA. Furthermore, we require that no such two edges reach the same state in the right-hand side NFA. Hence, the right-hand side NFA has at least $5l$ states with $l$ the number of states of the left-hand side DFA.\label{pt:injective}
     \item In fact, we require that the right-hand side NFA has exactly $5l+1$ states with the extra state named $\bot$.
 
   \end{enumerate}
 
   \begin{example}\normalfont
-    The structure described above is followed by the NFA depicted in Figure~\ref{fig:far_nfa}.
+    The structure described above is followed by the NFA depicted in Figure~\ref{fig:far_nfa}. Note that, following above Point~\ref{pt:injective}, it is natural to name states in the right-hand side NFA by prepending left-hand side DFA states to the transitions' TM state letter, e.g. state 1C in Figure~\ref{fig:far_nfa} is reached from DFA state 1 after reading TM state letter C.
   \end{example}
 
   This structure might seem arbitrary but it has a very nice property that we demonstrate in this section: once a DFA is chosen for the left-hand side of the tape, there is at most one right-hand side NFA (minimal for $\succeq$) such that the overall NFA satisfies Theorem~\ref{far-main-theorem}. Hence we can use our efficient DFA-search algorithm of Section~\ref{far-defs-dfa} to enumerate left-hand side DFA and for each of them, compute its associated right-hand side NFA (if it exists) until we find such a pair satisfying Theorem~\ref{far-main-theorem}.
