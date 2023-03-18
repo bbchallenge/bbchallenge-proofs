@@ -174,7 +174,6 @@ Let $\M_{m,n}$ be the set of matrices with $m$ rows and $n$ columns over $\mathb
       \draw (32.4,-20.7) node {$X$};
       \draw [black] (19.9,-32.9) circle (3);
       \draw (19.9,-32.9) node {$Y$};
-      \draw [black] (19.9,-32.9) circle (2.4);
       \draw [black] (43.9,-32.9) circle (3);
       \draw (43.9,-32.9) node {$Z$};
       \draw [black] (43.9,-32.9) circle (2.4);
@@ -205,35 +204,33 @@ Let $\M_{m,n}$ be the set of matrices with $m$ rows and $n$ columns over $\mathb
       \draw (31.9,-36.9) node [below] {$\alpha$};
     \end{tikzpicture}
   \end{center}
-  \caption{\ts{Example Nondeterministic Finite Automaton (NFA) with 3 states X,Y and Z, alphabet $\mathcal{A} = \{\alpha,\beta\}$, initial states X and Y, and accepting states Y and Z. The linear-algebra representation of this NFA is given in Example~\ref{ex:nfa}. Example accepted words are: $\alpha$, $\alpha\beta$, $\alpha\alpha\beta\beta$. Example rejected words are: $\beta$, $\beta\alpha$, $\beta\beta\alpha\beta$.}}\label{fig:example_nfa}
+  \caption{Example Nondeterministic Finite Automaton (NFA) with 3 states X,Y and Z, alphabet $\mathcal{A} = \{\alpha,\beta\}$, initial states X and Y, and accepting states Y and Z. The linear-algebra representation of this NFA is given in Example~\ref{ex:nfa}. Example accepted words are: $\beta$, $\alpha\beta$, $\alpha\alpha\beta\beta$. Example rejected words are: $\alpha$, $\alpha\alpha$, $\alpha\alpha\alpha$.}\label{fig:example_nfa}
 \end{figure}
-\ts{
-  \begin{example}\label{ex:nfa}\normalfont
-    The NFA depicted in Figure~\ref{fig:example_nfa}, with states X, Y, Z and alphabet $\mathcal{A}=\{\alpha,\beta\}$, is algebraically encoded as follows: $q_0 = (1,1,0)$, $a=(0,1,1)$, $T_\alpha=\begin{bmatrix}
-        0 & 0 & 0 \\
-        1 & 1 & 0 \\
-        0 & 1 & 1
-      \end{bmatrix}$ and $T_\beta= \begin{bmatrix}
-        1 & 0 & 1 \\
-        1 & 0 & 0 \\
-        0 & 0 & 1
-      \end{bmatrix}$. The reader can check that words $\alpha$, $\alpha\beta$ and, $\alpha\alpha\beta\beta$ are accepted, i.e. $q_0T_\alpha a\T = 1$, $q_0T_\alpha T_\beta a\T = 1$ and, $q_0T_\alpha T_\alpha T_\beta T_\beta a \T = 1$. But, words $\beta$, $\beta\alpha$ and $\beta\beta\alpha\beta$ are rejected, i.e. $q_0T_\beta a\T = 0$, $q_0T_\beta T_\alpha a\T = 0$ and, $q_0T_\beta T_\beta T_\alpha T_\beta a \T = 0$.
-  \end{example}
-}
 
-\ts{Now, we describe how we transform Turing machine configurations that finitely many 1s into finite words that will be read by our NFA. First recall that a Turing machine configuration is defined by the 3-tuple: (i) state in which the machine is (ii) position of the head (iii) content of the memory tape, see Section~\ref{sec:conventions}. Then, a word-representation of a configuration is defined by:
+\begin{example}\label{ex:nfa}\normalfont
+  The NFA depicted in Figure~\ref{fig:example_nfa}, with states X, Y, Z and alphabet $\mathcal{A}=\{\alpha,\beta\}$, is algebraically encoded as follows: $q_0 = (1,1,0)$, $a=(0,0,1)$, $T_\alpha=\begin{bmatrix}
+      0 & 0 & 0 \\
+      1 & 1 & 0 \\
+      0 & 1 & 1
+    \end{bmatrix}$ and $T_\beta= \begin{bmatrix}
+      1 & 0 & 1 \\
+      1 & 0 & 0 \\
+      0 & 0 & 1
+    \end{bmatrix}$. The reader can check that words $\beta$, $\alpha\beta$ and, $\alpha\alpha\beta\beta$ are accepted, i.e. $q_0T_\beta a\T = 1$, $q_0T_\alpha T_\beta a\T = 1$ and, $q_0T_\alpha T_\alpha T_\beta T_\beta a \T = 1$. But, words $\alpha$, $\alpha\alpha$ and $\alpha\alpha\alpha$ are rejected, i.e. $q_0T_\alpha a\T = 0$, $q_0T_\alpha T_\alpha a\T = 0$ and, $q_0T_\alpha T_\alpha T_\alpha a \T = 0$.
+\end{example}
 
-  \begin{definition}[Word-representations of a configuration]\label{def:wordc}\normalfont
-    Let $c$ be a Turing machine configuration with finite support, i.e. there are finitely many 1s on the memory tape of the configuration. A word-representation of the configuration $c$ is a word $\hat{c}$ constructed by concatenating (from left to right) the symbols of any finite region of the tape that contains all the 1s and, adding the head's state (a letter between A and E in the case of 5-state TMs) just before the tape symbol its currently reading.
-  \end{definition}
 
-  \begin{example}\normalfont
-    A word-representation of the configuration depicted in Figure~\ref{fig:far_scan} is $\hat{c} = \texttt{00A001100}$.
-  \end{example}
+Now, we describe how we transform Turing machine configurations that have finitely many 1s into finite words that will be read by our NFA. First recall that a Turing machine configuration is defined by the 3-tuple: (i) state in which the machine is (ii) position of the head (iii) content of the memory tape, see Section~\ref{sec:conventions}. Then, a word-representation of a configuration is defined by:
 
-}
+\begin{definition}[Word-representations of a configuration]\label{def:wordc}\normalfont
+  Let $c$ be a Turing machine configuration with finite support, i.e. there are finitely many 1s on the memory tape of the configuration. A word-representation of the configuration $c$ is a word $\hat{c}$ constructed by concatenating (from left to right) the symbols of any finite region of the tape that contains all the 1s and, adding the head's state (a letter between A and E in the case of 5-state TMs) just before the tape symbol its currently reading.
+\end{definition}
 
-\ts{Note that two word-representations of the same configuration will only differ in the number of leading and trailing 0s that they have.} Hence, if $\mathcal{L}$ is the regular language of the NFA that we wish to construct to recognise the eventually-halting configurations of a given TM, it is natural that we ask the following:
+\begin{example}\normalfont
+  A word-representation of the configuration depicted in Figure~\ref{fig:far_scan} is $\hat{c} = \texttt{00A001100}$.
+\end{example}
+
+Note that two word-representations of the same configuration will only differ in the number of leading and trailing 0s that they have. Hence, if $\mathcal{L}$ is the regular language of the NFA that we wish to construct to recognise the eventually-halting configurations of a given TM, it is natural that we ask the following:
 \begin{align*}
   u \in \mathcal{L} \iff 0u \in \mathcal{L} &  & \text{(leading zeros ignored)}
   \\
@@ -250,16 +247,16 @@ These are implied by the following, generally stronger, conditions on the transi
 \end{align}
 
 
-\ts{Note that Condition~\ref{far-cond-trailing-0}, $T_0 a^{\T} = a^{\T}$, means that for all accepting states of the NFA, reading a 0 is possible and leads to an accepting state. Indeed, $T_0 a^{\T}$ describes the set of NFA states that reach the set of accepting states $a$ after reading a $0$.}
+Note that Condition~\ref{far-cond-trailing-0}, $T_0 a^{\T} = a^{\T}$, means that for all accepting states of the NFA, reading a 0 is possible and leads to an accepting state. Indeed, $T_0 a^{\T}$ describes the set of NFA states that reach the set of accepting states $a$ after reading a $0$.
 
 
-\ts{Then, we want our NFA's language $\mathcal{L}$ to include all eventually-halting configurations of a given Turing machine $\mathcal{M}$.  Inductively, we want that:}
+Then, we want our NFA's language $\mathcal{L}$ to include all eventually-halting configurations of a given Turing machine $\mathcal{M}$.  Inductively, we want that:
 \begin{align*}
   c\vdash\bot                                    & \implies \hat{c} \in \mathcal{L}  \\
   (c_1\vdash c_2)\land \hat{c}_2 \in \mathcal{L} & \implies\hat{c}_1 \in \mathcal{L}
 \end{align*}
 
-\ts{With $c, c_1, c_2$ configurations of the TM (with finite support) and $\hat{c}, \hat{c}_1, \hat{c}_2$ any of their finite word-representations as defined above. Let $f,t \in \{A,B,C,D,E\}$ denote TM states (the ``from'' and ``to'' states in a TM transition), and $r,w,b \in \{0,1\}$ denote bits (a bit ``read'', a bit ``written'', and just a bit), then the above conditions turn into:}
+With $c, c_1, c_2$ configurations of the TM (with finite support) and $\hat{c}, \hat{c}_1, \hat{c}_2$ any of their finite word-representations, see Definition~\ref{def:wordc}. Let $f,t \in \{A,B,C,D,E\}$ denote TM states (the ``from'' and ``to'' states in a TM transition), and $r,w,b \in \{0,1\}$ denote bits (a bit ``read'', a bit ``written'', and just a bit), then the above conditions turn into:
 \begin{align*}
   \forall u,z\in\mathbf{2}^*: \; ufrz \in \mathcal{L},\;                                                             & \text{if $(f,r) \to \bot$ is a halting transition of $\mathcal{M}$}
   \\
@@ -281,20 +278,24 @@ These conditions are unwieldy. Let's seek stronger (thus still sufficient) condi
 
 \begin{itemize}
 
-  \item For machine transitions going left/right, simply require $T_t T_b T_w\preceq T_b T_f T_r$ and $T_w T_t\preceq T_f T_r$, respectively \ts{with $\preceq$ the following relation on same-size matrices: $M\preceq M'$ if $M_{ij}\le M'_{ij}$ element-wise, that is, if the second matrix has at least the same 1-entries as the first matrix.}
+  \item For machine transitions going left/right, simply require $T_t T_b T_w\preceq T_b T_f T_r$ and $T_w T_t\preceq T_f T_r$, respectively with $\preceq$ the following relation on same-size matrices: $M\preceq M'$ if $M_{ij}\le M'_{ij}$ element-wise, that is, if the second matrix has at least the same 1-entries as the first matrix.
 
-  \item To simplify the condition for halting machine transitions: define an \emph{accepted steady state\ts{-set}}\tsm{I have an issue with using the word state for \textit{steady state} here, since $s$ is a set of NFA states. This issue of using the word state to mean a set of states arises at other points of the text.} $s$ to be a row vector such that $sa\T = 1$, $s T_0\succeq s$, and $s T_1\succeq s$. Given such $s$, we have that: $\forall q\in\M_{1,n}\; q \succeq s\implies \forall z\in\mathbf{2}^*: qT_{z}a\T = 1$. \ts{Assuming that such $s$ exists we can simply require: $\forall u\in\mathbf{2}^*: q_0T_u T_f T_r \succeq s$ which is stronger than $\forall u,z\in\mathbf{2}^*: \; q_0 T_u T_f T_r T_z a\T = 1$ with $(f,r) \to \bot$ a halting transition\footnote{\ts{Note that our new condition $\forall u\in\mathbf{2}^*: q_0T_u T_f T_r \succeq s$ requires that $\forall u\in\mathbf{2}^*: q_0T_u \neq 0$, i.e. that reading 0 and 1 from the initial states must always lead to some state. This assertion is not limiting since if it is not met by some NFA, adding an additional sink state to the NFA will not change the recognised language and will satisfy the assertion.}}.}
+  \item To simplify the condition for halting machine transitions: define an \emph{accepted steady state-set} $s$ to be a row vector such that $sa\T = 1$, $s T_0\succeq s$, and $s T_1\succeq s$. Given such $s$, we have that: $\forall q\in\M_{1,n}\; q \succeq s\implies \forall z\in\mathbf{2}^*: qT_{z}a\T = 1$. Assuming that such $s$ exists we can simply require: $\forall u\in\mathbf{2}^*: q_0T_u T_f T_r \succeq s$ which is stronger than $\forall u,z\in\mathbf{2}^*: \; q_0 T_u T_f T_r T_z a\T = 1$ with $(f,r) \to \bot$ a halting transition.
+
+        % \footnote{\ts{Note that our new condition $\forall u\in\mathbf{2}^*: q_0T_u T_f T_r \succeq s$ requires that $\forall u\in\mathbf{2}^*: q_0T_u \neq 0$, i.e. that reading 0 and 1 from the initial states must always lead to some state. This assertion is not limiting since if it is not met by some NFA, adding an additional sink state to the NFA will not change the recognised language and will satisfy the assertion.}}
+
         % assert that for all $u \in \mathbf{2}^*$, the sub-expression $q_0 T_{u}$ is not zero \ts{(this means that reading 0 and 1 from the initial states must always lead to some state\footnote{This assertion is not limiting since if it is not met by some NFA, adding an additional sink state to the NFA will not change the recognised language and will satisfy the assertion.})},
         % and \tss{(for $q$ a nonzero combination of such vectors and $fr\vdash\bot$ a halt rule)}{that $q_0 T_{u} T_f T_r$}
         % is a vector $q'$ satisfying $\forall z\in\mathbf{2}^*: q' T_{z} a = 1$ \ts{(this means that the NFA will accept any word containing a halting transition independently of the bits written after the machine's head)}.
 
         % Given such $s$, we have $q'\succeq s\implies \forall z\in\mathbf{2}^*: q'T_{z}a = 1$. 
 \end{itemize}
-We have shown:
+
+Combining the above, we get our main result:
 
 \begin{theorem}\normalfont
   \label{far-main-theorem}
-  Machine $\mathcal{M}$ doesn't halt if there are an NFA $(q_0, \{T_\gamma\}, a)$ and row vector $s$ satisfying the below:
+  Machine $\mathcal{M}$ doesn't halt from the initial all-0 configuration if there are an NFA $(q_0, \{T_\gamma\}, a)$ and row vector $s$ satisfying the below:
   \begin{align}
     \label{far-cond-first}
     q_0 T_0                                  & = q_0
@@ -331,12 +332,15 @@ We have shown:
     \label{far-cond-reject-start}
   \end{align}
 \end{theorem}
+\begin{proof}
+  Conditions \eqref{far-cond-leading-0}--\eqref{far-cond-last} ensure that the NFA's language includes at least all eventually halting configurations of $\mathcal{M}$. Condition~\eqref{far-cond-reject-start} ensures that the initial all-0 configuration of the machine is rejected, hence not enventually halting. Hence, if conditions \eqref{far-cond-leading-0}--\eqref{far-cond-reject-start} are satisfied, we can conclude that $\mathcal{M}$ does not halt from the initial all-0 configuration.
+\end{proof}
 
-\ts{
-  \begin{remark}[Verification]\normalfont
-    Theorem~\ref{far-main-theorem} has the nice property of being quite suited for the purpose of \textit{verification}: given a TM, an NFA and a vector $s$, the task of verifying that equations \eqref{far-cond-first}--\eqref{far-cond-last} hold -- ignoring equation \eqref{far-cond-halt} -- and thus that the TM does not halt, is computationally simple. Equation~\eqref{far-cond-halt} will be dealt with thanks to extra structure that we will require on our NFA, see Section~\ref{far-algo-direct}.
-  \end{remark}
-}
+
+\begin{remark}[Verification]\normalfont
+  Theorem~\ref{far-main-theorem} has the nice property of being quite suited for the purpose of \textit{verification}: given a TM, an NFA and a vector $s$, the task of verifying that equations \eqref{far-cond-first}--\eqref{far-cond-last} hold -- ignoring equation \eqref{far-cond-halt} -- and thus that the TM does not halt, is computationally simple. Equation~\eqref{far-cond-halt} will be dealt with thanks to extra structure that we will require on our NFA, see Section~\ref{far-algo-direct}.
+\end{remark}
+
 
 \tss{}{This main theorem opens up a few avenues. The general next step is to impose more structure on the NFA, so that a subset of \eqref{far-cond-first}--\eqref{far-cond-last} is automatically satisfied and it's easier to search for recognizers.
 }
