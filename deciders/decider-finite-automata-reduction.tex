@@ -422,7 +422,7 @@ For a given left-hand side DFA with transition function $\delta$, the right-hand
 \end{proof}
 
 \ts{
-  Now that we have found $R_0$ and $R_1$ we need to find the set of accepting states, given by $\begin{bmatrix}0&a\end{bmatrix}$ with $a \in \M_{1,d}$.
+  Now that we have found $R_0$ and $R_1$ we need to find the set of accepting states $\begin{bmatrix}0&a\end{bmatrix}$ with $a \in \M_{1,d}$.
   % Note that the $R_0$ and $R_1$ values so produced are an increasing function of the matrices $\{L_b\}$, or of $\delta$ when it's viewed as a partial function (ordered by extension).
   % The remaining conditions of Theorem \ref{far-main-theorem} are \eqref{far-cond-trailing-0}--\eqref{far-cond-ass-accepted}, the conditions on acceptance.
   % \eqref{far-cond-reject-start} is the ``negative'' condition $\langle 0,A\vert \cdot a=0$.
@@ -444,7 +444,7 @@ For a given left-hand side DFA with transition function $\delta$, the right-hand
     \tag{\ref{far-cond-ass-accepted}'}
   \end{align}
 
-  Similarly, there is a unique minimal (w.r.t $\preceq$) solution to this system which is found by initially setting $a_0 = e_\bot$ then iterating $a_{k+1} = (R_0 a_{k}^{\T})^{\T}$ until a fixed point is reached which gives the value of $a$, satisfying (\ref{far-cond-trailing-0}') and (\ref{far-cond-ass-accepted}'). Indeed, from (\ref{far-cond-ass-steady}'), we see that the sequence $e_\bot^{\T} \preceq  R_0 e_\bot^{\T}\preceq R_0^2 e_\bot^{\T}  \preceq\dots$ is increasing hence it reaches a fixed point, which satisfies (\ref{far-cond-trailing-0}') and (\ref{far-cond-ass-accepted}').
+  Similarly, there is a unique minimal solution (w.r.t $\preceq$) to this system which is found by initially setting $a_0 = e_\bot$ then iterating $a_{k+1} = (R_0 a_{k}^{\T})^{\T}$ until a fixed point is reached which gives the value of $a$. Indeed, from (\ref{far-cond-ass-steady}'), we see that the sequence $e_\bot^{\T} \preceq  R_0 e_\bot^{\T}\preceq R_0^2 e_\bot^{\T}  \preceq\dots$ is increasing hence it reaches a fixed point, which satisfies (\ref{far-cond-trailing-0}') and (\ref{far-cond-ass-accepted}').
 
   The last condition from Theorem~\ref{far-main-theorem} that we need to satisfy is \eqref{far-cond-reject-start} (rejection of the initial configuration), which translates to:
   \begin{align}
@@ -455,7 +455,7 @@ For a given left-hand side DFA with transition function $\delta$, the right-hand
   By minimality, a solution of (\ref{far-cond-trailing-0}') and (\ref{far-cond-ass-accepted}') will satisfy (\ref{far-cond-reject-start}') if and only if the minimal solution exhibited above does. Hence, we check (\ref{far-cond-reject-start}') for the minimal $a$ that we constructed and there are two cases:
 
   \begin{itemize}
-    \item If $a$ satisfies (\ref{far-cond-reject-start}') then we have found an NFA satisfying Theorem~\ref{far-main-theorem} and we can conclude that the Turing machine does not halt.
+    \item If $a$ satisfies (\ref{far-cond-reject-start}') then we have found an NFA satisfying Theorem~\ref{far-main-theorem} and we can conclude that the Turing machine does not halt from the all-0 initial configuration.
     \item If $a$ does not satisfy (\ref{far-cond-reject-start}') then we cannot conclude and we continue our search for an appropriate left-hand side DFA.
   \end{itemize}
 
