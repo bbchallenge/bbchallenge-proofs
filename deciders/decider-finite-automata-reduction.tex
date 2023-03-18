@@ -421,45 +421,45 @@ For a given left-hand side DFA with transition function $\delta$, the right-hand
   First notice that (\ref{far-cond-ass-steady}'), (\ref{far-cond-halt}') and (\ref{far-cond-last}') have their right-hand side constant hence they only amount to constant lower bounds for matrices $R_0$ and $R_1$. Then note that, given any lower bound $B_0$ and $B_1$ for solutions of the system $R_0$ and $R_1$, we have  $\row_{\delta(i,b)}(M_f)^{\T} \row_i(M_t)R_b R_w \succeq \row_{\delta(i,b)}(M_f)^{\T} \row_i(M_t)B_b B_w$ by compatibility of $\succeq$ with the performed operations. Hence, iterating (\ref{far-cond-left}') produces an increasing, eventually stationary, sequence of lower bounds for $R_0$ and $R_1$ whose fixed point is solution to the system.
 \end{proof}
 
+\ts{
+  Now that we have found $R_0$ and $R_1$ we need to find the set of accepting states, given by $\begin{bmatrix}0&a\end{bmatrix}$ with $a \in \M_{1,d}$.
+  % Note that the $R_0$ and $R_1$ values so produced are an increasing function of the matrices $\{L_b\}$, or of $\delta$ when it's viewed as a partial function (ordered by extension).
+  % The remaining conditions of Theorem \ref{far-main-theorem} are \eqref{far-cond-trailing-0}--\eqref{far-cond-ass-accepted}, the conditions on acceptance.
+  % \eqref{far-cond-reject-start} is the ``negative'' condition $\langle 0,A\vert \cdot a=0$.
+  % The others translate to $a\succeq\vert\bot\rangle$ and $a=R_0 a$.
+  % From (\ref{far-cond-ass-steady}'), we see the sequence $\vert\bot\rangle\preceq R_0\vert\bot\rangle\preceq R_0^2\vert\bot\rangle\preceq\dots$ is increasing, this pair of conditions also has a minimal fixed-point solution.
+  % The minimal solution satisfies \eqref{far-cond-reject-start} if anything does.
+  % Since the fixed point of $R_0^k \vert\bot\rangle$ increases with $R$, the fixed-point solution for $R$ also suffices if anything does.
+  % Since that increases under partial-DFA extensions, we can check partial DFAs for violations of \eqref{far-cond-reject-start}.
+  % And so we obtain a complete decider in Algorithm \ref{alg:finite-automata-reduction-direct}.
+  % A slight elaboration allows for checking a specific $L$ instead of all DFAs, and for returning the recognizer.
+  Conditions \eqref{far-cond-trailing-0}, \eqref{far-cond-ass-accepted} of Theorem \ref{far-main-theorem}   translate to:
+  \begin{align}
+    R_0 a^{\T} & = a^{\T}
+               &
+    \tag{\ref{far-cond-trailing-0}'}
+    \\
+    a          & \succeq e_{\bot}
+               &
+    \tag{\ref{far-cond-ass-accepted}'}
+  \end{align}
 
-Now that we have found $R_0$ and $R_1$ we need to find the set of accepting states, given by $\begin{bmatrix}0&a\end{bmatrix}$ with $a \in \M_{1,d}$.
-% Note that the $R_0$ and $R_1$ values so produced are an increasing function of the matrices $\{L_b\}$, or of $\delta$ when it's viewed as a partial function (ordered by extension).
-% The remaining conditions of Theorem \ref{far-main-theorem} are \eqref{far-cond-trailing-0}--\eqref{far-cond-ass-accepted}, the conditions on acceptance.
-% \eqref{far-cond-reject-start} is the ``negative'' condition $\langle 0,A\vert \cdot a=0$.
-% The others translate to $a\succeq\vert\bot\rangle$ and $a=R_0 a$.
-% From (\ref{far-cond-ass-steady}'), we see the sequence $\vert\bot\rangle\preceq R_0\vert\bot\rangle\preceq R_0^2\vert\bot\rangle\preceq\dots$ is increasing, this pair of conditions also has a minimal fixed-point solution.
-% The minimal solution satisfies \eqref{far-cond-reject-start} if anything does.
-% Since the fixed point of $R_0^k \vert\bot\rangle$ increases with $R$, the fixed-point solution for $R$ also suffices if anything does.
-% Since that increases under partial-DFA extensions, we can check partial DFAs for violations of \eqref{far-cond-reject-start}.
-% And so we obtain a complete decider in Algorithm \ref{alg:finite-automata-reduction-direct}.
-% A slight elaboration allows for checking a specific $L$ instead of all DFAs, and for returning the recognizer.
-Conditions \eqref{far-cond-trailing-0}, \eqref{far-cond-ass-accepted} of Theorem \ref{far-main-theorem}   translate to:
-\begin{align}
-  R_0 a^{\T} & = a^{\T}
-             &
-  \tag{\ref{far-cond-trailing-0}'}
-  \\
-  a          & \succeq e_{\bot}
-             &
-  \tag{\ref{far-cond-ass-accepted}'}
-\end{align}
+  Similarly, there is a unique minimal (w.r.t $\preceq$) solution to this system which is found by initially setting $a_0 = e_\bot$ then iterating $a_{k+1} = (R_0 a_{k}^{\T})^{\T}$ until a fixed point is reached which gives the value of $a$, satisfying (\ref{far-cond-trailing-0}') and (\ref{far-cond-ass-accepted}'). Indeed, from (\ref{far-cond-ass-steady}'), we see that the sequence $e_\bot^{\T} \preceq  R_0 e_\bot^{\T}\preceq R_0^2 e_\bot^{\T}  \preceq\dots$ is increasing hence it reaches a fixed point, which satisfies (\ref{far-cond-trailing-0}') and (\ref{far-cond-ass-accepted}').
 
-Similarly, there is a unique minimal (w.r.t $\preceq$) solution to this system which is found by initially setting $a_0 = e_\bot$ then iterating $a_{k+1} = (R_0 a_{k}^{\T})^{\T}$ until a fixed point is reached which gives the value of $a$, satisfying (\ref{far-cond-trailing-0}') and (\ref{far-cond-ass-accepted}'). Indeed, from (\ref{far-cond-ass-steady}'), we see that the sequence $e_\bot^{\T} \preceq  R_0 e_\bot^{\T}\preceq R_0^2 e_\bot^{\T}  \preceq\dots$ is increasing hence it reaches a fixed point, which satisfies (\ref{far-cond-trailing-0}') and (\ref{far-cond-ass-accepted}').
+  The last condition from Theorem~\ref{far-main-theorem} that we need to satisfy is \eqref{far-cond-reject-start} (rejection of the initial configuration), which translates to:
+  \begin{align}
+    \row_0 (M_A) a^{\T} & =0
+                        & \tag{\ref{far-cond-reject-start}'}
+  \end{align}
 
-The last condition from Theorem~\ref{far-main-theorem} that we need to satisfy is \eqref{far-cond-reject-start} (rejection of the initial configuration), which translates to:
-\begin{align}
-  \row_0 (M_A) a^{\T} & =0
-                      & \tag{\ref{far-cond-reject-start}'}
-\end{align}
+  By minimality, a solution of (\ref{far-cond-trailing-0}') and (\ref{far-cond-ass-accepted}') will satisfy (\ref{far-cond-reject-start}') if and only if the minimal solution exhibited above does. Hence, we check (\ref{far-cond-reject-start}') for the minimal $a$ that we constructed and there are two cases:
 
-By minimality, a solution of (\ref{far-cond-trailing-0}') and (\ref{far-cond-ass-accepted}') will satisfy (\ref{far-cond-reject-start}') if and only if the minimal solution exhibited above does. Hence, we check (\ref{far-cond-reject-start}') for the minimal $a$ that we constructed and there are two cases:
+  \begin{itemize}
+    \item If $a$ satisfies (\ref{far-cond-reject-start}') then we have found an NFA satisfying Theorem~\ref{far-main-theorem} and we can conclude that the Turing machine does not halt.
+    \item If $a$ does not satisfy (\ref{far-cond-reject-start}') then we cannot conclude and we continue our search for an appropriate left-hand side DFA.
+  \end{itemize}
 
-\begin{itemize}
-  \item If $a$ satisfies (\ref{far-cond-reject-start}') then we have found an NFA satisfying Theorem~\ref{far-main-theorem} and we can conclude that the Turing machine does not halt.
-  \item If $a$ does not satisfy (\ref{far-cond-reject-start}') then we cannot conclude and we continue our search for an appropriate left-hand side DFA.
-\end{itemize}
-
-% From (\ref{far-cond-ass-steady})', we see that the sequence $e_\bot \preceq e_\bot R_0\preceq e_\bot R_0^2 \preceq\dots$ is increasing -- indeed, notice that $R_0 \succeq (e_\bot)^{\T} e_\bot$ is equivalent to $e_\bot R_0 \succeq e_\bot$ and that is $M \preceq M'$ then for all $M''$ (of compatible dimension) we have $M M'' \preceq M' M''$. Hence, the sequence $(e_\bot R_0^k)_{k\in\mathbb{N}}$ eventually reaches a fixed point, call it $a$, which satisfies (\ref{far-cond-trailing-0}') and (\ref{far-cond-ass-accepted}').
+  % From (\ref{far-cond-ass-steady})', we see that the sequence $e_\bot \preceq e_\bot R_0\preceq e_\bot R_0^2 \preceq\dots$ is increasing -- indeed, notice that $R_0 \succeq (e_\bot)^{\T} e_\bot$ is equivalent to $e_\bot R_0 \succeq e_\bot$ and that is $M \preceq M'$ then for all $M''$ (of compatible dimension) we have $M M'' \preceq M' M''$. Hence, the sequence $(e_\bot R_0^k)_{k\in\mathbb{N}}$ eventually reaches a fixed point, call it $a$, which satisfies (\ref{far-cond-trailing-0}') and (\ref{far-cond-ass-accepted}').
 
 
 
