@@ -412,7 +412,7 @@ For a given left-hand side DFA with transition function $\delta$, the right-hand
   \tag{\ref{far-cond-last}'}
 \end{align}
 
-\begin{lemma}\normalfont
+\begin{lemma}\normalfont\label{lem:far-unique-min}
   There's a unique minimal solution (w.r.t $\preceq$) to the system  of inequalities (\ref{far-cond-ass-steady}')--(\ref{far-cond-last}') and an effective way to compute it: initialize $R_0$, $R_1$ to zero,
   then set entries to 1 as (\ref{far-cond-ass-steady}'), (\ref{far-cond-halt}') and (\ref{far-cond-last}') demand then iterate (\ref{far-cond-left}') until $R_0$ and $R_1$ stop changing.
 \end{lemma}
@@ -459,10 +459,7 @@ By minimality, a solution of (\ref{far-cond-trailing-0}') and (\ref{far-cond-ass
   \item If $a$ does not satisfy (\ref{far-cond-reject-start}') then we cannot conclude and we continue our search for an appropriate left-hand side DFA.
 \end{itemize}
 
-% From (\ref{far-cond-ass-steady})', we see that the sequence $e_\bot \preceq e_\bot R_0\preceq e_\bot R_0^2 \preceq\dots$ is increasing -- indeed, notice that $R_0 \succeq (e_\bot)^{\T} e_\bot$ is equivalent to $e_\bot R_0 \succeq e_\bot$ and that is $M \preceq M'$ then for all $M''$ (of compatible dimension) we have $M M'' \preceq M' M''$. Hence, the sequence $(e_\bot R_0^k)_{k\in\mathbb{N}}$ eventually reaches a fixed point, call it $a$, which satisfies (\ref{far-cond-trailing-0}') and (\ref{far-cond-ass-accepted}').
-
-
-
+This method relies on a way to enumerate DFAs. In Section~\ref{far-defs-dfa} we give an efficient {\sc search-DFA} algorithm for enumerating canonically-represented DFAs. The search space of DFAs is a tree of partial transition functions and we can skip traversing some sub-trees based on a crucial observation. Solutions $R_0$, $R_1$ and $a$ for partial DFA transition function $\delta$ are lower bounds of solutions for any $\delta'$ that extends $\delta$. This observation gives that if $a$ constructed from $\delta$ violates (\ref{far-cond-reject-start}') then, any $a'$ constructed from $\delta'$ extending $\delta$ will violate it too. Hence, descendants of $\delta$ in the DFA search tree can be skipped, giving us an efficient pruning technique of the DFA search space.
 
 \begin{algorithm}
   \caption{{\sc decider-finite-automata-reduction-direct}}\label{alg:finite-automata-reduction-direct}
