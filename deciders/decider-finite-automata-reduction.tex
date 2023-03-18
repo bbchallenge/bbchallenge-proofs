@@ -461,9 +461,9 @@ This method relies on a way to enumerate DFAs. In Section~\ref{far-defs-dfa} we 
     \State \textbf{Matrix$\boldsymbol<$bool}, $5*n+1, 5*n+1\boldsymbol>$ $\textrm{R}[2*n+1][2]$ = $[[0,0],\ldots,[0,0]]$
     \State \textbf{ColVector$\boldsymbol<$bool}, $5*n+1\boldsymbol>$ $a[2*n+1]$ = 0
     % The next line is a hacky attempt at a full-line comment:
-    \State \(\triangleright\) Note about indexing: for $\langle i,f\vert$ use index $5*i+f$, and for $\langle\bot\vert$, use index $5*n$.
+    \State \(\triangleright\) Basis vector indexing: for $\row_i(M_f)$ use index $5*i+f$, and for $e_\bot$, use index $5*n$.
     \State Initialize R[0] using (\ref{far-cond-ass-steady}') and (\ref{far-cond-halt}')
-    \State Initialize a[0] = $\vert\bot\rangle$
+    \State Initialize a[0] = $e_\bot$
     \Procedure{{\rm CheckResult} {\sc check}}{List$\boldsymbol<$int$\boldsymbol>$ L}
     \State R[L.\textbf{length}()], a[L.\textbf{length}()] = R[L.\textbf{length}()-1], a[L.\textbf{length}()-1]
     \State Increase R[L.\textbf{length}()] using (\ref{far-cond-last}'), with $(i,w)=\operatorname{divmod}(\textrm{L.\textbf{length}()-1}, 2)$
@@ -471,9 +471,9 @@ This method relies on a way to enumerate DFAs. In Section~\ref{far-defs-dfa} we 
     \State Increase R[L.\textbf{length}()] using (\ref{far-cond-left}'), restricted to $2*i+b<\textrm{L.\textbf{length}()}$
     \Until{R[L.\textbf{length}()] stops changing}
     \Repeat
-    \State a[L.\textbf{length}()] = R[L.\textbf{length}()][0] * a[L.\textbf{length}()]
+    \State a[L.\textbf{length}()] = $\textrm{R}[\textrm{L}.\textbf{length}()][0] \cdot \textrm{a}[\textrm{L}.\textbf{length}()]$
     \Until{a[L.\textbf{length}()] stops changing}
-    \If{$\langle 0,A\vert\cdot a\ne 0$}
+    \If{$\row_0(M_\textrm{A})\cdot \textrm{a}[\textrm{L}.\textbf{length}()]\ne 0$}
     \Return SKIP
     \ElsIf{L.\textbf{length}() == 2*n}
     \Return STOP
@@ -492,8 +492,8 @@ Though NFAs generalize DFAs, they can be emulated by (exponentially larger) powe
 
 To put this definition in the linear-algebraic framework:
 identify $q_0\in Q$ with $0\in [n]\mathrel{\mathop:}=\{0,\ldots,n-1\}$;
-represent states $q$ with elementary row vectors $\langle q\vert$;
-define transition matrices $T_b$ via $\langle q\vert T_b = \langle \delta(q, b)\vert$.
+represent states $q$ with elementary row vectors $e_q$;
+define transition matrices $T_b$ via $e_q T_b = e_{\delta(q, b)}$.
 
 As we did for transition matrices, extend $\delta$ to words: $\delta(q,\epsilon)=q$, $\delta(q,ub)=\delta(\delta(q,u),b)$.
 
@@ -600,13 +600,13 @@ So, Algorithm \ref{alg:search-dfa} searches such DFAs incrementally (avoiding pa
 
 % \begin{remark}
 %   Our definitions require a left-to-right scan direction.
-%   Any NFA $(\langle 0\vert, \{R_b\})$ can be transposed.
+%   Any NFA $(e_0, \{R_b\})$ can be transposed.
 %   (Transposing transition matrices reverses the arrows in the diagram, as with graph adjacency matrices.)
-%   We can shoehorn this into the preceding framework by making an accept state from R's transposed initial state $\vert 0\rangle$,
+%   We can shoehorn this into the preceding framework by making an accept state from R's transposed initial state $e_0\T$,
 %   defining middle transitions $M_{fr}$ for the configuration's head state/bit,
 %   superposing all states of R to get our $s$ vector,
 %   and trying to satisfy conditions like
-%   $\langle 0\vert M_{A0} \vert 0\rangle = 0$, $M_{fr}=\sum_L \vert q\rangle\langle s\vert$ (for halt rules),
+%   $e_0 M_{A0} e_0\T = 0$, $M_{fr}=\sum_L e_q\T s$ (for halt rules),
 %   $L_b M_{fr} \succeq M_{tb} R^T_w$ (for left rules),
 %   $M_{fr} R^T_b \succeq L_w M_{tb}$ (for right rules).
 %   What follows is more intuitive.
