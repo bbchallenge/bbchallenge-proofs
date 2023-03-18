@@ -523,7 +523,7 @@ valid until $f([k])$ is closed under transitions.
 This induces $\delta_\textsf{cf}(q,b)\mapsto f^{-1}(f(q), b)$.
 (Warning: this definition is not standard.)
 
-\begin{lemma}
+\begin{lemma}\normalfont
   \label{far-dfa-canonical form}
   In a DFA with $(Q,q_0)=([n],0)$, the following are equivalent:
   \begin{enumerate}
@@ -535,7 +535,7 @@ This induces $\delta_\textsf{cf}(q,b)\mapsto f^{-1}(f(q), b)$.
           with $m_{2q-1}\ge q$ for $0<q<n$.
   \end{enumerate}
 \end{lemma}
-\proof
+\begin{proof}
 \begin{description}
   \item[$1\iff 2$:]
         We prove a partial version by induction:
@@ -551,17 +551,17 @@ This induces $\delta_\textsf{cf}(q,b)\mapsto f^{-1}(f(q), b)$.
         Conversely, if $m_k$ runs from $0$ to $n-1$ in steps of $0$ or $1$, each value $q\in [n]$ must appear in the table at the first index $k$ for which $m_k=q$, and all preceding values in the transition table must be strictly less.
 
         In case these equivalent conditions are true, that last observation shows that $q$ appears before the $\delta(q,0)$ position iff $m_k$ reaches $q$ by index $k=2q-1$, or equivalently $m_{2q-1}\ge q$.
-        \qed
 \end{description}
+\end{proof}
 
-\begin{corollary}
+\begin{corollary}\normalfont
   $\{t_k\}_{k=0}^\ell$ ($\ell<2n$) is a prefix of a canonical, leading-zero-ignoring, $n$-state DFA transition table iff
   $m_k \mathrel{\mathop:}= \max\{t_j\}_{j=0}^k$ runs from $0$ to $m_{\ell-1}<n$ in steps of $0$ or $1$, and $m_{2q-1}\ge q$ where defined.
 \end{corollary}
-\proof
+\begin{proof}
 If $\ell=2n-1$, $\{m_k\}$ grows to exactly $n-1$ (since $m_{2(n-1)-1}\ge n-1$), and lemma \ref{far-dfa-canonical form} applies.
 Otherwise, we may extend the sequence with $t_{\ell+1}=\min(m_\ell+1,n-1)$, the same conditions apply.
-\qed
+\end{proof}
 
 So, Algorithm \ref{alg:search-dfa} searches such DFAs incrementally (avoiding partial DFAs already deemed unworkable).
 
