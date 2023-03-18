@@ -566,8 +566,8 @@ So, Algorithm \ref{alg:search-dfa} searches such DFAs incrementally (avoiding pa
     \Require{$\operatorname{check}(t)\ne\textrm{MORE}$ if $t$ is a complete (length-$2n$) table}
 
     \State \textbf{int} k = 1, t[$2*n$] = $[0,\ldots,0]$, m[$2*n$] = $[0,\ldots,0]$
-    \State CheckResult state = $\operatorname{check}([0])$
     \Loop
+    \State state = check(length-k prefix of t)
     \If{state == MORE}
     \State \textbf{int} q\_new = m[k-1] + 1
     \State t[k] = (q\_new $<$ \textrm{n} \textbf{and} 2*q\_new-1 == k) ? q\_new : 0
@@ -583,7 +583,6 @@ So, Algorithm \ref{alg:search-dfa} searches such DFAs incrementally (avoiding pa
     \EndIf
     \State m[k] = max(m[k-1], t[k])
     \State k += 1
-    \State state = check(length-k prefix of t)
     \EndLoop
     \EndProcedure
 
