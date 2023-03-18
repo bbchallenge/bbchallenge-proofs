@@ -423,16 +423,6 @@ For a given left-hand side DFA with transition function $\delta$, the right-hand
 
 
 Now that we have found $R_0$ and $R_1$ we need to find the set of accepting states $\begin{bmatrix}0&a\end{bmatrix}$ with $a \in \M_{1,d}$.
-% Note that the $R_0$ and $R_1$ values so produced are an increasing function of the matrices $\{L_b\}$, or of $\delta$ when it's viewed as a partial function (ordered by extension).
-% The remaining conditions of Theorem \ref{far-main-theorem} are \eqref{far-cond-trailing-0}--\eqref{far-cond-ass-accepted}, the conditions on acceptance.
-% \eqref{far-cond-reject-start} is the ``negative'' condition $\langle 0,A\vert \cdot a=0$.
-% The others translate to $a\succeq\vert\bot\rangle$ and $a=R_0 a$.
-% From (\ref{far-cond-ass-steady}'), we see the sequence $\vert\bot\rangle\preceq R_0\vert\bot\rangle\preceq R_0^2\vert\bot\rangle\preceq\dots$ is increasing, this pair of conditions also has a minimal fixed-point solution.
-% The minimal solution satisfies \eqref{far-cond-reject-start} if anything does.
-% Since the fixed point of $R_0^k \vert\bot\rangle$ increases with $R$, the fixed-point solution for $R$ also suffices if anything does.
-% Since that increases under partial-DFA extensions, we can check partial DFAs for violations of \eqref{far-cond-reject-start}.
-% And so we obtain a complete decider in Algorithm \ref{alg:finite-automata-reduction-direct}.
-% A slight elaboration allows for checking a specific $L$ instead of all DFAs, and for returning the recognizer.
 Conditions \eqref{far-cond-trailing-0}, \eqref{far-cond-ass-accepted} of Theorem \ref{far-main-theorem}   translate to:
 \begin{align}
   R_0 a^{\T} & = a^{\T}
