@@ -530,7 +530,7 @@ This induces $\delta_\textsf{cf}(q,b)\mapsto f^{-1}(f(q), b)$.
     \item it's in canonical form ($Q_\textsf{cf}\to Q$ is the identity)
           and ignores leading zeros (equation \eqref{far-cond-leading-0} or $\delta(0,0)=0$);
     \item its transition table includes each of $0,\ldots,n-1$, whose first appearances occur in order,
-          and with each $q\in(0,n)$ appearing before the $\delta(q,0)$ position;
+          and with each $0 < q < n$ appearing before the $2q$ position in $\delta$;
     \item the sequence $\{m_k \mathrel{\mathop:}= \max\{\delta(q,b): 2q+b\le k\}\}_{k=0}^{2n-1}$ of cumulative maxima runs from $0$ to $n-1$ in steps of $0$ or $1$,
           with $m_{2q-1}\ge q$ for $0<q<n$.
   \end{enumerate}
@@ -542,7 +542,7 @@ This induces $\delta_\textsf{cf}(q,b)\mapsto f^{-1}(f(q), b)$.
         the DFA ignores leading zeros and $f(q)=q$ for $q\le k$,
         iff $0,\ldots,k$ have ordered first appearances in the transition table
         which precede appearances of any $q>k$
-        and occur before the $\delta(k,0)$ position if $k>0$.
+        and occur before the $2k$ position in $\delta$ if $k>0$.
         In case $k=0$, the DFA ignores leading zeros iff $0$ comes first in the transition table by definition.
         (The other conditions are vacuous.)
         In case the claim holds for preceding $k$, $f(k)$ is by definition the first number outside of $f([k])=[k]$ in the transition table---if any---and the inductive step follows.
