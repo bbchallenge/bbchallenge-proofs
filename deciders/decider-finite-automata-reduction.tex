@@ -342,19 +342,8 @@ Combining the above, we get our main result:
 \end{remark}
 
 
-\tss{}{This main theorem opens up a few avenues. The general next step is to impose more structure on the NFA, so that a subset of \eqref{far-cond-first}--\eqref{far-cond-last} is automatically satisfied and it's easier to search for recognizers.
-}
-\ts{Now, we need to design efficient search algorithms that will enumerate NFA until they find one that satisfies Theorem~\ref{far-main-theorem} for a given TM. For that search to be feasible, we impose more structure on the NFA so that (a) there are fewer of them to enumerate and (b) so that a subset of \eqref{far-cond-first}--\eqref{far-cond-last} is automatically satisfied.
+Now, we want to design an efficient search algorithm that will, for a given TM, try to find an NFA satisfying Theorem~\ref{far-main-theorem}. For that search to be feasible, we impose more structure on the NFA so that (a) the search space of NFAs is smaller (b) a subset of Conditions \eqref{far-cond-first}--\eqref{far-cond-last} is automatically satisfied by these NFAs.
 
-  We present two such search algorithms, the first one, called \textit{direct} in Section~\ref{far-algo-direct} and the second one called \textit{meet-in-the-middle} in Section~\ref{far-algo-mtim_dfa}.
-
-  Both search algorithms rely on an efficient search algorithm for \emph{deterministic finite automata} (DFA), which we give in Section~\ref{far-defs-dfa}.
-}
-
-
-
-\tss{
-  Let's take a detour to review \emph{deterministic finite automata} (DFA), which are simpler and satisfy totality \eqref{far-cond-total}.}{}
 
 
 \subsection{Deterministic finite automata}
