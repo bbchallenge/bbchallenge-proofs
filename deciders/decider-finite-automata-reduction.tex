@@ -345,116 +345,9 @@ Combining the above, we get our main result:
 Now, we want to design an efficient search algorithm that will, for a given TM, try to find an NFA satisfying Theorem~\ref{far-main-theorem}. For that search to be feasible, we impose more structure on the NFA so that (a) the search space of NFAs is smaller (b) a subset of Conditions \eqref{far-cond-first}--\eqref{far-cond-last} is automatically satisfied by these NFAs.
 
 
-
-\subsection{Deterministic finite automata}
-\label{far-defs-dfa}
-Textbooks\todo{JEB: cite} define \emph{deterministic} finite automata (on the binary alphabet, with acceptance unspecified) as tuples $(Q, \delta, q_0)$ of: a finite set $Q$ (states), a $q_0\in Q$ (initial state), and $\delta: Q\times\mathbf{2}\to Q$ (transition function).
-Though NFAs generalize DFAs, they can be emulated by (exponentially larger) power-set DFAs.
-
-To put this definition in the linear-algebraic framework:
-identify $q_0\in Q$ with $0\in [n]\mathrel{\mathop:}=\{0,\ldots,n-1\}$;
-represent states $q$ with elementary row vectors $\langle q\vert$;
-define transition matrices $T_b$ via $\langle q\vert T_b = \langle \delta(q, b)\vert$.
-
-As we did for transition matrices, extend $\delta$ to words: $\delta(q,\epsilon)=q$, $\delta(q,ub)=\delta(\delta(q,u),b)$.
-
-Given a DFA on $[n]$, call its \emph{transition table} the list $(\delta(0,0),\delta(0,1),\ldots,\delta(n-1,0),\delta(n-1,1))$.
-
-Call $\{\delta(q_0,u): u\in\mathbf{2}^*\}$ the set of \emph{reachable} states.
-
-When building a larger recognizer,
-we expect no benefit from considering DFAs which just relabel others or add unreachable states.
-So motivated, we define a canonical form for DFAs:
-enumerate the reachable states via breadth-first search from $q_0$,
-producing $f:[n]=\mathrel{\mathop:}Q_\textsf{cf}\to Q$.
-Explicitly,
-$f(0)=q_0$ and $f(k)$ is the first of
-$\delta(f(0),0), \delta(f(0),1), \ldots, \delta(f(k-1),0), \delta(f(k-1),1)$ not in $f([k])$,
-valid until $f([k])$ is closed under transitions.
-This induces $\delta_\textsf{cf}(q,b)\mapsto f^{-1}(f(q), b)$.
-(Warning: this definition is not standard.)
-
-\begin{lemma}
-  \label{far-dfa-canonical form}
-  In a DFA with $(Q,q_0)=([n],0)$, the following are equivalent:
-  \begin{enumerate}
-    \item it's in canonical form ($Q_\textsf{cf}\to Q$ is the identity)
-          and ignores leading zeros (equation \eqref{far-cond-leading-0} or $\delta(0,0)=0$);
-    \item its transition table includes each of $0,\ldots,n-1$, whose first appearances occur in order,
-          and with each $q\in(0,n)$ appearing before the $\delta(q,0)$ position;
-    \item the sequence $\{m_k \mathrel{\mathop:}= \max\{\delta(q,b): 2q+b\le k\}\}_{k=0}^{2n-1}$ of cumulative maxima runs from $0$ to $n-1$ in steps of $0$ or $1$,
-          with $m_{2q-1}\ge q$ for $0<q<n$.
-  \end{enumerate}
-\end{lemma}
-\proof
-\begin{description}
-  \item[$1\iff 2$:]
-        We prove a partial version by induction:
-        the DFA ignores leading zeros and $f(q)=q$ for $q\le k$,
-        iff $0,\ldots,k$ have ordered first appearances in the transition table
-        which precede appearances of any $q>k$
-        and occur before the $\delta(k,0)$ position if $k>0$.
-        In case $k=0$, the DFA ignores leading zeros iff $0$ comes first in the transition table by definition.
-        (The other conditions are vacuous.)
-        In case the claim holds for preceding $k$, $f(k)$ is by definition the first number outside of $f([k])=[k]$ in the transition table---if any---and the inductive step follows.
-  \item[$2\iff 3$:]
-        If the first appearances of $0,\ldots,n-1$ appear in order, any value at its first index is the largest so far, so $m_k$ takes the same values. The sequence $m_k$ is obviously nondecreasing, so to be gap-free it can only grow in steps of 0 or 1.
-        Conversely, if $m_k$ runs from $0$ to $n-1$ in steps of $0$ or $1$, each value $q\in [n]$ must appear in the table at the first index $k$ for which $m_k=q$, and all preceding values in the transition table must be strictly less.
-
-        In case these equivalent conditions are true, that last observation shows that $q$ appears before the $\delta(q,0)$ position iff $m_k$ reaches $q$ by index $k=2q-1$, or equivalently $m_{2q-1}\ge q$.
-        \qed
-\end{description}
-
-\begin{corollary}
-  $\{t_k\}_{k=0}^\ell$ ($\ell<2n$) is a prefix of a canonical, leading-zero-ignoring, $n$-state DFA transition table iff
-  $m_k \mathrel{\mathop:}= \max\{t_j\}_{j=0}^k$ runs from $0$ to $m_{\ell-1}<n$ in steps of $0$ or $1$, and $m_{2q-1}\ge q$ where defined.
-\end{corollary}
-\proof
-If $\ell=2n-1$, $\{m_k\}$ grows to exactly $n-1$ (since $m_{2(n-1)-1}\ge n-1$), and lemma \ref{far-dfa-canonical form} applies.
-Otherwise, we may extend the sequence with $t_{\ell+1}=\min(m_\ell+1,n-1)$, the same conditions apply.
-\qed
-
-So, Algorithm \ref{alg:search-dfa} searches such DFAs incrementally (avoiding partial DFAs already deemed unworkable).
-
-\begin{algorithm}
-  \caption{{\sc search-dfa}}\label{alg:search-dfa}
-
-  \begin{algorithmic}[1]
-    \State \textbf{enum} CheckResult \{MORE, SKIP, STOP\}
-    \Statex
-    \Procedure{\textbf{bool} {\sc search-dfa}}{\textbf{int} n, \textbf{function$\boldsymbol<$List$\boldsymbol<$int$\boldsymbol>$}, CheckResult$\boldsymbol>$ check}
-    \Require{$\operatorname{check}(t)\ne\textrm{MORE}$ if $t$ is a complete (length-$2n$) table}
-
-    \State \textbf{int} k = 1, t[$2*n$] = $[0,\ldots,0]$, m[$2*n$] = $[0,\ldots,0]$
-    \State CheckResult state = $\operatorname{check}([0])$
-    \Loop
-    \If{state == MORE}
-    \State \textbf{int} q\_new = m[k-1] + 1
-    \State t[k] = (q\_new $<$ \textrm{n} \textbf{and} 2*q\_new-1 == k) ? q\_new : 0
-    \ElsIf{state == SKIP}
-    \Repeat
-    \If{k $\le$ 1}
-    \Return false
-    \EndIf
-    \State k -= 1
-    \Until{t[k] $\le$ m[k-1] \textbf{and} t[k] $<$ n-1}
-    \State t[k] += 1
-    \Else\;\Return true
-    \EndIf
-    \State m[k] = max(m[k-1], t[k])
-    \State k += 1
-    \State state = check(length-k prefix of t)
-    \EndLoop
-    \EndProcedure
-
-  \end{algorithmic}
-\end{algorithm}
-
-
-\subsection{Search algorithm \ts{I}: direct}
+\subsection{Search algorithm: direct FAR algorithm}
 \label{far-algo-direct}
-Let's pick up the thread from \S\ref{far-defs-recognizer},
-and add more structure to our NFA \ts{in order to design an efficient search algorithm for Theorem~\ref{far-main-theorem}}. \ts{We are going to constrain our NFA in the following way:
+Let's add more structure to our NFA \ts{in order to design an efficient search algorithm for Theorem~\ref{far-main-theorem}}. \ts{We are going to constrain our NFA in the following way:
 
 
   \begin{enumerate}
@@ -637,223 +530,329 @@ then set entries to 1 as these 4 inequalities demand until \tss{a fixed point is
   \end{algorithmic}
 \end{algorithm}
 
+\subsection{Deterministic finite automata}
+\label{far-defs-dfa}
+Textbooks\todo{JEB: cite} define \emph{deterministic} finite automata (on the binary alphabet, with acceptance unspecified) as tuples $(Q, \delta, q_0)$ of: a finite set $Q$ (states), a $q_0\in Q$ (initial state), and $\delta: Q\times\mathbf{2}\to Q$ (transition function).
+Though NFAs generalize DFAs, they can be emulated by (exponentially larger) power-set DFAs.
 
-\subsection{Search algorithm \ts{II}: meet-in-the-middle DFA}
-\label{far-algo-mtim_dfa}
-A symmetric recognizer construction has also shown good results.
-Again, pass the left half-tape through a DFA with $l$ states.
-Imagine a DFA with $d$ states scanning the (strict) right half-tape right-to-left.
+To put this definition in the linear-algebraic framework:
+identify $q_0\in Q$ with $0\in [n]\mathrel{\mathop:}=\{0,\ldots,n-1\}$;
+represent states $q$ with elementary row vectors $\langle q\vert$;
+define transition matrices $T_b$ via $\langle q\vert T_b = \langle \delta(q, b)\vert$.
 
-\begin{remark}
-  Our definitions require a left-to-right scan direction.
-  Any NFA $(\langle 0\vert, \{R_b\})$ can be transposed.
-  (Transposing transition matrices reverses the arrows in the diagram, as with graph adjacency matrices.)
-  We can shoehorn this into the preceding framework by making an accept state from R's transposed initial state $\vert 0\rangle$,
-  defining middle transitions $M_{fr}$ for the configuration's head state/bit,
-  superposing all states of R to get our $s$ vector,
-  and trying to satisfy conditions like
-  $\langle 0\vert M_{A0} \vert 0\rangle = 0$, $M_{fr}=\sum_L \vert q\rangle\langle s\vert$ (for halt rules),
-  $L_b M_{fr} \succeq M_{tb} R^T_w$ (for left rules),
-  $M_{fr} R^T_b \succeq L_w M_{tb}$ (for right rules).
-  What follows is more intuitive.
-  \todo{JEB: Is this remark needed?}
-\end{remark}
+As we did for transition matrices, extend $\delta$ to words: $\delta(q,\epsilon)=q$, $\delta(q,ub)=\delta(\delta(q,u),b)$.
 
-\begin{figure}
-  \begin{tikzpicture}[shorten >=1pt, shorten <=1pt]]
-    % The commented code below turns this into a complete NFA diagram, if the 2nd "initial above" also becomes "accepting".
-    \node[state,initial above] (0L) at (-2, 2) {$0_L$};
-    \node[state]           (1L) at (-2, -2) {$1_L$};
-    \node[state,initial above] (0R) at (10, 0) {$0_R$};
-    \node[state]           (1R) at (8, 0) {$1_R$};
-    \node[state]           (2R) at (6, 0) {$2_R$};
-    \node[state]           (3R) at (4, 0) {$3_R$};
-    \node[state]           (4R) at (2, 2) {$4_R$};
-    \node[state]           (5R) at (2, -2) {$5_R$};
-    %\node[state]           (mid)at (0, 0) {Censored};
+Given a DFA on $[n]$, call its \emph{transition table} the list $(\delta(0,0),\delta(0,1),\ldots,\delta(n-1,0),\delta(n-1,1))$.
 
-    \path[->]  (0L)  edge [loop left]        node {$0$} (0L)
-    edge                    node [right] {$1$} (1L)
-    %edge                    (mid)
-    (1L)  edge [bend left=15]     node [left] {$0|1$} (0L)
-    %edge                    (mid)
-    %; \path[-]   (mid) edge (5R) edge (4R) edge [dotted] (3R)
-    %; \path[<-]
-    (0R)  edge [loop right]       node {$0$} (0R)
-    edge                    node [above] {$1$} (1R)
-    (1R)  edge [bend right]       node [below] {$0$} (0R)
-    edge                    node [above] {$1$} (2R)
-    (2R)  edge [loop above]       node {$0$} (2R)
-    edge                    node [above] {$1$} (3R)
-    (3R)  edge                    node [above left] {$1$} (5R)
-    (4R)  edge [bend right=15]    node [below left] {$1$} (3R)
-    (5R)  edge [loop right]       node {$0|1$} (5R)
-    ;
-    \path[<->]   (3R)  edge                    node [above right] {$0$} (4R);
-  \end{tikzpicture}
-  \caption{This pair of DFAs can also recognize halting configurations for the TM of figure \ref{fig:finite-automata-reduction}.
-    Configurations are classified by their head state, head bit, and the two half-tapes (processed outside-in by the DFAs.)}
-  \label{fig:far_mitm_dfa}
-\end{figure}
+Call $\{\delta(q_0,u): u\in\mathbf{2}^*\}$ the set of \emph{reachable} states.
 
-As in Figure \ref{fig:far_mitm_dfa}, let's consider the DFAs on their own terms.
-Each one partitions its input into a family of regular languages (one per state).
-Accounting for the head state/bit and right half-tape, we obtain $l\cdot 5\cdot 2\cdot d$ classes of TM configuration.
-Propose a recognizer which distils this classification into a result.
-We'll work out conditions for a good ``accepted'' set $A\subseteq[l]\times\{A,\ldots,E\}\times\mathbf{2}\times[d]$.
-If they're satisfiable, even if we don't prove the scheme sound, we can feed the left DFA into Algorithm \ref{alg:finite-automata-reduction-direct} to check the result.
+When building a larger recognizer,
+we expect no benefit from considering DFAs which just relabel others or add unreachable states.
+So motivated, we define a canonical form for DFAs:
+enumerate the reachable states via breadth-first search from $q_0$,
+producing $f:[n]=\mathrel{\mathop:}Q_\textsf{cf}\to Q$.
+Explicitly,
+$f(0)=q_0$ and $f(k)$ is the first of
+$\delta(f(0),0), \delta(f(0),1), \ldots, \delta(f(k-1),0), \delta(f(k-1),1)$ not in $f([k])$,
+valid until $f([k])$ is closed under transitions.
+This induces $\delta_\textsf{cf}(q,b)\mapsto f^{-1}(f(q), b)$.
+(Warning: this definition is not standard.)
 
-Despite the new setting, we can write out closure conditions analogous to \S\ref{far-defs-recognizer}'s, each $\forall i\in[l],j\in[d]$:
-\begin{align}
-                                         & (i,f,r,j)\in A
-                                         &                               & \text{if $\ldots fr\ldots\vdash_\mathcal{M}\bot$ is a halt rule}
-  \tag{\ref{far-cond-halt}''}
-  \\
-  (i, t, b, \delta_R(j,w))\in A \implies & (\delta_L(i,b), f, r, j)\in A
-                                         &                               & \text{if $\ldots bfr\ldots\vdash_\mathcal{M}\ldots tbw\ldots$ is a left rule}
-  \tag{\ref{far-cond-left}''}
-  \\
-  (\delta_L(i,w), t, b, j)\in A \implies & (i, f, r, \delta_R(j,b))\in A
-                                         &                               & \text{if $\ldots frb\ldots\vdash_\mathcal{M}\ldots wtb\ldots$ is a right rule}
-  %\label{far-cond-right}
-  \tag{\ref{far-cond-last}''}
-\end{align}
+\begin{lemma}
+  \label{far-dfa-canonical form}
+  In a DFA with $(Q,q_0)=([n],0)$, the following are equivalent:
+  \begin{enumerate}
+    \item it's in canonical form ($Q_\textsf{cf}\to Q$ is the identity)
+          and ignores leading zeros (equation \eqref{far-cond-leading-0} or $\delta(0,0)=0$);
+    \item its transition table includes each of $0,\ldots,n-1$, whose first appearances occur in order,
+          and with each $q\in(0,n)$ appearing before the $\delta(q,0)$ position;
+    \item the sequence $\{m_k \mathrel{\mathop:}= \max\{\delta(q,b): 2q+b\le k\}\}_{k=0}^{2n-1}$ of cumulative maxima runs from $0$ to $n-1$ in steps of $0$ or $1$,
+          with $m_{2q-1}\ge q$ for $0<q<n$.
+  \end{enumerate}
+\end{lemma}
+\proof
+\begin{description}
+  \item[$1\iff 2$:]
+        We prove a partial version by induction:
+        the DFA ignores leading zeros and $f(q)=q$ for $q\le k$,
+        iff $0,\ldots,k$ have ordered first appearances in the transition table
+        which precede appearances of any $q>k$
+        and occur before the $\delta(k,0)$ position if $k>0$.
+        In case $k=0$, the DFA ignores leading zeros iff $0$ comes first in the transition table by definition.
+        (The other conditions are vacuous.)
+        In case the claim holds for preceding $k$, $f(k)$ is by definition the first number outside of $f([k])=[k]$ in the transition table---if any---and the inductive step follows.
+  \item[$2\iff 3$:]
+        If the first appearances of $0,\ldots,n-1$ appear in order, any value at its first index is the largest so far, so $m_k$ takes the same values. The sequence $m_k$ is obviously nondecreasing, so to be gap-free it can only grow in steps of 0 or 1.
+        Conversely, if $m_k$ runs from $0$ to $n-1$ in steps of $0$ or $1$, each value $q\in [n]$ must appear in the table at the first index $k$ for which $m_k=q$, and all preceding values in the transition table must be strictly less.
 
-The goal, analogous to \eqref{far-cond-reject-start}, is $(0, A, 0, 0)\notin A$.
+        In case these equivalent conditions are true, that last observation shows that $q$ appears before the $\delta(q,0)$ position iff $m_k$ reaches $q$ by index $k=2q-1$, or equivalently $m_{2q-1}\ge q$.
+        \qed
+\end{description}
 
-We could now search all DFA pairs, checking if the smallest $A$ closed under (\ref{far-cond-halt}'')--(\ref{far-cond-last}'') rejects $(0,A,0,0)$.
-However, to get decent performance, we must express the above as a boolean satisfiability ({\sc sat}) problem.
+\begin{corollary}
+  $\{t_k\}_{k=0}^\ell$ ($\ell<2n$) is a prefix of a canonical, leading-zero-ignoring, $n$-state DFA transition table iff
+  $m_k \mathrel{\mathop:}= \max\{t_j\}_{j=0}^k$ runs from $0$ to $m_{\ell-1}<n$ in steps of $0$ or $1$, and $m_{2q-1}\ge q$ where defined.
+\end{corollary}
+\proof
+If $\ell=2n-1$, $\{m_k\}$ grows to exactly $n-1$ (since $m_{2(n-1)-1}\ge n-1$), and lemma \ref{far-dfa-canonical form} applies.
+Otherwise, we may extend the sequence with $t_{\ell+1}=\min(m_\ell+1,n-1)$, the same conditions apply.
+\qed
 
-Other lessons learned in practice:
-it was most effective to use the same state count on both sides ($l=d=n$),
-and it was decisively faster to impose the canonical form restrictions of Lemma \ref{far-dfa-canonical form}.
-
-Algorithm \ref{alg:finite-automata-reduction-mitm_dfa} shows how this works.
-Here especially, actual code can vary from the given pseudocode:
-\begin{itemize}
-  \item If {\sc sat} solvers use integers for literals (variables and their negations), one needn't ``allocate variables''.
-  \item It may be possible to simplify by adding propositional variables for more edge cases.
-  \item The ``outcomes are mutually exclusive'' condition may be represented differently.
-  \item Checking a solution is valid needn't involve Algorithm \ref{alg:finite-automata-reduction-direct}, if the author proves more.
-\end{itemize}
+So, Algorithm \ref{alg:search-dfa} searches such DFAs incrementally (avoiding partial DFAs already deemed unworkable).
 
 \begin{algorithm}
-  \caption{{\sc decider-finite-automata-reduction-MitM-DFA}}\label{alg:finite-automata-reduction-mitm_dfa}
+  \caption{{\sc search-dfa}}\label{alg:search-dfa}
 
   \begin{algorithmic}[1]
-    \Procedure{\textbf{bool} {\sc decider-finite-MitM-DFA}}{\textbf{TM} machine, \textbf{int} n}
-    % The next line is a hacky attempt at a full-line comment:
-    \State \(\triangleright\) Allocate variables.
-    \State\textbf{Map$\boldsymbol<$tuple, int$\boldsymbol>$} tk\_eq, tk\_le, mk\_eq, A
-    \ForAll{$(\textrm{lr}, \textrm{k}, \textrm{y})\in[2]\times[n]\times[2*n]\times[n+1]$}
-    \If{(k, y) == (0, 0)}
-    tk\_eq[lr, k, y] = true
-    \ElsIf{$0\le y\le\min(k,n-1)$}
-    tk\_eq[lr, k, y] = \Call{new-variable}{}
-    \Else\;
-    tk\_eq[lr, k, y] = false
+    \State \textbf{enum} CheckResult \{MORE, SKIP, STOP\}
+    \Statex
+    \Procedure{\textbf{bool} {\sc search-dfa}}{\textbf{int} n, \textbf{function$\boldsymbol<$List$\boldsymbol<$int$\boldsymbol>$}, CheckResult$\boldsymbol>$ check}
+    \Require{$\operatorname{check}(t)\ne\textrm{MORE}$ if $t$ is a complete (length-$2n$) table}
+
+    \State \textbf{int} k = 1, t[$2*n$] = $[0,\ldots,0]$, m[$2*n$] = $[0,\ldots,0]$
+    \State CheckResult state = $\operatorname{check}([0])$
+    \Loop
+    \If{state == MORE}
+    \State \textbf{int} q\_new = m[k-1] + 1
+    \State t[k] = (q\_new $<$ \textrm{n} \textbf{and} 2*q\_new-1 == k) ? q\_new : 0
+    \ElsIf{state == SKIP}
+    \Repeat
+    \If{k $\le$ 1}
+    \Return false
     \EndIf
-
-    \If{$y\le 0$}
-    tk\_le[lr, k, y] = tk\_eq[lr, k, y]
-    \ElsIf{$0\le y\le\min(k-1,n-2)$}
-    tk\_le[lr, k, y] = \Call{new-variable}{}
-    \Else\;
-    tk\_le[lr, k, y] = true
+    \State k -= 1
+    \Until{t[k] $\le$ m[k-1] \textbf{and} t[k] $<$ n-1}
+    \State t[k] += 1
+    \Else\;\Return true
     \EndIf
-
-    \If{(k, y) == (2*n-1, n-1)}
-    mk\_eq[lr, k, y] = true
-    \ElsIf{\textbf{not} $\left\lceil\frac{k}{2}\right\rceil\le y<\min(n,k+1)$}
-    mk\_eq[lr, k, y] = false
-    \ElsIf{$\min(n, k+1)-((k+1)/2) \le 1$}
-    mk\_eq[lr, k, y] = true
-    \Else\;
-    mk\_eq[lr, k, y] = \Call{new-variable}{}
-    \EndIf
-    \EndFor
-
-    \ForAll{$(\textrm{i}, \textrm{f}, \textrm{r}, \textrm{j})\in[n]\times[5]\times[2]\times[n]$}
-    \If{(k, y) == (2*n-1, n-1)}
-    A[i, f, r, j] = false
-    \Else\;
-    A[i, f, r, j] = \Call{new-variable}{}
-    \EndIf
-    \EndFor
-
-    % The next line is a hacky attempt at a full-line comment:
-    \State \(\triangleright\) Transition validity: outcomes are mutually exclusive.
-    \ForAll{$(\textrm{lr}, k, \textrm{y})\in[2]\times[2*n]\times[n]$}
-    \State \Call{new-clause}{$\textrm{tk\_eq}(\textrm{lr}, k, y)\implies \textrm{tk\_le}(\textrm{lr}, k, y)$}
-    \State \Call{new-clause}{$\textrm{tk\_le}(\textrm{lr}, k, y)\implies \textrm{tk\_le}(\textrm{lr}, k, y+1)$}
-    \State \Call{new-clause}{$\textrm{tk\_eq}(\textrm{lr}, k, y+1)\implies \neg\textrm{tk\_le}(\textrm{lr}, k, y)$}
-    \EndFor
-    \State \(\triangleright\) Transition validity: an outcome occurs.
-    \ForAll{$(\textrm{lr}, k)\in[2]\times\{1,\ldots,2*n-1\}$}
-    \Call{new-clause}{$\bigvee_{y=0}^{\min(k,n-1)} \textrm{tk\_eq}(\textrm{lr}, k, y)$}
-    \EndFor
-
-    % The next line is a hacky attempt at a full-line comment:
-    \State \(\triangleright\) Closure conditions.
-    \ForAll{$(i,j,(f,r))\in[n]^2\times$\Call{halt-rules}{machine}}
-    \State\Call{new-clause}{$A[i, f, r, j]$}
-    \EndFor
-    \ForAll{$(i,j,\textrm{ib},\textrm{jw},(f,r,w,L,t))\in[n]^4\times$\Call{left-rules}{machine}}
-    \State\Call{new-clause}{$
-        \textrm{tk\_eq}[L, i, b, \textrm{ib}]
-        \land \textrm{tk\_eq}[R, j, w, \textrm{jw}]
-        \land A[i, t, b, \textrm{jw}]
-        \implies A[\textrm{ib}, f, r, j]
-      $}
-    \EndFor
-    \ForAll{$(i,j,\textrm{iw},\textrm{jb},(f,r,w,R,t))\in[n]^4\times$\Call{right-rules}{machine}}
-    \State\Call{new-clause}{$
-        \textrm{tk\_eq}[R, j, b, \textrm{jb}]
-        \land \textrm{tk\_eq}[L, i, w, \textrm{iw}]
-        \land A[\textrm{iw}, t, b, j]
-        \implies A[i, f, r, \textrm{jb}]
-      $}
-    \EndFor
-
-    % The next line is a hacky attempt at a full-line comment:
-    \State \(\triangleright\) DFA is in canonical form (Lemma \ref{far-dfa-canonical form}).
-    \ForAll{$(\textrm{lr},k)\in[2]\times\{1,\ldots,2*n-1\}$}
-    \For{$m=\lfloor k/2\rfloor,\ldots,\min(n, k)$}
-    \State\Call{new-clause}{$\textrm{mk\_eq}(\textrm{lr}, k-1, m) \implies \textrm{tk\_le}(\textrm{lr}, k, m+1)$}
-    \State\Call{new-clause}{$\textrm{mk\_eq}(\textrm{lr}, k-1, m) \land \textrm{tk\_le}(\textrm{lr}, k, m) \implies \textrm{mk\_eq}(\textrm{lr}, k, m)$}
-    \State\Call{new-clause}{$\textrm{mk\_eq}(\textrm{lr}, k-1, m) \land \textrm{tk\_eq}(\textrm{lr}, k, m+1) \implies \textrm{mk\_eq}(\textrm{lr}, k, m+1)$}
-    \EndFor
-    \EndFor
-
-    \If{\Call{check-sat}{}}
-    \State Assert L DFA from the model proves the machine using Algorithm \ref{alg:finite-automata-reduction-direct}.
-    \State \Return true
-    \Else\;\Return false
-    \EndIf
+    \State m[k] = max(m[k-1], t[k])
+    \State k += 1
+    \State state = check(length-k prefix of t)
+    \EndLoop
     \EndProcedure
+
   \end{algorithmic}
 \end{algorithm}
 
 
-\subsection{Correctness}
-Our implementation takes a brutally simple approach to correctness:
-independent of the proof-search algorithm, it checks the recognizer it returns satisfies \eqref{far-cond-first}--\eqref{far-cond-last}.
-By theorem \ref{far-main-theorem}, this prevents false proofs.
 
 
-\subsection{Results}
-\todo[inline]{JEB: TBD. If accepted/merged, update repo link, state the parameters, summarize the progress.}
-The decider was coded in \texttt{Rust} and is accessible at this link: \url{https://github.com/UncombedCoconut/bbchallenge-deciders/tree/finite-automata-reduction/decider-finite-automata-reduction}.
+% \subsection{Search algorithm \ts{II}: meet-in-the-middle DFA}
+% \label{far-algo-mtim_dfa}
+% A symmetric recognizer construction has also shown good results.
+% Again, pass the left half-tape through a DFA with $l$ states.
+% Imagine a DFA with $d$ states scanning the (strict) right half-tape right-to-left.
 
-It uses Kissat\cite{Biere_2020} as its \textsc{SAT} solver.
+% \begin{remark}
+%   Our definitions require a left-to-right scan direction.
+%   Any NFA $(\langle 0\vert, \{R_b\})$ can be transposed.
+%   (Transposing transition matrices reverses the arrows in the diagram, as with graph adjacency matrices.)
+%   We can shoehorn this into the preceding framework by making an accept state from R's transposed initial state $\vert 0\rangle$,
+%   defining middle transitions $M_{fr}$ for the configuration's head state/bit,
+%   superposing all states of R to get our $s$ vector,
+%   and trying to satisfy conditions like
+%   $\langle 0\vert M_{A0} \vert 0\rangle = 0$, $M_{fr}=\sum_L \vert q\rangle\langle s\vert$ (for halt rules),
+%   $L_b M_{fr} \succeq M_{tb} R^T_w$ (for left rules),
+%   $M_{fr} R^T_b \succeq L_w M_{tb}$ (for right rules).
+%   What follows is more intuitive.
+%   \todo{JEB: Is this remark needed?}
+% \end{remark}
 
-More information about these results are available at: \url{https://discuss.bbchallenge.org/t/decider-finite-automata-reduction/123}.
+% \begin{figure}
+%   \begin{tikzpicture}[shorten >=1pt, shorten <=1pt]]
+%     % The commented code below turns this into a complete NFA diagram, if the 2nd "initial above" also becomes "accepting".
+%     \node[state,initial above] (0L) at (-2, 2) {$0_L$};
+%     \node[state]           (1L) at (-2, -2) {$1_L$};
+%     \node[state,initial above] (0R) at (10, 0) {$0_R$};
+%     \node[state]           (1R) at (8, 0) {$1_R$};
+%     \node[state]           (2R) at (6, 0) {$2_R$};
+%     \node[state]           (3R) at (4, 0) {$3_R$};
+%     \node[state]           (4R) at (2, 2) {$4_R$};
+%     \node[state]           (5R) at (2, -2) {$5_R$};
+%     %\node[state]           (mid)at (0, 0) {Censored};
 
-\subsection{Related research}
-The ``direct'' algorithm of \S \ref{far-algo-direct} was first found by applying \cite{BEM_1997}.
-Rough sketch: treat a TM as a two-stack machine (one per side of the tape).
-Fix a DFA classifying left half-tape configurations.
-Form a ``quotient'' of $\mathcal{M}$ in which stack values are replaced by corresponding DFA states.
-The many-to-one mapping of configurations induces a mapping of transitions, leaving us with a nondeterministic one-stack machine.
-The algorithm of \cite{BEM_1997} solves reachability for its halt-configurations.
-This perspective was dropped in favour of a more direct approach, but it can be useful when probing the limits of this technique.
+%     \path[->]  (0L)  edge [loop left]        node {$0$} (0L)
+%     edge                    node [right] {$1$} (1L)
+%     %edge                    (mid)
+%     (1L)  edge [bend left=15]     node [left] {$0|1$} (0L)
+%     %edge                    (mid)
+%     %; \path[-]   (mid) edge (5R) edge (4R) edge [dotted] (3R)
+%     %; \path[<-]
+%     (0R)  edge [loop right]       node {$0$} (0R)
+%     edge                    node [above] {$1$} (1R)
+%     (1R)  edge [bend right]       node [below] {$0$} (0R)
+%     edge                    node [above] {$1$} (2R)
+%     (2R)  edge [loop above]       node {$0$} (2R)
+%     edge                    node [above] {$1$} (3R)
+%     (3R)  edge                    node [above left] {$1$} (5R)
+%     (4R)  edge [bend right=15]    node [below left] {$1$} (3R)
+%     (5R)  edge [loop right]       node {$0|1$} (5R)
+%     ;
+%     \path[<->]   (3R)  edge                    node [above right] {$0$} (4R);
+%   \end{tikzpicture}
+%   \caption{This pair of DFAs can also recognize halting configurations for the TM of figure \ref{fig:finite-automata-reduction}.
+%     Configurations are classified by their head state, head bit, and the two half-tapes (processed outside-in by the DFAs.)}
+%   \label{fig:far_mitm_dfa}
+% \end{figure}
+
+% As in Figure \ref{fig:far_mitm_dfa}, let's consider the DFAs on their own terms.
+% Each one partitions its input into a family of regular languages (one per state).
+% Accounting for the head state/bit and right half-tape, we obtain $l\cdot 5\cdot 2\cdot d$ classes of TM configuration.
+% Propose a recognizer which distils this classification into a result.
+% We'll work out conditions for a good ``accepted'' set $A\subseteq[l]\times\{A,\ldots,E\}\times\mathbf{2}\times[d]$.
+% If they're satisfiable, even if we don't prove the scheme sound, we can feed the left DFA into Algorithm \ref{alg:finite-automata-reduction-direct} to check the result.
+
+% Despite the new setting, we can write out closure conditions analogous to \S\ref{far-defs-recognizer}'s, each $\forall i\in[l],j\in[d]$:
+% \begin{align}
+%                                          & (i,f,r,j)\in A
+%                                          &                               & \text{if $\ldots fr\ldots\vdash_\mathcal{M}\bot$ is a halt rule}
+%   \tag{\ref{far-cond-halt}''}
+%   \\
+%   (i, t, b, \delta_R(j,w))\in A \implies & (\delta_L(i,b), f, r, j)\in A
+%                                          &                               & \text{if $\ldots bfr\ldots\vdash_\mathcal{M}\ldots tbw\ldots$ is a left rule}
+%   \tag{\ref{far-cond-left}''}
+%   \\
+%   (\delta_L(i,w), t, b, j)\in A \implies & (i, f, r, \delta_R(j,b))\in A
+%                                          &                               & \text{if $\ldots frb\ldots\vdash_\mathcal{M}\ldots wtb\ldots$ is a right rule}
+%   %\label{far-cond-right}
+%   \tag{\ref{far-cond-last}''}
+% \end{align}
+
+% The goal, analogous to \eqref{far-cond-reject-start}, is $(0, A, 0, 0)\notin A$.
+
+% We could now search all DFA pairs, checking if the smallest $A$ closed under (\ref{far-cond-halt}'')--(\ref{far-cond-last}'') rejects $(0,A,0,0)$.
+% However, to get decent performance, we must express the above as a boolean satisfiability ({\sc sat}) problem.
+
+% Other lessons learned in practice:
+% it was most effective to use the same state count on both sides ($l=d=n$),
+% and it was decisively faster to impose the canonical form restrictions of Lemma \ref{far-dfa-canonical form}.
+
+% Algorithm \ref{alg:finite-automata-reduction-mitm_dfa} shows how this works.
+% Here especially, actual code can vary from the given pseudocode:
+% \begin{itemize}
+%   \item If {\sc sat} solvers use integers for literals (variables and their negations), one needn't ``allocate variables''.
+%   \item It may be possible to simplify by adding propositional variables for more edge cases.
+%   \item The ``outcomes are mutually exclusive'' condition may be represented differently.
+%   \item Checking a solution is valid needn't involve Algorithm \ref{alg:finite-automata-reduction-direct}, if the author proves more.
+% \end{itemize}
+
+% \begin{algorithm}
+%   \caption{{\sc decider-finite-automata-reduction-MitM-DFA}}\label{alg:finite-automata-reduction-mitm_dfa}
+
+%   \begin{algorithmic}[1]
+%     \Procedure{\textbf{bool} {\sc decider-finite-MitM-DFA}}{\textbf{TM} machine, \textbf{int} n}
+%     % The next line is a hacky attempt at a full-line comment:
+%     \State \(\triangleright\) Allocate variables.
+%     \State\textbf{Map$\boldsymbol<$tuple, int$\boldsymbol>$} tk\_eq, tk\_le, mk\_eq, A
+%     \ForAll{$(\textrm{lr}, \textrm{k}, \textrm{y})\in[2]\times[n]\times[2*n]\times[n+1]$}
+%     \If{(k, y) == (0, 0)}
+%     tk\_eq[lr, k, y] = true
+%     \ElsIf{$0\le y\le\min(k,n-1)$}
+%     tk\_eq[lr, k, y] = \Call{new-variable}{}
+%     \Else\;
+%     tk\_eq[lr, k, y] = false
+%     \EndIf
+
+%     \If{$y\le 0$}
+%     tk\_le[lr, k, y] = tk\_eq[lr, k, y]
+%     \ElsIf{$0\le y\le\min(k-1,n-2)$}
+%     tk\_le[lr, k, y] = \Call{new-variable}{}
+%     \Else\;
+%     tk\_le[lr, k, y] = true
+%     \EndIf
+
+%     \If{(k, y) == (2*n-1, n-1)}
+%     mk\_eq[lr, k, y] = true
+%     \ElsIf{\textbf{not} $\left\lceil\frac{k}{2}\right\rceil\le y<\min(n,k+1)$}
+%     mk\_eq[lr, k, y] = false
+%     \ElsIf{$\min(n, k+1)-((k+1)/2) \le 1$}
+%     mk\_eq[lr, k, y] = true
+%     \Else\;
+%     mk\_eq[lr, k, y] = \Call{new-variable}{}
+%     \EndIf
+%     \EndFor
+
+%     \ForAll{$(\textrm{i}, \textrm{f}, \textrm{r}, \textrm{j})\in[n]\times[5]\times[2]\times[n]$}
+%     \If{(k, y) == (2*n-1, n-1)}
+%     A[i, f, r, j] = false
+%     \Else\;
+%     A[i, f, r, j] = \Call{new-variable}{}
+%     \EndIf
+%     \EndFor
+
+%     % The next line is a hacky attempt at a full-line comment:
+%     \State \(\triangleright\) Transition validity: outcomes are mutually exclusive.
+%     \ForAll{$(\textrm{lr}, k, \textrm{y})\in[2]\times[2*n]\times[n]$}
+%     \State \Call{new-clause}{$\textrm{tk\_eq}(\textrm{lr}, k, y)\implies \textrm{tk\_le}(\textrm{lr}, k, y)$}
+%     \State \Call{new-clause}{$\textrm{tk\_le}(\textrm{lr}, k, y)\implies \textrm{tk\_le}(\textrm{lr}, k, y+1)$}
+%     \State \Call{new-clause}{$\textrm{tk\_eq}(\textrm{lr}, k, y+1)\implies \neg\textrm{tk\_le}(\textrm{lr}, k, y)$}
+%     \EndFor
+%     \State \(\triangleright\) Transition validity: an outcome occurs.
+%     \ForAll{$(\textrm{lr}, k)\in[2]\times\{1,\ldots,2*n-1\}$}
+%     \Call{new-clause}{$\bigvee_{y=0}^{\min(k,n-1)} \textrm{tk\_eq}(\textrm{lr}, k, y)$}
+%     \EndFor
+
+%     % The next line is a hacky attempt at a full-line comment:
+%     \State \(\triangleright\) Closure conditions.
+%     \ForAll{$(i,j,(f,r))\in[n]^2\times$\Call{halt-rules}{machine}}
+%     \State\Call{new-clause}{$A[i, f, r, j]$}
+%     \EndFor
+%     \ForAll{$(i,j,\textrm{ib},\textrm{jw},(f,r,w,L,t))\in[n]^4\times$\Call{left-rules}{machine}}
+%     \State\Call{new-clause}{$
+%         \textrm{tk\_eq}[L, i, b, \textrm{ib}]
+%         \land \textrm{tk\_eq}[R, j, w, \textrm{jw}]
+%         \land A[i, t, b, \textrm{jw}]
+%         \implies A[\textrm{ib}, f, r, j]
+%       $}
+%     \EndFor
+%     \ForAll{$(i,j,\textrm{iw},\textrm{jb},(f,r,w,R,t))\in[n]^4\times$\Call{right-rules}{machine}}
+%     \State\Call{new-clause}{$
+%         \textrm{tk\_eq}[R, j, b, \textrm{jb}]
+%         \land \textrm{tk\_eq}[L, i, w, \textrm{iw}]
+%         \land A[\textrm{iw}, t, b, j]
+%         \implies A[i, f, r, \textrm{jb}]
+%       $}
+%     \EndFor
+
+%     % The next line is a hacky attempt at a full-line comment:
+%     \State \(\triangleright\) DFA is in canonical form (Lemma \ref{far-dfa-canonical form}).
+%     \ForAll{$(\textrm{lr},k)\in[2]\times\{1,\ldots,2*n-1\}$}
+%     \For{$m=\lfloor k/2\rfloor,\ldots,\min(n, k)$}
+%     \State\Call{new-clause}{$\textrm{mk\_eq}(\textrm{lr}, k-1, m) \implies \textrm{tk\_le}(\textrm{lr}, k, m+1)$}
+%     \State\Call{new-clause}{$\textrm{mk\_eq}(\textrm{lr}, k-1, m) \land \textrm{tk\_le}(\textrm{lr}, k, m) \implies \textrm{mk\_eq}(\textrm{lr}, k, m)$}
+%     \State\Call{new-clause}{$\textrm{mk\_eq}(\textrm{lr}, k-1, m) \land \textrm{tk\_eq}(\textrm{lr}, k, m+1) \implies \textrm{mk\_eq}(\textrm{lr}, k, m+1)$}
+%     \EndFor
+%     \EndFor
+
+%     \If{\Call{check-sat}{}}
+%     \State Assert L DFA from the model proves the machine using Algorithm \ref{alg:finite-automata-reduction-direct}.
+%     \State \Return true
+%     \Else\;\Return false
+%     \EndIf
+%     \EndProcedure
+%   \end{algorithmic}
+% \end{algorithm}
+
+
+% \subsection{Correctness}
+% Our implementation takes a brutally simple approach to correctness:
+% independent of the proof-search algorithm, it checks the recognizer it returns satisfies \eqref{far-cond-first}--\eqref{far-cond-last}.
+% By theorem \ref{far-main-theorem}, this prevents false proofs.
+
+
+% \subsection{Results}
+% \todo[inline]{JEB: TBD. If accepted/merged, update repo link, state the parameters, summarize the progress.}
+% The decider was coded in \texttt{Rust} and is accessible at this link: \url{https://github.com/UncombedCoconut/bbchallenge-deciders/tree/finite-automata-reduction/decider-finite-automata-reduction}.
+
+% It uses Kissat\cite{Biere_2020} as its \textsc{SAT} solver.
+
+% More information about these results are available at: \url{https://discuss.bbchallenge.org/t/decider-finite-automata-reduction/123}.
+
+% \subsection{Related research}
+% The ``direct'' algorithm of \S \ref{far-algo-direct} was first found by applying \cite{BEM_1997}.
+% Rough sketch: treat a TM as a two-stack machine (one per side of the tape).
+% Fix a DFA classifying left half-tape configurations.
+% Form a ``quotient'' of $\mathcal{M}$ in which stack values are replaced by corresponding DFA states.
+% The many-to-one mapping of configurations induces a mapping of transitions, leaving us with a nondeterministic one-stack machine.
+% The algorithm of \cite{BEM_1997} solves reachability for its halt-configurations.
+% This perspective was dropped in favour of a more direct approach, but it can be useful when probing the limits of this technique.
