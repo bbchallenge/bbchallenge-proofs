@@ -607,7 +607,7 @@ Indeed, they were the original motive for developing Algorithm~\ref{alg:finite-a
 Any closed language $\mathcal{L}$ classifies the binary words $w\in\mathbf{2}^*$ by Nerode congruence: $w\sim_\mathcal{L} w'$ if for every $z\in\{0,1,A,\ldots,E\}^*$, $wz\in\mathcal{L}\iff w'z\in\mathcal{L}$.
 We may form a modified version of the Turing machine $\mathcal{M}$, herein called $\mathcal{M}/\sim_\mathcal{L}$, with the following semantics:
 
-A \textit{configuration} of $\mathcal{M}/\sim_\mathcal{L}$ is defined by the 3-tuple: (i) a state of $\mathcal{M}$, (ii) an equivalence class $[w]_{\sim_\mathcal{L}}$ of some $w\in\mathbf{2}^*$ representing the (strictly) left-of-head portion of the tape,  (iii.) a finite word $w\in\mathbf{2}^*$, representing the remainder of the tape.
+A \textit{configuration} of $\mathcal{M}/\sim_\mathcal{L}$ is defined by the 3-tuple: (i) a state of $\mathcal{M}$, (ii) an equivalence class $[w]_{\sim_\mathcal{L}}$ of some $w\in\mathbf{2}^*$ representing the (strictly) left-of-head portion of the tape,  (iii) a finite word $w\in\mathbf{2}^*$, representing the remainder of the tape.
 We additionally define one distinct configuration, named $\bot$, which represents the machine in a halted state.
 
 Note that any finitely supported configuration $c$ of $\mathcal{M}$ maps to a configuration $[c]$ of $\mathcal{M}/\sim_{\mathcal{L}}$, by sending the left-of-head contents to their equivalence class modulo $\sim_\mathcal{L}$.
