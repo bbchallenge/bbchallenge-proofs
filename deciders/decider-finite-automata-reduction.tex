@@ -337,7 +337,7 @@ Combining the above, we get our main result:
 \end{proof}
 
 
-\begin{remark}[Verification]\normalfont
+\begin{remark}[Verification]\normalfont\label{far-remark-verification}
   Theorem~\ref{far-main-theorem} has the nice property of being quite suited for the purpose of \textit{verification}: given a TM, an NFA and a vector $s$, the task of verifying that equations \eqref{far-cond-first}--\eqref{far-cond-last} hold -- ignoring equation \eqref{far-cond-halt} -- and thus that the TM does not halt, is computationally simple. Equation~\eqref{far-cond-halt} will be dealt with thanks to extra structure that we will require on our NFA, see Section~\ref{far-algo-direct}.
 \end{remark}
 
@@ -590,7 +590,47 @@ So, Algorithm \ref{alg:search-dfa} searches such DFAs incrementally (avoiding pa
 \end{algorithm}
 
 
+\subsection{Generality of the method}
+In the preceding sections, we started from the idea of a closed language of word-representations of TM configurations, made a series of simplifying assumptions, and obtained a search algorithm.
+This raises a question: if a TM is proven infinite by \emph{any} ``closed tape language''  (CTL) argument\footnote{
+	In this paper, we work with regular languages closed under ``backward'' TM transitions: if the word-representation of a configuration after a TM transition is in the language, so is any word-representation of the configuration before the TM transition.
+	Other authors have also used languages closed in the forward direction, i.e., with the converse closure criterion.
+	By contraposition, a language $\mathcal{L}$ satisfies this converse requirement iff its complement satisfies our version, so these forms of ``Closed Tape Language'' proofs are equivalent in power.
+	A language satisfying this paper's closure condition is sometimes called a ``co-CTL''.
+},
+must a proof in the form required for Theorem~\ref{far-main-theorem}, let alone in \S\ref{far-algo-direct}, exist?
 
+The answer is yes, and we sketch the proof below.
+The following definitions and results aren't strictly required outside of this subsection, but they justify our choice to make the verification scheme of Remark~\ref{far-remark-verification} a standard for all verifiable CTL proofs.
+Indeed, they were the original motive for developing Algorithm~\ref{alg:finite-automata-reduction-direct}.
+
+Any closed language $\mathcal{L}$ classifies the binary words $w\in\mathbf{2}^*$ by Nerode congruence: $w\sim_\mathcal{L} w'$ if for every $z\in\{0,1,A,\ldots,E\}^*$, $wz\in\mathcal{L}\iff w'z\in\mathcal{L}$.
+We may form a modified version of the Turing machine $\mathcal{M}$, herein called $\mathcal{M}/\sim_\mathcal{L}$, with the following semantics:
+
+A \textit{configuration} of $\mathcal{M}/\sim_\mathcal{L}$ is defined by the 3-tuple: (i) a state of $\mathcal{M}$, (ii) an equivalence class $[w]_{\sim_\mathcal{L}}$ of some $w\in\mathbf{2}^*$ representing the (strictly) left-of-head portion of the tape,  (iii.) a finite word $w\in\mathbf{2}^*$, representing the remainder of the tape.
+We additionally define one distinct configuration, named $\bot$, which represents the machine in a halted state.
+
+Note that any finitely supported configuration $c$ of $\mathcal{M}$ maps to a configuration $[c]$ of $\mathcal{M}/\sim_{\mathcal{L}}$, by sending the left-of-head contents to their equivalence class modulo $\sim_\mathcal{L}$.
+This is a many-to-one mapping.
+
+The \emph{transitions} of $\mathcal{M}/\sim_{\mathcal{L}}$ are the images of those of $\mathcal{M}$: that is, if $c_1\vdash_\mathcal{M} c_2$, $[c_1]\vdash_{\mathcal{M}/\sim_\mathcal{L}} [c_2]$. Since $c_1\mapsto[c_1]$ is a many-to-one mapping, this definition makes $\mathcal{M}/\sim_\mathcal{L}$ a nondeterministic machine.
+In case $c_1\vdash_\mathcal{M}\bot$ (i.e., the $\mathcal{M}$-transition from $c_1$ is undefined), we also define $[c_1]\vdash_{\mathcal{M}/\sim_\mathcal{L}}\bot$.
+
+For any configurations $c_1,c_2$ of $\mathcal{M}$, if $[c_1]\vdash_\mathcal{M}/\sim_\mathcal{L} [c_2]$ and a word-representation of $c_2$ is in $\mathcal{L}$, observe that a word-representation of $c_1$ is also in $\mathcal{L}$.
+This follows because the $\mathcal{M}/\sim_\mathcal{L}$-transition must come from some transition $c_1'\vdash_\mathcal{M}c'_2$ of $\mathcal{M}$, where $[c_1]=[c_1']$ and $[c_2]=[c_2']$. Now, $c'_2$ has a word-representation which differs from one of $c_2$ only by substituting a Nerode-congruent prefix, so $c'_2$ also has a word-representation in $\mathcal{L}$. By closure of $\mathcal{L}$, this is true of $c'_1$, and similarly by Nerode congruence this is true of $c_1$.
+
+Similarly, if $[c_1]\vdash_\mathcal{M}/\sim_\mathcal{L}\bot$, $c_1$ has a word-representation in $\mathcal{L}$.
+
+Say that $\mathcal{M}/\sim_\mathcal{L}$ halts from its initial configuration (which is the image of $\mathcal{M}$'s initial configuration) if there exists a sequence of $\mathcal{M}/\sim_\mathcal{L}$-transitions from it to $\bot$.
+The point of this is: if $\mathcal{L}$ is a closed language for $\mathcal{M}$, separating its initial configuration from all halting configurations, then that's impossible!
+For that would imply a sequence $[c_0]\vdash_{\mathcal{M}/\sim_\mathcal{L}}\dots\vdash_{\mathcal{M}/\sim_\mathcal{L}}[c_n]\vdash_{\mathcal{M}/\sim_\mathcal{L}}\bot$, where $c_0$ is the initial configuration of $\mathcal{M}$ and $\{c_i\}_{i=1}^n$ is a sequence of other configurations.
+By the above, this would imply that $c_0$ has a word-representation in $\mathcal{L}$, contrary to assumption that $\mathcal{L}$ provides a CTL proof that $c_0\not\vdash^*_\mathcal{M}\bot$.
+
+We now seek to recover $\mathcal{L}$, or another regular language which leads to a CTL proof, by studying the halting problem of $\mathcal{M}/\sim_\mathcal{L}$.
+In fact, the work has been done already: observe that, just as any Turing machine $\mathcal{M}$ is equivalent to a PDA equipped with two stacks (corresponding to the strict left-hand side of the tape and the rest of it), the machine $\mathcal{M}/\sim_\mathcal{L}$ is equivalent to a  standard nondeterministic PDA. (The control-state space of the PDA to is simply $\mathbf{2}^*/\sim_\mathcal{L} \times \{A,\ldots,E\}$---which is a finite set by the Myhill-Nerode theorem. A transition of $\mathcal{M}/\sim_\mathcal{L}$ corresponding to a leftward TM transition pushes the written bit onto the stack. A transition of $\mathcal{M}/\sim_\mathcal{L}$ corresponding to a rightward TM transition pops the read bit off the stack.)
+The halting problem of a PDA is solved in  \cite{BEM_1997}: the eventually-halting configurations of any PDA are in fact described by a regular language, whose construction corresponds exactly to the procedure of \S\ref{far-algo-direct}.
+
+In summary: we may take the Myhill-Nerode DFA for the original language $\mathcal{L}$, restrict it to the alphabet $\mathbf{2}$, apply the construction from \S\ref{far-algo-direct} to obtain an NFA which recognizes precisely the halting configurations of $\mathcal{M}/\sim_\mathcal{L}$, and combine the DFA/NFA to form a recognizer for some closed language $\mathcal{L}'$ for $\mathcal{M}$; that is, it satisfies \eqref{far-cond-first}--\eqref{far-cond-last}. We also know that a language solving the halting problem of $\mathcal{M}/\sim_\mathcal{L}$ rejects its initial configuration, and so \eqref{far-cond-reject-start} is also satisfied and the constructed $\mathcal{L}'$ provides a CTL proof for $\mathcal{M}$.
 
 % \subsection{Search algorithm \ts{II}: meet-in-the-middle DFA}
 % \label{far-algo-mtim_dfa}
@@ -801,13 +841,4 @@ So, Algorithm \ref{alg:search-dfa} searches such DFAs incrementally (avoiding pa
 
 % It uses Kissat\cite{Biere_2020} as its \textsc{SAT} solver.
 
-% More information about these results are available at: \url{https://discuss.bbchallenge.org/t/decider-finite-automata-reduction/123}.
-
-% \subsection{Related research}
-% The ``direct'' algorithm of \S \ref{far-algo-direct} was first found by applying \cite{BEM_1997}.
-% Rough sketch: treat a TM as a two-stack machine (one per side of the tape).
-% Fix a DFA classifying left half-tape configurations.
-% Form a ``quotient'' of $\mathcal{M}$ in which stack values are replaced by corresponding DFA states.
-% The many-to-one mapping of configurations induces a mapping of transitions, leaving us with a nondeterministic one-stack machine.
-% The algorithm of \cite{BEM_1997} solves reachability for its halt-configurations.
-% This perspective was dropped in favour of a more direct approach, but it can be useful when probing the limits of this technique.
+% More information about these results is available at: \url{https://discuss.bbchallenge.org/t/decider-finite-automata-reduction/123}.
