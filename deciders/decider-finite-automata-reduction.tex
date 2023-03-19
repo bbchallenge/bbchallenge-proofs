@@ -3,7 +3,7 @@
 
 \subsection{Method overview}
 
-The core idea of the method presented in this Section is to find, for a given Turing machine, a regular language that describes the set (or a superset) of the machine's eventually-halting configurations -- with finite support\footnote{By finite support, we mean tapes that contain finitely many 1s, i.e. that are prefixed and suffixed by infinitely many 0s.}. Then, we only have to test that the initial all-0 configuration is not part of the language to deduce that the machine does not halt from it.
+The core idea of the method presented in this Section is to find, for a given Turing machine, a regular language that describes the set (or a superset) of the machine's eventually-halting configurations -- with finite support\footnote{By finite support, we mean tapes that contain finitely many 1s, i.e. that are prefixed and suffixed by infinitely many 0s. Note that all configurations reachable starting from a blank tape have finite support.}. Then, we only have to test that the initial all-0 configuration is not part of the language to deduce that the machine does not halt from it.
 
 This idea has been explored by other authors under the name Closed Tape Languages (CTL) as described in S. Ligocki's blog (\url{https://www.sligocki.com/2022/06/10/ctl.html}) and credited to H. Marxen in collaboration with J. Buntrock.
 
@@ -164,7 +164,7 @@ For a given Turing machine, we aim at building an NFA that recognises at least a
 
 
 Let's first recall how Nondeterministic Finite Automta (\textbf{NFA}) can be described using linear algebra. Let $\mathbf{2}$ denote the Boolean semiring\footnote{A semiring is a ring without the requirement to have additive inverses, e.g. the set of natural numbers $\N=\{0,1,2\dots\}$ is a semiring.} $\{0,1\}$ with operations $+$ and $\cdot$ respectively implemented by $\operatorname{OR}$ and $\operatorname{AND}$ \cite{CUNINGHAMEGREEN1991251}.
-Let $\M_{m,n}$ be the set of matrices with $m$ rows and $n$ columns over $\mathbf{2}$. We may define a Nondeterministic Finite Automaton (NFA) with $n$ states and alphabet $\mathcal{A}$ as a tuple $(q_0, \{T_\gamma\}_{\gamma \in \mathcal{A}}, a)$ where $q_0 \in \M_{1,n}$ and $a \in \M_{1,n}$ respectively represent the initial states and accepting states of the NFA. (i.e. if the $i^\text{th}$ state of the NFA is an initial state then the $i^\text{th}$ entry of $q_0$ is set to 1 and the rest are 0, and the $i^\text{th}$ entry of $a$ is set to 1 if and only if the $i^\text{th}$ state of the NFA is accepting), and where transitions are matrices $T_\gamma\in \M_{n,n}$ for each $\gamma\in\mathcal{A}$ (i.e. the entry $(i,j)$ of matrix $T_\gamma$ is set to 1 iff the NFA transitions from state $i$ to state $j$ when reading $\gamma$). A word $u=\gamma_1\dots\gamma_\ell \in \mathcal{A}^*$ is accepted by the NFA iff there exists a path from an initial state to an accepting state that is labelled by the symbols of $u$, which algebraically translates to $q_0 T_u a\T = 1$ with $a\T \in \M_{n,1}$ the transposition of $a$.
+Let $\M_{m,n}$ be the set of matrices with $m$ rows and $n$ columns over $\mathbf{2}$. We may define a Nondeterministic Finite Automaton (NFA) with $n$ states and alphabet $\mathcal{A}$ as a tuple $(q_0, \{T_\gamma\}_{\gamma \in \mathcal{A}}, a)$ where $q_0 \in \M_{1,n}$ and $a \in \M_{1,n}$ respectively represent the initial states and accepting states of the NFA. (i.e. if the $i^\text{th}$ state of the NFA is an initial state then the $i^\text{th}$ entry of $q_0$ is set to 1 and the rest are 0, and the $i^\text{th}$ entry of $a$ is set to 1 if and only if the $i^\text{th}$ state of the NFA is accepting), and where transitions are matrices $T_\gamma\in \M_{n,n}$ for each $\gamma\in\mathcal{A}$ (i.e. the entry $(i,j)$ of matrix $T_\gamma$ is set to 1 iff the NFA transitions from state $i$ to state $j$ when reading $\gamma$). Furthermore, for any word $u=\gamma_1\dots\gamma_\ell \in \mathcal{A}^*$, let $T_u = T_{\gamma_1} T_{\gamma_2} \dots T_{\gamma_\ell}$ is the state transformation resulting from reading word $u$ (Note: $T_\epsilon = I$). A word $u=\gamma_1\dots\gamma_\ell \in \mathcal{A}^*$ is accepted by the NFA iff there exists a path from an initial state to an accepting state that is labelled by the symbols of $u$, which algebraically translates to $q_0 T_u a\T = 1$ with $a\T \in \M_{n,1}$ the transposition of $a$.
 
 \begin{figure}
   \begin{center}
@@ -204,7 +204,7 @@ Let $\M_{m,n}$ be the set of matrices with $m$ rows and $n$ columns over $\mathb
       \draw (31.9,-36.9) node [below] {$\alpha$};
     \end{tikzpicture}
   \end{center}
-  \caption{Example Nondeterministic Finite Automaton (NFA) with 3 states X,Y and Z, alphabet $\mathcal{A} = \{\alpha,\beta\}$, initial states X and Y, and accepting states Y and Z. The linear-algebra representation of this NFA is given in Example~\ref{ex:nfa}. Example accepted words are: $\beta$, $\alpha\beta$, $\alpha\alpha\beta\beta$. Example rejected words are: $\alpha$, $\alpha\alpha$, $\alpha\alpha\alpha$.}\label{fig:example_nfa}
+  \caption{Example Nondeterministic Finite Automaton (NFA) with 3 states X,Y and Z, alphabet $\mathcal{A} = \{\alpha,\beta\}$, initial states X and Y, and accepting state Z. The linear-algebra representation of this NFA is given in Example~\ref{ex:nfa}. Example accepted words are: $\beta$, $\alpha\beta$, $\alpha\alpha\beta\beta$. Example rejected words are: $\alpha$, $\alpha\alpha$, $\alpha\alpha\alpha$.}\label{fig:example_nfa}
 \end{figure}
 
 \begin{example}\label{ex:nfa}\normalfont
@@ -229,6 +229,8 @@ Now, we describe how we transform Turing machine configurations that have finite
 \begin{example}\normalfont
   A word-representation of the configuration depicted in Figure~\ref{fig:far_scan} is $\hat{c} = \texttt{00A001100}$.
 \end{example}
+
+(Comment from Shawn: I think it would be helpful here to explain how we are applying our general NFA description above to this specific TM config identification application. For example, what is $$\mathcal{A}$$? I think $$\mathcal{A} = \{0, 1\} \sqcup \{A, B, C, D, E\}$$ i.e. the disjoint union of all tape symbols and all tape states.)
 
 Note that two word-representations of the same configuration will only differ in the number of leading and trailing 0s that they have. Hence, if $\mathcal{L}$ is the regular language of the NFA that we wish to construct to recognise the eventually-halting configurations of a given TM, it is natural that we ask the following:
 \begin{align*}
