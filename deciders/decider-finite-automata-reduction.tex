@@ -3,11 +3,24 @@
 
 \subsection{Method overview}
 
-The core idea of the method presented in this Section is to find, for a given Turing machine, a regular language that describes the set (or a superset) of the machine's eventually-halting configurations -- with finite support\footnote{By finite support, we mean tapes that contain finitely many 1s, i.e. that are prefixed and suffixed by infinitely many 0s. Note that all configurations reachable starting from a blank tape have finite support.}. Then, we only have to test that the initial all-0 configuration is not part of the language to deduce that the machine does not halt from it.
+The core idea of the method presented in this Section is to find, for a given Turing machine, a regular language that describes the set (or a superset) of the machine's eventually-halting configurations. Then, we only have to test that the initial all-0 configuration is not part of the language to deduce that the machine does not halt from it.
 
-This idea has been explored by other authors under the name Closed Tape Languages (CTL) as described in S. Ligocki's blog (\url{https://www.sligocki.com/2022/06/10/ctl.html}) and credited to H. Marxen in collaboration with J. Buntrock.
+This idea has been explored by other authors under the name Closed Tape Languages (CTL) as described in S. Ligocki's blog \cite{ShawnCTL} and credited to H. Marxen in collaboration with J. Buntrock. \ts{For a given Turing machine, the CTL technique consists in trying to construct a set $C$ of configurations such that:
 
-Here, we develop an original technique, based on the algebraic description of Nondeterministic Finite Automata (NFA), for finding the regular language associated to a machine's eventually halting configurations.
+  \begin{enumerate}
+    \item Starting from the all-0 initial configuration, the TM eventually reaches a configuration $c \in C$.
+    \item $C$ is \textit{closed}: for any $c \in C$, a positive number of TM steps from $c$ leads to $c' \in C$
+    \item $C$ does not contain any halting configuration
+  \end{enumerate}
+
+  If such a set $C$ exists then the machine does not halt. The CTL approach has proven to be practical and powerful when we search for $C$ among regular languages \cite{ShawnCTL} \cite{BruteforceCTL}.
+
+
+
+}
+
+
+Here, we develop an original \ts{\textit{co-CTL}} technique\footnote{\ts{By co-CTL we mean the complement of a CTL language, i.e. recognising eventually-halting configurations and not including the initial one. The CTL and co-CTL approaches are equivalent, they correspond the contraposition of one another.}}, based on the algebraic description of Nondeterministic Finite Automata (NFA), for finding a regular language associated to a machine's eventually halting configurations.
 
 One important aspect of the technique is that, given a Turing machine and its constructed NFA---if found---it is a computationally simple task to verify that the NFA's language does indeed recognise all eventually-halting configurations of the machine.
 
@@ -260,7 +273,7 @@ Then, we want our NFA's language $\mathcal{L}$ to include all eventually-halting
 
 With $c, c_1, c_2$ configurations of the TM (with finite support) and $\hat{c}, \hat{c}_1, \hat{c}_2$ any of their finite word-representations, see Definition~\ref{def:wordc}. Let $f,t \in \{A,B,C,D,E\}$ denote TM states (the ``from'' and ``to'' states in a TM transition), and $r,w,b \in \{0,1\}$ denote bits (a bit ``read'', a bit ``written'', and just a bit), then the above conditions turn into:
 \begin{align*}
-  \forall u,z\in\{0, 1\}^*: \; ufrz \in \mathcal{L},\;                                                             & \text{if $(f,r) \to \bot$ is a halting transition of $\mathcal{M}$}
+  \forall u,z\in\{0, 1\}^*: \; ufrz \in \mathcal{L},\;                                                           & \text{if $(f,r) \to \bot$ is a halting transition of $\mathcal{M}$}
   \\
   \forall u,z\in\{0, 1\}^*,\,\forall b \in \{0, 1\}: utbwz \in \mathcal{L} \implies ubfrz \in \mathcal{L},\;     & \text{if $(f,r) \to (t,w,\text{left})$ is a transition of $\mathcal{M}$}
   \\
@@ -269,7 +282,7 @@ With $c, c_1, c_2$ configurations of the TM (with finite support) and $\hat{c}, 
 
 Which algebraically becomes:
 \begin{align*}
-  \forall u,z\in\{0, 1\}^*: \; q_0 T_u T_f T_r T_z a\T = 1 \;                                                                              & \text{if $(f,r) \to \bot$ is a halting transition of $\mathcal{M}$}
+  \forall u,z\in\{0, 1\}^*: \; q_0 T_u T_f T_r T_z a\T = 1 \;                                                                            & \text{if $(f,r) \to \bot$ is a halting transition of $\mathcal{M}$}
   \\
   \forall u,z\in\{0, 1\}^*,\,\forall b \in \{0, 1\}: q_0 T_{u} T_t T_b T_w T_{z} a\T = 1 \implies q_0 T_{u} T_b T_f T_r T_{z} a\T = 1,\; & \text{if $(f,r) \to (t,w,\text{left})$ is a transition of $\mathcal{M}$}
   \\
@@ -300,37 +313,37 @@ Combining the above, we get our main result:
   Machine $\mathcal{M}$ doesn't halt from the initial all-0 configuration if there are an NFA $(q_0, \{T_\gamma\}, a)$ and row vector $s$ satisfying the below:
   \begin{align}
     \label{far-cond-first}
-    q_0 T_0                                  & = q_0
-                                             &                     & \text{(leading zeros ignored)}
+    q_0 T_0                                & = q_0
+                                           &                     & \text{(leading zeros ignored)}
     \tag{\ref{far-cond-leading-0}}
     \\
-    T_0a^{\T}                                & = a^{\T}
-                                             &                     & \text{(trailing zeros ignored)}
+    T_0a^{\T}                              & = a^{\T}
+                                           &                     & \text{(trailing zeros ignored)}
     \tag{\ref{far-cond-trailing-0}}
     \\
-    sa\T                                     & = 1
-                                             &                     & \text{($s$ is accepted)}
+    sa\T                                   & = 1
+                                           &                     & \text{($s$ is accepted)}
     \label{far-cond-ass-accepted}
     \\
-    sT_0,sT_1                                & \succeq s
-                                             &                     & \text{($s$ is a steady state)}
+    sT_0,sT_1                              & \succeq s
+                                           &                     & \text{($s$ is a steady state)}
     \label{far-cond-ass-steady}
     \\
     \forall u\in\{0, 1\}^*: q_0T_u T_f T_r & \succeq s
-                                             &                     & \text{if $(f,r) \to \bot$ is a halting transition of $\mathcal{M}$}
+                                           &                     & \text{if $(f,r) \to \bot$ is a halting transition of $\mathcal{M}$}
     \label{far-cond-halt}
     \\
-    T_b T_f T_r                              & \succeq T_t T_b T_w
-                                             &                     & \text{if $(f,r) \to (t,w,\text{left})$ is a transition of $\mathcal{M}$}
+    T_b T_f T_r                            & \succeq T_t T_b T_w
+                                           &                     & \text{if $(f,r) \to (t,w,\text{left})$ is a transition of $\mathcal{M}$}
     \label{far-cond-left}
     \\
-    T_f T_r                                  & \succeq T_w T_t
-                                             &                     & \text{if $(f,r) \to (t,w,\text{right})$ is a transition of $\mathcal{M}$}
+    T_f T_r                                & \succeq T_w T_t
+                                           &                     & \text{if $(f,r) \to (t,w,\text{right})$ is a transition of $\mathcal{M}$}
     %\label{far-cond-right}
     \label{far-cond-last}
     \\
-    q_0 T_A a\T                              & = 0
-                                             &                     & \text{(initial configuration rejected)}
+    q_0 T_A a\T                            & = 0
+                                           &                     & \text{(initial configuration rejected)}
     \label{far-cond-reject-start}
   \end{align}
 \end{theorem}
@@ -529,22 +542,22 @@ This induces $\delta_\textsf{cf}(q,b)\mapsto f^{-1}(f(q), b)$.
   \end{enumerate}
 \end{lemma}
 \begin{proof}
-\begin{description}
-  \item[$1\iff 2$:]
-        We prove a partial version by induction:
-        the DFA ignores leading zeros and $f(q)=q$ for $q\le k$,
-        iff $0,\ldots,k$ have ordered first appearances in the transition table
-        which precede appearances of any $q>k$
-        and occur before the $2k$ position in $\delta$ if $k>0$.
-        In case $k=0$, the DFA ignores leading zeros iff $0$ comes first in the transition table by definition.
-        (The other conditions are vacuous.)
-        In case the claim holds for preceding $k$, $f(k)$ is by definition the first number outside of $f([k])=[k]$ in the transition table---if any---and the inductive step follows.
-  \item[$2\iff 3$:]
-        If the first appearances of $0,\ldots,n-1$ appear in order, any value at its first index is the largest so far, so $m_k$ takes the same values. The sequence $m_k$ is obviously nondecreasing, so to be gap-free it can only grow in steps of 0 or 1.
-        Conversely, if $m_k$ runs from $0$ to $n-1$ in steps of $0$ or $1$, each value $q\in [n]$ must appear in the table at the first index $k$ for which $m_k=q$, and all preceding values in the transition table must be strictly less.
+  \begin{description}
+    \item[$1\iff 2$:]
+          We prove a partial version by induction:
+          the DFA ignores leading zeros and $f(q)=q$ for $q\le k$,
+          iff $0,\ldots,k$ have ordered first appearances in the transition table
+          which precede appearances of any $q>k$
+          and occur before the $2k$ position in $\delta$ if $k>0$.
+          In case $k=0$, the DFA ignores leading zeros iff $0$ comes first in the transition table by definition.
+          (The other conditions are vacuous.)
+          In case the claim holds for preceding $k$, $f(k)$ is by definition the first number outside of $f([k])=[k]$ in the transition table---if any---and the inductive step follows.
+    \item[$2\iff 3$:]
+          If the first appearances of $0,\ldots,n-1$ appear in order, any value at its first index is the largest so far, so $m_k$ takes the same values. The sequence $m_k$ is obviously nondecreasing, so to be gap-free it can only grow in steps of 0 or 1.
+          Conversely, if $m_k$ runs from $0$ to $n-1$ in steps of $0$ or $1$, each value $q\in [n]$ must appear in the table at the first index $k$ for which $m_k=q$, and all preceding values in the transition table must be strictly less.
 
-        In case these equivalent conditions are true, that last observation shows that $q$ appears before the $\delta(q,0)$ position iff $m_k$ reaches $q$ by index $k=2q-1$, or equivalently $m_{2q-1}\ge q$.
-\end{description}
+          In case these equivalent conditions are true, that last observation shows that $q$ appears before the $\delta(q,0)$ position iff $m_k$ reaches $q$ by index $k=2q-1$, or equivalently $m_{2q-1}\ge q$.
+  \end{description}
 \end{proof}
 
 \begin{corollary}\normalfont
@@ -552,8 +565,8 @@ This induces $\delta_\textsf{cf}(q,b)\mapsto f^{-1}(f(q), b)$.
   $m_k \mathrel{\mathop:}= \max\{t_j\}_{j=0}^k$ runs from $0$ to $m_\ell<n$ in steps of $0$ or $1$, and $m_{2q-1}\ge q$ (for all $2q - 1 \le \ell$).
 \end{corollary}
 \begin{proof}
-If $\ell=2n-1$, $\{m_k\}$ grows to exactly $n-1$ (since $m_{2(n-1)-1}\ge n-1$), and lemma \ref{far-dfa-canonical form} applies.
-Otherwise, we may extend the sequence with $t_{\ell+1}=\min(m_\ell+1,n-1)$, the same conditions apply.
+  If $\ell=2n-1$, $\{m_k\}$ grows to exactly $n-1$ (since $m_{2(n-1)-1}\ge n-1$), and lemma \ref{far-dfa-canonical form} applies.
+  Otherwise, we may extend the sequence with $t_{\ell+1}=\min(m_\ell+1,n-1)$, the same conditions apply.
 \end{proof}
 
 So, Algorithm \ref{alg:search-dfa} searches such DFAs incrementally (avoiding partial DFAs already deemed unworkable).
@@ -595,10 +608,10 @@ So, Algorithm \ref{alg:search-dfa} searches such DFAs incrementally (avoiding pa
 \subsection{Generality of the method}
 In the preceding sections, we started from the idea of a closed language of word-representations of TM configurations, made a series of simplifying assumptions, and obtained a search algorithm.
 This raises a question: if a TM is proven infinite by \emph{any} ``closed tape language''  (CTL) argument\footnote{
-	In this paper, we work with regular languages closed under ``backward'' TM transitions: if the word-representation of a configuration after a TM transition is in the language, so is any word-representation of the configuration before the TM transition.
-	Other authors have also used languages closed in the forward direction, i.e., with the converse closure criterion.
-	By contraposition, a language $\mathcal{L}$ satisfies this converse requirement iff its complement satisfies our version, so these forms of ``Closed Tape Language'' proofs are equivalent in power.
-	A language satisfying this paper's closure condition is sometimes called a ``co-CTL''.
+  In this paper, we work with regular languages closed under ``backward'' TM transitions: if the word-representation of a configuration after a TM transition is in the language, so is any word-representation of the configuration before the TM transition.
+  Other authors have also used languages closed in the forward direction, i.e., with the converse closure criterion.
+  By contraposition, a language $\mathcal{L}$ satisfies this converse requirement iff its complement satisfies our version, so these forms of ``Closed Tape Language'' proofs are equivalent in power.
+  A language satisfying this paper's closure condition is sometimes called a ``co-CTL''.
 },
 must a proof in the form required for Theorem~\ref{far-main-theorem}, let alone in \S\ref{far-algo-direct}, exist?
 
