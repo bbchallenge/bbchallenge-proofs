@@ -420,7 +420,7 @@ For a given left-hand side DFA with transition function $\delta$, the right-hand
 \end{lemma}
 \begin{proof}
 
-  First notice that (\ref{far-cond-ass-steady}'), (\ref{far-cond-halt}') and (\ref{far-cond-last}') have their right-hand side constant (with respect to $R$) hence they only amount to constant lower bounds for matrices $R_0$ and $R_1$. Then note that, given any lower bound $B_0$ and $B_1$ for solutions of the system $R_0$ and $R_1$ \todo{Shawn's Comment: Does this just mean for any $B_0 \preqeq R_0$ and $B_1 \preqeq R_1$?}, we have  $\row_{\delta(i,b)}(M_f)^{\T} \row_i(M_t)R_b R_w \succeq \row_{\delta(i,b)}(M_f)^{\T} \row_i(M_t)B_b B_w$ by compatibility of $\succeq$ with the performed operations. Hence, iterating (\ref{far-cond-left}') produces an increasing, eventually stationary, sequence of lower bounds for $R_0$ and $R_1$ whose fixed point is solution to the system.
+  First notice that (\ref{far-cond-ass-steady}'), (\ref{far-cond-halt}') and (\ref{far-cond-last}') have their right-hand side constant (with respect to $R$) hence they only amount to constant lower bounds for matrices $R_0$ and $R_1$. Then note that, given any lower bound $B_0$ and $B_1$ for solutions of the system $R_0$ and $R_1$ \todo{Shawn's Comment: Does this just mean for any $B_0 \preceq R_0$ and $B_1 \preceq R_1$?}, we have  $\row_{\delta(i,b)}(M_f)^{\T} \row_i(M_t)R_b R_w \succeq \row_{\delta(i,b)}(M_f)^{\T} \row_i(M_t)B_b B_w$ by compatibility of $\succeq$ with the performed operations. Hence, iterating (\ref{far-cond-left}') produces an increasing, eventually stationary, sequence of lower bounds for $R_0$ and $R_1$ whose fixed point is solution to the system.
 \end{proof}
 
 
@@ -490,7 +490,7 @@ This efficient pruning technique completes the method, shown below as Algorithm 
 
 \subsection{Deterministic finite automata}
 \label{far-defs-dfa}
-Textbooks define \emph{deterministic} finite automata (on the binary alphabet, with acceptance unspecified) as tuples $(Q, \delta, q_0)$ of: a finite set $Q$ (states), a $q_0\in Q$ (initial state), and $\delta: Q\times\mathbf{2}\to Q$ (transition function).
+Textbooks define \emph{deterministic} finite automata (on the binary alphabet, with acceptance unspecified) as tuples $(Q, \delta, q_0)$ of: a finite set $Q$ (states), a $q_0\in Q$ (initial state), and $\delta: Q\times\{0, 1\}\to Q$ (transition function).
 Though NFAs generalize DFAs, they can be emulated by (exponentially larger) power-set DFAs. \cite{Sipser}
 
 To put this definition in the linear-algebraic framework:
@@ -523,7 +523,7 @@ This induces $\delta_\textsf{cf}(q,b)\mapsto f^{-1}(f(q), b)$.
     \item it's in canonical form ($Q_\textsf{cf}\to Q$ is the identity)
           and ignores leading zeros (equation \eqref{far-cond-leading-0} or $\delta(0,0)=0$);
     \item its transition table includes each of $0,\ldots,n-1$, whose first appearances occur in order,
-          and with each $0 < q < n$ appearing before the $2q$ position in the transition tabel;
+          and with each $0 < q < n$ appearing before the $2q$ position in the transition table;
     \item the sequence $\{m_k \mathrel{\mathop:}= \max\{\delta(q,b): 2q+b\le k\}\}_{k=0}^{2n-1}$ of cumulative maxima runs from $0$ to $n-1$ in steps of $0$ or $1$,
           with $m_{2q-1}\ge q$ for $0<q<n$.
   \end{enumerate}
