@@ -389,7 +389,7 @@ Indeed, let's rewrite the above structural points algebraically:
 For a given Turing machine, our direct FAR algorithm will enumerate left-hand side DFAs and for each, find an associated right-hand side NFA by solving Theorem~\ref{far-main-theorem} \eqref{far-cond-first}--\eqref{far-cond-last} for $R_0$, $R_1$, and $a$. If Condition \eqref{far-cond-reject-start} is also satisfied then, by Theorem~\ref{far-main-theorem}, the Turing machine is proven non-halting and we stop the search.
 
 
-For a given left-hand side DFA with transition function $\delta$, the right-hand side NFA is constructed by rewriting Theorem~\ref{far-main-theorem} conditions~\eqref{far-cond-ass-steady}--\eqref{far-cond-last} in the following way, where we set the accepted steady state-set to the one element set $s=\{\begin{bmatrix}0 & e_\bot\end{bmatrix}\}$. The algebra is helped by the general observation that for any $i$, the condition $\row_i(M) \succeq v$ with $\row_i(M)$ the $i^\text{th}$ row of matrix $M$ and $v$ some row vector, is equivalent to $M\succeq e_i\T v$ with $e_i$ the $i^\text{th}$ standard basis vector\footnote{This is why we asked that row vectors of matrices $M_f$ are standard basis vectors, Point~\ref{pt:basis} above.}.
+For a given left-hand side DFA with transition function $\delta$, the right-hand side NFA is constructed by rewriting Theorem~\ref{far-main-theorem} conditions~\eqref{far-cond-ass-steady}--\eqref{far-cond-last} in the following way, where we set the accepted steady state-set to $s=0\oplus e_\bot$. The algebra is helped by the general observation that for any $i$, the condition $\row_i(M) \succeq v$ with $\row_i(M)$ the $i^\text{th}$ row of matrix $M$ and $v$ some row vector, is equivalent to $M\succeq e_i\T v$ with $e_i$ the $i^\text{th}$ standard basis vector\footnote{This is why we asked that row vectors of matrices $M_f$ are standard basis vectors, Point~\ref{pt:basis} above.}.
 
 % A helpful property of standard basis vectors is: the condition $\row_i(M) \succeq v$ with $\row_i(M)$ the $i^\text{th}$ row of matrix $M$ and $v$ some row vector, is equivalent to $M\succeq e_i\T v$. We asked that row vectors of matrices $M_f$ are basis vectors (Point~\ref{pt:basis} above) because of this property as it crucially lets us re-express conditions \eqref{far-cond-ass-steady}--\eqref{far-cond-last} of Theorem~\ref{far-main-theorem} in the following way, where we
 
@@ -420,7 +420,7 @@ For a given left-hand side DFA with transition function $\delta$, the right-hand
 \end{lemma}
 \begin{proof}
 
-  First notice that (\ref{far-cond-ass-steady}'), (\ref{far-cond-halt}') and (\ref{far-cond-last}') have their right-hand side constant (with respect to $R$) hence they only amount to constant lower bounds for matrices $R_0$ and $R_1$. Then note that, given any lower bound $B_0$ and $B_1$ for solutions of the system $R_0$ and $R_1$ \todo{Shawn's Comment: Does this just mean for any $B_0 \preceq R_0$ and $B_1 \preceq R_1$?}, we have  $\row_{\delta(i,b)}(M_f)^{\T} \row_i(M_t)R_b R_w \succeq \row_{\delta(i,b)}(M_f)^{\T} \row_i(M_t)B_b B_w$ by compatibility of $\succeq$ with the performed operations. Hence, iterating (\ref{far-cond-left}') produces an increasing, eventually stationary, sequence of lower bounds for $R_0$ and $R_1$ whose fixed point is solution to the system.
+  First notice that (\ref{far-cond-ass-steady}'), (\ref{far-cond-halt}') and (\ref{far-cond-last}') have their right-hand side constant (with respect to $R$) hence they only amount to constant lower bounds for matrices $R_0$ and $R_1$. Then note that, given any lower bound $B_0\preceq R_0$ and $B_1\preceq R_1$ for true solutions of the system, we have  $\row_{\delta(i,b)}(M_f)^{\T} \row_i(M_t)R_b R_w \succeq \row_{\delta(i,b)}(M_f)^{\T} \row_i(M_t)B_b B_w$ by compatibility of $\succeq$ with the performed operations. Hence, iterating (\ref{far-cond-left}') produces an increasing, eventually stationary, sequence of lower bounds for $R_0$ and $R_1$ whose fixed point is solution to the system.
 \end{proof}
 
 
@@ -549,7 +549,7 @@ This induces $\delta_\textsf{cf}(q,b)\mapsto f^{-1}(f(q), b)$.
 
 \begin{corollary}\normalfont
   $\{t_k\}_{k=0}^\ell$ ($\ell<2n$) is a prefix of a canonical, leading-zero-ignoring, $n$-state DFA transition table iff
-  $m_k \mathrel{\mathop:}= \max\{t_j\}_{j=0}^k$ runs from $0$ to $m_{\ell-1}<n$\todo{Shawn: Shouldn't this be to $m_\ell$? As in there should be something that transitions to the highest defined state (State $\ell$)?} in steps of $0$ or $1$, and $m_{2q-1}\ge q$ (for all $2q - 1 \le \ell$).
+  $m_k \mathrel{\mathop:}= \max\{t_j\}_{j=0}^k$ runs from $0$ to $m_\ell<n$ in steps of $0$ or $1$, and $m_{2q-1}\ge q$ (for all $2q - 1 \le \ell$).
 \end{corollary}
 \begin{proof}
 If $\ell=2n-1$, $\{m_k\}$ grows to exactly $n-1$ (since $m_{2(n-1)-1}\ge n-1$), and lemma \ref{far-dfa-canonical form} applies.
