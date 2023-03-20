@@ -3,7 +3,7 @@
 
 \subsection{Method overview}
 
-The core idea of the method presented in this Section is to find, for a given Turing machine, a regular language that describes the set (or a superset) of the machine's eventually-halting configurations -- with finite support\footnote{By finite support, we mean tapes that contain finitely many 1s, i.e. that are prefixed and suffixed by infinitely many 0s.}. Then, we only have to test that the initial all-0 configuration is not part of the language to deduce that the machine does not halt from it.
+The core idea of the method presented in this Section is to find, for a given Turing machine, a regular language that describes the set (or a superset) of the machine's eventually-halting configurations -- with finite support\footnote{By finite support, we mean tapes that contain finitely many 1s, i.e. that are prefixed and suffixed by infinitely many 0s. Note that all configurations reachable starting from a blank tape have finite support.}. Then, we only have to test that the initial all-0 configuration is not part of the language to deduce that the machine does not halt from it.
 
 This idea has been explored by other authors under the name Closed Tape Languages (CTL) as described in S. Ligocki's blog (\url{https://www.sligocki.com/2022/06/10/ctl.html}) and credited to H. Marxen in collaboration with J. Buntrock.
 
@@ -164,7 +164,7 @@ For a given Turing machine, we aim at building an NFA that recognises at least a
 
 
 Let's first recall how Nondeterministic Finite Automta (\textbf{NFA}) can be described using linear algebra. Let $\mathbf{2}$ denote the Boolean semiring\footnote{A semiring is a ring without the requirement to have additive inverses, e.g. the set of natural numbers $\N=\{0,1,2\dots\}$ is a semiring.} $\{0,1\}$ with operations $+$ and $\cdot$ respectively implemented by $\operatorname{OR}$ and $\operatorname{AND}$ \cite{CUNINGHAMEGREEN1991251}.
-Let $\M_{m,n}$ be the set of matrices with $m$ rows and $n$ columns over $\mathbf{2}$. We may define a Nondeterministic Finite Automaton (NFA) with $n$ states and alphabet $\mathcal{A}$ as a tuple $(q_0, \{T_\gamma\}_{\gamma \in \mathcal{A}}, a)$ where $q_0 \in \M_{1,n}$ and $a \in \M_{1,n}$ respectively represent the initial states and accepting states of the NFA. (i.e. if the $i^\text{th}$ state of the NFA is an initial state then the $i^\text{th}$ entry of $q_0$ is set to 1 and the rest are 0, and the $i^\text{th}$ entry of $a$ is set to 1 if and only if the $i^\text{th}$ state of the NFA is accepting), and where transitions are matrices $T_\gamma\in \M_{n,n}$ for each $\gamma\in\mathcal{A}$ (i.e. the entry $(i,j)$ of matrix $T_\gamma$ is set to 1 iff the NFA transitions from state $i$ to state $j$ when reading $\gamma$). A word $u=\gamma_1\dots\gamma_\ell \in \mathcal{A}^*$ is accepted by the NFA iff there exists a path from an initial state to an accepting state that is labelled by the symbols of $u$, which algebraically translates to $q_0 T_u a\T = 1$ with $a\T \in \M_{n,1}$ the transposition of $a$.
+Let $\M_{m,n}$ be the set of matrices with $m$ rows and $n$ columns over $\mathbf{2}$. We may define a Nondeterministic Finite Automaton (NFA) with $n$ states and alphabet $\mathcal{A}$ as a tuple $(q_0, \{T_\gamma\}_{\gamma \in \mathcal{A}}, a)$ where $q_0 \in \M_{1,n}$ and $a \in \M_{1,n}$ respectively represent the initial states and accepting states of the NFA. (i.e. if the $i^\text{th}$ state of the NFA is an initial state then the $i^\text{th}$ entry of $q_0$ is set to 1 and the rest are 0, and the $i^\text{th}$ entry of $a$ is set to 1 if and only if the $i^\text{th}$ state of the NFA is accepting), and where transitions are matrices $T_\gamma\in \M_{n,n}$ for each $\gamma\in\mathcal{A}$ (i.e. the entry $(i,j)$ of matrix $T_\gamma$ is set to 1 iff the NFA transitions from state $i$ to state $j$ when reading $\gamma$). Furthermore, for any word $u=\gamma_1\dots\gamma_\ell \in \mathcal{A}^*$, let $T_u = T_{\gamma_1} T_{\gamma_2} \dots T_{\gamma_\ell}$ is the state transformation resulting from reading word $u$ (Note: $T_\epsilon = I$). A word $u=\gamma_1\dots\gamma_\ell \in \mathcal{A}^*$ is accepted by the NFA iff there exists a path from an initial state to an accepting state that is labelled by the symbols of $u$, which algebraically translates to $q_0 T_u a\T = 1$ with $a\T \in \M_{n,1}$ the transposition of $a$.
 
 \begin{figure}
   \begin{center}
@@ -204,7 +204,7 @@ Let $\M_{m,n}$ be the set of matrices with $m$ rows and $n$ columns over $\mathb
       \draw (31.9,-36.9) node [below] {$\alpha$};
     \end{tikzpicture}
   \end{center}
-  \caption{Example Nondeterministic Finite Automaton (NFA) with 3 states X,Y and Z, alphabet $\mathcal{A} = \{\alpha,\beta\}$, initial states X and Y, and accepting states Y and Z. The linear-algebra representation of this NFA is given in Example~\ref{ex:nfa}. Example accepted words are: $\beta$, $\alpha\beta$, $\alpha\alpha\beta\beta$. Example rejected words are: $\alpha$, $\alpha\alpha$, $\alpha\alpha\alpha$.}\label{fig:example_nfa}
+  \caption{Example Nondeterministic Finite Automaton (NFA) with 3 states X,Y and Z, alphabet $\mathcal{A} = \{\alpha,\beta\}$, initial states X and Y, and accepting state Z. The linear-algebra representation of this NFA is given in Example~\ref{ex:nfa}. Example accepted words are: $\beta$, $\alpha\beta$, $\alpha\alpha\beta\beta$. Example rejected words are: $\alpha$, $\alpha\alpha$, $\alpha\alpha\alpha$.}\label{fig:example_nfa}
 \end{figure}
 
 \begin{example}\label{ex:nfa}\normalfont
@@ -229,6 +229,8 @@ Now, we describe how we transform Turing machine configurations that have finite
 \begin{example}\normalfont
   A word-representation of the configuration depicted in Figure~\ref{fig:far_scan} is $\hat{c} = \texttt{00A001100}$.
 \end{example}
+
+\todo{Shawn: I think it would be helpful here to explain how we are applying our general NFA description above to this specific TM config identification application. For example, what is $\mathcal{A}$? I think $\mathcal{A} = \{0, 1\} \sqcup \{A, B, C, D, E\}$ i.e. the disjoint union of all tape symbols and all tape states.}
 
 Note that two word-representations of the same configuration will only differ in the number of leading and trailing 0s that they have. Hence, if $\mathcal{L}$ is the regular language of the NFA that we wish to construct to recognise the eventually-halting configurations of a given TM, it is natural that we ask the following:
 \begin{align*}
@@ -258,20 +260,20 @@ Then, we want our NFA's language $\mathcal{L}$ to include all eventually-halting
 
 With $c, c_1, c_2$ configurations of the TM (with finite support) and $\hat{c}, \hat{c}_1, \hat{c}_2$ any of their finite word-representations, see Definition~\ref{def:wordc}. Let $f,t \in \{A,B,C,D,E\}$ denote TM states (the ``from'' and ``to'' states in a TM transition), and $r,w,b \in \{0,1\}$ denote bits (a bit ``read'', a bit ``written'', and just a bit), then the above conditions turn into:
 \begin{align*}
-  \forall u,z\in\mathbf{2}^*: \; ufrz \in \mathcal{L},\;                                                             & \text{if $(f,r) \to \bot$ is a halting transition of $\mathcal{M}$}
+  \forall u,z\in\{0, 1\}^*: \; ufrz \in \mathcal{L},\;                                                             & \text{if $(f,r) \to \bot$ is a halting transition of $\mathcal{M}$}
   \\
-  \forall u,z\in\mathbf{2}^*,\,\forall b \in \mathbf{2}: utbwz \in \mathcal{L} \implies ubfrz \in \mathcal{L},\;     & \text{if $(f,r) \to (t,w,\text{left})$ is a transition of $\mathcal{M}$}
+  \forall u,z\in\{0, 1\}^*,\,\forall b \in \{0, 1\}: utbwz \in \mathcal{L} \implies ubfrz \in \mathcal{L},\;     & \text{if $(f,r) \to (t,w,\text{left})$ is a transition of $\mathcal{M}$}
   \\
-  \forall u,z\in\mathbf{2}^*,\,\forall b \in \mathbf{2}: u w t z \in \mathcal{L} \implies u f r z \in \mathcal{L},\; & \text{if $(f,r) \to (t,w,\text{right})$ is a transition of $\mathcal{M}$}
+  \forall u,z\in\{0, 1\}^*,\,\forall b \in \{0, 1\}: u w t z \in \mathcal{L} \implies u f r z \in \mathcal{L},\; & \text{if $(f,r) \to (t,w,\text{right})$ is a transition of $\mathcal{M}$}
 \end{align*}
 
 Which algebraically becomes:
 \begin{align*}
-  \forall u,z\in\mathbf{2}^*: \; q_0 T_u T_f T_r T_z a\T = 1 \;                                                                              & \text{if $(f,r) \to \bot$ is a halting transition of $\mathcal{M}$}
+  \forall u,z\in\{0, 1\}^*: \; q_0 T_u T_f T_r T_z a\T = 1 \;                                                                              & \text{if $(f,r) \to \bot$ is a halting transition of $\mathcal{M}$}
   \\
-  \forall u,z\in\mathbf{2}^*,\,\forall b \in \mathbf{2}: q_0 T_{u} T_t T_b T_w T_{z} a\T = 1 \implies q_0 T_{u} T_b T_f T_r T_{z} a\T = 1,\; & \text{if $(f,r) \to (t,w,\text{left})$ is a transition of $\mathcal{M}$}
+  \forall u,z\in\{0, 1\}^*,\,\forall b \in \{0, 1\}: q_0 T_{u} T_t T_b T_w T_{z} a\T = 1 \implies q_0 T_{u} T_b T_f T_r T_{z} a\T = 1,\; & \text{if $(f,r) \to (t,w,\text{left})$ is a transition of $\mathcal{M}$}
   \\
-  \forall u,z\in\mathbf{2}^*,\,\forall b \in \mathbf{2}: q_0 T_{u} T_w T_t T_{z} a\T = 1 \implies q_0 T_{u} T_f T_r T_{z} a\T = 1,\;         & \text{if $(f,r) \to (t,w,\text{right})$ is a transition of $\mathcal{M}$}
+  \forall u,z\in\{0, 1\}^*,\,\forall b \in \{0, 1\}: q_0 T_{u} T_w T_t T_{z} a\T = 1 \implies q_0 T_{u} T_f T_r T_{z} a\T = 1,\;         & \text{if $(f,r) \to (t,w,\text{right})$ is a transition of $\mathcal{M}$}
 \end{align*}
 
 These conditions are unwieldy. Let's seek stronger (thus still sufficient) conditions which are simpler:
@@ -280,15 +282,15 @@ These conditions are unwieldy. Let's seek stronger (thus still sufficient) condi
 
   \item For machine transitions going left/right, simply require $T_t T_b T_w\preceq T_b T_f T_r$ and $T_w T_t\preceq T_f T_r$, respectively with $\preceq$ the following relation on same-size matrices: $M\preceq M'$ if $M_{ij}\le M'_{ij}$ element-wise, that is, if the second matrix has at least the same 1-entries as the first matrix.
 
-  \item To simplify the condition for halting machine transitions: define an \emph{accepted steady state-set} $s$ to be a row vector such that $sa\T = 1$, $s T_0\succeq s$, and $s T_1\succeq s$. Given such $s$, we have that: $\forall q\in\M_{1,n}\; q \succeq s\implies \forall z\in\mathbf{2}^*: qT_{z}a\T = 1$. Assuming that such $s$ exists we can simply require: $\forall u\in\mathbf{2}^*: q_0T_u T_f T_r \succeq s$ which is stronger than $\forall u,z\in\mathbf{2}^*: \; q_0 T_u T_f T_r T_z a\T = 1$ with $(f,r) \to \bot$ a halting transition.
+  \item To simplify the condition for halting machine transitions: define an \emph{accepted steady state-set} $s$ to be a row vector such that $sa\T = 1$, $s T_0\succeq s$, and $s T_1\succeq s$. Given such $s$, we have that: $\forall q\in\M_{1,n}\; q \succeq s\implies \forall z\in\{0, 1\}^*: qT_{z}a\T = 1$. Assuming that such $s$ exists we can simply require: $\forall u\in\{0, 1\}^*: q_0T_u T_f T_r \succeq s$ which is stronger than $\forall u,z\in\{0, 1\}^*: \; q_0 T_u T_f T_r T_z a\T = 1$ with $(f,r) \to \bot$ a halting transition.
 
-        % \footnote{\ts{Note that our new condition $\forall u\in\mathbf{2}^*: q_0T_u T_f T_r \succeq s$ requires that $\forall u\in\mathbf{2}^*: q_0T_u \neq 0$, i.e. that reading 0 and 1 from the initial states must always lead to some state. This assertion is not limiting since if it is not met by some NFA, adding an additional sink state to the NFA will not change the recognised language and will satisfy the assertion.}}
+        % \footnote{\ts{Note that our new condition $\forall u\in\{0, 1\}^*: q_0T_u T_f T_r \succeq s$ requires that $\forall u\in\{0, 1\}^*: q_0T_u \neq 0$, i.e. that reading 0 and 1 from the initial states must always lead to some state. This assertion is not limiting since if it is not met by some NFA, adding an additional sink state to the NFA will not change the recognised language and will satisfy the assertion.}}
 
-        % assert that for all $u \in \mathbf{2}^*$, the sub-expression $q_0 T_{u}$ is not zero \ts{(this means that reading 0 and 1 from the initial states must always lead to some state\footnote{This assertion is not limiting since if it is not met by some NFA, adding an additional sink state to the NFA will not change the recognised language and will satisfy the assertion.})},
+        % assert that for all $u \in \{0, 1\}^*$, the sub-expression $q_0 T_{u}$ is not zero \ts{(this means that reading 0 and 1 from the initial states must always lead to some state\footnote{This assertion is not limiting since if it is not met by some NFA, adding an additional sink state to the NFA will not change the recognised language and will satisfy the assertion.})},
         % and \tss{(for $q$ a nonzero combination of such vectors and $fr\vdash\bot$ a halt rule)}{that $q_0 T_{u} T_f T_r$}
-        % is a vector $q'$ satisfying $\forall z\in\mathbf{2}^*: q' T_{z} a = 1$ \ts{(this means that the NFA will accept any word containing a halting transition independently of the bits written after the machine's head)}.
+        % is a vector $q'$ satisfying $\forall z\in\{0, 1\}^*: q' T_{z} a = 1$ \ts{(this means that the NFA will accept any word containing a halting transition independently of the bits written after the machine's head)}.
 
-        % Given such $s$, we have $q'\succeq s\implies \forall z\in\mathbf{2}^*: q'T_{z}a = 1$. 
+        % Given such $s$, we have $q'\succeq s\implies \forall z\in\{0, 1\}^*: q'T_{z}a = 1$.
 \end{itemize}
 
 Combining the above, we get our main result:
@@ -314,7 +316,7 @@ Combining the above, we get our main result:
                                              &                     & \text{($s$ is a steady state)}
     \label{far-cond-ass-steady}
     \\
-    \forall u\in\mathbf{2}^*: q_0T_u T_f T_r & \succeq s
+    \forall u\in\{0, 1\}^*: q_0T_u T_f T_r & \succeq s
                                              &                     & \text{if $(f,r) \to \bot$ is a halting transition of $\mathcal{M}$}
     \label{far-cond-halt}
     \\
@@ -387,9 +389,9 @@ Indeed, let's rewrite the above structural points algebraically:
 For a given Turing machine, our direct FAR algorithm will enumerate left-hand side DFAs and for each, find an associated right-hand side NFA by solving Theorem~\ref{far-main-theorem} \eqref{far-cond-first}--\eqref{far-cond-last} for $R_0$, $R_1$, and $a$. If Condition \eqref{far-cond-reject-start} is also satisfied then, by Theorem~\ref{far-main-theorem}, the Turing machine is proven non-halting and we stop the search.
 
 
-For a given left-hand side DFA with transition function $\delta$, the right-hand side NFA is constructed by rewriting Theorem~\ref{far-main-theorem} conditions~\eqref{far-cond-ass-steady}--\eqref{far-cond-last} in the following way, where we set the accepted steady state-set to $s=0\oplus e_\bot$. The algebra is helped by the general observation that for any $i$, the condition $\row_i(M) \succeq v$ with $\row_i(M)$ the $i^\text{th}$ row of matrix $M$ and $v$ some row vector, is equivalent to $M\succeq e_i\T v$ with $e_i$ the $i^\text{th}$ standard basis vector\footnote{This is why we asked that row vectors of matrices $M_f$ are standard basis vectors, Point~\ref{pt:basis} above.}.
+For a given left-hand side DFA with transition function $\delta$, the right-hand side NFA is constructed by rewriting Theorem~\ref{far-main-theorem} conditions~\eqref{far-cond-ass-steady}--\eqref{far-cond-last} in the following way, where we set the accepted steady state-set to the one element set $s=\{\begin{bmatrix}0 & e_\bot\end{bmatrix}\}$. The algebra is helped by the general observation that for any $i$, the condition $\row_i(M) \succeq v$ with $\row_i(M)$ the $i^\text{th}$ row of matrix $M$ and $v$ some row vector, is equivalent to $M\succeq e_i\T v$ with $e_i$ the $i^\text{th}$ standard basis vector\footnote{This is why we asked that row vectors of matrices $M_f$ are standard basis vectors, Point~\ref{pt:basis} above.}.
 
-% A helpful property of standard basis vectors is: the condition $\row_i(M) \succeq v$ with $\row_i(M)$ the $i^\text{th}$ row of matrix $M$ and $v$ some row vector, is equivalent to $M\succeq e_i\T v$. We asked that row vectors of matrices $M_f$ are basis vectors (Point~\ref{pt:basis} above) because of this property as it crucially lets us re-express conditions \eqref{far-cond-ass-steady}--\eqref{far-cond-last} of Theorem~\ref{far-main-theorem} in the following way, where we 
+% A helpful property of standard basis vectors is: the condition $\row_i(M) \succeq v$ with $\row_i(M)$ the $i^\text{th}$ row of matrix $M$ and $v$ some row vector, is equivalent to $M\succeq e_i\T v$. We asked that row vectors of matrices $M_f$ are basis vectors (Point~\ref{pt:basis} above) because of this property as it crucially lets us re-express conditions \eqref{far-cond-ass-steady}--\eqref{far-cond-last} of Theorem~\ref{far-main-theorem} in the following way, where we
 
 
 \begin{align}
@@ -418,7 +420,7 @@ For a given left-hand side DFA with transition function $\delta$, the right-hand
 \end{lemma}
 \begin{proof}
 
-  First notice that (\ref{far-cond-ass-steady}'), (\ref{far-cond-halt}') and (\ref{far-cond-last}') have their right-hand side constant hence they only amount to constant lower bounds for matrices $R_0$ and $R_1$. Then note that, given any lower bound $B_0$ and $B_1$ for solutions of the system $R_0$ and $R_1$, we have  $\row_{\delta(i,b)}(M_f)^{\T} \row_i(M_t)R_b R_w \succeq \row_{\delta(i,b)}(M_f)^{\T} \row_i(M_t)B_b B_w$ by compatibility of $\succeq$ with the performed operations. Hence, iterating (\ref{far-cond-left}') produces an increasing, eventually stationary, sequence of lower bounds for $R_0$ and $R_1$ whose fixed point is solution to the system.
+  First notice that (\ref{far-cond-ass-steady}'), (\ref{far-cond-halt}') and (\ref{far-cond-last}') have their right-hand side constant (with respect to $R$) hence they only amount to constant lower bounds for matrices $R_0$ and $R_1$. Then note that, given any lower bound $B_0$ and $B_1$ for solutions of the system $R_0$ and $R_1$ \todo{Shawn's Comment: Does this just mean for any $B_0 \preceq R_0$ and $B_1 \preceq R_1$?}, we have  $\row_{\delta(i,b)}(M_f)^{\T} \row_i(M_t)R_b R_w \succeq \row_{\delta(i,b)}(M_f)^{\T} \row_i(M_t)B_b B_w$ by compatibility of $\succeq$ with the performed operations. Hence, iterating (\ref{far-cond-left}') produces an increasing, eventually stationary, sequence of lower bounds for $R_0$ and $R_1$ whose fixed point is solution to the system.
 \end{proof}
 
 
@@ -488,7 +490,7 @@ This efficient pruning technique completes the method, shown below as Algorithm 
 
 \subsection{Deterministic finite automata}
 \label{far-defs-dfa}
-Textbooks define \emph{deterministic} finite automata (on the binary alphabet, with acceptance unspecified) as tuples $(Q, \delta, q_0)$ of: a finite set $Q$ (states), a $q_0\in Q$ (initial state), and $\delta: Q\times\mathbf{2}\to Q$ (transition function).
+Textbooks define \emph{deterministic} finite automata (on the binary alphabet, with acceptance unspecified) as tuples $(Q, \delta, q_0)$ of: a finite set $Q$ (states), a $q_0\in Q$ (initial state), and $\delta: Q\times\{0, 1\}\to Q$ (transition function).
 Though NFAs generalize DFAs, they can be emulated by (exponentially larger) power-set DFAs. \cite{Sipser}
 
 To put this definition in the linear-algebraic framework:
@@ -506,13 +508,13 @@ When building a larger recognizer,
 we expect no benefit from considering DFAs which just relabel others or add unreachable states.
 So motivated, we define a canonical form for DFAs:
 enumerate the reachable states via breadth-first search from $q_0$,
-producing $f:[n]=\mathrel{\mathop:}Q_\textsf{cf}\to Q$.
+producing $f:[n]=\mathrel{\mathop:}Q_\textsf{cf}\to Q$.\todo{Shawn: What is $Q_{cf}$? I guess it's $Q$ in canonical form ... but that's the same set as $Q$, right? This is just a permutation of $[n]$?}
 Explicitly,
 $f(0)=q_0$ and $f(k)$ is the first of
 $\delta(f(0),0), \delta(f(0),1), \ldots, \delta(f(k-1),0), \delta(f(k-1),1)$ not in $f([k])$,
 valid until $f([k])$ is closed under transitions.
 This induces $\delta_\textsf{cf}(q,b)\mapsto f^{-1}(f(q), b)$.
-(Warning: this definition is not standard.)
+(Warning: this definition is not standard.)\todo{Shawn: What do you mean by not standard? Like there is a more common way to refer to canonical forms, but this one differs?}
 
 \begin{lemma}\normalfont
   \label{far-dfa-canonical form}
@@ -521,7 +523,7 @@ This induces $\delta_\textsf{cf}(q,b)\mapsto f^{-1}(f(q), b)$.
     \item it's in canonical form ($Q_\textsf{cf}\to Q$ is the identity)
           and ignores leading zeros (equation \eqref{far-cond-leading-0} or $\delta(0,0)=0$);
     \item its transition table includes each of $0,\ldots,n-1$, whose first appearances occur in order,
-          and with each $0 < q < n$ appearing before the $2q$ position in $\delta$;
+          and with each $0 < q < n$ appearing before the $2q$ position in the transition table;
     \item the sequence $\{m_k \mathrel{\mathop:}= \max\{\delta(q,b): 2q+b\le k\}\}_{k=0}^{2n-1}$ of cumulative maxima runs from $0$ to $n-1$ in steps of $0$ or $1$,
           with $m_{2q-1}\ge q$ for $0<q<n$.
   \end{enumerate}
@@ -547,7 +549,7 @@ This induces $\delta_\textsf{cf}(q,b)\mapsto f^{-1}(f(q), b)$.
 
 \begin{corollary}\normalfont
   $\{t_k\}_{k=0}^\ell$ ($\ell<2n$) is a prefix of a canonical, leading-zero-ignoring, $n$-state DFA transition table iff
-  $m_k \mathrel{\mathop:}= \max\{t_j\}_{j=0}^k$ runs from $0$ to $m_{\ell-1}<n$ in steps of $0$ or $1$, and $m_{2q-1}\ge q$ where defined.
+  $m_k \mathrel{\mathop:}= \max\{t_j\}_{j=0}^k$ runs from $0$ to $m_{\ell-1}<n$\todo{Shawn: Shouldn't this be to $m_\ell$? As in there should be something that transitions to the highest defined state (State $\ell$)?} in steps of $0$ or $1$, and $m_{2q-1}\ge q$ (for all $2q - 1 \le \ell$).
 \end{corollary}
 \begin{proof}
 If $\ell=2n-1$, $\{m_k\}$ grows to exactly $n-1$ (since $m_{2(n-1)-1}\ge n-1$), and lemma \ref{far-dfa-canonical form} applies.
