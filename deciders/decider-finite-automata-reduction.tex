@@ -416,7 +416,7 @@ For a given left-hand side DFA with transition function $\delta$, the right-hand
                                                  &                                                  & \text{if $(f,r) \to \bot$ is a halting transition of $\mathcal{M}$}
   \tag{\ref{far-cond-halt}'}
   \\
-  \forall b \in \mathbf{2}, \forall i\in[l]: R_r & \succeq
+  \forall b \in\{0,1\}, \forall i\in[l]: R_r & \succeq
   \row_{\delta(i,b)}(M_f)^{\T} \row_i(M_t)R_b R_w
                                                  &                                                  & \text{if $(f,r) \to (t,w,\text{left})$ is a transition of $\mathcal{M}$}
   \tag{\ref{far-cond-left}'}
@@ -515,7 +515,7 @@ As we did for transition matrices, extend $\delta$ to words: $\delta(q,\epsilon)
 
 Given a DFA on $[n]$, call its \emph{transition table} the list $(\delta(0,0),\delta(0,1),\ldots,\delta(n-1,0),\delta(n-1,1))$.
 
-Call $\{\delta(q_0,u): u\in\mathbf{2}^*\}$ the set of \emph{reachable} states.
+Call $\{\delta(q_0,u): u\in\{0,1\}^*\}$ the set of \emph{reachable} states.
 
 When building a larger recognizer,
 we expect no benefit from considering DFAs which just relabel others or add unreachable states.
@@ -619,10 +619,10 @@ The answer is yes, and we sketch the proof below.
 The following definitions and results aren't strictly required outside of this subsection, but they justify our choice to make the verification scheme of Remark~\ref{far-remark-verification} a standard for all verifiable CTL proofs.
 Indeed, they were the original motive for developing Algorithm~\ref{alg:finite-automata-reduction-direct}.
 
-Any closed language $\mathcal{L}$ classifies the binary words $w\in\mathbf{2}^*$ by Nerode congruence: $w\sim_\mathcal{L} w'$ if for every $z\in\{0,1,A,\ldots,E\}^*$, $wz\in\mathcal{L}\iff w'z\in\mathcal{L}$.
+Any closed language $\mathcal{L}$ classifies the binary words $w\in\{0,1\}^*$ by Nerode congruence: $w\sim_\mathcal{L} w'$ if for every $z\in\{0,1,A,\ldots,E\}^*$, $wz\in\mathcal{L}\iff w'z\in\mathcal{L}$.
 We may form a modified version of the Turing machine $\mathcal{M}$, herein called $\mathcal{M}/\sim_\mathcal{L}$, with the following semantics:
 
-A \textit{configuration} of $\mathcal{M}/\sim_\mathcal{L}$ is defined by the 3-tuple: (i) a state of $\mathcal{M}$, (ii) an equivalence class $[w]_{\sim_\mathcal{L}}$ of some $w\in\mathbf{2}^*$ representing the (strictly) left-of-head portion of the tape,  (iii) a finite word $w\in\mathbf{2}^*$, representing the remainder of the tape.
+A \textit{configuration} of $\mathcal{M}/\sim_\mathcal{L}$ is defined by the 3-tuple: (i) a state of $\mathcal{M}$, (ii) an equivalence class $[w]_{\sim_\mathcal{L}}$ of some $w\in\{0,1\}^*$ representing the (strictly) left-of-head portion of the tape,  (iii) a finite word $w\in\{0,1\}^*$, representing the remainder of the tape.
 We additionally define one distinct configuration, named $\bot$, which represents the machine in a halted state.
 
 Note that any finitely supported configuration $c$ of $\mathcal{M}$ maps to a configuration $[c]$ of $\mathcal{M}/\sim_{\mathcal{L}}$, by sending the left-of-head contents to their equivalence class modulo $\sim_\mathcal{L}$.
@@ -642,10 +642,10 @@ For that would imply a sequence $[c_0]\vdash_{\mathcal{M}/\sim_\mathcal{L}}\dots
 By the above, this would imply that $c_0$ has a word-representation in $\mathcal{L}$, contrary to assumption that $\mathcal{L}$ provides a CTL proof that $c_0\not\vdash^*_\mathcal{M}\bot$.
 
 We now seek to recover $\mathcal{L}$, or another regular language which leads to a CTL proof, by studying the halting problem of $\mathcal{M}/\sim_\mathcal{L}$.
-In fact, the work has been done already: observe that, just as any Turing machine $\mathcal{M}$ is equivalent to a PDA equipped with two stacks (corresponding to the strict left-hand side of the tape and the rest of it), the machine $\mathcal{M}/\sim_\mathcal{L}$ is equivalent to a  standard nondeterministic PDA. (The control-state space of the PDA to is simply $\mathbf{2}^*/\sim_\mathcal{L} \times \{A,\ldots,E\}$---which is a finite set by the Myhill-Nerode theorem. A transition of $\mathcal{M}/\sim_\mathcal{L}$ corresponding to a leftward TM transition pushes the written bit onto the stack. A transition of $\mathcal{M}/\sim_\mathcal{L}$ corresponding to a rightward TM transition pops the read bit off the stack.)
+In fact, the work has been done already: observe that, just as any Turing machine $\mathcal{M}$ is equivalent to a PDA equipped with two stacks (corresponding to the strict left-hand side of the tape and the rest of it), the machine $\mathcal{M}/\sim_\mathcal{L}$ is equivalent to a  standard nondeterministic PDA. (The control-state space of the PDA to is simply $\{0,1\}^*/\sim_\mathcal{L} \times \{A,\ldots,E\}$---which is a finite set by the Myhill-Nerode theorem. A transition of $\mathcal{M}/\sim_\mathcal{L}$ corresponding to a leftward TM transition pushes the written bit onto the stack. A transition of $\mathcal{M}/\sim_\mathcal{L}$ corresponding to a rightward TM transition pops the read bit off the stack.)
 The halting problem of a PDA is solved in  \cite{BEM_1997}: the eventually-halting configurations of any PDA are in fact described by a regular language, whose construction corresponds exactly to the procedure of \S\ref{far-algo-direct}.
 
-In summary: we may take the Myhill-Nerode DFA for the original language $\mathcal{L}$, restrict it to the alphabet $\mathbf{2}$, apply the construction from \S\ref{far-algo-direct} to obtain an NFA which recognizes precisely the halting configurations of $\mathcal{M}/\sim_\mathcal{L}$, and combine the DFA/NFA to form a recognizer for some closed language $\mathcal{L}'$ for $\mathcal{M}$; that is, it satisfies \eqref{far-cond-first}--\eqref{far-cond-last}. We also know that a language solving the halting problem of $\mathcal{M}/\sim_\mathcal{L}$ rejects its initial configuration, and so \eqref{far-cond-reject-start} is also satisfied and the constructed $\mathcal{L}'$ provides a CTL proof for $\mathcal{M}$.
+In summary: we may take the Myhill-Nerode DFA for the original language $\mathcal{L}$, restrict it to the alphabet $\{0,1\}$, apply the construction from \S\ref{far-algo-direct} to obtain an NFA which recognizes precisely the halting configurations of $\mathcal{M}/\sim_\mathcal{L}$, and combine the DFA/NFA to form a recognizer for some closed language $\mathcal{L}'$ for $\mathcal{M}$; that is, it satisfies \eqref{far-cond-first}--\eqref{far-cond-last}. We also know that a language solving the halting problem of $\mathcal{M}/\sim_\mathcal{L}$ rejects its initial configuration, and so \eqref{far-cond-reject-start} is also satisfied and the constructed $\mathcal{L}'$ provides a CTL proof for $\mathcal{M}$.
 
 % \subsection{Search algorithm \ts{II}: meet-in-the-middle DFA}
 % \label{far-algo-mtim_dfa}
@@ -709,7 +709,7 @@ In summary: we may take the Myhill-Nerode DFA for the original language $\mathca
 % Each one partitions its input into a family of regular languages (one per state).
 % Accounting for the head state/bit and right half-tape, we obtain $l\cdot 5\cdot 2\cdot d$ classes of TM configuration.
 % Propose a recognizer which distils this classification into a result.
-% We'll work out conditions for a good ``accepted'' set $A\subseteq[l]\times\{A,\ldots,E\}\times\mathbf{2}\times[d]$.
+% We'll work out conditions for a good ``accepted'' set $A\subseteq[l]\times\{A,\ldots,E\}\times\{0,1\}\times[d]$.
 % If they're satisfiable, even if we don't prove the scheme sound, we can feed the left DFA into Algorithm \ref{alg:finite-automata-reduction-direct} to check the result.
 
 % Despite the new setting, we can write out closure conditions analogous to \S\ref{far-defs-recognizer}'s, each $\forall i\in[l],j\in[d]$:
