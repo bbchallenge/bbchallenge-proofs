@@ -201,11 +201,11 @@ One important aspect of the technique is that, given a Turing machine and its co
   \centering
   \includegraphics*[scale=0.7]{FAR.pdf}
 
-  \caption{\tss{Reducing a machine (\url{https://bbchallenge.org/1RB0LD_1LC1RA_0RB0LC_---1LA}) to a finite automata problem.}{Halt-recognizing Nondeterministic Finite Automaton, constructed using the direct FAR algorithm (Section~\ref{far-algo-direct}), for a 4-state Turing machine\protect\footnotemark.}
-    (a) \tss{A space-time diagram of the machine, which runs forever as a ``counter''. Diagram rows depict \emph{non-halting} configurations.}{Space-time diagram showing the first few descendants of the all-0 configuration for the machine. The machine actually runs forever from the all-0 configuration, adopting a ``counting'' behavior.}
-    (b) With an alternate initial configuration, the machine halts \ts{after 18 steps}, so these rows depict \emph{\ts{eventually}-halting} configurations.
+  \caption{\small \jbs{Halt-recognizing}{A} Nondeterministic Finite Automaton, \jbs{constructed using the direct FAR algorithm (Section~\ref{far-algo-direct}), for}{used as follows to decide} a 4-state Turing machine\protect\footnotemark:
+    (a) Space-time diagram showing the first few descendants of the all-0 configuration for the machine. The machine actually runs forever from the all-0 configuration, adopting a ``counting'' behavior.
+    (b) The TM halts in 18 steps from a different configuration; these 18 rows depict \emph{eventually-halting} configurations.
     (c) Transition table for the TM.
-    (d) \ts{Halt-recognizing Nondeterministic Finite Automaton, constructed using the direct FAR algorithm (Section~\ref{far-algo-direct}), that recognises at least all eventually-halting configurations of the machine. For instance, inputting the top row of (\ref{fig:far_spacetime_halt}), encoded as word \texttt{000A01100} (see Definition~\ref{def:wordc}), the NFA transitions by reading each successive symbol of the input, through NFA states: 0, 0, 0A, 1B, \{0B, 1B\}, \{0A, 1A\}, \{$\bot$, 0B, 1B\}, \{$\bot$, 0B, 1A, 1B\} and finally \{$\bot$, 0B, 1A, 1B\}. Since NFA state $\bot$ is accepting (doubly circled in (\ref{fig:far_nfa})), the NFA accepts \texttt{000A01100}, classifying this configuration as eventually-halting. However, the NFA does not accept input \texttt{A0}, which corresponds to the all-0 configuration, hence this configuration is not eventually-halting: the machine does not halt from the all-0 configuration.}}
+    (d) \jbs{Halt-recognizing}{A} Nondeterministic Finite Automaton, constructed using the direct FAR algorithm (Section~\ref{far-algo-direct}), that recognises at least all eventually-halting configurations of the machine. For instance, inputting the top row of (b), encoded as word \texttt{000A01100} (see Definition~\ref{def:wordc}), the NFA transitions by reading each successive symbol of the input, through NFA states: 0, 0, 0A, 1B, \{0B, 1B\}, \{0A, 1A\}, \{$\bot$, 0B, 1B\}, \{$\bot$, 0B, 1A, 1B\} and finally \{$\bot$, 0B, 1A, 1B\}. Since NFA state $\bot$ is accepting (doubly circled in (d)), the NFA accepts \texttt{000A01100}, classifying this configuration as \jb{potentially} eventually-halting. However, the NFA does not accept input \texttt{A0}, which corresponds to the all-0 configuration, hence \jbs{this configuration is not eventually-halting: the machine does not halt from the all-0 configuration}{this TM cannot halt from there}.}
 
 
 
@@ -214,7 +214,7 @@ One important aspect of the technique is that, given a Turing machine and its co
 
 \footnotetext{\url{https://bbchallenge.org/1RB0LD_1LC1RA_0RB0LC_---1LA}}
 
-\subsection{Halt-recognizing automata}
+\subsection{\jb{Potential-}Halt-recognizing automata}
 \newcommand{\M}{\mathcal{M}}
 \newcommand{\T}{^T}
 \newcommand{\row}{\text{row}}
@@ -247,7 +247,7 @@ Now, we describe how we transform Turing machine configurations that have finite
 \end{definition}
 
 \begin{example}\normalfont
-  A word-representation of the configuration depicted in Figure~\ref{fig:far_scan} is $\hat{c} = \texttt{00A001100}$.
+  A word-representation of the configuration depicted in Figure~\ref{fig:finite-automata-reduction}(d) is $\hat{c} = \texttt{00A001100}$.
 \end{example}
 
 \todo{Shawn: I think it would be helpful here to explain how we are applying our general NFA description above to this specific TM config identification application. For example, what is $\mathcal{A}$? I think $\mathcal{A} = \{0, 1\} \sqcup \{A, B, C, D, E\}$ i.e. the disjoint union of all tape symbols and all tape states.}
@@ -383,7 +383,7 @@ We design an efficient search algorithm for Theorem~\ref{far-main-theorem} that 
 \end{enumerate}
 
 \begin{example}\normalfont
-  The structure described above is followed by the NFA depicted in Figure~\ref{fig:far_nfa}. Note that, following above Point~\ref{pt:injective}, it is natural to name states in the right-hand side NFA by prepending left-hand side DFA states to the transitions' TM state letter, e.g. state 1C in Figure~\ref{fig:far_nfa} is reached from DFA state 1 after reading TM state letter C.
+  The structure described above is followed by the NFA depicted in Figure~\ref{fig:finite-automata-reduction}. Note that, following above Point~\ref{pt:injective}, it is natural to name states in the right-hand side NFA by prepending left-hand side DFA states to the transitions' TM state letter, e.g. state 1C in Figure~\ref{fig:finite-automata-reduction} is reached from DFA state 1 after reading TM state letter C.
 \end{example}
 
 This structure might seem arbitrary but it has a very nice property that we demonstrate here: once the left-hand side DFA is chosen, there is at most one right-hand side NFA (minimal for $\succeq$) such that the overall NFA satisfies Theorem~\ref{far-main-theorem}.
