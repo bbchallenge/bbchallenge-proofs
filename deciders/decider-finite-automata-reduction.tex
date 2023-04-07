@@ -71,133 +71,134 @@ One important aspect of the technique is that, given a Turing machine and its co
 \end{figure}
 
 \begin{figure}
-  \centering
-  \begin{subfigure}[m]{0.13\textwidth}
-    \centering
-    \includegraphics[width=\textwidth]{space-time-diagrams/finite-automata-reduction-counter4.pdf}
-    \caption{First few descendants of \tss{a 4-state TM's}{the initial all-0 configuration for the machine given in (\ref{fig:far_transitions})}.}
-    \label{fig:far_spacetime}
-  \end{subfigure}
-  \hfill
-  \parbox{0.2\textwidth}{
-    \begin{subfigure}[t]{0.22\textwidth}
-      \centering
-      \includegraphics[width=\textwidth]{space-time-diagrams/finite-automata-reduction-counter4-halt.pdf}
-      \caption{\tss{The same TM halts in these configurations.}{Some  eventually-halting successive configurations of the machine given in (\ref{fig:far_transitions}): the machine halts after 18 steps by reading a 0 in state D.}}
-      \label{fig:far_spacetime_halt}
-    \end{subfigure}
-    \vspace{0.23\textheight}
 
-    \begin{subfigure}[t]{0.2\textwidth}
-      \centering
-      \begin{tabular}{lll}
-                              & 0                       & 1                       \\
-        \textcolor{colorA}{A} & 1R\textcolor{colorB}{B} & 0L\textcolor{colorD}{D} \\
-        \textcolor{colorB}{B} & 1L\textcolor{colorC}{C} & 1R\textcolor{colorA}{A} \\
-        \textcolor{colorC}{C} & 0R\textcolor{colorB}{B} & 0L\textcolor{colorC}{C} \\
-        \textcolor{colorD}{D} & - - -                   & 1L\textcolor{colorA}{A} \\
-      \end{tabular}
-      \caption{Transition table.}
-      \label{fig:far_transitions}
-    \end{subfigure}
-  }
-  \hfill
-  \begin{subfigure}[m]{0.62\textwidth}
-    \begin{tikzpicture}[shorten >=1pt]
-      \node[state,initial above] (0) at (-2, 2) {0};
-      \node[state]           (1) at (-2, -2) {1};
-      \node[state,accepting] (H) at (2, 4) {$\bot$};
-      \node[state]           (0A) at (0, 2) {0A};
-      \node[state,accepting] (0D) at (4, 2) {0D};
-      \node[state]           (0B) at (2, 0) {0B};
-      \node[state]           (0C) at (4, 0) {0C};
-      \node[state]           (1C) at (2, -2.5) {1C};
-      \node[state]           (1B) at (0, -4) {1B};
-      \node[state]           (1A) at (4, -4) {1A};
-      \node[state,accepting] (1D) at (5.5, -2) {1D};
+  % \begin{subfigure}[m]{0.13\textwidth}
+  %   \centering
+  %   \includegraphics[width=\textwidth]{space-time-diagrams/finite-automata-reduction-counter4.pdf}
+  %   \caption{First few descendants of \tss{a 4-state TM's}{the initial all-0 configuration for the machine given in (\ref{fig:far_transitions})}.}
+  %   \label{fig:far_spacetime}
+  % \end{subfigure}
+  % \hfill
+  % \parbox{0.2\textwidth}{
+  %   \begin{subfigure}[t]{0.22\textwidth}
+  %     \centering
+  %     \includegraphics[width=\textwidth]{space-time-diagrams/finite-automata-reduction-counter4-halt.pdf}
+  %     \caption{\tss{The same TM halts in these configurations.}{Some  eventually-halting successive configurations of the machine given in (\ref{fig:far_transitions}): the machine halts after 18 steps by reading a 0 in state D.}}
+  %     \label{fig:far_spacetime_halt}
+  %   \end{subfigure}
+  %   \vspace{0.23\textheight}
 
-      \path[->]  (0)  edge [loop right]       node {$0$} (0)
-      edge                    node [right] {$1$} (1)
-      (1)  edge [bend left=15]     node [above left] {$0|1$} (0)
-      (0A) edge                    node [right] {$0$} (1B)
-      edge                    node [above,rotate=60] {$1$} (H)
-      (0C) edge                    node [above] {$0$} (0B)
-      edge                    node [right] {$1$} (1A)
-      (0D) edge                    node [above,rotate=300] {$0$} (H)
-      edge                    node [above] {$1$} (0A)
-      edge [bend left]        node [left] {$1$} (1A)
-      (1A) edge                    node [above] {$1$} (1B)
-      (1A) edge [bend right=15]    node [above,rotate=300] {$0|1$} (0B)
-      (0B) edge [bend right=5]     node [above,rotate=300] {$0|1$} (1A)
-      (1B) edge                    node [above right,rotate=60] {$0$} (0B)
-      edge [loop left]        node {$0$} (1B)
-      edge [bend left]        node [right] {$1$} (0A)
-      (1C) edge                    node [above right,rotate=270] {$0|1$} (0B)
-      (1D) edge [bend right=48]    node [below,rotate=300] {$0|1$} (H)
-      (H)  edge [loop above]       node {$0|1$} (H)
-      (0)  edge [dotted,bend left] node {\textcolor{colorA}{A}} (0A)
-      edge [dotted]           node [left] {\textcolor{colorB}{B}} (0B)
-      edge [dotted]           node {\textcolor{colorC}{C}} (0C)
-      edge [dotted,bend left] node [right] {\textcolor{colorD}{D}} (0D)
-      (1)  edge [dotted]           node {\textcolor{colorB}{B}} (1B)
-      edge [dotted]           node {\textcolor{colorA}{A}} (1A)
-      edge [dotted]           node [left] {\textcolor{colorC}{C}} (1C)
-      edge [dotted]           node [left] {\textcolor{colorD}{D}} (1D);
-    \end{tikzpicture}
-    \caption[Caption for figure]{Diagram of a Nondeterministic Finite Automaton\ts{, constructed using the direct FAR algorithm (Section~\ref{far-algo-direct}),} recognizing at least all \tss{rows of (\ref{fig:far_spacetime_halt}) but none of (\ref{fig:far_spacetime})}{eventually-halting configurations of the machine given in (\ref{fig:far_transitions}). For instance, it recognises all rows of (\ref{fig:far_spacetime_halt}). However, it recognises no rows of (\ref{fig:far_spacetime}), hence the machine does not halt from the all-0 configuration.}}
-    \label{fig:far_nfa}
-  \end{subfigure}
-  \bigskip
+  %   \begin{subfigure}[t]{0.2\textwidth}
+  %     \centering
+  %     \begin{tabular}{lll}
+  %                             & 0                       & 1                       \\
+  %       \textcolor{colorA}{A} & 1R\textcolor{colorB}{B} & 0L\textcolor{colorD}{D} \\
+  %       \textcolor{colorB}{B} & 1L\textcolor{colorC}{C} & 1R\textcolor{colorA}{A} \\
+  %       \textcolor{colorC}{C} & 0R\textcolor{colorB}{B} & 0L\textcolor{colorC}{C} \\
+  %       \textcolor{colorD}{D} & - - -                   & 1L\textcolor{colorA}{A} \\
+  %     \end{tabular}
+  %     \caption{Transition table.}
+  %     \label{fig:far_transitions}
+  %   \end{subfigure}
+  % }
+  % \hfill
+  % \begin{subfigure}[m]{0.62\textwidth}
+  %   \begin{tikzpicture}[shorten >=1pt]
+  %     \node[state,initial above] (0) at (-2, 2) {0};
+  %     \node[state]           (1) at (-2, -2) {1};
+  %     \node[state,accepting] (H) at (2, 4) {$\bot$};
+  %     \node[state]           (0A) at (0, 2) {0A};
+  %     \node[state,accepting] (0D) at (4, 2) {0D};
+  %     \node[state]           (0B) at (2, 0) {0B};
+  %     \node[state]           (0C) at (4, 0) {0C};
+  %     \node[state]           (1C) at (2, -2.5) {1C};
+  %     \node[state]           (1B) at (0, -4) {1B};
+  %     \node[state]           (1A) at (4, -4) {1A};
+  %     \node[state,accepting] (1D) at (5.5, -2) {1D};
 
-  \begin{subfigure}{\textwidth}
-    \usetikzlibrary{chains,fit,shapes}
-    \begin{tikzpicture}
-      \tikzstyle{tmtape}=[draw,minimum size=15mm]
-      \tikzstyle{tmhead}=[arrow box,draw,minimum size=10mm,arrow box arrows={east:3mm, west:3mm},minimum height=5mm]
-      \tikzstyle{fastate}=[draw,minimum size=10mm,minimum height=64pt]
-      \begin{scope}[start chain=1 going right,node distance=0]
-        \node [on chain=1,tmtape,draw=none] (--) {Configuration: \dots};
-        \node [on chain=1,tmtape] (-2) {\textbf{0}};
-        \node [on chain=1,tmtape] (-1) {\textbf{0}};
-        \node [on chain=1,tmtape] (-0) {\textbf{0}};
-        \node [on chain=1,tmtape] (+1) {\textbf{0}};
-        \node [on chain=1,tmtape] (+2) {\textbf{1}};
-        \node [on chain=1,tmtape] (+3) {\textbf{1}};
-        \node [on chain=1,tmtape] (+4) {\textbf{0}};
-        \node [on chain=1,tmtape] (+5) {\textbf{0}};
-        \node [on chain=1,tmtape,draw=none] (++) {$\dots$};
-      \end{scope}
-      \node [tmhead,yshift=-3mm] at (-0.south) (+0) {\textcolor{colorA}{A}};
+  %     \path[->]  (0)  edge [loop right]       node {$0$} (0)
+  %     edge                    node [right] {$1$} (1)
+  %     (1)  edge [bend left=15]     node [above left] {$0|1$} (0)
+  %     (0A) edge                    node [right] {$0$} (1B)
+  %     edge                    node [above,rotate=60] {$1$} (H)
+  %     (0C) edge                    node [above] {$0$} (0B)
+  %     edge                    node [right] {$1$} (1A)
+  %     (0D) edge                    node [above,rotate=300] {$0$} (H)
+  %     edge                    node [above] {$1$} (0A)
+  %     edge [bend left]        node [left] {$1$} (1A)
+  %     (1A) edge                    node [above] {$1$} (1B)
+  %     (1A) edge [bend right=15]    node [above,rotate=300] {$0|1$} (0B)
+  %     (0B) edge [bend right=5]     node [above,rotate=300] {$0|1$} (1A)
+  %     (1B) edge                    node [above right,rotate=60] {$0$} (0B)
+  %     edge [loop left]        node {$0$} (1B)
+  %     edge [bend left]        node [right] {$1$} (0A)
+  %     (1C) edge                    node [above right,rotate=270] {$0|1$} (0B)
+  %     (1D) edge [bend right=48]    node [below,rotate=300] {$0|1$} (H)
+  %     (H)  edge [loop above]       node {$0|1$} (H)
+  %     (0)  edge [dotted,bend left] node {\textcolor{colorA}{A}} (0A)
+  %     edge [dotted]           node [left] {\textcolor{colorB}{B}} (0B)
+  %     edge [dotted]           node {\textcolor{colorC}{C}} (0C)
+  %     edge [dotted,bend left] node [right] {\textcolor{colorD}{D}} (0D)
+  %     (1)  edge [dotted]           node {\textcolor{colorB}{B}} (1B)
+  %     edge [dotted]           node {\textcolor{colorA}{A}} (1A)
+  %     edge [dotted]           node [left] {\textcolor{colorC}{C}} (1C)
+  %     edge [dotted]           node [left] {\textcolor{colorD}{D}} (1D);
+  %   \end{tikzpicture}
+  %   \caption[Caption for figure]{Diagram of a Nondeterministic Finite Automaton\ts{, constructed using the direct FAR algorithm (Section~\ref{far-algo-direct}),} recognizing at least all \tss{rows of (\ref{fig:far_spacetime_halt}) but none of (\ref{fig:far_spacetime})}{eventually-halting configurations of the machine given in (\ref{fig:far_transitions}). For instance, it recognises all rows of (\ref{fig:far_spacetime_halt}). However, it recognises no rows of (\ref{fig:far_spacetime}), hence the machine does not halt from the all-0 configuration.}}
+  %   \label{fig:far_nfa}
+  % \end{subfigure}
+  % \bigskip
 
-      \begin{scope}[start chain=2 going right,node distance=5mm]
-        \node [on chain=2,fastate,draw=none,below=of --,xshift=-.5cm,yshift=-5mm] (a--) {Scan: \dots};
-        \node [on chain=2,fastate] (a-2) {0};
-        \node [on chain=2,fastate] (a-1) {0};
-        \node [on chain=2,fastate,minimum height=24pt,yshift=-18pt] (a-0) {0A};
-        \node [above=of a-0,fastate,minimum height=24pt] (a+0) {1B};
-        \node [on chain=2,fastate,yshift=18pt] (a+1) {$\begin{aligned}&\textrm{0B}\\|&\textrm{1B}\end{aligned}$};
-        \node [on chain=2,fastate] (a+2) {$\begin{aligned}&\textrm{0A}\\|&\textrm{1A}\end{aligned}$};
-        \node [on chain=2,fastate] (a+3) {$\begin{aligned}&\bot\\|&\textrm{0B}\\|&\textrm{1B}\end{aligned}$};
-        \node [on chain=2,fastate] (a+4) {$\begin{aligned}&\bot\\|&\textrm{0B}\\|&\textrm{1A}\\|&\textrm{1B}\end{aligned}$};
-        \node [on chain=2,fastate] (a+5) {$\begin{aligned}&\bot\\|&\textrm{0B}\\|&\textrm{1A}\\|&\textrm{1B}\end{aligned}$};
-        \node [on chain=2,fastate,draw=none] (a++) {$\dots$};
-      \end{scope}
+  % \begin{subfigure}{\textwidth}
+  %   \usetikzlibrary{chains,fit,shapes}
+  %   \begin{tikzpicture}
+  %     \tikzstyle{tmtape}=[draw,minimum size=15mm]
+  %     \tikzstyle{tmhead}=[arrow box,draw,minimum size=10mm,arrow box arrows={east:3mm, west:3mm},minimum height=5mm]
+  %     \tikzstyle{fastate}=[draw,minimum size=10mm,minimum height=64pt]
+  %     \begin{scope}[start chain=1 going right,node distance=0]
+  %       \node [on chain=1,tmtape,draw=none] (--) {Configuration: \dots};
+  %       \node [on chain=1,tmtape] (-2) {\textbf{0}};
+  %       \node [on chain=1,tmtape] (-1) {\textbf{0}};
+  %       \node [on chain=1,tmtape] (-0) {\textbf{0}};
+  %       \node [on chain=1,tmtape] (+1) {\textbf{0}};
+  %       \node [on chain=1,tmtape] (+2) {\textbf{1}};
+  %       \node [on chain=1,tmtape] (+3) {\textbf{1}};
+  %       \node [on chain=1,tmtape] (+4) {\textbf{0}};
+  %       \node [on chain=1,tmtape] (+5) {\textbf{0}};
+  %       \node [on chain=1,tmtape,draw=none] (++) {$\dots$};
+  %     \end{scope}
+  %     \node [tmhead,yshift=-3mm] at (-0.south) (+0) {\textcolor{colorA}{A}};
 
-      \path (a--) edge node [above] {$\boldsymbol{0}$} (a-2)
-      (a-2) edge node [above] {\textbf{0}} (a-1)
-      (a-1) edge node [above] {\textbf{A}} (a-0)
-      (a-0) edge node [right] {\textbf{0}} (a+0)
-      (a+0) edge node [above] {\textbf{0}} (a+1)
-      (a+1) edge node [above] {\textbf{1}} (a+2)
-      (a+2) edge node [above] {\textbf{1}} (a+3)
-      (a+3) edge node [above] {\textbf{0}} (a+4)
-      (a+4) edge node [above] {\textbf{0}} (a+5)
-      (a+5) edge                    (a++);
-    \end{tikzpicture}
-    \caption{\tss{An NFA with transitions (\ref{fig:far_nfa}), scanning the top row of (\ref{fig:far_spacetime_halt}), stays in ``accepted'' state
-        $\bot|\textrm{0B}|\textrm{1A}|\textrm{1B}$.}{oo}}
-    \label{fig:far_scan}
-  \end{subfigure}
+  %     \begin{scope}[start chain=2 going right,node distance=5mm]
+  %       \node [on chain=2,fastate,draw=none,below=of --,xshift=-.5cm,yshift=-5mm] (a--) {Scan: \dots};
+  %       \node [on chain=2,fastate] (a-2) {0};
+  %       \node [on chain=2,fastate] (a-1) {0};
+  %       \node [on chain=2,fastate,minimum height=24pt,yshift=-18pt] (a-0) {0A};
+  %       \node [above=of a-0,fastate,minimum height=24pt] (a+0) {1B};
+  %       \node [on chain=2,fastate,yshift=18pt] (a+1) {$\begin{aligned}&\textrm{0B}\\|&\textrm{1B}\end{aligned}$};
+  %       \node [on chain=2,fastate] (a+2) {$\begin{aligned}&\textrm{0A}\\|&\textrm{1A}\end{aligned}$};
+  %       \node [on chain=2,fastate] (a+3) {$\begin{aligned}&\bot\\|&\textrm{0B}\\|&\textrm{1B}\end{aligned}$};
+  %       \node [on chain=2,fastate] (a+4) {$\begin{aligned}&\bot\\|&\textrm{0B}\\|&\textrm{1A}\\|&\textrm{1B}\end{aligned}$};
+  %       \node [on chain=2,fastate] (a+5) {$\begin{aligned}&\bot\\|&\textrm{0B}\\|&\textrm{1A}\\|&\textrm{1B}\end{aligned}$};
+  %       \node [on chain=2,fastate,draw=none] (a++) {$\dots$};
+  %     \end{scope}
+
+  %     \path (a--) edge node [above] {$\boldsymbol{0}$} (a-2)
+  %     (a-2) edge node [above] {\textbf{0}} (a-1)
+  %     (a-1) edge node [above] {\textbf{A}} (a-0)
+  %     (a-0) edge node [right] {\textbf{0}} (a+0)
+  %     (a+0) edge node [above] {\textbf{0}} (a+1)
+  %     (a+1) edge node [above] {\textbf{1}} (a+2)
+  %     (a+2) edge node [above] {\textbf{1}} (a+3)
+  %     (a+3) edge node [above] {\textbf{0}} (a+4)
+  %     (a+4) edge node [above] {\textbf{0}} (a+5)
+  %     (a+5) edge                    (a++);
+  %   \end{tikzpicture}
+  %   \caption{\tss{An NFA with transitions (\ref{fig:far_nfa}), scanning the top row of (\ref{fig:far_spacetime_halt}), stays in ``accepted'' state
+  %       $\bot|\textrm{0B}|\textrm{1A}|\textrm{1B}$.}{oo}}
+  %   \label{fig:far_scan}
+  % \end{subfigure}
+  \includegraphics*[scale=0.7]{FAR.pdf}
 
   \caption{\tss{Reducing a machine (\url{https://bbchallenge.org/1RB0LD_1LC1RA_0RB0LC_---1LA}) to a finite automata problem.}{Halt-recognizing Nondeterministic Finite Automaton, constructed using the direct FAR algorithm (Section~\ref{far-algo-direct}), for a 4-state Turing machine\protect\footnotemark.}
     (a) \tss{A space-time diagram of the machine, which runs forever as a ``counter''. Diagram rows depict \emph{non-halting} configurations.}{Space-time diagram showing the first few descendants of the all-0 configuration for the machine. The machine actually runs forever from the all-0 configuration, adopting a ``counting'' behavior.}
