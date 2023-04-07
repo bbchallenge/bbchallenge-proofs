@@ -250,8 +250,6 @@ Now, we describe how we transform Turing machine configurations that have finite
   A word-representation of the configuration depicted in Figure~\ref{fig:finite-automata-reduction}(d) is $\hat{c} = \texttt{00A001100}$.
 \end{example}
 
-\todo{Shawn: I think it would be helpful here to explain how we are applying our general NFA description above to this specific TM config identification application. For example, what is $\mathcal{A}$? I think $\mathcal{A} = \{0, 1\} \sqcup \{A, B, C, D, E\}$ i.e. the disjoint union of all tape symbols and all tape states.}
-
 Note that two word-representations of the same configuration will only differ in the number of leading and trailing 0s that they have. Hence, if $\mathcal{L}$ is the regular language of the NFA that we wish to construct to recognise the eventually-halting configurations of a given TM, it is natural that we ask the following:
 \begin{align*}
   u \in \mathcal{L} \iff 0u \in \mathcal{L} &  & \text{(leading zeros ignored)}
