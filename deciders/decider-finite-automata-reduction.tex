@@ -30,6 +30,47 @@ One important aspect of the technique is that, given a Turing machine and its co
 \usetikzlibrary {automata, positioning}
 
 \begin{figure}
+  \begin{center}
+    \begin{tikzpicture}[scale=0.2]
+      \tikzstyle{every node}+=[inner sep=0pt]
+      \draw [black] (32.4,-20.7) circle (3);
+      \draw (32.4,-20.7) node {$X$};
+      \draw [black] (19.9,-32.9) circle (3);
+      \draw (19.9,-32.9) node {$Y$};
+      \draw [black] (43.9,-32.9) circle (3);
+      \draw (43.9,-32.9) node {$Z$};
+      \draw [black] (43.9,-32.9) circle (2.4);
+      \draw [black] (12.2,-32.9) -- (16.9,-32.9);
+      \fill [black] (16.9,-32.9) -- (16.1,-32.4) -- (16.1,-33.4);
+      \draw [black] (32.4,-13.6) -- (32.4,-17.7);
+      \fill [black] (32.4,-17.7) -- (32.9,-16.9) -- (31.9,-16.9);
+      \draw [black] (31.917,-23.654) arc (-16.01031:-75.38142:12.771);
+      \fill [black] (31.92,-23.65) -- (31.22,-24.28) -- (32.18,-24.56);
+      \draw (29.58,-29.75) node [below] {$\alpha$};
+      \draw [black] (20.894,-35.718) arc (47.15723:-240.84277:2.25);
+      \draw (18.84,-40.19) node [below] {$\alpha$};
+      \fill [black] (18.27,-35.4) -- (17.36,-35.65) -- (18.09,-36.33);
+      \draw [black] (20.283,-29.932) arc (165.64786:102.96041:12.277);
+      \fill [black] (29.42,-21.01) -- (28.53,-20.7) -- (28.76,-21.68);
+      \draw (22.58,-23.71) node [above] {$\beta$};
+      \draw [black] (34.46,-22.88) -- (41.84,-30.72);
+      \fill [black] (41.84,-30.72) -- (41.66,-29.79) -- (40.93,-30.48);
+      \draw (37.62,-28.27) node [left] {$\beta$};
+      \draw [black] (34.454,-18.529) arc (164.32314:-123.67686:2.25);
+      \draw (39.49,-17.55) node [right] {$\beta$};
+      \fill [black] (35.37,-21.01) -- (36.01,-21.71) -- (36.28,-20.74);
+      \draw [black] (45.807,-35.201) arc (67.3925:-220.6075:2.25);
+      \draw (46.66,-40.1) node [below] {$\alpha,\beta$};
+      \fill [black] (43.23,-35.81) -- (42.47,-36.36) -- (43.39,-36.74);
+      \draw [black] (41.27,-34.338) arc (-65.18014:-114.81986:22.321);
+      \fill [black] (22.53,-34.34) -- (23.05,-35.13) -- (23.47,-34.22);
+      \draw (31.9,-36.9) node [below] {$\alpha$};
+    \end{tikzpicture}
+  \end{center}
+  \caption{Example Nondeterministic Finite Automaton (NFA) with 3 states X,Y and Z, alphabet $\mathcal{A} = \{\alpha,\beta\}$, initial states X and Y, and accepting state Z. The linear-algebra representation of this NFA is given in Example~\ref{ex:nfa}. Example accepted words are: $\beta$, $\alpha\beta$, $\alpha\alpha\beta\beta$. Example rejected words are: $\alpha$, $\alpha\alpha$, $\alpha\alpha\alpha$.}\label{fig:example_nfa}
+\end{figure}
+
+\begin{figure}
   \centering
   \begin{subfigure}[m]{0.13\textwidth}
     \centering
@@ -106,57 +147,57 @@ One important aspect of the technique is that, given a Turing machine and its co
     \caption[Caption for figure]{Diagram of a Nondeterministic Finite Automaton\ts{, constructed using the direct FAR algorithm (Section~\ref{far-algo-direct}),} recognizing at least all \tss{rows of (\ref{fig:far_spacetime_halt}) but none of (\ref{fig:far_spacetime})}{eventually-halting configurations of the machine given in (\ref{fig:far_transitions}). For instance, it recognises all rows of (\ref{fig:far_spacetime_halt}). However, it recognises no rows of (\ref{fig:far_spacetime}), hence the machine does not halt from the all-0 configuration.}}
     \label{fig:far_nfa}
   \end{subfigure}
-  %\bigskip
+  \bigskip
 
-  % \begin{subfigure}{\textwidth}
-  %   \usetikzlibrary{chains,fit,shapes}
-  %   \begin{tikzpicture}
-  %     \tikzstyle{tmtape}=[draw,minimum size=15mm]
-  %     \tikzstyle{tmhead}=[arrow box,draw,minimum size=10mm,arrow box arrows={east:3mm, west:3mm},minimum height=5mm]
-  %     \tikzstyle{fastate}=[draw,minimum size=10mm,minimum height=64pt]
-  %     \begin{scope}[start chain=1 going right,node distance=0]
-  %       \node [on chain=1,tmtape,draw=none] (--) {Configuration: \dots};
-  %       \node [on chain=1,tmtape] (-2) {0};
-  %       \node [on chain=1,tmtape] (-1) {0};
-  %       \node [on chain=1,tmtape] (-0) {0};
-  %       \node [on chain=1,tmtape] (+1) {0};
-  %       \node [on chain=1,tmtape] (+2) {1};
-  %       \node [on chain=1,tmtape] (+3) {1};
-  %       \node [on chain=1,tmtape] (+4) {0};
-  %       \node [on chain=1,tmtape] (+5) {0};
-  %       \node [on chain=1,tmtape,draw=none] (++) {$\dots$};
-  %     \end{scope}
-  %     \node [tmhead,yshift=-3mm] at (-0.south) (+0) {\textcolor{colorA}{A}};
+  \begin{subfigure}{\textwidth}
+    \usetikzlibrary{chains,fit,shapes}
+    \begin{tikzpicture}
+      \tikzstyle{tmtape}=[draw,minimum size=15mm]
+      \tikzstyle{tmhead}=[arrow box,draw,minimum size=10mm,arrow box arrows={east:3mm, west:3mm},minimum height=5mm]
+      \tikzstyle{fastate}=[draw,minimum size=10mm,minimum height=64pt]
+      \begin{scope}[start chain=1 going right,node distance=0]
+        \node [on chain=1,tmtape,draw=none] (--) {Configuration: \dots};
+        \node [on chain=1,tmtape] (-2) {\textbf{0}};
+        \node [on chain=1,tmtape] (-1) {\textbf{0}};
+        \node [on chain=1,tmtape] (-0) {\textbf{0}};
+        \node [on chain=1,tmtape] (+1) {\textbf{0}};
+        \node [on chain=1,tmtape] (+2) {\textbf{1}};
+        \node [on chain=1,tmtape] (+3) {\textbf{1}};
+        \node [on chain=1,tmtape] (+4) {\textbf{0}};
+        \node [on chain=1,tmtape] (+5) {\textbf{0}};
+        \node [on chain=1,tmtape,draw=none] (++) {$\dots$};
+      \end{scope}
+      \node [tmhead,yshift=-3mm] at (-0.south) (+0) {\textcolor{colorA}{A}};
 
-  %     \begin{scope}[start chain=2 going right,node distance=5mm]
-  %       \node [on chain=2,fastate,draw=none,below=of --,xshift=-.5cm,yshift=-5mm] (a--) {Scan: \dots};
-  %       \node [on chain=2,fastate] (a-2) {0};
-  %       \node [on chain=2,fastate] (a-1) {0};
-  %       \node [on chain=2,fastate,minimum height=24pt,yshift=-18pt] (a-0) {0A};
-  %       \node [above=of a-0,fastate,minimum height=24pt] (a+0) {1B};
-  %       \node [on chain=2,fastate,yshift=18pt] (a+1) {$\begin{aligned}&\textrm{0B}\\|&\textrm{1B}\end{aligned}$};
-  %       \node [on chain=2,fastate] (a+2) {$\begin{aligned}&\textrm{0A}\\|&\textrm{1A}\end{aligned}$};
-  %       \node [on chain=2,fastate] (a+3) {$\begin{aligned}&\bot\\|&\textrm{0B}\\|&\textrm{1B}\end{aligned}$};
-  %       \node [on chain=2,fastate] (a+4) {$\begin{aligned}&\bot\\|&\textrm{0B}\\|&\textrm{1A}\\|&\textrm{1B}\end{aligned}$};
-  %       \node [on chain=2,fastate] (a+5) {$\begin{aligned}&\bot\\|&\textrm{0B}\\|&\textrm{1A}\\|&\textrm{1B}\end{aligned}$};
-  %       \node [on chain=2,fastate,draw=none] (a++) {$\dots$};
-  %     \end{scope}
+      \begin{scope}[start chain=2 going right,node distance=5mm]
+        \node [on chain=2,fastate,draw=none,below=of --,xshift=-.5cm,yshift=-5mm] (a--) {Scan: \dots};
+        \node [on chain=2,fastate] (a-2) {0};
+        \node [on chain=2,fastate] (a-1) {0};
+        \node [on chain=2,fastate,minimum height=24pt,yshift=-18pt] (a-0) {0A};
+        \node [above=of a-0,fastate,minimum height=24pt] (a+0) {1B};
+        \node [on chain=2,fastate,yshift=18pt] (a+1) {$\begin{aligned}&\textrm{0B}\\|&\textrm{1B}\end{aligned}$};
+        \node [on chain=2,fastate] (a+2) {$\begin{aligned}&\textrm{0A}\\|&\textrm{1A}\end{aligned}$};
+        \node [on chain=2,fastate] (a+3) {$\begin{aligned}&\bot\\|&\textrm{0B}\\|&\textrm{1B}\end{aligned}$};
+        \node [on chain=2,fastate] (a+4) {$\begin{aligned}&\bot\\|&\textrm{0B}\\|&\textrm{1A}\\|&\textrm{1B}\end{aligned}$};
+        \node [on chain=2,fastate] (a+5) {$\begin{aligned}&\bot\\|&\textrm{0B}\\|&\textrm{1A}\\|&\textrm{1B}\end{aligned}$};
+        \node [on chain=2,fastate,draw=none] (a++) {$\dots$};
+      \end{scope}
 
-  %     \path (a--) edge node [above] {$0$} (a-2)
-  %     (a-2) edge node [above] {$0$} (a-1)
-  %     (a-1) edge node [above] {$A$} (a-0)
-  %     (a-0) edge node [right] {$0$} (a+0)
-  %     (a+0) edge node [above] {$0$} (a+1)
-  %     (a+1) edge node [above] {$1$} (a+2)
-  %     (a+2) edge node [above] {$1$} (a+3)
-  %     (a+3) edge node [above] {$0$} (a+4)
-  %     (a+4) edge node [above] {$0$} (a+5)
-  %     (a+5) edge                    (a++);
-  %   \end{tikzpicture}
-  %   \caption{\tss{An NFA with transitions (\ref{fig:far_nfa}), scanning the top row of (\ref{fig:far_spacetime_halt}), stays in ``accepted'' state
-  %       $\bot|\textrm{0B}|\textrm{1A}|\textrm{1B}$.}{oo}}
-  %   \label{fig:far_scan}
-  % \end{subfigure}
+      \path (a--) edge node [above] {$\boldsymbol{0}$} (a-2)
+      (a-2) edge node [above] {\textbf{0}} (a-1)
+      (a-1) edge node [above] {\textbf{A}} (a-0)
+      (a-0) edge node [right] {\textbf{0}} (a+0)
+      (a+0) edge node [above] {\textbf{0}} (a+1)
+      (a+1) edge node [above] {\textbf{1}} (a+2)
+      (a+2) edge node [above] {\textbf{1}} (a+3)
+      (a+3) edge node [above] {\textbf{0}} (a+4)
+      (a+4) edge node [above] {\textbf{0}} (a+5)
+      (a+5) edge                    (a++);
+    \end{tikzpicture}
+    \caption{\tss{An NFA with transitions (\ref{fig:far_nfa}), scanning the top row of (\ref{fig:far_spacetime_halt}), stays in ``accepted'' state
+        $\bot|\textrm{0B}|\textrm{1A}|\textrm{1B}$.}{oo}}
+    \label{fig:far_scan}
+  \end{subfigure}
 
   \caption{\tss{Reducing a machine (\url{https://bbchallenge.org/1RB0LD_1LC1RA_0RB0LC_---1LA}) to a finite automata problem.}{Halt-recognizing Nondeterministic Finite Automaton, constructed using the direct FAR algorithm (Section~\ref{far-algo-direct}), for a 4-state Turing machine\protect\footnotemark.}
     (a) \tss{A space-time diagram of the machine, which runs forever as a ``counter''. Diagram rows depict \emph{non-halting} configurations.}{Space-time diagram showing the first few descendants of the all-0 configuration for the machine. The machine actually runs forever from the all-0 configuration, adopting a ``counting'' behavior.}
@@ -182,46 +223,7 @@ For a given Turing machine, we aim at building an NFA that recognises at least a
 Let's first recall how Nondeterministic Finite Automta (\textbf{NFA}) can be described using linear algebra. Let $\mathbf{2}$ denote the Boolean semiring\footnote{A semiring is a ring without the requirement to have additive inverses, e.g. the set of natural numbers $\N=\{0,1,2\dots\}$ is a semiring.} $\{0,1\}$ with operations $+$ and $\cdot$ respectively implemented by $\operatorname{OR}$ and $\operatorname{AND}$ \cite{CUNINGHAMEGREEN1991251}.
 Let $\M_{m,n}$ be the set of matrices with $m$ rows and $n$ columns over $\mathbf{2}$. We may define a Nondeterministic Finite Automaton (NFA) with $n$ states and alphabet $\mathcal{A}$ as a tuple $(q_0, \{T_\gamma\}_{\gamma \in \mathcal{A}}, a)$ where $q_0 \in \M_{1,n}$ and $a \in \M_{1,n}$ respectively represent the initial states and accepting states of the NFA. (i.e. if the $i^\text{th}$ state of the NFA is an initial state then the $i^\text{th}$ entry of $q_0$ is set to 1 and the rest are 0, and the $i^\text{th}$ entry of $a$ is set to 1 if and only if the $i^\text{th}$ state of the NFA is accepting), and where transitions are matrices $T_\gamma\in \M_{n,n}$ for each $\gamma\in\mathcal{A}$ (i.e. the entry $(i,j)$ of matrix $T_\gamma$ is set to 1 iff the NFA transitions from state $i$ to state $j$ when reading $\gamma$). Furthermore, for any word $u=\gamma_1\dots\gamma_\ell \in \mathcal{A}^*$, let $T_u = T_{\gamma_1} T_{\gamma_2} \dots T_{\gamma_\ell}$ is the state transformation resulting from reading word $u$ (Note: $T_\epsilon = I$). A word $u=\gamma_1\dots\gamma_\ell \in \mathcal{A}^*$ is accepted by the NFA iff there exists a path from an initial state to an accepting state that is labelled by the symbols of $u$, which algebraically translates to $q_0 T_u a\T = 1$ with $a\T \in \M_{n,1}$ the transposition of $a$.
 
-\begin{figure}
-  \begin{center}
-    \begin{tikzpicture}[scale=0.2]
-      \tikzstyle{every node}+=[inner sep=0pt]
-      \draw [black] (32.4,-20.7) circle (3);
-      \draw (32.4,-20.7) node {$X$};
-      \draw [black] (19.9,-32.9) circle (3);
-      \draw (19.9,-32.9) node {$Y$};
-      \draw [black] (43.9,-32.9) circle (3);
-      \draw (43.9,-32.9) node {$Z$};
-      \draw [black] (43.9,-32.9) circle (2.4);
-      \draw [black] (12.2,-32.9) -- (16.9,-32.9);
-      \fill [black] (16.9,-32.9) -- (16.1,-32.4) -- (16.1,-33.4);
-      \draw [black] (32.4,-13.6) -- (32.4,-17.7);
-      \fill [black] (32.4,-17.7) -- (32.9,-16.9) -- (31.9,-16.9);
-      \draw [black] (31.917,-23.654) arc (-16.01031:-75.38142:12.771);
-      \fill [black] (31.92,-23.65) -- (31.22,-24.28) -- (32.18,-24.56);
-      \draw (29.58,-29.75) node [below] {$\alpha$};
-      \draw [black] (20.894,-35.718) arc (47.15723:-240.84277:2.25);
-      \draw (18.84,-40.19) node [below] {$\alpha$};
-      \fill [black] (18.27,-35.4) -- (17.36,-35.65) -- (18.09,-36.33);
-      \draw [black] (20.283,-29.932) arc (165.64786:102.96041:12.277);
-      \fill [black] (29.42,-21.01) -- (28.53,-20.7) -- (28.76,-21.68);
-      \draw (22.58,-23.71) node [above] {$\beta$};
-      \draw [black] (34.46,-22.88) -- (41.84,-30.72);
-      \fill [black] (41.84,-30.72) -- (41.66,-29.79) -- (40.93,-30.48);
-      \draw (37.62,-28.27) node [left] {$\beta$};
-      \draw [black] (34.454,-18.529) arc (164.32314:-123.67686:2.25);
-      \draw (39.49,-17.55) node [right] {$\beta$};
-      \fill [black] (35.37,-21.01) -- (36.01,-21.71) -- (36.28,-20.74);
-      \draw [black] (45.807,-35.201) arc (67.3925:-220.6075:2.25);
-      \draw (46.66,-40.1) node [below] {$\alpha,\beta$};
-      \fill [black] (43.23,-35.81) -- (42.47,-36.36) -- (43.39,-36.74);
-      \draw [black] (41.27,-34.338) arc (-65.18014:-114.81986:22.321);
-      \fill [black] (22.53,-34.34) -- (23.05,-35.13) -- (23.47,-34.22);
-      \draw (31.9,-36.9) node [below] {$\alpha$};
-    \end{tikzpicture}
-  \end{center}
-  \caption{Example Nondeterministic Finite Automaton (NFA) with 3 states X,Y and Z, alphabet $\mathcal{A} = \{\alpha,\beta\}$, initial states X and Y, and accepting state Z. The linear-algebra representation of this NFA is given in Example~\ref{ex:nfa}. Example accepted words are: $\beta$, $\alpha\beta$, $\alpha\alpha\beta\beta$. Example rejected words are: $\alpha$, $\alpha\alpha$, $\alpha\alpha\alpha$.}\label{fig:example_nfa}
-\end{figure}
+
 
 \begin{example}\label{ex:nfa}\normalfont
   The NFA depicted in Figure~\ref{fig:example_nfa}, with states X, Y, Z and alphabet $\mathcal{A}=\{\alpha,\beta\}$, is algebraically encoded as follows: $q_0 = (1,1,0)$, $a=(0,0,1)$, $T_\alpha=\begin{bmatrix}
