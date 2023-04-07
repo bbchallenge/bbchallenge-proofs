@@ -12,7 +12,7 @@ The CTL technique for proving a Turing machine doesn't halt is to exhibit a set 
 \begin{enumerate}
   \item $C$ contains the all-0 initial configuration\footnote{
           Criteria 1--2 give a strict definition; in \cite{ShawnCTL}, $C$ only needs to contain some descendant of the initial configuration and some descendant of the successor to each $c\in C$.
-          In that case, the set of ancestor configurations to those in $C$ meets the strict definition; noting this abstractly may be more convenient than constructing this set.
+          \tss{In that case, the set of ancestor configurations to those in $C$ meets the strict definition; noting this abstractly may be more convenient than constructing this set.}{}
         }
   \item $C$ is \textit{closed} under transitions: for any $c \in C$, the configuration one step later belongs to $C$\addtocounter{footnote}{-1}\addtocounter{Hfootnote}{-1}\footnotemark
   \item $C$ does not contain any halting configuration
@@ -608,43 +608,43 @@ So, Algorithm \ref{alg:search-dfa} searches such DFAs incrementally (avoiding pa
 
 
 % \subsection{Generality of the method}
-In the preceding sections, we started from the idea of a closed language of word-representations of TM configurations, made a series of simplifying assumptions, and obtained a search algorithm.
-This raises a question: if \emph{any} regular language proves a given TM infinite by co-CTL argument\footnote{
-  As regular languages' complements are regular, this is the same as a regular CTL (in the strict sense of \S\ref{far-overview}) existing.
-},
-must a proof of the form used in Theorem~\ref{far-main-theorem}, let alone in \S\ref{far-algo-direct}, exist?
+% In the preceding sections, we started from the idea of a closed language of word-representations of TM configurations, made a series of simplifying assumptions, and obtained a search algorithm.
+% This raises a question: if \emph{any} regular language proves a given TM infinite by co-CTL argument\footnote{
+%   As regular languages' complements are regular, this is the same as a regular CTL (in the strict sense of \S\ref{far-overview}) existing.
+% },
+% must a proof of the form used in Theorem~\ref{far-main-theorem}, let alone in \S\ref{far-algo-direct}, exist?
 
-The answer is yes, and we sketch the proof below.
-The following definitions and results aren't needed to prove this decider method's soundness---or outside of this subsection at all---but they justify using Remark~\ref{far-remark-verification} to build a universal (regular) CTL verification scheme.
-Historically, they were discovered together with Algorithm~\ref{alg:finite-automata-reduction-direct}, and motivated its development.
+% The answer is yes, and we sketch the proof below.
+% The following definitions and results aren't needed to prove this decider method's soundness---or outside of this subsection at all---but they justify using Remark~\ref{far-remark-verification} to build a universal (regular) CTL verification scheme.
+% Historically, they were discovered together with Algorithm~\ref{alg:finite-automata-reduction-direct}, and motivated its development.
 
-Any closed language $\mathcal{L}$ classifies the binary words $w\in\{0,1\}^*$ by Nerode congruence: $w\sim_\mathcal{L} w'$ if for every $z\in\{0,1,A,\ldots,E\}^*$, $wz\in\mathcal{L}\iff w'z\in\mathcal{L}$.
-We may form a modified version of the Turing machine $\mathcal{M}$, herein called $\mathcal{M}/\sim_\mathcal{L}$, with the following semantics:
+% Any closed language $\mathcal{L}$ classifies the binary words $w\in\{0,1\}^*$ by Nerode congruence: $w\sim_\mathcal{L} w'$ if for every $z\in\{0,1,A,\ldots,E\}^*$, $wz\in\mathcal{L}\iff w'z\in\mathcal{L}$.
+% We may form a modified version of the Turing machine $\mathcal{M}$, herein called $\mathcal{M}/\sim_\mathcal{L}$, with the following semantics:
 
-A \textit{configuration} of $\mathcal{M}/\sim_\mathcal{L}$ is defined by the 3-tuple: (i) a state of $\mathcal{M}$, (ii) an equivalence class $[w]_{\sim_\mathcal{L}}$ of some $w\in\{0,1\}^*$ representing the (strictly) left-of-head portion of the tape,  (iii) a finite word $w\in\{0,1\}^*$, representing the remainder of the tape.
-We additionally define one distinct configuration, named $\bot$, which represents the machine in a halted state.
+% A \textit{configuration} of $\mathcal{M}/\sim_\mathcal{L}$ is defined by the 3-tuple: (i) a state of $\mathcal{M}$, (ii) an equivalence class $[w]_{\sim_\mathcal{L}}$ of some $w\in\{0,1\}^*$ representing the (strictly) left-of-head portion of the tape,  (iii) a finite word $w\in\{0,1\}^*$, representing the remainder of the tape.
+% We additionally define one distinct configuration, named $\bot$, which represents the machine in a halted state.
 
-Note that any finitely supported configuration $c$ of $\mathcal{M}$ maps to a configuration $[c]$ of $\mathcal{M}/\sim_{\mathcal{L}}$, by sending the left-of-head contents to their equivalence class modulo $\sim_\mathcal{L}$.
-This is a many-to-one mapping.
+% Note that any finitely supported configuration $c$ of $\mathcal{M}$ maps to a configuration $[c]$ of $\mathcal{M}/\sim_{\mathcal{L}}$, by sending the left-of-head contents to their equivalence class modulo $\sim_\mathcal{L}$.
+% This is a many-to-one mapping.
 
-The \emph{transitions} of $\mathcal{M}/\sim_{\mathcal{L}}$ are the images of those of $\mathcal{M}$: that is, if $c_1\vdash_\mathcal{M} c_2$, $[c_1]\vdash_{\mathcal{M}/\sim_\mathcal{L}} [c_2]$. Since $c_1\mapsto[c_1]$ is a many-to-one mapping, this definition makes $\mathcal{M}/\sim_\mathcal{L}$ a nondeterministic machine.
-In case $c_1\vdash_\mathcal{M}\bot$ (i.e., the $\mathcal{M}$-transition from $c_1$ is undefined), we also define $[c_1]\vdash_{\mathcal{M}/\sim_\mathcal{L}}\bot$.
+% The \emph{transitions} of $\mathcal{M}/\sim_{\mathcal{L}}$ are the images of those of $\mathcal{M}$: that is, if $c_1\vdash_\mathcal{M} c_2$, $[c_1]\vdash_{\mathcal{M}/\sim_\mathcal{L}} [c_2]$. Since $c_1\mapsto[c_1]$ is a many-to-one mapping, this definition makes $\mathcal{M}/\sim_\mathcal{L}$ a nondeterministic machine.
+% In case $c_1\vdash_\mathcal{M}\bot$ (i.e., the $\mathcal{M}$-transition from $c_1$ is undefined), we also define $[c_1]\vdash_{\mathcal{M}/\sim_\mathcal{L}}\bot$.
 
-For any configurations $c_1,c_2$ of $\mathcal{M}$, if $[c_1]\vdash_\mathcal{M}/\sim_\mathcal{L} [c_2]$ and a word-representation of $c_2$ is in $\mathcal{L}$, observe that a word-representation of $c_1$ is also in $\mathcal{L}$.
-This follows because the $\mathcal{M}/\sim_\mathcal{L}$-transition must come from some transition $c_1'\vdash_\mathcal{M}c'_2$ of $\mathcal{M}$, where $[c_1]=[c_1']$ and $[c_2]=[c_2']$. Now, $c'_2$ has a word-representation which differs from one of $c_2$ only by substituting a Nerode-congruent prefix, so $c'_2$ also has a word-representation in $\mathcal{L}$. By closure of $\mathcal{L}$, this is true of $c'_1$, and similarly by Nerode congruence this is true of $c_1$.
+% For any configurations $c_1,c_2$ of $\mathcal{M}$, if $[c_1]\vdash_\mathcal{M}/\sim_\mathcal{L} [c_2]$ and a word-representation of $c_2$ is in $\mathcal{L}$, observe that a word-representation of $c_1$ is also in $\mathcal{L}$.
+% This follows because the $\mathcal{M}/\sim_\mathcal{L}$-transition must come from some transition $c_1'\vdash_\mathcal{M}c'_2$ of $\mathcal{M}$, where $[c_1]=[c_1']$ and $[c_2]=[c_2']$. Now, $c'_2$ has a word-representation which differs from one of $c_2$ only by substituting a Nerode-congruent prefix, so $c'_2$ also has a word-representation in $\mathcal{L}$. By closure of $\mathcal{L}$, this is true of $c'_1$, and similarly by Nerode congruence this is true of $c_1$.
 
-Similarly, if $[c_1]\vdash_\mathcal{M}/\sim_\mathcal{L}\bot$, $c_1$ has a word-representation in $\mathcal{L}$.
+% Similarly, if $[c_1]\vdash_\mathcal{M}/\sim_\mathcal{L}\bot$, $c_1$ has a word-representation in $\mathcal{L}$.
 
-Say that $\mathcal{M}/\sim_\mathcal{L}$ halts from its initial configuration (which is the image of $\mathcal{M}$'s initial configuration) if there exists a sequence of $\mathcal{M}/\sim_\mathcal{L}$-transitions from it to $\bot$.
-The point of this is: if $\mathcal{L}$ is a closed language for $\mathcal{M}$, separating its initial configuration from all halting configurations, then that's impossible!
-For that would imply a sequence $[c_0]\vdash_{\mathcal{M}/\sim_\mathcal{L}}\dots\vdash_{\mathcal{M}/\sim_\mathcal{L}}[c_n]\vdash_{\mathcal{M}/\sim_\mathcal{L}}\bot$, where $c_0$ is the initial configuration of $\mathcal{M}$ and $\{c_i\}_{i=1}^n$ is a sequence of other configurations.
-By the above, this would imply that $c_0$ has a word-representation in $\mathcal{L}$, contrary to assumption that $\mathcal{L}$ provides a CTL proof that $c_0\not\vdash^*_\mathcal{M}\bot$.
+% Say that $\mathcal{M}/\sim_\mathcal{L}$ halts from its initial configuration (which is the image of $\mathcal{M}$'s initial configuration) if there exists a sequence of $\mathcal{M}/\sim_\mathcal{L}$-transitions from it to $\bot$.
+% The point of this is: if $\mathcal{L}$ is a closed language for $\mathcal{M}$, separating its initial configuration from all halting configurations, then that's impossible!
+% For that would imply a sequence $[c_0]\vdash_{\mathcal{M}/\sim_\mathcal{L}}\dots\vdash_{\mathcal{M}/\sim_\mathcal{L}}[c_n]\vdash_{\mathcal{M}/\sim_\mathcal{L}}\bot$, where $c_0$ is the initial configuration of $\mathcal{M}$ and $\{c_i\}_{i=1}^n$ is a sequence of other configurations.
+% By the above, this would imply that $c_0$ has a word-representation in $\mathcal{L}$, contrary to assumption that $\mathcal{L}$ provides a CTL proof that $c_0\not\vdash^*_\mathcal{M}\bot$.
 
-We now seek to recover $\mathcal{L}$, or another regular language which leads to a CTL proof, by studying the halting problem of $\mathcal{M}/\sim_\mathcal{L}$.
-In fact, the work has been done already: observe that, just as any Turing machine $\mathcal{M}$ is equivalent to a PDA equipped with two stacks (corresponding to the strict left-hand side of the tape and the rest of it), the machine $\mathcal{M}/\sim_\mathcal{L}$ is equivalent to a  standard nondeterministic PDA. (The control-state space of the PDA to is simply $\{0,1\}^*/\sim_\mathcal{L} \times \{A,\ldots,E\}$---which is a finite set by the Myhill-Nerode theorem. A transition of $\mathcal{M}/\sim_\mathcal{L}$ corresponding to a leftward TM transition pushes the written bit onto the stack. A transition of $\mathcal{M}/\sim_\mathcal{L}$ corresponding to a rightward TM transition pops the read bit off the stack.)
-The halting problem of a PDA is solved in  \cite{BEM_1997}: the eventually-halting configurations of any PDA are in fact described by a regular language, whose construction corresponds exactly to the procedure of \S\ref{far-algo-direct}.
+% We now seek to recover $\mathcal{L}$, or another regular language which leads to a CTL proof, by studying the halting problem of $\mathcal{M}/\sim_\mathcal{L}$.
+% In fact, the work has been done already: observe that, just as any Turing machine $\mathcal{M}$ is equivalent to a PDA equipped with two stacks (corresponding to the strict left-hand side of the tape and the rest of it), the machine $\mathcal{M}/\sim_\mathcal{L}$ is equivalent to a  standard nondeterministic PDA. (The control-state space of the PDA to is simply $\{0,1\}^*/\sim_\mathcal{L} \times \{A,\ldots,E\}$---which is a finite set by the Myhill-Nerode theorem. A transition of $\mathcal{M}/\sim_\mathcal{L}$ corresponding to a leftward TM transition pushes the written bit onto the stack. A transition of $\mathcal{M}/\sim_\mathcal{L}$ corresponding to a rightward TM transition pops the read bit off the stack.)
+% The halting problem of a PDA is solved in  \cite{BEM_1997}: the eventually-halting configurations of any PDA are in fact described by a regular language, whose construction corresponds exactly to the procedure of \S\ref{far-algo-direct}.
 
-In summary: we may take the Myhill-Nerode DFA for the original language $\mathcal{L}$, restrict it to the alphabet $\{0,1\}$, apply the construction from \S\ref{far-algo-direct} to obtain an NFA which recognizes precisely the halting configurations of $\mathcal{M}/\sim_\mathcal{L}$, and combine the DFA/NFA to form a recognizer for some closed language $\mathcal{L}'$ for $\mathcal{M}$; that is, it satisfies \eqref{far-cond-first}--\eqref{far-cond-last}. We also know that a language solving the halting problem of $\mathcal{M}/\sim_\mathcal{L}$ rejects its initial configuration, and so \eqref{far-cond-reject-start} is also satisfied and the constructed $\mathcal{L}'$ provides a CTL proof for $\mathcal{M}$.
+% In summary: we may take the Myhill-Nerode DFA for the original language $\mathcal{L}$, restrict it to the alphabet $\{0,1\}$, apply the construction from \S\ref{far-algo-direct} to obtain an NFA which recognizes precisely the halting configurations of $\mathcal{M}/\sim_\mathcal{L}$, and combine the DFA/NFA to form a recognizer for some closed language $\mathcal{L}'$ for $\mathcal{M}$; that is, it satisfies \eqref{far-cond-first}--\eqref{far-cond-last}. We also know that a language solving the halting problem of $\mathcal{M}/\sim_\mathcal{L}$ rejects its initial configuration, and so \eqref{far-cond-reject-start} is also satisfied and the constructed $\mathcal{L}'$ provides a CTL proof for $\mathcal{M}$.
 
 % \subsection{Search algorithm \ts{II}: meet-in-the-middle DFA}
 % \label{far-algo-mtim_dfa}
