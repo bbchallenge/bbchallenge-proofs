@@ -1,0 +1,21 @@
+\documentclass{standalone}
+
+\usepackage{xcolor}
+
+\definecolor{colorA}{RGB}{255,0,0}
+\definecolor{colorB}{RGB}{255,128,0}
+\definecolor{colorC}{RGB}{0,0,255}
+\definecolor{colorD}{RGB}{0,255,0}
+\definecolor{colorE}{RGB}{255,0,255}
+
+\begin{document}
+
+\begin{tabular}{lll}
+                              & 0                       & 1                       \\
+        \textcolor{colorA}{A} & 1R\textcolor{colorB}{B} & 0L\textcolor{colorD}{D} \\
+        \textcolor{colorB}{B} & 1L\textcolor{colorC}{C} & 1R\textcolor{colorA}{A} \\
+        \textcolor{colorC}{C} & 0R\textcolor{colorB}{B} & 0L\textcolor{colorC}{C} \\
+        \textcolor{colorD}{D} & - - -                   & 1L\textcolor{colorA}{A} \\
+      \end{tabular}
+
+\end{document}
