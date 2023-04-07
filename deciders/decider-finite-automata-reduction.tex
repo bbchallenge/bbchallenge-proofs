@@ -528,7 +528,7 @@ When building a larger recognizer,
 we expect no benefit from considering DFAs which just relabel others or add unreachable states.
 So motivated, we define a canonical form for DFAs:
 enumerate the reachable states via breadth-first search from $q_0$,
-producing $f:[n]=\mathrel{\mathop:}Q_\textsf{cf}\to Q$.\todo{Shawn: What is $Q_{cf}$? I guess it's $Q$ in canonical form ... but that's the same set as $Q$, right? This is just a permutation of $[n]$?}
+producing $f:[n]=\mathrel{\mathop:}Q_\textsf{cf}\to Q$.
 Explicitly,
 $f(0)=q_0$ and $f(k)$ is the first of
 $\delta(f(0),0), \delta(f(0),1), \ldots, \delta(f(k-1),0), \delta(f(k-1),1)$ not in $f([k])$,
