@@ -219,7 +219,7 @@ One important aspect of the technique is that, given a Turing machine and its co
 \newcommand{\T}{^T}
 \newcommand{\row}{\text{row}}
 \label{far-defs-recognizer}
-For a given Turing machine, we aim at building an NFA that recognises at least all eventually-halting configurations. \ts{Said otherwises, the NFA recognises configuration that \textit{potentially} eventually halt, which is why we call the NFA \textit{potential-halt-recognizing}.} \tss{That way}{Importantly}, if the NFA does not recognise the all-0 initial configuration then we know that the Turing machine does not halt from it.
+For a given Turing machine, we aim at building an NFA that recognises at least all eventually-halting configurations. In other words, the NFA recognises configurations that \textit{potentially} eventually halt, which is why we call the NFA \textit{potential-halt-recognizing}. Importantly, if the NFA does not recognise the all-0 initial configuration then we know that the Turing machine does not halt from it.
 
 
 Let's first recall how Nondeterministic Finite Automta (\textbf{NFA}) can be described using linear algebra. Let $\mathbf{2}$ denote the Boolean semiring\footnote{A semiring is a ring without the requirement to have additive inverses, e.g. the set of natural numbers $\N=\{0,1,2\dots\}$ is a semiring.} $\{0,1\}$ with operations $+$ and $\cdot$ respectively implemented by $\operatorname{OR}$ and $\operatorname{AND}$ \cite{CUNINGHAMEGREEN1991251}.
