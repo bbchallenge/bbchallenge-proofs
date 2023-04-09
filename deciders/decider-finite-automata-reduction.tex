@@ -287,7 +287,7 @@ With $c, c_1, c_2$ configurations of the TM (with finite support) and $\hat{c}, 
 
 Which algebraically becomes:
 \begin{align*}
-  \forall u,z\in\{0, 1\}^*: \; q_0 T_u T_f T_r T_z a\T = 1 \;                                                                            & \text{if $(f,r) \to \bot$ is a halting transition of $\mathcal{M}$}
+  \forall u,z\in\{0, 1\}^*: \; q_0 T_u T_f T_r T_z a\T = 1, \;                                                                           & \text{if $(f,r) \to \bot$ is a halting transition of $\mathcal{M}$}
   \\
   \forall u,z\in\{0, 1\}^*,\,\forall b \in \{0, 1\}: q_0 T_{u} T_t T_b T_w T_{z} a\T = 1 \implies q_0 T_{u} T_b T_f T_r T_{z} a\T = 1,\; & \text{if $(f,r) \to (t,w,\text{left})$ is a transition of $\mathcal{M}$}
   \\
@@ -381,7 +381,7 @@ We design an efficient search algorithm for Theorem~\ref{far-main-theorem} that 
 \end{enumerate}
 
 \begin{example}\normalfont
-  The structure described above is followed by the NFA depicted in Figure~\ref{fig:finite-automata-reduction}. Note that, following above Point~\ref{pt:injective}, it is natural to name states in the right-hand side NFA by prepending left-hand side DFA states to the transitions' TM state letter, e.g. state 1C in Figure~\ref{fig:finite-automata-reduction} is reached from DFA state 1 after reading TM state letter C.
+  The structure described above is followed by the NFA depicted in Figure~\ref{fig:finite-automata-reduction}(d)~Left. Note that, following above Point~\ref{pt:injective}, it is natural to name states in the right-hand side NFA by prepending left-hand side DFA states to the transitions' TM state letter, e.g. state 1C in Figure~\ref{fig:finite-automata-reduction} is reached from DFA state 1 after reading TM state letter C.
 \end{example}
 
 This structure might seem arbitrary but it has a very nice property that we demonstrate here: once the left-hand side DFA is chosen, there is at most one right-hand side NFA (minimal for $\succeq$) such that the overall NFA satisfies Theorem~\ref{far-main-theorem}.
