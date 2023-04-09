@@ -485,7 +485,7 @@ This efficient pruning technique completes the method, shown below as Algorithm 
     \If{\textbf{not} left\_to\_right} switch all left-going transitions of the TM to right-going and vice versa
     \EndIf
     \State \textbf{Matrix$\boldsymbol<$bool}, $5*n+1, 5*n+1${}$\boldsymbol>$ $\textrm{R}[2*n+1][2]$ = $[[0,0],\ldots,[0,0]]$
-    \State \textbf{ColVector$\boldsymbol<$bool}, $5*n+1${}$\boldsymbol>$ $aT[2*n+1]$ = 0
+    \State \textbf{ColVector$\boldsymbol<$bool}, $5*n+1${}$\boldsymbol>$ $aT[2*n+1]$ = 0 // $aT$ for transpose as $a$ is row vector in Section~\ref{far-algo-direct}
     % The next line is a hacky attempt at a full-line comment:
     \State \(\triangleright\) Basis vector indexing: for $\row_i(M_f)$ use index $5*i+f$, and for $e_\bot$, use index $5*n$.
     \State Initialize R[0] using (\ref{far-cond-ass-steady}') and (\ref{far-cond-halt}')
