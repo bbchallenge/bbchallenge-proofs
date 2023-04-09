@@ -1,14 +1,16 @@
+% !TeX root = ../correctness-deciders.tex
+
 \newcommand{\HS}{Halting Segment\xspace}
 
 \section{Halting Segment}\label{sec:halting-segment}
 
-\paragraph{Acknowledgement.} Sincere thanks to bbchallenge's contributor Iijil who initially presented this method and the first implementation\footnote{See: \url{https://discuss.bbchallenge.org/t/decider-halting-segment}.}. Other contributors have contributed to this method by producing alternative implementations (see Section~\ref{sec:hs-implem}) or discussing and writing the formal proof presented here: Mateusz Naściszewski (Mateon1), Nathan Fenner, Tony Guilfoyle, Justin Blanchard and cosmo.
+\paragraph{Acknowledgement.} Sincere thanks to bbchallenge's contributor Iijil who initially presented this method and the first implementation\footnote{See: \url{https://discuss.bbchallenge.org/t/decider-halting-segment}.}. Other contributors have contributed to this method by producing alternative implementations (see Section~\ref{sec:hs-implem}) or discussing and writing the formal proof presented here: Mateusz Naściszewski (Mateon1), Nathan Fenner, Tony Guilfoyle, Justin Blanchard, Tristan Stérin (cosmo), and, Pavel Kropitz (uni).
 
 \subsection{Overview}
 
 \begin{figure}[h!]
   \centering
-  \includegraphics[width=1\textwidth]{halting-segment.pdf}
+  \includegraphics[width=1\textwidth]{figures/halting-segment/halting-segment.pdf}
   \caption{\HS graph for the 3-state machine \url{https://bbchallenge.org/1RB1RC_0LA0RA_0LB---} and segment size 2, see Definition~\ref{def:hs-graph}. Nodes of this graph correspond to \textit{segment configurations} (Definition~\ref{def:hs-conf}), i.e. configurations of the machine on a finite segment (here, of size 2). In a node, the machine's head position is represented between brackets and the symbol \texttt{-} represents the outside of the segment (either to the left or to the right). Nodes where the machine's head is within the segment (circle shape) only one have child corresponding to the next step of the machine and nodes where the head is outside of the segment (diamond shape) may have multiple children corresponding to all the theoretically possible ways (deduced from the machine's transition table) that the machine can enter the segment back or continue to stay out of it. In order to improve readibility, edges that revisit a node are dotted. The machine presented here does not halt because the halting nodes (red outline) that are reachable from the initial nodes (blue outline) do not cover all the positions of the segment (there is no halting node for any of the two internal positions of the segment), by contraposition of Theorem~\ref{th:hs}. }\label{fig:hs}
 \end{figure}
 
@@ -84,7 +86,7 @@ Interestingly, \HS is the method that was used by Newcomb Greenleaf to prove\foo
 Here are the implementations of the method that were realised, almost all of them construct the \HS graph from the halting nodes (backward implementation) instead than from the initial nodes (forward implementation):
 
 \begin{enumerate}
-  \item Iijil's who originally proposed the method, \url{https://github.com/bbchallenge/bbchallenge-deciders/tree/main/decider-halting-segment}, and was independently reproduced by cosmo \url{https://github.com/bbchallenge/bbchallenge-deciders/tree/main/decider-halting-segment-reproduction} (backward implementation)
+  \item Iijil's who originally proposed the method, \url{https://github.com/bbchallenge/bbchallenge-deciders/tree/main/decider-halting-segment}, and was independently reproduced by Tristan Stérin (cosmo) \url{https://github.com/bbchallenge/bbchallenge-deciders/tree/main/decider-halting-segment-reproduction} (backward implementation)
   \item Mateusz Naściszewski (Mateon1)'s: \url{https://gist.github.com/mateon1/7f5e10169abbb50d1537165c6e71733b} (forward implementation)
   \item Nathan Fenner's which has the interesting feature of being written in a language for formal verification (Dafny): \url{https://github.com/Nathan-Fenner/bbchallenge-dafny-deciders/blob/main/halting-segment.dfy} (backward implementation)
   \item Tony Guilfoyle: \url{https://github.com/TonyGuil/bbchallenge/tree/main/HaltingSegments} (backward implementation)

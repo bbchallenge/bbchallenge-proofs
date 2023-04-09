@@ -1,0 +1,47 @@
+digraph A {
+	nodesep=0.1
+	rankir="TB"
+	"start" [shape=plaintext]
+	"r1_0" [label="0"]
+	"start" -> "r1_0"
+	"r2_0" [label="0"]
+	"r1_0" -> "r2_0"
+	"r3_0" [label="0"]
+	"r2_0" -> "r3_0"
+	"r4_0A" [label="0A"]
+	"r3_0" -> "r4_0A"
+	"r5_1B" [label="1B"]
+	"r4_0A" -> "r5_1B"
+	"r6_0B" [label="0B"]
+	"r6_1B" [label="1B"]
+	"r5_1B" -> "r6_0B"
+	"r5_1B" -> "r6_1B"
+	"r7_1A" [label="1A"]
+	"r7_0A" [label="0A"]
+	"r6_0B" -> "r7_1A"
+	"r6_1B" -> "r7_0A"
+	"r8_0B" [label="0B"]
+	"r8_1B" [label="1B"]
+	"r8_bot" [label="⊥",peripheries=2]
+	"r7_1A" -> "r8_0B"
+	"r7_1A" -> "r8_1B"
+	"r7_0A" -> "r8_bot"
+	"r9_1A" [label="1A"]
+	"r9_0B" [label="0B"]
+	"r9_1B" [label="1B"]
+	"r9_bot" [label="⊥",peripheries=2]
+	"r8_0B" -> "r9_1A"
+	"r8_1B" -> "r9_0B"
+	"r8_1B" -> "r9_1B"
+	"r8_bot" -> "r9_bot"
+	"r10_1A" [label="1A"]
+	"r10_0Bx" [label="0B"]
+	"r10_0By" [label="0B"]
+	"r10_1B" [label="1B"]
+	"r10_bot" [label="⊥",peripheries=2]
+	"r9_1A" -> "r10_0Bx"
+	"r9_0B" -> "r10_1A"
+	"r9_1B" -> "r10_0By"
+	"r9_1B" -> "r10_1B"
+	"r9_bot" -> "r10_bot"
+}

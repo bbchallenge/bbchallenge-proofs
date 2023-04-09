@@ -1,0 +1,64 @@
+\documentclass[a4paper,10pt]{article}
+
+\usepackage{tikz}
+\usepackage[psfixbb,graphics,tightpage,active]{preview}
+
+\usepackage{xcolor}
+
+\definecolor{colorA}{RGB}{255,0,0}
+\definecolor{colorB}{RGB}{255,128,0}
+\definecolor{colorC}{RGB}{0,0,255}
+\definecolor{colorD}{RGB}{0,255,0}
+\definecolor{colorE}{RGB}{255,0,255}
+
+\PreviewEnvironment{tikzpicture}
+
+\begin{document}
+
+\usetikzlibrary {automata, positioning}
+
+\begin{tikzpicture}[shorten >=1pt]
+  \node[state,initial above] (0) at (-2, 2) {0};
+  \node[state]           (1) at (-2, -2) {1};
+  \node[state,accepting] (H) at (2, 4) {$\bot$};
+  \node[state]           (0A) at (0, 2) {0A};
+  \node[state,accepting] (0D) at (4, 2) {0D};
+  \node[state]           (0B) at (2, 0) {0B};
+  \node[state]           (0C) at (4, 0) {0C};
+  \node[state]           (1C) at (2, -2.5) {1C};
+  \node[state]           (1B) at (0, -4) {1B};
+  \node[state]           (1A) at (4, -4) {1A};
+  \node[state,accepting] (1D) at (5.5, -2) {1D};
+
+  \path[->]  (0)  edge [loop right]       node {\texttt{0}} (0)
+  edge                    node [right] {\texttt{1}} (1)
+  (1)  edge [bend left=15]     node [above left] {\texttt{0}$|$\texttt{1}} (0)
+  (0A) edge                    node [right] {\texttt{0}} (1B)
+  edge                    node [above,rotate=60] {\texttt{1}} (H)
+  (0C) edge                    node [above] {\texttt{0}} (0B)
+  edge                    node [right] {\texttt{1}} (1A)
+  (0D) edge                    node [above,rotate=300] {\texttt{0}} (H)
+  edge                    node [above] {\texttt{1}} (0A)
+  edge [bend left]        node [left] {\texttt{1}} (1A)
+  (1A) edge                    node [above] {\texttt{1}} (1B)
+  (1A) edge [bend right=15]    node [above,rotate=300] {\texttt{0}$|$\texttt{1}} (0B)
+  (0B) edge [bend right=5]     node [above,rotate=300] {\texttt{0}$|$\texttt{1}} (1A)
+  (1B) edge                    node [above right,rotate=60] {\texttt{0}} (0B)
+  edge [loop left]        node {\texttt{0}} (1B)
+  edge [bend left]        node [right] {\texttt{1}} (0A)
+  (1C) edge                    node [above right,rotate=270] {\texttt{0}$|$\texttt{1}} (0B)
+  (1D) edge [bend right=48]    node [below,rotate=300] {\texttt{0}$|$\texttt{1}} (H)
+  (H)  edge [loop above]       node {\texttt{0}$|$\texttt{1}} (H)
+  (0)  edge [dotted,bend left] node {\textcolor{colorA}{\texttt{A}}} (0A)
+  edge [dotted]           node [left] {\textcolor{colorB}{\texttt{B}}} (0B)
+  edge [dotted]           node {\textcolor{colorC}{\texttt{C}}} (0C)
+  edge [dotted,bend left] node [right] {\textcolor{colorD}{\texttt{D}}} (0D)
+  (1)  edge [dotted]           node {\textcolor{colorB}{\texttt{B}}} (1B)
+  edge [dotted]           node {\textcolor{colorA}{\texttt{A}}} (1A)
+  edge [dotted]           node [left] {\textcolor{colorC}{\texttt{C}}} (1C)
+  edge [dotted]           node [left] {\textcolor{colorD}{\texttt{D}}} (1D);
+\end{tikzpicture}
+
+
+
+\end{document}

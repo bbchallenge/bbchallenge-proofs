@@ -1,0 +1,19 @@
+digraph R {
+	nodesep=0.1
+	rankir="TB"
+	"start" [shape=plaintext]
+	"r1_0" [label="0"]
+	"start" -> "r1_0"
+	"r2_0" [label="0"]
+	"r1_0" -> "r2_0"
+	"r3_0" [label="0"]
+	"r2_0" -> "r3_0"
+	"r4_0A" [label="0A"]
+	"r3_0" -> "r4_0A"
+	"r5_1B" [label="1B"]
+	"r4_0A" -> "r5_1B"
+	"r6_0B" [label="0B"]
+	"r6_1B" [label="1B"]
+	"r5_1B" -> "r6_0B"
+	"r5_1B" -> "r6_1B"
+}
