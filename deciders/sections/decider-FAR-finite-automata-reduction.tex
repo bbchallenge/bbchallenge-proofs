@@ -228,7 +228,7 @@ For a given Turing machine, we aim at building an NFA that recognises at least a
 
 
 Let's first recall how Nondeterministic Finite Automta (\textbf{NFA}) can be described using linear algebra. Let $\mathbf{2}$ denote the Boolean semiring\footnote{A semiring is a ring without the requirement to have additive inverses, e.g. the set of natural numbers $\N=\{0,1,2\dots\}$ is a semiring.} $\{0,1\}$ with operations $+$ and $\cdot$ respectively implemented by $\operatorname{OR}$ and $\operatorname{AND}$ \cite{CUNINGHAMEGREEN1991251}.
-Let $\M_{m,n}$ be the set of matrices with $m$ rows and $n$ columns over $\mathbf{2}$. We may define a Nondeterministic Finite Automaton (NFA) with $n$ states and alphabet $\mathcal{A}$ as a tuple $(q_0, \{T_\gamma\}_{\gamma \in \mathcal{A}}, a)$ where $q_0 \in \M_{1,n}$ and $a \in \M_{1,n}$ respectively represent the initial states and accepting states of the NFA. (i.e. if the $i^\text{th}$ state of the NFA is an initial state then the $i^\text{th}$ entry of $q_0$ is set to 1 and the rest are 0, and the $i^\text{th}$ entry of $a$ is set to 1 if and only if the $i^\text{th}$ state of the NFA is accepting), and where transitions are matrices $T_\gamma\in \M_{n,n}$ for each $\gamma\in\mathcal{A}$ (i.e. the entry $(i,j)$ of matrix $T_\gamma$ is set to 1 iff the NFA transitions from state $i$ to state $j$ when reading $\gamma$). Furthermore, for any word $u=\gamma_1\dots\gamma_\ell \in \mathcal{A}^*$, let $T_u = T_{\gamma_1} T_{\gamma_2} \dots T_{\gamma_\ell}$ is the state transformation resulting from reading word $u$ (Note: $T_\epsilon = I$). A word $u=\gamma_1\dots\gamma_\ell \in \mathcal{A}^*$ is accepted by the NFA iff there exists a path from an initial state to an accepting state that is labelled by the symbols of $u$, which algebraically translates to $q_0 T_u a\T = 1$ with $a\T \in \M_{n,1}$ the transposition of $a$.
+Let $\M_{m,n}$ be the set of matrices with $m$ rows and $n$ columns over $\mathbf{2}$. We may define a Nondeterministic Finite Automaton (NFA) with $n$ states and alphabet $\mathcal{A}$ as a tuple $(q_0, \{T_\gamma\}_{\gamma \in \mathcal{A}}, a)$ where $q_0 \in \M_{1,n}$ and $a \in \M_{1,n}$ respectively represent the initial states and accepting states of the NFA. (i.e. if the $i^\text{th}$ state of the NFA is an initial state then the $i^\text{th}$ entry of $q_0$ is set to 1 and the rest are 0, and the $i^\text{th}$ entry of $a$ is set to 1 if and only if the $i^\text{th}$ state of the NFA is accepting), and where transitions are matrices $T_\gamma\in \M_{n,n}$ for each $\gamma\in\mathcal{A}$ (i.e. the entry $(i,j)$ of matrix $T_\gamma$ is set to 1 iff the NFA transitions from state $i$ to state $j$ when reading $\gamma$). Furthermore, for any word $u=\gamma_1\dots\gamma_\ell \in \mathcal{A}^*$, let $T_u = T_{\gamma_1} T_{\gamma_2} \dots T_{\gamma_\ell}$ be the state transformation resulting from reading word $u$ (Note: $T_\epsilon = I$). A word $u=\gamma_1\dots\gamma_\ell \in \mathcal{A}^*$ is accepted by the NFA iff there exists a path from an initial state to an accepting state that is labelled by the symbols of $u$, which algebraically translates to $q_0 T_u a\T = 1$ with $a\T \in \M_{n,1}$ the transposition of $a$.
 
 
 
@@ -267,12 +267,12 @@ These are implied by the following, generally stronger, conditions on the transi
   q_0 T_0    & = q_0
   \label{far-cond-leading-0}
   \\
-  T_0 a^{\T} & = a^{\T}
+  T_0 a\T & = a\T
   \label{far-cond-trailing-0}
 \end{align}
 
 
-Note that Condition~\ref{far-cond-trailing-0}, $T_0 a^{\T} = a^{\T}$, means that for all accepting states of the NFA, reading a 0 is possible and leads to an accepting state. Indeed, $T_0 a^{\T}$ describes the set of NFA states that reach the set of accepting states $a$ after reading a $0$.
+Note that Condition~\ref{far-cond-trailing-0}, $T_0 a\T = a\T$, means that for all accepting states of the NFA, reading a 0 is possible and leads to an accepting state. Indeed, $T_0 a\T$ describes the set of NFA states that reach the set of accepting states $a$ after reading a $0$.
 
 
 Then, we want our NFA's language $\mathcal{L}$ to include all eventually-halting configurations (with finitely many 1s) of a given Turing machine $\mathcal{M}$.  Inductively, we want that:
@@ -327,7 +327,7 @@ Combining the above, we get our main result:
                                            &                     & \text{(leading zeros ignored)}
     \tag{\ref{far-cond-leading-0}}
     \\
-    T_0a^{\T}                              & = a^{\T}
+    T_0a\T                              & = a\T
                                            &                     & \text{(trailing zeros ignored)}
     \tag{\ref{far-cond-trailing-0}}
     \\
@@ -418,20 +418,20 @@ For a given left-hand side DFA with transition function $\delta$, the right-hand
 
 
 \begin{align}
-  R_r                                        & \succeq (e_\bot)^{\T}e_\bot
+  R_r                                        & \succeq (e_\bot)\T e_\bot
                                              &                                                  & \text{for }r\in\{0,1\}
   \tag{\ref{far-cond-ass-steady}'}
   \\
-  \forall i\in[l]: R_r                       & \succeq \row_i(M_f)^{\T}e_\bot
+  \forall i\in[l]: R_r                       & \succeq \row_i(M_f)\T e_\bot
                                              &                                                  & \text{if $(f,r) \to \bot$ is a halting transition of $\mathcal{M}$}
   \tag{\ref{far-cond-halt}'}
   \\
   \forall b \in\{0,1\}, \forall i\in[l]: R_r & \succeq
-  \row_{\delta(i,b)}(M_f)^{\T} \row_i(M_t)R_b R_w
+  \row_{\delta(i,b)}(M_f)\T \row_i(M_t)R_b R_w
                                              &                                                  & \text{if $(f,r) \to (t,w,\text{left})$ is a transition of $\mathcal{M}$}
   \tag{\ref{far-cond-left}'}
   \\
-  \forall i\in[l]: R_r                       & \succeq \row_i(M_f)^{\T} \row_{\delta(i,w)}(M_t)
+  \forall i\in[l]: R_r                       & \succeq \row_i(M_f)\T \row_{\delta(i,w)}(M_t)
                                              &                                                  & \text{if $(f,r) \to (t,w,\text{right})$ is a transition of $\mathcal{M}$}
   %\label{far-cond-right}
   \tag{\ref{far-cond-last}'}
@@ -443,14 +443,14 @@ For a given left-hand side DFA with transition function $\delta$, the right-hand
 \end{lemma}
 \begin{proof}
 
-  First notice that (\ref{far-cond-ass-steady}'), (\ref{far-cond-halt}') and (\ref{far-cond-last}') have their right-hand side constant (with respect to $R$) hence they only amount to constant lower bounds for matrices $R_0$ and $R_1$. Then note that, given any lower bound $B_0\preceq R_0$ and $B_1\preceq R_1$ for true solutions of the system, we have  $\row_{\delta(i,b)}(M_f)^{\T} \row_i(M_t)R_b R_w \succeq \row_{\delta(i,b)}(M_f)^{\T} \row_i(M_t)B_b B_w$ by compatibility of $\succeq$ with the performed operations. Hence, iterating (\ref{far-cond-left}') produces an increasing, eventually stationary, sequence of lower bounds for $R_0$ and $R_1$ whose fixed point is solution to the system.
+  First notice that (\ref{far-cond-ass-steady}'), (\ref{far-cond-halt}') and (\ref{far-cond-last}') have their right-hand side constant (with respect to $R$) hence they only amount to constant lower bounds for matrices $R_0$ and $R_1$. Then note that, given any lower bound $B_0\preceq R_0$ and $B_1\preceq R_1$ for true solutions of the system, we have  $\row_{\delta(i,b)}(M_f)\T \row_i(M_t)R_b R_w \succeq \row_{\delta(i,b)}(M_f)\T \row_i(M_t)B_b B_w$ by compatibility of $\succeq$ with the performed operations. Hence, iterating (\ref{far-cond-left}') produces an increasing, eventually stationary, sequence of lower bounds for $R_0$ and $R_1$ whose fixed point is solution to the system.
 \end{proof}
 
 
 Now that we have found $R_0$ and $R_1$ we need to find the set of accepting states $\begin{bmatrix}0&a\end{bmatrix}$ with $a \in \M_{1,d}$.
 Conditions \eqref{far-cond-trailing-0}, \eqref{far-cond-ass-accepted} of Theorem \ref{far-main-theorem}   translate to:
 \begin{align}
-  R_0 a^{\T} & = a^{\T}
+  R_0 a\T & = a\T
              &
   \tag{\ref{far-cond-trailing-0}'}
   \\
@@ -459,11 +459,11 @@ Conditions \eqref{far-cond-trailing-0}, \eqref{far-cond-ass-accepted} of Theorem
   \tag{\ref{far-cond-ass-accepted}'}
 \end{align}
 
-Similarly, there is a unique minimal solution (w.r.t $\preceq$) to this system which is found by initially setting $a_0 = e_\bot$ then iterating $a_{k+1} = (R_0 a_{k}^{\T})^{\T}$ until a fixed point is reached which gives the value of $a$. Indeed, from (\ref{far-cond-ass-steady}'), we see that the sequence $e_\bot^{\T} \preceq  R_0 e_\bot^{\T}\preceq R_0^2 e_\bot^{\T}  \preceq\dots$ is increasing hence it reaches a fixed point, which satisfies (\ref{far-cond-trailing-0}') and (\ref{far-cond-ass-accepted}').
+Similarly, there is a unique minimal solution (w.r.t $\preceq$) to this system which is found by initially setting $a_0 = e_\bot$ then iterating $a_{k+1} = (R_0 a_{k}\T)\T$ until a fixed point is reached which gives the value of $a$. Indeed, from (\ref{far-cond-ass-steady}'), we see that the sequence $e_\bot\T \preceq  R_0 e_\bot\T\preceq R_0^2 e_\bot\T  \preceq\dots$ is increasing hence it reaches a fixed point, which satisfies (\ref{far-cond-trailing-0}') and (\ref{far-cond-ass-accepted}').
 
 The last condition from Theorem~\ref{far-main-theorem} that we need to satisfy is \eqref{far-cond-reject-start} (rejection of the initial configuration), which translates to:
 \begin{align}
-  \row_0 (M_A) a^{\T} & =0
+  \row_0 (M_A) a\T & =0
                       & \tag{\ref{far-cond-reject-start}'}
 \end{align}
 
