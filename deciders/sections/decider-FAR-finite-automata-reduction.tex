@@ -363,7 +363,7 @@ Combining the above, we get our main result:
 
 
 \begin{remark}[Verification]\normalfont\label{far-remark-verification}
-  Theorem~\ref{far-main-theorem} has the nice property of being quite suited for the purpose of \textit{verification}: given a TM, an NFA and a vector $s$, the task of verifying that equations \eqref{far-cond-first}--\eqref{far-cond-last} hold -- ignoring equation \eqref{far-cond-halt} -- and thus that the TM does not halt, is computationally simple. Equation~\eqref{far-cond-halt} will be dealt with thanks to extra structure that we will require on our NFA, see Section~\ref{far-algo-direct}.
+  Theorem~\ref{far-main-theorem} has the nice property of being suited for the purpose of \textit{verification}: given a TM, an NFA and a vector $s$, the task of verifying that equations \eqref{far-cond-first}--\eqref{far-cond-last} hold and thus that the TM does not halt, is computationally simple\footnote{Note that although equation~\eqref{far-cond-halt} has a $\forall$ quantifier, the set of NFA states reachable after reading an arbitrary $u \in \{0,1\}^*$ is computable, and we just have to consider one instance of equation~\eqref{far-cond-halt} replacing $q_0 T_u$ per such state.}.
 \end{remark}
 
 
@@ -484,7 +484,7 @@ This efficient pruning technique completes the method, shown below as Algorithm 
     \Procedure{\textbf{bool} {\sc decider-finite-automata-direct}}{\textbf{TM} machine, \textbf{int} n, \textbf{bool} left\_to\_right}
     \If{\textbf{not} left\_to\_right} switch all left-going transitions of the TM to right-going and vice versa
     \EndIf
-	  \State \textbf{Matrix$\boldsymbol<$bool}, $5*n+1, 5*n+1${}$\boldsymbol>$ $\textrm{R}[2*n+1][2]$ = $[[0,0],\ldots,[0,0]]$
+    \State \textbf{Matrix$\boldsymbol<$bool}, $5*n+1, 5*n+1${}$\boldsymbol>$ $\textrm{R}[2*n+1][2]$ = $[[0,0],\ldots,[0,0]]$
     \State \textbf{ColVector$\boldsymbol<$bool}, $5*n+1${}$\boldsymbol>$ $aT[2*n+1]$ = 0
     % The next line is a hacky attempt at a full-line comment:
     \State \(\triangleright\) Basis vector indexing: for $\row_i(M_f)$ use index $5*i+f$, and for $e_\bot$, use index $5*n$.
