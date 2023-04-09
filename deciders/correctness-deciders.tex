@@ -66,7 +66,7 @@
 \maketitle
 
 \begin{abstract}
-  The Busy Beaver Challenge (or bbchallenge) aims at collaboratively solving the following conjecture: ``BB(5) = 47,176,870'' [Aaronson, 2020]\nocite{BusyBeaverFrontier}. This goal amounts to decide whether or not 88,664,064 Turing machines with 5-state halt or not -- starting from all-0 tape. In order to decide the behavior of these machines we write \textit{deciders}. A decider is a program that takes as input a Turing machine and outputs \texttt{true} if it is able to tell whether the machine halts or not. Each decider is specialised in recognising a particular type of behavior that can be decided.
+  The Busy Beaver Challenge (or bbchallenge) aims at collaboratively solving the following conjecture: ``BB(5) = 47,176,870'' [Aaronson, 2020]\nocite{BusyBeaverFrontier}. This conjecture says that if a 5-state Turing machine runs for more than 47,176,870 steps without halting then it will never halt (starting from all-0 memory tape). Proving this conjecture amounts to decide whether or not 88,664,064 Turing machines with 5-state halt or not -- starting from all-0 tape. In order to decide the behavior of these machines we write \textit{deciders}. A decider is a program that takes as input a Turing machine and outputs \texttt{true} if it is able to tell whether the machine halts or not. Each decider is specialised in recognising a particular type of behavior that can be decided.
 
   In this document we are concerned with proving the correctness of these deciders programs. More context and information about this methodology are available at \url{https://bbchallenge.org}.
 \end{abstract}
