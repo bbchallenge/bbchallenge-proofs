@@ -477,26 +477,27 @@ This efficient pruning technique completes the method, shown below as Algorithm 
 
   \begin{algorithmic}[1]
     \Procedure{\textbf{bool} {\sc decider-finite-automata-direct}}{\textbf{TM} machine, \textbf{int} n, \textbf{bool} left\_to\_right}
-    \If{\textbf{not} left\_to\_right} replace TM with its mirror-image
+    \If{\textbf{not} left\_to\_right} switch all left-going transitions of the TM to right-going and vice versa
     \EndIf
     \State \textbf{Matrix$\boldsymbol<$bool}, $5*n+1, 5*n+1\boldsymbol>$ $\textrm{R}[2*n+1][2]$ = $[[0,0],\ldots,[0,0]]$
-    \State \textbf{ColVector$\boldsymbol<$bool}, $5*n+1\boldsymbol>$ $a[2*n+1]$ = 0
+    \State \textbf{RowVector$\boldsymbol<$bool}, $5*n+1\boldsymbol>$ $a[2*n+1]$ = 0
     % The next line is a hacky attempt at a full-line comment:
     \State \(\triangleright\) Basis vector indexing: for $\row_i(M_f)$ use index $5*i+f$, and for $e_\bot$, use index $5*n$.
     \State Initialize R[0] using (\ref{far-cond-ass-steady}') and (\ref{far-cond-halt}')
     \State Initialize a[0] = $e_\bot$
     \Procedure{{\rm CheckResult} {\sc check}}{List$\boldsymbol<$int$\boldsymbol>$ L}
-    \State R[L.\textbf{length}()], a[L.\textbf{length}()] = R[L.\textbf{length}()-1], a[L.\textbf{length}()-1]
-    \State Increase R[L.\textbf{length}()] using (\ref{far-cond-last}'), with $(i,w)=\operatorname{divmod}(\textrm{L.\textbf{length}()-1}, 2)$
+    \State k $\coloneqq$ L.\textbf{length}
+    \State R[k], a[k] = R[k-1], a[k-1]
+    \State Increase R[k] using (\ref{far-cond-last}'), with $(i,w)=\operatorname{divmod}(\textrm{k-1}, 2)$
     \Repeat
-    \State Increase R[L.\textbf{length}()] using (\ref{far-cond-left}'), restricted to $2*i+b<\textrm{L.\textbf{length}()}$
-    \Until{R[L.\textbf{length}()] stops changing}
+    \State Increase R[k] using (\ref{far-cond-left}'), restricted to $2*i+b<\textrm{k}$
+    \Until{R[k] stops changing}
     \Repeat
-    \State a[L.\textbf{length}()] = $\textrm{R}[\textrm{L}.\textbf{length}()][0] \cdot \textrm{a}[\textrm{L}.\textbf{length}()]$
-    \Until{a[L.\textbf{length}()] stops changing}
-    \If{$\row_0(M_\textrm{A})\cdot \textrm{a}[\textrm{L}.\textbf{length}()]\ne 0$}
+    \State a[k] = $\textrm{R}[k][0] \cdot \textrm{a}[k]$
+    \Until{a[k] stops changing}
+    \If{$\row_0(M_\textrm{A})\cdot \textrm{a}[k]\ne 0$}
     \Return SKIP
-    \ElsIf{L.\textbf{length}() == 2*n}
+    \ElsIf{k == 2*n}
     \Return STOP
     \Else\;\Return MORE
     \EndIf
