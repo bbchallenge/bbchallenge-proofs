@@ -8,7 +8,7 @@
 
 \subsection{Method overview}\label{far-overview}
 
-The core idea of the method presented in this section is to find, for a given Turing machine, a regular language that contains the set of the machine's eventually-halting configurations. Then, provided that the all-0 configuration is not in the regular language, we know that the machine does not halt.
+The core idea of the method presented in this section is to find, for a given Turing machine, a regular language that contains the set of the machine's eventually-halting configurations (with finitely many 1s). Then, provided that the all-0 configuration is not in the regular language, we know that the machine does not halt.
 
 A dual idea has been explored by other authors under the name Closed Tape Languages (CTL) as described in S. Ligocki's blog \cite{ShawnCTL} and credited to H. Marxen in collaboration with J. Buntrock.
 The CTL technique for proving a Turing machine doesn't halt is to exhibit a set $C$ of configurations such that:
@@ -28,7 +28,7 @@ The CTL approach has proven to be practical and powerful when we search for $C$ 
 
 Here, we develop an original \textit{co-CTL} technique\footnote{By co-CTL we mean a set whose complement is a CTL, characterized by closure criteria inverse---or equivalently converse---to 1--3. In other words, a co-CTL contains all halting configurations, any configuration which can \emph{precede} any member configuration by one TM transition, and not the initial configuration.}, based on the algebraic description of Nondeterministic Finite Automata (NFA), for finding a regular language which contains a machine's eventually halting configurations (in general a superset).
 
-One important aspect of the technique is that, given a Turing machine and its constructed NFA---if found---it is a computationally simple task to verify that the NFA's language does indeed recognise all eventually-halting configurations of the machine.
+One important aspect of the technique is that, given a Turing machine and its constructed NFA---if found---it is a computationally simple task to verify that the NFA's language does indeed recognise all eventually-halting configurations (with finitely many 1s) of the machine.
 
 
 \usetikzlibrary {automata, positioning}
@@ -209,7 +209,7 @@ One important aspect of the technique is that, given a Turing machine and its co
     (a) Space-time diagram showing the first few descendants of the all-0 configuration for the machine. The machine actually runs for ever from the all-0 configuration, adopting a ``counting'' behavior.
     (b) The TM halts in 18 steps from a different configuration; these 18 rows depict \emph{eventually-halting} configurations.
     (c) Transition table for the TM.
-    (d) A Nondeterministic Finite Automaton, constructed using the direct FAR algorithm (Section~\ref{far-algo-direct}), that recognises at least all eventually-halting configurations of the machine. Inputting the top row of (b), encoded as word \texttt{000A01100} (see Definition~\ref{def:wordc}), the NFA transitions by reading each successive symbol of the input, through NFA states: 0, 0, 0A, 1B, \{0B, 1B\}, \{1A, 0A\}, \{0B, 1B, $\bot$\}, \{1A, 0B, 1B, $\bot$\} and finally \{0B, 1A, 0B, 1B, $\bot$\}. Since NFA state $\bot$ is accepting (doubly circled in (d)), the NFA accepts \texttt{000A01100}, classifying this configuration as potentially eventually-halting. However, the NFA does not accept input \texttt{A0}, which corresponds to the all-0 configuration, hence this TM cannot halt from there.}
+    (d) A Nondeterministic Finite Automaton, constructed using the direct FAR algorithm (Section~\ref{far-algo-direct}), that recognises at least all eventually-halting configurations (with finitely many 1s) of the machine. Inputting the top row of (b), encoded as word \texttt{000A01100} (see Definition~\ref{def:wordc}), the NFA transitions by reading each successive symbol of the input, through NFA states: 0, 0, 0A, 1B, \{0B, 1B\}, \{1A, 0A\}, \{0B, 1B, $\bot$\}, \{1A, 0B, 1B, $\bot$\} and finally \{0B, 1A, 0B, 1B, $\bot$\}. Since NFA state $\bot$ is accepting (doubly circled in (d)), the NFA accepts \texttt{000A01100}, classifying this configuration as potentially eventually-halting. However, the NFA does not accept input \texttt{A0}, which corresponds to the all-0 configuration, hence this TM cannot halt from there.}
 
 
 
@@ -224,7 +224,7 @@ One important aspect of the technique is that, given a Turing machine and its co
 \newcommand{\T}{^T}
 \newcommand{\row}{\text{row}}
 \label{far-defs-recognizer}
-For a given Turing machine, we aim at building an NFA that recognises at least all eventually-halting configurations. In other words, the NFA recognises configurations that \textit{potentially} eventually halt, which is why we call the NFA \textit{potential-halt-recognizing}. Importantly, if the NFA does not recognise the all-0 initial configuration then we know that the Turing machine does not halt from it. Figure~\ref{fig:finite-automata-reduction} gives a potential-halt-recognizing NFA for a 4-state Turing machine, constructed using the results of Section~\ref{far-algo-direct}.
+For a given Turing machine, we aim at building an NFA that recognises at least all its eventually-halting configurations (with finitely many 1s). In other words, the NFA recognises configurations that \textit{potentially} eventually halt, which is why we call the NFA \textit{potential-halt-recognizing}. Importantly, if the NFA does not recognise the all-0 initial configuration then we know that the Turing machine does not halt from it. Figure~\ref{fig:finite-automata-reduction} gives a potential-halt-recognizing NFA for a 4-state Turing machine, constructed using the results of Section~\ref{far-algo-direct}.
 
 
 Let's first recall how Nondeterministic Finite Automta (\textbf{NFA}) can be described using linear algebra. Let $\mathbf{2}$ denote the Boolean semiring\footnote{A semiring is a ring without the requirement to have additive inverses, e.g. the set of natural numbers $\N=\{0,1,2\dots\}$ is a semiring.} $\{0,1\}$ with operations $+$ and $\cdot$ respectively implemented by $\operatorname{OR}$ and $\operatorname{AND}$ \cite{CUNINGHAMEGREEN1991251}.
@@ -255,7 +255,7 @@ Now, we describe how we transform Turing machine configurations that have finite
   A word-representation of the configuration on the top row of Figure~\ref{fig:finite-automata-reduction}(c), is $\hat{c} = \texttt{00A001100}$.
 \end{example}
 
-Note that two word-representations of the same configuration will only differ in the number of leading and trailing 0s that they have. Hence, if $\mathcal{L}$ is the regular language of the NFA that we wish to construct to recognise the eventually-halting configurations of a given TM, it is natural that we ask the following:
+Note that two word-representations of the same configuration will only differ in the number of leading and trailing 0s that they have. Hence, if $\mathcal{L}$ is the regular language of the NFA that we wish to construct to recognise the eventually-halting configurations (with finitely many 1s) of a given TM, it is natural that we ask the following:
 \begin{align*}
   u \in \mathcal{L} \iff 0u \in \mathcal{L} &  & \text{(leading zeros ignored)}
   \\
@@ -275,7 +275,7 @@ These are implied by the following, generally stronger, conditions on the transi
 Note that Condition~\ref{far-cond-trailing-0}, $T_0 a^{\T} = a^{\T}$, means that for all accepting states of the NFA, reading a 0 is possible and leads to an accepting state. Indeed, $T_0 a^{\T}$ describes the set of NFA states that reach the set of accepting states $a$ after reading a $0$.
 
 
-Then, we want our NFA's language $\mathcal{L}$ to include all eventually-halting configurations of a given Turing machine $\mathcal{M}$.  Inductively, we want that:
+Then, we want our NFA's language $\mathcal{L}$ to include all eventually-halting configurations (with finitely many 1s) of a given Turing machine $\mathcal{M}$.  Inductively, we want that:
 \begin{align*}
   c\vdash\bot                                    & \implies \hat{c} \in \mathcal{L}  \\
   (c_1\vdash c_2)\land \hat{c}_2 \in \mathcal{L} & \implies\hat{c}_1 \in \mathcal{L}
