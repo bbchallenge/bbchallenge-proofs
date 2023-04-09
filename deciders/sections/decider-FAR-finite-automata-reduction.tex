@@ -859,25 +859,23 @@ So, Algorithm \ref{alg:search-dfa} searches such DFAs incrementally (avoiding pa
 % By theorem \ref{far-main-theorem}, this prevents false proofs.
 
 
-% \subsection{Results}
-% \todo[inline]{JEB: TBD. If accepted/merged, update repo link, state the parameters, summarize the progress.}
-% The decider was coded in \texttt{Rust} and is accessible at this link: \url{https://github.com/UncombedCoconut/bbchallenge-deciders/tree/finite-automata-reduction/decider-finite-automata-reduction}.
-
-% It uses Kissat\cite{Biere_2020} as its \textsc{SAT} solver.
-
-% More information about these results is available at: \url{https://discuss.bbchallenge.org/t/decider-finite-automata-reduction/123}.
 
 \subsection{Implementations and results}\label{sec:far-implem}
 
 Here are the implementations of the decider that were realised:
 
 \begin{enumerate}
-  \item Justin Blanchard's original rust (and blazingly fast) implementation: \url{https://github.com/UncombedCoconut/bbchallenge-deciders/tree/finite-automata-reduction/decider-finite-automata-reduction},
+  \item Justin Blanchard's original, optimized Rust implementation: \url{https://github.com/bbchallenge/bbchallenge-deciders/tree/main/decider-finite-automata-reduction-reproduction},
   \item Tony Guilfoyle's C++ reproduction: \url{https://github.com/TonyGuil/bbchallenge/tree/main/FAR}
   \item Tristan Stérin (cosmo)'s Python reproduction: \url{https://github.com/bbchallenge/bbchallenge-deciders/tree/main/decider-finite-automata-reduction-reproduction}
 \end{enumerate}
 
+
+% MitM-DFA impl notes:
+% It uses Kissat\cite{Biere_2020} as its \textsc{SAT} solver.
+% Acknowledgements should point to djmati1111 and mateon1 implementations (pinned in Discord)
 Verifiers for Theorem~\ref{far-main-theorem} -- i.e. programs that check that a given NFA gives a valid nonhalting proof for a given machine, see Remark~\ref{far-remark-verification} -- have also been given with each of the above deciders and, Nathan Fenner provided one verifier formally verified in Dafny: \url{https://github.com/Nathan-Fenner/busy-beaver-dafny-regex-verifier}.
 
 
 \paragraph*{Results.} In order to achieve reasonable compute time, the search space of DFA (see Section~\ref{far-algo-direct}) was searched up to 6 DFA states. The method decides 503,169 machines out of the 535,801 remaining machines (94\%) after halting segment , in a bit less than 20 minutes using Justin Blanchard's rust implementation on a 4-core i7 laptop. Hence, after FAR, we have 32,632 machines left to be decided.
+% More information about these results is available at: \url{https://discuss.bbchallenge.org/t/decider-finite-automata-reduction/123}.
