@@ -3,6 +3,9 @@
 \newpage
 \section{Finite automata reduction}\label{sec:finite-automata-reduction}
 
+\paragraph{Acknowledgement.} Sincere thanks to bbchallenge's contributor Justin Blanchard who initially presented this method and the first implementation\footnote{See: \url{https://discuss.bbchallenge.org/t/decider-finite-automata-reduction/}.}. Other have contributed to this method by producing alternative implementations (see Section~\ref{sec:far-implem}) or discussing and writing the formal proof presented here: Tony Guilfoyle, Tristan Stérin (cosmo), Nathan Fenner, Mateusz Naściszewski (Mateon1), djmati1111.
+
+
 \subsection{Method overview}\label{far-overview}
 
 The core idea of the method presented in this section is to find, for a given Turing machine, a regular language that contains the set of the machine's eventually-halting configurations. Then, provided that the all-0 configuration is not in the regular language, we know that the machine does not halt.
@@ -863,3 +866,18 @@ So, Algorithm \ref{alg:search-dfa} searches such DFAs incrementally (avoiding pa
 % It uses Kissat\cite{Biere_2020} as its \textsc{SAT} solver.
 
 % More information about these results is available at: \url{https://discuss.bbchallenge.org/t/decider-finite-automata-reduction/123}.
+
+\subsection{Implementations and results}\label{sec:far-implem}
+
+Here are the implementations of the decider that were realised:
+
+\begin{enumerate}
+  \item Justin Blanchard's original rust (and blazingly fast) implementation: \url{https://github.com/UncombedCoconut/bbchallenge-deciders/tree/finite-automata-reduction/decider-finite-automata-reduction},
+  \item Tony Guilfoyle's C++ reproduction: \url{https://github.com/TonyGuil/bbchallenge/tree/main/FAR}
+  \item Tristan Stérin (cosmo)'s Python reproduction: \url{https://github.com/bbchallenge/bbchallenge-deciders/tree/main/decider-finite-automata-reduction-reproduction}
+\end{enumerate}
+
+Verifiers for Theorem~\ref{far-main-theorem} -- i.e. programs that check that a given NFA gives a valid nonhalting proof for a given machine, see Remark~\ref{far-remark-verification} -- have also been given with each of the above deciders and, Nathan Fenner provided one verifier formally verified in Dafny: \url{https://github.com/Nathan-Fenner/busy-beaver-dafny-regex-verifier}.
+
+
+\paragraph*{Results.} In order to achieve reasonable compute time, the search space of DFA (see Section~\ref{far-algo-direct}) was searched up to 6 DFA states. The method decides 503,169 machines out of the 535,801 remaining machines (94\%) after halting segment , in a bit less than 20 minutes using Justin Blanchard's rust implementation on a 4-core i7 laptop. Hence, after FAR, we have 32,632 machines left to be decided.
