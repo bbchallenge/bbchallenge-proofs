@@ -363,7 +363,7 @@ Combining the above, we get our main result:
 
 
 \begin{remark}[Verification]\normalfont\label{far-remark-verification}
-  Theorem~\ref{far-main-theorem} has the nice property of being suited for the purpose of \textit{verification}: given a TM, an NFA and a vector $s$, the task of verifying that equations \eqref{far-cond-first}--\eqref{far-cond-last} hold and thus that the TM does not halt, is computationally simple\footnote{Note that although equation~\eqref{far-cond-halt} has a $\forall$ quantifier, the set of NFA states reachable after reading an arbitrary $u \in \{0,1\}^*$ is computable, and we just have to consider one instance of equation~\eqref{far-cond-halt} replacing $q_0 T_u$ per such state.}.
+  Theorem~\ref{far-main-theorem} has the nice property of being suited for the purpose of \textit{verification}: given a TM, an NFA and a vector $s$, the task of verifying that equations \eqref{far-cond-first}--\eqref{far-cond-last} hold and thus that the TM does not halt, is computationally simple\footnote{Note that although equation~\eqref{far-cond-halt} has a $\forall$ quantifier, the set of NFA states reachable after reading an arbitrary $u \in \{0,1\}^*$ is computable, and we just have to consider one instance of equation~\eqref{far-cond-halt} replacing $q_0 T_u$ per such state.}. Verifiers have been implemented for Theorem~\ref{far-main-theorem}, see Section~\ref{sec:far-implem}.
 \end{remark}
 
 
