@@ -12,7 +12,7 @@
     \url{https://bbchallenge/4239083}.}\label{fig:cyclers}
 \end{figure}
 
-The goal of this decider is to recognise Turing machines that cycle through the same configurations for ever. Such machines never halt. The method is simple: remember every configuration seen by a machine and return \texttt{true} if one is visited twice. A time limit (maximum number of steps) is also given for running the test in practice: the algorithm recognises any machine whose cycle fits within this limit\footnote{In practice, for machines with 5 states the decider was run with 1000 steps time limit.}.
+The goal of this decider is to recognise Turing machines that cycle through the same configurations for ever. Such machines never halt. The method is simple: remember every configuration seen by a machine and return \texttt{true} if one is visited twice\footnote{Variations making use of Floyd's cycle detection algorithm are also practical.}. A time limit (maximum number of steps) is also given for running the test in practice: the algorithm recognises any machine whose cycle fits within this limit\footnote{In practice, for machines with 5 states the decider was run with 1000 steps time limit.}.
 
 
 \begin{example}\normalfont
@@ -25,7 +25,7 @@ The goal of this decider is to recognise Turing machines that cycle through the 
 
 We assume that we are given a Turing Machine type \textbf{TM} that encodes the transition table of a machine as well as a procedure \textbf{TuringMachineStep}(machine,configuration) which computes the next configuration of a Turing machine from the given configuration or \textbf{nil} if the machine halts at that step.
 
-\begin{algorithm}
+\begin{algorithm}[H]
   \caption{{\sc decider-cylers}}\label{alg:cyclers}
 
   \begin{algorithmic}[1]
@@ -42,6 +42,11 @@ We assume that we are given a Turing Machine type \textbf{TM} that encodes the t
     \State \textbf{int} currTime = 0
 
     \While{currTime $<$ timeLimit}
+    \State \textbf{invariant 1}:
+        $c_0 \vdash^\text{currTime} \text{currConfiguration}$.
+    \State \textbf{invariant 2}:
+        $\forall c_i \in \text{configurationsSeen},\ 
+            \exists i < \text{currTime},\ c_0 \vdash^i c_i$.
     \If{currConfiguration \textbf{in} configurationsSeen}
     \State \textbf{return} true
     \EndIf
@@ -52,7 +57,7 @@ We assume that we are given a Turing Machine type \textbf{TM} that encodes the t
 
 
     \If{currConfiguration == \textbf{nil}}
-    \State \textbf{return} false //machine has halted, it is not a Cycler
+    \State \textbf{return} false \Comment{machine has halted, it is not a Cycler}
     \EndIf
     \EndWhile
 
@@ -66,18 +71,30 @@ We assume that we are given a Turing Machine type \textbf{TM} that encodes the t
 
 
 
-\begin{theorem}\label{th:cyclers}\normalfont Let $\mathcal{M}$ be a Turing machine and $t \in \mathbb{N}$ a time limit. Let $c_0$ be the initial configuration of the machine. There exists $i\in\mathbb{N}$ and $j\in\mathbb{N}$ such that $c_0 \vdash^i c_i \vdash^j c_i$ with $i+j \leq t$ if and only if {\sc decider-cyclers}($\mathcal{M}$,$t$) returns \texttt{true} (Algorithm~\ref{alg:cyclers}).
+\begin{theorem}\label{th:cyclers}\normalfont Let $\mathcal{M}$ be a Turing machine and $t \in \mathbb{N}$ a time limit. Let $c_0$ be the initial configuration of the machine. If {\sc decider-cyclers}($\mathcal{M}$, $t$) returns \texttt{true}, then there exists $i\in\mathbb{N}$ and $j\in\mathbb{N}$ such that $c_0 \vdash^i c_i \vdash^j c_i$ with $i+j < t$.
 \end{theorem}
 \begin{proof}
-  This follows directly from the behavior of {\sc decider-cyclers}($\mathcal{M}$,$t$): all intermediate configurations below time $t$ are recorded and the algorithm returns \texttt{true} if and only if one is visited twice. This mathematically translates to
-  there exists $i\in\mathbb{N}$ and $j\in\mathbb{N}$ such that $c_0 \vdash^i c_i \vdash^j c_i$ with $i+j \leq t$, which is what we want. Index $i$ corresponds to the first time that $c_i$ is seen (l.13 in Algorithm~\ref{alg:cyclers}) while index $j$ corresponds to the second time that $c_i$ is seen (l.11 in Algorithm~\ref{alg:cyclers}).
+  We first observe that the invariants labeled in the pseudocode hold whenever
+  the algorithm reaches them. When entering the loop, invariant 1 holds since
+  $c_0 \vdash^0 c_0$, and invariant 2 holds vacuously, since configurationsSeen
+  is empty. Invariant 1 is preserved in each iteration by definition of
+  \textbf{TuringMachineStep}. Invariant 2 continues to hold for all configurations
+  already in the set, as \text{currTime} grows monotonously, and will also hold
+  for the newly inserted configuration, which follows from invariant 1.
+
+  Now, if the algorithm has returned true, we have
+  $c_i = \text{currConfiguration} \in \text{configurationsSeen}$, and therefore
+  $c_0 \vdash^i c_i$ for $i < \text{currTime}$ by invariant 2.
+  Let $j = \text{currTime} - i$. By invariant 1 we have $c_0 \vdash^{i + j} c_i$,
+  and therefore $c_i \vdash^j c_i$. It remains to see that $i + j < t$, which
+  follows immediately from the loop condition.
 \end{proof}
 
 \begin{corollary}\normalfont
   Let $\mathcal{M}$ be a Turing machine and $t \in \mathbb{N}$ a time limit. If {\sc decider-cyclers}($\mathcal{M}$,$t$) returns \texttt{true} then the behavior of $\mathcal{M}$ from all-0 tape has been decided: $\mathcal{M}$ does not halt.
 \end{corollary}
 \begin{proof}
-  By Theorem~\ref{th:cyclers}, there exists $i\in\mathbb{N}$ and $j\in\mathbb{N}$ such that $c_0 \vdash^i c_i \vdash^j c_i$ with $i+j \leq t$. It follows that for all $k\in\mathbb{N}$, $c_0 \vdash^{i+kj} c_i$. The machine never halts as it will visit $c_i$ infinitely often.
+  By Theorem~\ref{th:cyclers}, there exists $i\in\mathbb{N}$ and $j\in\mathbb{N}$ such that $c_0 \vdash^i c_i \vdash^j c_i$ with $i+j \leq t$. It follows that for all $k\in\mathbb{N}$, $c_0 \vdash^{i+kj} c_i$, by a routine induction on $k$. The machine never halts as it will visit $c_i$ infinitely often.
 \end{proof}
 
 \subsection{Results}
