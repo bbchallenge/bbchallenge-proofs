@@ -114,7 +114,7 @@ We assume that we are given routine {\sc get-undefined-transitions}(machine) whi
 
 \subsection{Correctness}
 
-\begin{theorem}\label{th:backward-reasoning}\normalfont
+\begin{theorem}\label{th:backward-reasoning}
   Let $\mathcal{M}$ be a Turing machine and $D\in\mathbb{N}$.
   Then, {\sc decider-backward-reasoning}($\mathcal{M}$,$D$) returns \texttt{true} if and only if no undefined transition of $\mathcal{M}$ can be reached in more than $D$ steps.
 \end{theorem}
@@ -130,7 +130,7 @@ We assume that we are given routine {\sc get-undefined-transitions}(machine) whi
   This pseudocode contains a slight optimisation with the use of set \texttt{configurationSeen} (l.29). This set racks configurations which would have already been seen in different branches of the tree in order not traverse them twice (l.32-33). While not needed in theory, this optimisation is useful in practice, especially at large depths (e.g. $D=300$).
 \end{proof}
 
-\begin{corollary}\normalfont
+\begin{corollary}
   Let $\mathcal{M}$ be a Turing machine and $D\in\mathbb{N}$. If {\sc decider-backward-reasoning}($\mathcal{M}$,$D$) returns \texttt{true} and machine $\mathcal{M}$ can run $D$ steps from all-0 tape without halting then the behavior of $\mathcal{M}$ from all-0 tape has been decided: $\mathcal{M}$ does not halt.
 \end{corollary}
 \begin{proof}

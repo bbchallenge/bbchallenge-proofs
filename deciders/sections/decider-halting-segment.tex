@@ -36,15 +36,15 @@ Interestingly, \HS is the method that was used by Newcomb Greenleaf to prove\foo
 
 \subsection{Formal proof}
 
-\begin{definition}[Segment configurations]\label{def:hs-conf}\normalfont
+\begin{definition}[Segment configurations]\label{def:hs-conf}
   Let $n \in \N = \{0, 1, 2 \dots\}$ a natural number called \textit{segment size}. A \textit{segment configuration} is a 3-tuple: (i) state, (ii) $w \in \{0,1\}^n$ which is the segment's content and (iii) the position of the machine's head is an integer $p \in \llbracket -1, n \rrbracket$ where positions $\llbracket 0,n \llbracket$ correspond to the interior of the segment, position $-1$ for outside to the left and $n$ for outside to the right. \textit{Halting segment configurations} are segment configurations where the state is $\bot$ and with an additional information (iv) of which halting transition of the machine has been used to halt.
 \end{definition}
 
-\begin{example}\normalfont
+\begin{example}
   In Figure~\ref{fig:hs} we have $n=2$ and, the leftmost node in blue and diamond shape corresponds to segment configuration \texttt{A [-] 0 0 -} (i) state A, (ii) $w = \texttt{00}$ and (iii) $p = -1$. The rightmost node in red and diamond shape corresponds to halting segment configuration $\bot$ \texttt{C1 - 0 0 [-]} (i) state $\bot$, (ii) $w = \texttt{00}$, (iii) $p = 2$ and (iv) halting transition \texttt{C1}.
 \end{example}
 
-\begin{definition}[\HS graph]\label{def:hs-graph}\normalfont
+\begin{definition}[\HS graph]\label{def:hs-graph}
   Let $\mathcal{M}$ be a Turing machine and $n \in \N$ a segment size. The \HS graph for $M$ and $n$ is a directed graph where the nodes are segment configurations (Definition~\ref{def:hs-conf}). The graph is generated from $n+2$ \textit{initial nodes} (blue outline in Figure~\ref{fig:hs}) that are all in state A with segment content $0^n$ ($n$ consecutive 0s) but where the head is at each of the $n+2$ possible positions, one per each initial node, see the blue nodes in Figure~\ref{fig:hs} for an example.
   Then, edges that go out of a given node $r$ are defined as follows:
   \begin{itemize}
@@ -61,7 +61,7 @@ Interestingly, \HS is the method that was used by Newcomb Greenleaf to prove\foo
 
 \end{definition}
 
-\begin{theorem}[\HS]\label{th:hs}\normalfont
+\begin{theorem}[\HS]\label{th:hs}
   Let $\mathcal{M}$ be a Turing machine and $n \in \N$ a segment size. Let $G$ be the \HS graph for $\mathcal{M}$ and $n$ (Definition~\ref{def:hs-graph}). If $\mathcal{M}$ halts in halting transition $T$ when started from state A and all-0 tape, then $G$ must contain a halting node for transition $T$ for each of the $n+2$ possible values of the head's position $p \in \llbracket -1, n \rrbracket$.
 \end{theorem}
 \begin{proof}
@@ -70,14 +70,14 @@ Interestingly, \HS is the method that was used by Newcomb Greenleaf to prove\foo
   Hence we have shown that all halting nodes for transition $T$ for each of the $n+2$ possible values of the head's position $p \in \llbracket -1, n \rrbracket$ are reachable from some initial node(s).
 \end{proof}
 
-\begin{remark}\normalfont
+\begin{remark}
   By contraposition of Theorem~\ref{th:hs}, if, for all halting transitions $T$ there is at least one halting node (red outline in Figure~\ref{fig:hs}) for some position in the segment that is not reachable from one of the initial node (blue outline in Figure~\ref{fig:hs}) then the machine does not halt. That way, in Figure~\ref{fig:hs}, we can conclude that machine\url{https://bbchallenge.org/1RB1RC_0LA0RA_0LB---} does not halt since the halting nodes of halting transition \texttt{C1} are \texttt{$\bot$ C1 [-] 0 0 -}, \texttt{$\bot$ C1 - 0 1 [-]} and \texttt{$\bot$ C1 - 0 0 [-]} which does not cover the entire segment (both internal segment postions are not covered).
 
   Note that if all of the segment's positions are covered for some halting transition, we cannot conclude that the machine does not halt, but it does not mean that the machine necessarily halts either.
 \end{remark}
 
 \begin{remark}
-  \normalfont Some non-halting machines cannot be decided using \HS for any segment size. Such a machine is for instance \url{https://bbchallenge.org/1RB---_1LC0RB_1LB1LA}.
+  Some non-halting machines cannot be decided using \HS for any segment size. Such a machine is for instance \url{https://bbchallenge.org/1RB---_1LC0RB_1LB1LA}.
 \end{remark}
 
 \subsection{Implementations and results}\label{sec:hs-implem}

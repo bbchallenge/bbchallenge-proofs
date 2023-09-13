@@ -232,7 +232,7 @@ Let $\M_{m,n}$ be the set of matrices with $m$ rows and $n$ columns over $\mathb
 
 
 
-\begin{example}\label{ex:nfa}\normalfont
+\begin{example}\label{ex:nfa}
   The NFA depicted in Figure~\ref{fig:example_nfa}, with states X, Y, Z and alphabet $\mathcal{A}=\{\alpha,\beta\}$, is algebraically encoded as follows: $q_0 = (1,1,0)$, $a=(0,0,1)$, $T_\alpha=\begin{bmatrix}
       0 & 0 & 0 \\
       1 & 1 & 0 \\
@@ -247,11 +247,11 @@ Let $\M_{m,n}$ be the set of matrices with $m$ rows and $n$ columns over $\mathb
 
 Now, we describe how we transform Turing machine configurations that have finitely many 1s into finite words that will be read by our NFA. First recall that a Turing machine configuration is defined by the 3-tuple: (i) state in which the machine is (ii) position of the head (iii) content of the memory tape, see Section~\ref{sec:conventions}. Then, a word-representation of a configuration is defined by:
 
-\begin{definition}[Word-representations of a configuration]\label{def:wordc}\normalfont
+\begin{definition}[Word-representations of a configuration]\label{def:wordc}
   Let $c$ be a Turing machine configuration with finite support, i.e. there are finitely many 1s on the memory tape of the configuration. A word-representation of the configuration $c$ is a word $\hat{c}$ constructed by concatenating (from left to right) the symbols of any finite region of the tape that contains all the 1s and, adding the head's state (a letter between A and E in the case of 5-state TMs) just before the tape symbol its currently reading.
 \end{definition}
 
-\begin{example}\normalfont
+\begin{example}
   A word-representation of the configuration on the top row of Figure~\ref{fig:finite-automata-reduction}(c), is $\hat{c} = \texttt{00A001100}$.
 \end{example}
 
@@ -318,7 +318,7 @@ These conditions are unwieldy. Let's seek stronger (thus still sufficient) condi
 
 Combining the above, we get our main result:
 
-\begin{theorem}\normalfont
+\begin{theorem}
   \label{far-main-theorem}
   Machine $\mathcal{M}$ doesn't halt from the initial all-0 configuration if there are an NFA $(q_0, \{T_\gamma\}, a)$ and row vector $s$ satisfying the below:
   \begin{align}
@@ -362,7 +362,7 @@ Combining the above, we get our main result:
 \end{proof}
 
 
-\begin{remark}[Verification]\normalfont\label{far-remark-verification}
+\begin{remark}[Verification]\label{far-remark-verification}
   Theorem~\ref{far-main-theorem} has the nice property of being suited for the purpose of \textit{verification}: given a TM, an NFA and a vector $s$, the task of verifying that equations \eqref{far-cond-first}--\eqref{far-cond-last} hold and thus that the TM does not halt, is computationally simple\footnote{Note that although equation~\eqref{far-cond-halt} has a $\forall$ quantifier, the set of NFA states reachable after reading an arbitrary $u \in \{0,1\}^*$ is computable, and we just have to consider one instance of equation~\eqref{far-cond-halt} replacing $q_0 T_u$ per such state.}. Verifiers have been implemented for Theorem~\ref{far-main-theorem}, see Section~\ref{sec:far-implem}.
 \end{remark}
 
@@ -385,7 +385,7 @@ We design an efficient search algorithm for Theorem~\ref{far-main-theorem} that 
 
 \end{enumerate}
 
-\begin{example}\normalfont
+\begin{example}
   The structure described above is followed by the NFA depicted in Figure~\ref{fig:finite-automata-reduction}(d)~Left. Note that, following above Point~\ref{pt:injective}, it is natural to name states in the right-hand side NFA by prepending left-hand side DFA states to the transitions' TM state letter, e.g. state 1C in Figure~\ref{fig:finite-automata-reduction} is reached from DFA state 1 after reading TM state letter C.
 \end{example}
 
@@ -437,7 +437,7 @@ For a given left-hand side DFA with transition function $\delta$, the right-hand
   \tag{\ref{far-cond-last}'}
 \end{align}
 
-\begin{lemma}\normalfont\label{lem:far-unique-min}
+\begin{lemma}\label{lem:far-unique-min}
   There's a unique minimal solution (w.r.t $\preceq$) to the system  of inequalities (\ref{far-cond-ass-steady}')--(\ref{far-cond-last}') and an effective way to compute it: initialize $R_0$, $R_1$ to zero,
   then set entries to 1 as (\ref{far-cond-ass-steady}'), (\ref{far-cond-halt}') and (\ref{far-cond-last}') demand then iterate (\ref{far-cond-left}') until $R_0$ and $R_1$ stop changing.
 \end{lemma}
@@ -542,7 +542,7 @@ valid until $f([k])$ is closed under transitions.
 This induces $\delta_\textsf{cf}(q,b)\mapsto f^{-1}(f(q), b)$.
 (Warning: this definition and terminology aren't standard.)
 
-\begin{lemma}\normalfont
+\begin{lemma}
   \label{far-dfa-canonical form}
   In a DFA with $(Q,q_0)=([n],0)$, the following are equivalent:
   \begin{enumerate}
@@ -573,7 +573,7 @@ This induces $\delta_\textsf{cf}(q,b)\mapsto f^{-1}(f(q), b)$.
   \end{description}
 \end{proof}
 
-\begin{corollary}\normalfont
+\begin{corollary}
   $\{t_k\}_{k=0}^\ell$ ($\ell<2n$) is a prefix of a canonical, leading-zero-ignoring, $n$-state DFA transition table iff
   $m_k \mathrel{\mathop:}= \max\{t_j\}_{j=0}^k$ runs from $0$ to $m_\ell<n$ in steps of $0$ or $1$, and $m_{2q-1}\ge q$ (for all $2q - 1 \le \ell$).
 \end{corollary}
