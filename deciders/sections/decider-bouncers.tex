@@ -1,0 +1,29 @@
+% !TeX root = ../correctness-deciders.tex
+
+\section{Bouncers}\label{sec:bouncers}
+
+Intuitively, a \emph{bouncer} is a Turing machine that builds a tape with
+ever-expanding repeating fragments. We shall refine this definition later,
+such that it clearly explains what machines the decider should hope to decide.
+
+\paragraph{Notation.} For a tape segment $s \in \{0, 1\}^*$, we will
+write $(s)$ to mean $s$ repeated any number of times, i.e.~$s^k$ for
+an unspecified $k$. 
+
+\begin{example}
+    $0\,(110)\,1$ can refer to $01$, $01101$, $01101101$, and so on.
+\end{example}
+
+\begin{definition}
+    A bouncer's \emph{reset configuration} is given by
+    a list of \emph{walls} $w_0,\ \ldots,\ w_n \in \{0, 1\}^*$
+    and \emph{repeaters} $r_1,\ \ldots,\ r_n$, as well as a fixed state $q$,
+    and refers to the configuration
+    \begin{equation}
+        0^\infty\; [0]\; w_0\; (r_1)\; w_1\; (r_2)\; w_2\: \cdots\: (r_n)\; w_n,
+    \end{equation}
+    in state $q$.
+\end{definition}
+
+% TODO: We would probably want an illustration here. Perhaps a space-time
+% diagram with the reset configurations marked?
