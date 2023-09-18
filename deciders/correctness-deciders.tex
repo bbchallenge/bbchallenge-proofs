@@ -25,17 +25,21 @@
 \usepackage{amsmath,amsfonts,amssymb,amsthm}
 
 \theoremstyle{definition} % don't use italics
-\newtheorem{theorem}{Theorem}
-\newtheorem{definition}[theorem]{Definition}
-\newtheorem{lemma}[theorem]{Lemma}
-\newtheorem{proposition}[theorem]{Proposition}
-\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{definition}{Definition}[section]
+\newtheorem{lemma}{Lemma}[section]
+\newtheorem{proposition}{Proposition}[section]
+\newtheorem{corollary}{Corollary}[section]
+
 
 \theoremstyle{remark} % emphasize the "Remark N." with italics, not bold
-\newtheorem{observation}[theorem]{Observation}
-\newtheorem{example}[theorem]{Example}
-\newtheorem{remark}[theorem]{Remark}
+\newtheorem{observation}{Observation}[section]
+\newtheorem{example}{Example}[section]
+\newtheorem{remark}{Remark}[section]
 
+\usepackage{xassoccnt}
+\DeclareCoupledCountersGroup{theorems}
+\DeclareCoupledCounters[name=theorems]{theorem,definition,lemma,proposition,corollary,remark,observation,example}
 
 \usepackage{microtype,xspace,wrapfig,multicol} 
 \usepackage[textsize=tiny,color=lightgray]{todonotes} 
