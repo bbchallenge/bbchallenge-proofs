@@ -145,25 +145,25 @@ We also assume that we are given a routine {\sc get-extreme-position}(tape,sideO
 
 \subsection{Correctness}
 
-\begin{definition}[record-breaking configurations]\normalfont
+\begin{definition}[record-breaking configurations]
   Let $\mathcal{M}$ be a Turing machine and $c_0$ its busy beaver initial configuration (i.e. state is 0, head position is 0 and tape is all-0).
   Let $c$ be a configuration reachable from $c_0$, i.e. $c_0 \vdash^* c$.
   Then $c$ is said to be \textit{record-breaking} if the current head position had never been visited before. Records can be broken to the \textit{right} (positive head position) or to the left (negative head position).
 \end{definition}
 
-\begin{definition}[Distance $L$ between record-breaking configurations]\label{def:distL}\normalfont
+\begin{definition}[Distance $L$ between record-breaking configurations]\label{def:distL}
   Let $\mathcal{M}$ be a Turing machine and $r_1,r_2$ be two record-breaking configurations on the same side of the tape at respective times $t_1$ and $t_2$ with $t_1 < t_2$. Let $p_1$ and $p_2$ be the tape positions of these records. Then, distance $L$ between $r_1$ and $r_2$ is defined as $\max\{|p_1 - p|\}$ with $p$ any position visited by $\mathcal{M}$ between $t_1$ and $t_2$ that is not beating record $p_1$ (i.e. $p \leq p_1$ for a record on the right and $p \geq p_1$ for a record on the left).
 \end{definition}
 
-\begin{lemma}\label{lem:translated-cyclers}\normalfont
+\begin{lemma}\label{lem:translated-cyclers}
   Let $\mathcal{M}$ be a Turing machine. Let $r_1$ and $r_2$ be two configurations that broke a record in the same state and on the same side of the tape at respective times $t_1$ and $t_2$ with $t_1 < t_2$. Let $p_1$ and $p_2$ be the tape positions of these records. Let $L$ be the distance between $r_1$ and $r_2$ (Definition~\ref{def:distL}). If the content of tape in $r_1$ at distance $L$ of $p_1$ is the same than the content of the tape in $r_2$ at distance $L$ of $p_2$ then $\mathcal{M}$ never halts. Furthermore, by Definition~\ref{def:distL}, we know that distance $L$ is the maximum distance that $\mathcal{M}$ can travel to the left of $p_1$ between times $t_1$ and $t_2$.
 \end{lemma}
 
-\begin{proof}\normalfont
+\begin{proof}
   Let's suppose that the record-breaking configurations are on the right-hand side of the tape. By the hypotheses, we know the machine is in the same state in $r_1$ and $r_2$ and that the content of the tape at distance $L$ to the left of $p_1$ in $r_1$ is the same as the content of the tape at distance $L$ to the left of $p_2$ in $r_2$. Note that the content of the tape to the right of $p_1$ and $p_2$ is the same: all-0 since they are record positions. Hence that after $r_2$, since it will read the same tape content the machine will reproduce the same behavior than it did after $r_1$ but translated at position $p_2$: there will a record-breaking configuration $r_3$ such that the distance between record-breaking configurations $r_2$ and $r_3$ is also $L$ (Definition~\ref{def:distL}). Hence the machine will keep breaking records to the right for ever and will not halt. Analogous proof for records that are broken to the left.
 \end{proof}
 
-\begin{theorem}\label{th:translated-cyclers}\normalfont
+\begin{theorem}\label{th:translated-cyclers}
   Let $\mathcal{M}$ be a Turing machine and $t$ a time limit. The conditions of Lemma~\ref{lem:translated-cyclers} are met before time $t$ if and only if {\sc decider-translated-cyclers}($\mathcal{M}$,$t$) outputs \texttt{true} (Algorithm~\ref{alg:translated-cyclers}).
 \end{theorem}
 \begin{proof}
@@ -179,7 +179,7 @@ We also assume that we are given a routine {\sc get-extreme-position}(tape,sideO
 
 \end{proof}
 
-\begin{corollary}\normalfont
+\begin{corollary}
   Let $\mathcal{M}$ be a Turing machine and $t \in \mathbb{N}$ a time limit. If {\sc decider-translated-cyclers}($\mathcal{M}$,$t$) returns \texttt{true} then the behavior of $\mathcal{M}$ from all-0 tape has been decided: $\mathcal{M}$ does not halt.
 \end{corollary}
 \begin{proof}
