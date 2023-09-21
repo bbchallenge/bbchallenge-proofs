@@ -99,6 +99,18 @@ The set $\mathbb{N}$ denotes $\{0,1,2\dots\}$.
 A \textit{configuration} of a Turing machine is defined by the 3-tuple: (i) state (ii) position of the head (iii) content of the memory tape. In the context of bbchallenge, \textit{the initial configuration} of a machine is always (i) state is 0, i.e. the first state to appear in the machine's description (ii) head's position is 0 (iii) the initial tape is all-0 -- i.e. each memory cell is containing 0. We write $c_1 \vdash_\mathcal{M} c_2$ if a configuration $c_2$ is obtained from $c_1$ in one computation step of machine $\mathcal{M}$. We omit $\mathcal{M}$ if it is clear from context. We let $c_1 \vdash^s c_2$ denote a sequence of $s$ computation steps, and let  $c_1 \vdash^* c_2$ denote zero or more computation steps. % exact same wording as in https://dna.hamilton.ie/assets/dw/NearyWoodsFCT09.pdf
 We write $c_1 \vdash \bot$ if the machine halts after executing one computation step from configuration $c_1$. In the context of bbchallenge, halting happens when an undefined machine transition  is met i.e. no instruction is given for when the machine is in the state, tape position and tape corresponding to configuration $c_1$.
 
+When discussing concrete configurations, we write
+$0^\infty\; s_1\; \cdots\; s_{k-1}\; [s_k]_q\; s_{k+1}\; \cdots\; s_n\; 0^\infty$
+to mean the configuration where the machine is in state $q$, with the head
+positioned on the symbol $s_k$. Thus, the initial configuration of the machine
+can be written as $0^\infty\; [0]_A\; 0^\infty$.
+
+Moreover, we will sometimes prefer to think of the tape head as being between
+symbols. Thus, we write $l <_q r$ to mean that the head is at the rightmost symbol
+of $l$, and $l >_q r$ to mean that the head is at the leftmost symbol of $r$.
+For example, $0^\infty\; [1]_A\; 0^\infty$ can be written as
+$0^\infty\; 1 <_A 0^\infty$ or $0^\infty >_A 1\; 0^\infty$.
+
 \paragraph*{Space-time diagram.} We use space-time diagrams to give a visual representation of the behavior of a given machine. The space-time diagram of machine $\mathcal{M}$ is an image where the $i^\text{th}$ row of the image gives:
 \begin{enumerate}
   \item The content of the tape after $i$ steps (black is 0 and white is 1).
