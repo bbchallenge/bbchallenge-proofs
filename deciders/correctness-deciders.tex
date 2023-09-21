@@ -59,9 +59,8 @@
 
 \newcommand{\N}{\mathbb{N}}
 
-\usepackage{leftindex}
-\newcommand{\lhead}[1]{<_#1}
-\newcommand{\rhead}[1]{\leftindex_#1 >}
+\newcommand{\lhead}[1]{\stackrel{#1}\triangleleft}
+\newcommand{\rhead}[1]{\stackrel{#1}\triangleright}
 
 \usepackage{xcolor}
 
@@ -115,6 +114,9 @@ symbols. Thus, we write $l \lhead{q} r$ to mean that the head is at the rightmos
 of $l$, and $l \rhead{q} r$ to mean that the head is at the leftmost symbol of $r$.
 For example, $0^\infty\; [1]_A\; 0^\infty$ can be written as
 $0^\infty\; 1 \lhead A 0^\infty$ or $0^\infty \rhead A 1\; 0^\infty$.
+
+\todo{It would probably be a good idea to say something here about subtapes, as
+used by Bouncers}
 
 \paragraph*{Space-time diagram.} We use space-time diagrams to give a visual representation of the behavior of a given machine. The space-time diagram of machine $\mathcal{M}$ is an image where the $i^\text{th}$ row of the image gives:
 \begin{enumerate}

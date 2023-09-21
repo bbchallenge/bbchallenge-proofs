@@ -49,7 +49,7 @@ After 12 steps of simulation, we reach
     0^\infty\; (111)\; 1110110 \rhead D (01)\; 1\; 0^\infty.
 \end{equation}
 Now, being in state $D$ and with a 0 to the left of the tape head, we have
-$0 \rhead D 01 \rightarrow 110 \rhead D$, and so we reach
+$0 \rhead D 01 \vdash^* 110 \rhead D$, and so we reach
 \begin{equation}
     0^\infty\; (111)\; 111011\; (11)\; 0 \rhead D 1\; 0^\infty,
 \end{equation}
@@ -62,6 +62,43 @@ conclude that this machine will never halt. \qed
 
 \end{example}
 
+\begin{definition} 
+    A \emph{tape chunk} is either a symbol $s \in \{0, 1\}$,
+    or a repeater $(s)$, with $s \in \{0, 1\}^*, s \neq \epsilon$.
+    The set of all tape chunks is denoted $\mathcal C$.
+\end{definition}
+
+\begin{definition}
+    A \emph{symbolic configuration} consists of a directed tape head, and
+    possibly empty sequences of tape chunks on either side, of the form
+\begin{align}
+    0^\infty\; l_1\; \cdots\; l_m &\lhead q r_1\; \cdots\; r_n\; 0^\infty
+\shortintertext{or}
+    0^\infty\; l_1\; \cdots\; l_m &\rhead q r_1\; \cdots\; r_n\; 0^\infty
+\end{align}
+where $l_k, r_k \in \mathcal C$.
+\end{definition}
+
+\begin{definition}
+    A configuration $c$ \emph{matches} a symbolic configuration $F$,
+    written $c \in L(F)$, if one can choose a number of repeatitions for each
+    repeater in $F$ and obtain $c$.
+\end{definition}
+
+\begin{definition}[Step relation for symbolic configurations]
+    We write $F \vdash F'$ if for all $c \in L(F)$ there is a $c' \in L(F')$
+    such that $c \vdash c'$. Likewise for $\vdash^*$ and $\vdash^s$.
+    \todo{Do we want to use $\vDash$ for this?}
+\end{definition}
+
+\begin{definition}[Shift rules]
+    If $a \rhead q b\; \vdash^* b'\; a \rhead q$, we say that we have a
+    \emph{right-facing shift rule} with tail $a \in \{0, 1\}^*$
+    taking $b \in \{0, 1\}^k$ to $b' \in \{0, 1\}^k$.
+    Likewise, if $b \lhead q a \,\vdash^*\; \lhead q a\; b$, we say that we have
+    a \emph{left-facing shift rule}.
+\end{definition}
+
 \todo{The below is not yet coherent, but merely snippets of what might
 be useful, created through endless rewriting}
 \begin{remark} The symbolic tapes we're considering can also be understood as
@@ -73,7 +110,7 @@ on all elements of the language at the same time.
 We will be considering a tape language of the form
 \begin{equation}
     \{
-    0^\infty\; [0]_q\; w_0\; (r_1)^{k_1}\; w_1\; (r_2)^{k_2}\; w_2\: \cdots\: (r_n)^{k_n}\; w_n
+    0^\infty\; \lhead q w_0\; (r_1)^{k_1}\; w_1\; (r_2)^{k_2}\; w_2\: \cdots\: (r_n)^{k_n}\; w_n
     \mid k_1, k_2, \ldots, k_n \in \N
     \}.
 \end{equation}
