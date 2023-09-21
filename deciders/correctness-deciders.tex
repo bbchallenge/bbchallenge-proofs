@@ -59,6 +59,10 @@
 
 \newcommand{\N}{\mathbb{N}}
 
+\usepackage{leftindex}
+\newcommand{\lhead}[1]{<_#1}
+\newcommand{\rhead}[1]{\leftindex_#1 >}
+
 \usepackage{xcolor}
 
 \definecolor{colorA}{RGB}{255,0,0}
@@ -107,10 +111,10 @@ positioned on the symbol $s_k$. Thus, the initial configuration of the machine
 can be written as $0^\infty\; [0]_A\; 0^\infty$.
 
 Moreover, we will sometimes prefer to think of the tape head as being between
-symbols. Thus, we write $l <_q r$ to mean that the head is at the rightmost symbol
-of $l$, and $l >_q r$ to mean that the head is at the leftmost symbol of $r$.
+symbols. Thus, we write $l \lhead{q} r$ to mean that the head is at the rightmost symbol
+of $l$, and $l \rhead{q} r$ to mean that the head is at the leftmost symbol of $r$.
 For example, $0^\infty\; [1]_A\; 0^\infty$ can be written as
-$0^\infty\; 1 <_A 0^\infty$ or $0^\infty >_A 1\; 0^\infty$.
+$0^\infty\; 1 \lhead A 0^\infty$ or $0^\infty \rhead A 1\; 0^\infty$.
 
 \paragraph*{Space-time diagram.} We use space-time diagrams to give a visual representation of the behavior of a given machine. The space-time diagram of machine $\mathcal{M}$ is an image where the $i^\text{th}$ row of the image gives:
 \begin{enumerate}
