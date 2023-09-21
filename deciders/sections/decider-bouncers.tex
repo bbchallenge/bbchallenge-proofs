@@ -2,27 +2,54 @@
 
 \section{Bouncers}\label{sec:bouncers}
 
-Intuitively, a \emph{bouncer} is a Turing machine that builds a tape with
-ever-expanding repeating fragments. We shall refine this definition later,
-such that it clearly explains what machines the decider should hope to decide.
+Intuitively, a \emph{bouncer} is a Turing machine that builds a tape out of
+ever-expanding repeating fragments. The decider analyses the machine to
+identify the growing \emph{repeaters} and the \emph{walls} that separate them,
+and then executes the machine symbolically to prove that this growth is endless.
 
 \paragraph{Notation.} For a tape segment $s \in \{0, 1\}^*$, we will
 write $(s)$ to mean $s$ repeated any number of times, i.e.~$s^k$ for
-an unspecified $k$. 
+an unspecified $k$.
+
+During the 
+
+% TODO: example of a small bouncer – run a search for small numbers
+% of shift rules applied
+
+\begin{remark} The symbolic tapes we're considering can also be understood as
+defining a regular language of tapes matching a particular step of the cycle
+being simulated. In this interpretation, we are executing the Turing machine
+on all elements of the language at the same time.
+\end{remark}
+
+Specifically, we will be considering
+a tape language of the form
+\begin{equation}
+    \{
+    0^\infty\; [0]_q\; w_0\; (r_1)^{k_1}\; w_1\; (r_2)^{k_2}\; w_2\: \cdots\: (r_n)^{k_n}\; w_n
+    \mid k_1, k_2, \ldots, k_n \in \N
+    \}.
+\end{equation}
+for a fixed list of \emph{walls} $w_0,\ \ldots,\ w_n \in \{0, 1\}^*$,
+a list of \emph{repeaters} $r_1,\ \ldots,\ r_n$, and a fixed state $q$.
+
+Fundamentally, the technique is a variant
+of Closed Tape Languages, but 
+To prove that a Turing machine is a bouncer,
+we exhibit a set of configurations
+More formally, we say that a Turing machine
+is a bouncer if
+We shall refine this definition later,
+such that it clearly explains what machines the decider should hope to decide.
+
 
 \begin{example}
-    $0\,(110)\,1$ can refer to $01$, $01101$, $01101101$, and so on.
+    $0(110)1$ can refer to $01$, $01101$, $01101101$, and so on.
 \end{example}
 
 \begin{definition}
     A bouncer's \emph{reset configuration} is given by
-    a list of \emph{walls} $w_0,\ \ldots,\ w_n \in \{0, 1\}^*$
-    and \emph{repeaters} $r_1,\ \ldots,\ r_n$, as well as a fixed state $q$,
     and refers to the configuration
-    \begin{equation}
-        0^\infty\; [0]\; w_0\; (r_1)\; w_1\; (r_2)\; w_2\: \cdots\: (r_n)\; w_n,
-    \end{equation}
-    in state $q$.
 \end{definition}
 
 % TODO: We would probably want an illustration here. Perhaps a space-time
