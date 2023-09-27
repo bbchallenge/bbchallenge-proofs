@@ -12,8 +12,10 @@ write $(s)$ to mean $s$ repeated any number of times, i.e.~$s^k$ for
 an unspecified $k$.
 
 \begin{example}
-Consider machine \#88,427,177 (see \url{https://bbchallenge.org/88427177}).
-After executing it for 25 steps, we reach the configuration
+Consider machine \#88,427,177 (see \url{https://bbchallenge.org/88427177}),
+which the bouncer decider can prove to never halt. We shall now retrace the
+steps it takes, to understand the proof approach.
+After executing 25 steps from the empty tape, we reach the configuration
 \begin{equation}
     0^\infty\; 111\; 0\; 00 \rhead D 0^\infty.
 \end{equation}
@@ -59,12 +61,13 @@ and after one step, we have
 \end{equation}
 Since this is a special case of \eqref{eqn:initial-symbolic}, we can
 conclude that this machine will never halt. \qed
-
 \end{example}
+
+We formalize this way of reasoning as follows:
 
 \begin{definition} 
     A \emph{tape chunk} is either a symbol $s \in \{0, 1\}$,
-    or a repeater $(s)$, with $s \in \{0, 1\}^*, s \neq \epsilon$.
+    or a repeater $(s)$, with $s \in \{0, 1\}^*$, $s \neq \epsilon$.
     The set of all tape chunks is denoted $\mathcal C$.
 \end{definition}
 
@@ -83,6 +86,7 @@ where $l_k, r_k \in \mathcal C$.
     A configuration $c$ \emph{matches} a symbolic configuration $F$,
     written $c \in L(F)$, if one can choose a number of repeatitions for each
     repeater in $F$ and obtain $c$.
+    \todo{Playing fast and loose here but I haven't thought of any better wording}
 \end{definition}
 
 \begin{definition}[Step relation for symbolic configurations]
@@ -95,7 +99,7 @@ where $l_k, r_k \in \mathcal C$.
     If $a \rhead q b\; \vdash^* b'\; a \rhead q$, we say that we have a
     \emph{right-facing shift rule} with tail $a \in \{0, 1\}^*$
     taking $b \in \{0, 1\}^k$ to $b' \in \{0, 1\}^k$.
-    Likewise, if $b \lhead q a \,\vdash^*\; \lhead q a\; b$, we say that we have
+    Likewise, if $b \lhead q a \,\vdash^*\; \lhead q a\; b'$, we say that we have
     a \emph{left-facing shift rule}.
 \end{definition}
 
