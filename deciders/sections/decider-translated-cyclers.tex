@@ -9,14 +9,14 @@
   % \hspace{2ex}
   \includegraphics[width=0.54\textwidth]{figures/space-time-diagrams/translated_cycler_44394115_annotated.pdf}
 
-  \caption{Example ``Translated cycler'': 45-step space-time diagram of bbchallenge's machine \#44,394,115. See \url{https://bbchallenge.org/44394115}. The same bounded pattern is being translated to the right for ever. The text annotations illustrate the main idea for recognising ``Translated Cyclers'': find two configurations that break a record (i.e. visit a memory cell that was never visited before) in the same state (here state \textcolor{colorD}{D}) such that the content of the memory tape at distance L from the record positions is the same in both record configurations. Distance L is defined as being the maximum distance to record position 1 that was visited between the configuration of record 1 and record 2.}\label{fig:translated-cyclers}
+  \caption{Example ``Translated cycler'': 45-step space-time diagram of bbchallenge's machine \#44,394,115. See \url{https://bbchallenge.org/44394115}. The same bounded pattern is being translated to the right forever. The text annotations illustrate the main idea for recognising ``Translated Cyclers'': find two configurations that break a record (i.e. visit a memory cell that was never visited before) in the same state (here state \textcolor{colorD}{D}) such that the content of the memory tape at distance $L$ from the record positions is the same in both record configurations. Distance $L$ is defined as being the maximum distance to record position 1 that was visited between the configuration of record 1 and record 2.}\label{fig:translated-cyclers}
 \end{figure}
 
-The goal of this decider is to recognise Turing machines that translate a bounded pattern for ever. We call such machines ``Translated cyclers''. They are close to ``Cyclers'' (Section~\ref{sec:cyclers}) in the sense that they are only repeating a pattern but there is added complexity as they are able to translate the pattern in space at the same time, hence the decider for Cyclers cannot directly apply here.
+The goal of this decider is to recognise Turing machines that translate a bounded pattern forever. We call such machines ``Translated cyclers''. They are close to ``Cyclers'' (Section~\ref{sec:cyclers}) in the sense that they are only repeating a pattern but there is added complexity as they are able to translate the pattern in space at the same time, hence the decider for Cyclers cannot directly apply here.
 
-The main idea for this decider is illustrated in Figure~\ref{fig:translated-cyclers} which gives the space-time diagram of a ``Translated cycler': bbchallenge's machine \#44,394,115 (c.f. \url{https://bbchallenge.org/44394115}). The idea is to find two configurations that break a record (i.e. visit a memory cell that was never visited before) in the same state (here state \textcolor{colorD}{D}) such that the content of the memory tape at distance L from the record positions is the same in both record configurations. Distance L is defined as being the maximum distance to record position 1 that was visited between the configuration of record 1 and record 2. In those conditions, we can prove that the machine will never halt.
+The main idea for this decider is illustrated in Figure~\ref{fig:translated-cyclers} which gives the space-time diagram of a ``Translated cycler'': bbchallenge's machine \#44,394,115 (c.f. \url{https://bbchallenge.org/44394115}). The idea is to find two configurations that break a record (i.e. visit a memory cell that was never visited before) in the same state (here state \textcolor{colorD}{D}) such that the content of the memory tape at distance $L$ from the record positions is the same in both record configurations. Distance $L$ is defined as being the maximum distance to record position 1 that was visited between the configuration of record 1 and record 2. In those conditions, we can prove that the machine will never halt.
 
-The translated cycler of Figure~\ref{fig:translated-cyclers} features a relatively simple repeating pattern and transient pattern (pattern occurring before the repeating patterns starts). These can get significantly more complex, bbchallenge's machine \#59,090,563 is an example see Figure~\ref{fig:translated-cyclers-more} and \url{https://bbchallenge.org/59090563}. The method for detecting the behavior is the same but more resources are needed.
+The translated cycler of Figure~\ref{fig:translated-cyclers} features a relatively simple repeating pattern and transient pattern (pattern occurring before the repeating patterns starts). The translated cycler of Figure~\ref{fig:translated-cyclers-more} features a significantly more complex pattern. The method for detecting the behavior is the same but more resources are needed.
 
 
 \begin{figure}
@@ -38,7 +38,7 @@ One minor complication of the technique described above is that one has to track
 We also assume that we are given a routine {\sc get-extreme-position}(tape,sideOfTape) which gives us the rightmost or leftmost position of the given tape (well defined as we always manipulate finite tapes).
 
 \begin{algorithm}
-  \caption{{\sc decider-translated-cylers}}\label{alg:translated-cyclers}
+  \caption{{\sc decider-translated-cyclers}}\label{alg:translated-cyclers}
 
   \begin{algorithmic}[1]
     \State \textbf{const int} RIGHT, LEFT = 0, 1
@@ -56,7 +56,7 @@ We also assume that we are given a routine {\sc get-extreme-position}(tape,sideO
     \State
 
 
-    \Procedure{\textbf{bool} {\sc decider-translated-cylers}}{\textbf{TM} machine,\textbf{int} timeLimit}
+    \Procedure{\textbf{bool} {\sc decider-translated-cyclers}}{\textbf{TM} machine,\textbf{int} timeLimit}
     \State \textbf{Configuration} currConfiguration = \{.state = 0,$\,$.headPosition = 0,$\,$ .tape = \{0:\{.value = 0, .lastTimeVisited = 0\}\}\}
     \State // 0: right records, 1: left records
     \State \textbf{List$\boldsymbol{<}$Configuration$\boldsymbol{>}$}
@@ -70,7 +70,7 @@ We also assume that we are given a routine {\sc get-extreme-position}(tape,sideO
     \If{headPosition $>$ extremePositions[RIGHT] \textbf{or} headPosition $<$ extremePositions[LEFT]}
     \State \textbf{int} recordSide = (headPosition $>$ extremePositions[RIGHT]) ? RIGHT : LEFT
     \State extremePositions[recordSide] = headPosition
-    \If{{\sc check-records}(currConfiguration, recordBreakingConfigurations[recordSide], recordSide)}
+    \If{{\sc aux-check-records}(currConfiguration, recordBreakingConfigurations[recordSide], recordSide)}
     \State \textbf{return} true
     \EndIf
     \State recordBreakingConfigurations[recordSide].\textbf{append}(currConfiguration)
@@ -107,7 +107,7 @@ We also assume that we are given a routine {\sc get-extreme-position}(tape,sideO
     \textbf{continue}
     \EndIf
 
-    \textbf{int} lastTimeVisited = currRecord.tape[pos].lastTimeVisited
+    \State \textbf{int} lastTimeVisited = currRecord.tape[pos].lastTimeVisited
     \If{lastTimeVisited $\geq$ olderRecordTime \textbf{and} lastTimeVisited $\leq$ currRecordTime}
     \State distanceL = \textbf{max}(distanceL,\textbf{abs}(pos-olderRecordPos))
     \EndIf
@@ -116,7 +116,7 @@ We also assume that we are given a routine {\sc get-extreme-position}(tape,sideO
     \State \textbf{return} distanceL
     \EndProcedure
     \State
-    \Procedure{\textbf{bool} {\sc aux-check-records} }{\textbf{Configuration} currRecord, \textbf{List$\boldsymbol{<}$Configuration$\boldsymbol{>}$} olderRecords, \textbf{int} recordSide}
+    \Procedure{\textbf{bool} {\sc aux-check-records}}{\textbf{Configuration} currRecord, \textbf{List$\boldsymbol{<}$Configuration$\boldsymbol{>}$} olderRecords, \textbf{int} recordSide}
 
     \For{\textbf{Configuration} olderRecord \textbf{in} olderRecords}
     \If{currRecord.state != olderRecord.state}
@@ -127,8 +127,8 @@ We also assume that we are given a routine {\sc get-extreme-position}(tape,sideO
     \State \textbf{int} olderExtremePos = {\sc get-extreme-position}(olderRecord.tape,recordSide)
     \State \textbf{int} step = (recordSide == RIGHT) ? -1 : 1
     \State \textbf{bool} isSameLocalTape = true
-    \For{\textbf{int} offset = 0; \textbf{abs}(offset) $<$ distanceL; offset += step}
-    \If{currRecord.tape[currExtremePos+offset] != olderRecord.tape[olderExtremePos+offset]}
+    \For{\textbf{int} offset = 0; \textbf{abs}(offset) $\leq$ distanceL; offset += step}
+    \If{currRecord.tape[currExtremePos+offset].value != \newline olderRecord.tape[olderExtremePos+offset].value}
     \State isSameLocalTape = false
     \State \textbf{break}
     \EndIf
@@ -156,11 +156,11 @@ We also assume that we are given a routine {\sc get-extreme-position}(tape,sideO
 \end{definition}
 
 \begin{lemma}\label{lem:translated-cyclers}
-  Let $\mathcal{M}$ be a Turing machine. Let $r_1$ and $r_2$ be two configurations that broke a record in the same state and on the same side of the tape at respective times $t_1$ and $t_2$ with $t_1 < t_2$. Let $p_1$ and $p_2$ be the tape positions of these records. Let $L$ be the distance between $r_1$ and $r_2$ (Definition~\ref{def:distL}). If the content of tape in $r_1$ at distance $L$ of $p_1$ is the same than the content of the tape in $r_2$ at distance $L$ of $p_2$ then $\mathcal{M}$ never halts. Furthermore, by Definition~\ref{def:distL}, we know that distance $L$ is the maximum distance that $\mathcal{M}$ can travel to the left of $p_1$ between times $t_1$ and $t_2$.
+  Let $\mathcal{M}$ be a Turing machine. Let $r_1$ and $r_2$ be two configurations that broke a record in the same state and on the same side of the tape at respective times $t_1$ and $t_2$ with $t_1 < t_2$. Let $p_1$ and $p_2$ be the tape positions of these records. Let $L$ be the distance between $r_1$ and $r_2$ (Definition~\ref{def:distL}). If the content of the tape in $r_1$ at distance $L$ of $p_1$ is the same as the content of the tape in $r_2$ at distance $L$ of $p_2$ then $\mathcal{M}$ never halts.
 \end{lemma}
 
 \begin{proof}
-  Let's suppose that the record-breaking configurations are on the right-hand side of the tape. By the hypotheses, we know the machine is in the same state in $r_1$ and $r_2$ and that the content of the tape at distance $L$ to the left of $p_1$ in $r_1$ is the same as the content of the tape at distance $L$ to the left of $p_2$ in $r_2$. Note that the content of the tape to the right of $p_1$ and $p_2$ is the same: all-0 since they are record positions. Hence that after $r_2$, since it will read the same tape content the machine will reproduce the same behavior than it did after $r_1$ but translated at position $p_2$: there will a record-breaking configuration $r_3$ such that the distance between record-breaking configurations $r_2$ and $r_3$ is also $L$ (Definition~\ref{def:distL}). Hence the machine will keep breaking records to the right for ever and will not halt. Analogous proof for records that are broken to the left.
+  Let's suppose that the record-breaking configurations are on the right-hand side of the tape. By the hypotheses, we know the machine is in the same state in $r_1$ and $r_2$ and that the content of the tape at distance $L$ to the left of $p_1$ in $r_1$ is the same as the content of the tape at distance $L$ to the left of $p_2$ in $r_2$. Note that the content of the tape to the right of $p_1$ and $p_2$ is the same: all-0 since they are record positions. Furthermore, by Definition~\ref{def:distL}, we know that distance $L$ is the maximum distance that $\mathcal{M}$ can travel to the left of $p_1$ between times $t_1$ and $t_2$. Hence that after $r_2$, since it will read the same tape content the machine will reproduce the same behavior as it did after $r_1$ but translated at position $p_2$: after $t_2 - t_1$ steps, there will be a record-breaking configuration $r_3$ such that the distance between record-breaking configurations $r_2$ and $r_3$ is also $L$ (Definition~\ref{def:distL}). Hence the machine will keep breaking records to the right forever and will not halt. Analogous proof for records that are broken to the left.
 \end{proof}
 
 \begin{theorem}\label{th:translated-cyclers}
@@ -169,14 +169,13 @@ We also assume that we are given a routine {\sc get-extreme-position}(tape,sideO
 \begin{proof}
   The algorithm consists of a main function {\sc decider-translated-cyclers} (Algorithm~\ref{alg:translated-cyclers}) and two auxiliary functions {\sc compute-distance-L} and {\sc aux-check-records} (Algorithm~\ref{alg:translated-cyclers-aux}).
 
-  The main loop of {\sc decider-translated-cyclers} (Algorithm~\ref{alg:translated-cyclers} l.17) simulates the machine with the particularity that (a) it keeps track of the last time it visited each memory cell (l.19) and (b) it keeps track of all record-breaking configurations that are met (l.20) before reaching time limit $t$. When a record-breaking configuration is found, it is compared to all the previous record-breaking configurations on the same side in seek of the conditions of Lemma~\ref{lem:translated-cyclers}. This is done by auxiliary routine {\sc aux-check-records} (Algorithm~\ref{alg:translated-cyclers-aux}).
+  The main loop of {\sc decider-translated-cyclers} (Algorithm~\ref{alg:translated-cyclers} l.18) simulates the machine with the particularity that (a) it keeps track of the last time it visited each memory cell (l.20) and (b) it keeps track of all record-breaking configurations that are met (l.21) before reaching time limit $t$. When a record-breaking configuration is found, it is compared to all the previous record-breaking configurations on the same side in seek of the conditions of Lemma~\ref{lem:translated-cyclers}. This is done by auxiliary routine {\sc aux-check-records} (Algorithm~\ref{alg:translated-cyclers-aux}).
 
-  Auxiliary routine {\sc aux-check-records} (Algorithm~\ref{alg:translated-cyclers-aux}, l.12) loops over all older record-breaking configurations on the same side than the current one (l.13). The routine ignores older record-breaking configurations that were not in the same state than the current one (l.14). If the states are the same, it computes distance $L$ (Definition~\ref{def:distL}) between the older and the current record-breaking configuration (l.16). This computation is done by auxiliary routine {\sc compute-distance-L}.
+  Auxiliary routine {\sc aux-check-records} (Algorithm~\ref{alg:translated-cyclers-aux}, l.14) loops over all older record-breaking configurations on the same side as the current one (l.15), and only examines older configurations that are in the same state as the current one (l.16). It computes distance $L$ (Definition~\ref{def:distL}) between the older and the current record-breaking configuration (l.18). This computation is done by auxiliary routine {\sc compute-distance-L}.
 
   Auxiliary routine {\sc compute-distance-L} (Algorithm~\ref{alg:translated-cyclers-aux}, l.1) uses the ``pebbles'' that were left on the tape to give the last time a memory cell was seen (field \texttt{lastTimeVisited}) in order to compute the farthest position from the old record position that was visited before meeting the new record position (l.10). Note that we discard intermediate positions that beat the old record position (l.7-8) as we know that the part of the tape after the record position in the old record-breaking configuration is all-0, same as the part of the tape after current record position in the current record-breaking position (part of the tape to the right of the red-circled green cell in Figure~\ref{fig:translated-cyclers}).
 
-  Thanks to the computation of {\sc compute-distance-L} the routine {\sc aux-check-records} is able to check whether the tape content at distance $L$ of the record-breaking position in both record-holding configurations is the same or not (Algorithm~\ref{alg:translated-cyclers-aux}, l.22). The routine returns \texttt{true} if they are the same and the function {\sc decider-translated-cyclers} will return \texttt{true} as well in cascade (Algorithm~\ref{alg:translated-cyclers} l.24). That scenario is reached if and only if the algorithm has found two record-breaking configurations on the same side that satisfy the conditions of Lemma~\ref{lem:translated-cyclers}, which is what we wanted.
-
+  Thanks to the computation of {\sc compute-distance-L} the routine {\sc aux-check-records} is able to check whether the tape content at distance $L$ of the record-breaking position in both record-holding configurations is the same or not (Algorithm~\ref{alg:translated-cyclers-aux}, l.23). The routine returns \texttt{true} if they are the same and the function {\sc decider-translated-cyclers} will return \texttt{true} as well in cascade (Algorithm~\ref{alg:translated-cyclers} l.24). That scenario is reached if and only if the algorithm has found two record-breaking configurations on the same side that satisfy the conditions of Lemma~\ref{lem:translated-cyclers}, which is what we wanted.
 \end{proof}
 
 \begin{corollary}
