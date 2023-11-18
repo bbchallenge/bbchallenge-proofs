@@ -1,5 +1,6 @@
 % !TeX root = ../correctness-deciders.tex
 
+\newpage
 \section{Cyclers}\label{sec:cyclers}
 
 \begin{figure}[h!]
@@ -20,7 +21,6 @@ The goal of this decider is to recognise Turing machines that cycle through the 
   \url{https://bbchallenge.org/4239083} for their transition tables. From these space-time diagrams we see that the machines eventually repeat the same configuration.
 \end{example}
 
-\newpage
 \subsection{Pseudocode}
 
 We assume that we are given a Turing Machine type \textbf{TM} that encodes the transition table of a machine as well as a procedure \textbf{TuringMachineStep}(machine,configuration) which computes the next configuration of a Turing machine from the given configuration or \textbf{nil} if the machine halts at that step. The pseudocode is given in Algorithm~\ref{alg:cyclers}.

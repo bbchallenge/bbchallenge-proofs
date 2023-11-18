@@ -71,12 +71,13 @@
 \maketitle
 
 \begin{abstract}
-  The Busy Beaver Challenge (or bbchallenge) aims at collaboratively solving the following conjecture: ``BB(5) = 47,176,870'' [Aaronson, 2020]\nocite{BusyBeaverFrontier}. This conjecture says that if a 5-state Turing machine runs for more than 47,176,870 steps without halting then it will never halt (starting from all-0 memory tape). Proving this conjecture amounts to decide whether or not 88,664,064 Turing machines with 5-state halt or not -- starting from all-0 tape. In order to decide the behavior of these machines we write \textit{deciders}. A decider is a program that takes as input a Turing machine and outputs \texttt{true} if it is able to tell whether the machine halts or not. Each decider is specialised in recognising a particular type of behavior that can be decided.
+  The Busy Beaver Challenge (or bbchallenge) aims at collaboratively solving the following conjecture: ``BB(5) = 47,176,870'' [Aaronson, 2020]\nocite{BusyBeaverFrontier}. This conjecture says that if a 5-state Turing machine runs for more than 47,176,870 steps without halting then it will never halt (starting from all-0 memory tape). Proving this conjecture amounts to decide whether or not 88,664,064 Turing machines with 5 states halt or not -- starting from all-0 tape. In order to decide the behavior of these machines we write \textit{deciders}. A decider is a program that takes as input a Turing machine and outputs either \texttt{halt}, \texttt{non-halt}, or \texttt{undecided}. Each decider is specialised in recognising a particular type of behavior that can be decided.
 
   In this document we are concerned with proving the correctness of these deciders programs. More context and information about this methodology are available at \url{https://bbchallenge.org}.
 \end{abstract}
 \tableofcontents
 
+\newpage
 \section{Conventions}\label{sec:conventions}
 
 \begin{table}[h!]
@@ -89,7 +90,7 @@
     D & 1LA   & 1LD \\
     E & - - - & 0LA
   \end{tabular}
-  \caption{Transition table of the current 5-state busy beaver champion: it halts after 47,176,870 steps.\\\url{https://bbchallenge.org/1RB1LC1RC1RB1RD0LE1LA1LD---0LA&status=halt}}
+  \caption{Transition table of the current 5-state busy beaver champion: it halts after 47,176,870 steps.\\\url{https://bbchallenge.org/1RB1LC_1RC1RB_1RD0LE_1LA1LD_---0LA&status=halt}}
 \end{table}\label{table:bb5}
 
 The set $\mathbb{N}$ denotes $\{0,1,2\dots\}$.
