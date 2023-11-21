@@ -33,20 +33,20 @@
     \centering
     \includegraphics[width=0.9\textwidth]{figures/backward-reasoning/backward-reasoning.pdf}
 
-    \caption{Contradiction reached after 3 backward steps: machine \#55,897,188 does cannot reach its halting configuration hence it does not halt.}
+    \caption{Contradiction reached after 3 backward steps: machine \#55,897,188 cannot reach its halting configuration hence it does not halt.}
 
   \end{subfigure}
 
-  \caption{Applying backward reasoning on bbchallenge's machine \#55,897,188. (a) 10,000-step space-time diagram of machine \#55,897,188. The \textit{forward} behavior of the machine looks very complex. (b) Transition table. (c) We are able to deduce that the machine will never halt thanks to only 3 backward reasoning steps: because a contradiction is met, it is impossible to reach the halting configuration in more than 3 steps -- and, by (a), the machine can do at least 20,000 without halting starting from all-0 tape.}
+  \caption{Applying backward reasoning on bbchallenge's machine \#55,897,188. (a) 10,000-step space-time diagram of machine \#55,897,188. The \textit{forward} behavior of the machine looks very complex. (b) Transition table. (c) We are able to deduce that the machine will never halt thanks to only 3 backward reasoning steps: because a contradiction is met, it is impossible to reach the halting configuration in more than 3 steps -- and, by (a), the machine did not halt in 10,000 steps starting from all-0 tape.}
   \label{fig:backward-reasoning}
 \end{figure}
 
 
 Backward reasoning, as described in \cite{Marxen_1998}, takes a different approach than what has been done with deciders in Sections~\ref{sec:cyclers} and \ref{sec:translated-cyclers}. Indeed, instead of trying to recognise a particular kind of machine's behavior, the idea of backward reasoning is to show that, independently of the machine's behavior, the halting configurations are not reachable. In order to do so, the decider simulates the machine \textit{backwards} from halting configurations until it reaches some obvious contradiction.
 
-Figure~\ref{fig:backward-reasoning} illustrates this idea on bbchallenge's machine \#55,897,188. From the space-time diagram, the \textit{forward} behavior of the machine from all-0 tape looks to be extremely complex, Figure~\ref{fig:backward-reasoning}a. However, by reconstructing the sequence of transitions that would lead to the halting configuration (reading a 0 in state \textcolor{colorC}{C}), we reach a contradiction in only 3 steps, Figure~\ref{fig:backward-reasoning}c. Indeed, the only way to reach state  \textcolor{colorC}{C} is to come from the right in state \textcolor{colorB}{B} where we read a 0. The only way to reach state \textcolor{colorB}{B} is to com from left in state  \textcolor{colorA}{A} where we read a 0. However, the transition table (Figure~\ref{fig:backward-reasoning}b) is instructing us to write a 1 in that case, which is not consistent with the 0 that we assumed was at position in order for the machine to halt.
+Figure~\ref{fig:backward-reasoning} illustrates this idea on bbchallenge's machine \#55,897,188. From the space-time diagram, the \textit{forward} behavior of the machine from all-0 tape looks to be extremely complex, Figure~\ref{fig:backward-reasoning}a. However, by reconstructing the sequence of transitions that would lead to the halting configuration (reading a 0 in state \textcolor{colorC}{C}), we reach a contradiction in only 3 steps, Figure~\ref{fig:backward-reasoning}c. Indeed, the only way to reach state \textcolor{colorC}{C} is to come from the right in state \textcolor{colorB}{B} where we read a 0. The only way to reach state \textcolor{colorB}{B} is to come from the left in state \textcolor{colorA}{A} where we read a 0. However, the transition table (Figure~\ref{fig:backward-reasoning}b) is instructing us to write a 1 in that case, which is not consistent with the 0 that we assumed was at this position in order for the machine to halt.
 
-Backward reasoning in the case of Figure~\ref{fig:backward-reasoning} was particularly simple because there was only one possible previous configuration for each backward step -- e.g. there is only one transition that can reach state \textcolor{colorC}{C} and same for state \textcolor{colorB}{B}. In general, this is not the case and the structure created by backward reasoning is a tree of configurations instead of just a chain. If all the leaves of a backward reasoning tree of depth $D$ reach a contradiction, we know that if the machine runs for $D$ steps from all-0 tape then the machine cannot reach a halting configuration and thus does not halt.
+Backward reasoning in the case of Figure~\ref{fig:backward-reasoning} was particularly simple because there was only one possible previous configuration for each backward step -- i.e. there is only one transition that can reach state \textcolor{colorC}{C} and same for state \textcolor{colorB}{B}. In general, this is not the case and the structure created by backward reasoning is a tree of configurations instead of just a chain. If all the leaves of a backward reasoning tree of depth $D$ reach a contradiction, we know that if the machine runs for $D$ steps from all-0 tape then the machine cannot reach a halting configuration and thus does not halt.
 
 \subsection{Pseudocode}
 
@@ -70,12 +70,10 @@ Backward reasoning in the case of Figure~\ref{fig:backward-reasoning} was partic
     \Procedure{\textbf{Configuration} {\sc apply-transition-backwards}}{\textbf{Configuration} conf,\textbf{Transition} t}
     \State \textbf{int} reversedHeadMoveOffset = (t.move == RIGHT) ? -1 : 1
     \State \textbf{int} previousPosition = conf.headPosition+reversedHeadMoveOffset
-    \State // Backward contradiction spotted
     \If{previousPosition \textbf{in} conf.tape \textbf{and} conf.tape[previousPosition] != t.write}
-    \State \textbf{return} \textbf{nil}
+    \State \textbf{return} \textbf{nil} // Backward contradiction spotted
     \EndIf
-    \State \textbf{Configuration} previousConf = \{.state = t.state, .depth = conf.depth + 1, .tape = conf.tape\}
-    \State previousConf.headPosition = previousPosition
+    \State \textbf{Configuration} previousConf = \{.state = t.state, .headPosition = previousPosition, .tape = conf.tape, .depth = conf.depth + 1\}
     \State previousConf.tape[previousPosition] = t.read
     \State \textbf{return} previousConf
     \EndProcedure
@@ -83,18 +81,13 @@ Backward reasoning in the case of Figure~\ref{fig:backward-reasoning} was partic
     \Procedure{\textbf{bool} {\sc decider-backward-reasoning}}{\textbf{TM} machine,\textbf{int} maxDepth}
 
     \State \textbf{Stack$\boldsymbol{<}$Configuration$\boldsymbol{>}$} configurationStack
-    \For{\textbf{int} (state,read) \textbf{in} {\sc get-undefined-transitions}(machine)}
-    \State \textbf{Configuration} haltingConfiguration = \{.state = state,.depth=0,.headPosition = 0\}
-    \State haltingConfiguration.tape = \{0: read\}
+    \For{\textbf{Pair$\boldsymbol{<}$int, int$\boldsymbol{>}$} (state,read) \textbf{in} {\sc get-undefined-transitions}(machine)}
+    \State \textbf{Configuration} haltingConfiguration = \{.state = state, .headPosition = 0, .tape = \{0: read\}, .depth = 0\}
     \State configurationStack.\textbf{push}(haltingConfiguration)
     \EndFor
-    \State \textbf{Set$\boldsymbol{<}$Configuration$\boldsymbol{>}$} configurationsSeen = \{\}
     \While{!configurationStack.\textbf{empty}()}
     \State \textbf{Configuration} currConf = configurationStack.\textbf{pop}()
     \If{currConf.depth $>$ maxDepth} \textbf{return} false \EndIf
-    \If{ currConf \textbf{in} configurationsSeen} \textbf{continue} \EndIf
-    \State configurationsSeen.\textbf{insert}(currConf)
-    \State \textbf{List$\boldsymbol{<}$Configuration$\boldsymbol{>}$} confList = []
 
     \For{\textbf{Transition} transition \textbf{in} {\sc get-transitions-reaching-state}(machine,currConf.state)}
     \State \textbf{Configuration} previousConf = {\sc apply-transition-backwards}(currConf, transition)
@@ -120,15 +113,13 @@ We assume that we are given routine {\sc get-undefined-transitions}(machine) whi
   Then, {\sc decider-backward-reasoning}($\mathcal{M}$,$D$) returns \texttt{true} if and only if no undefined transition of $\mathcal{M}$ can be reached in more than $D$ steps.
 \end{theorem}
 \begin{proof}
-  The tree of backward configurations is maintained in a DFS fashion through a stack (Algorithm~\ref{alg:backward-reasoning}, l.24). Initially, the stack is filled with the configurations where only one tape cell is defined and state is set such that the corresponding transition is undefined (i.e. the machine halts after that step), l.25-28.
+  The tree of backward configurations is maintained in a DFS fashion through a stack (Algorithm~\ref{alg:backward-reasoning}, l.22). Initially, the stack is filled with the configurations where only one tape cell is defined and state is set such that the corresponding transition is undefined (i.e. the machine halts after that step), l.23-25.
 
-  Then, the main loop runs until either (a) the stack is empty or (b) one leaf exceeded the maximum allowed depth, l.30 and l.32. Note that running the algorithm with increased maximum depth increases its chances to contradict all branches of the backward simulation tree. At each step of loop, we remove the current configuration from the stack and we try to apply all the transitions that leads to its state backwards by calling routine {\sc apply-transition-backwards}(configuration, transition).
+  Then, the main loop runs until either (a) the stack is empty or (b) one leaf exceeded the maximum allowed depth, l.26 and l.28. Note that running the algorithm with increased maximum depth increases its chances to contradict all branches of the backward simulation tree. At each step of the loop, we remove the current configuration from the stack and we try to apply all the transitions that lead to this configuration backwards by calling routine {\sc apply-transition-backwards}(configuration, transition).
 
-  The only case where it is not possible to apply a transition backwards, i.e. the case where a contradiction is reached is when the tape symbol at the position where the transition comes from (i.e. to the right if transition movement is left and vice-versa) is defined but is not equal to the write instruction of the transition. Indeed, that means that the future (i.e. previous backward steps) is not consistent the current transition's write instruction. This logic is checked l.16. Otherwise, we can construct the previous configuration (i.e. next backward step) and augment depth by 1. We then stack this configuration in the main routine (l.39).
+  The only case where it is not possible to apply a transition backwards, i.e. the case where a contradiction is reached, is when the tape symbol at the position where the transition comes from (i.e. to the right if transition movement is left and vice-versa) is defined but is not equal to the write instruction of the transition. Indeed, that means that the future (i.e. previous backward steps) is not consistent with the current transition's write instruction. This logic is in l.15. Otherwise, we can construct the previous configuration (i.e. next backward step) and augment depth by 1. We then stack this configuration in the main routine (l.33).
 
   The algorithm returns \texttt{true} if and only if the stack ever becomes empty which means that all leaves of the backward simulation tree of depth $D$ have reached a contradiction and thus, no undefined transition of the machine is reachable in more than $D$ steps.
-
-  This pseudocode contains a slight optimisation with the use of set \texttt{configurationSeen} (l.29). This set racks configurations which would have already been seen in different branches of the tree in order not traverse them twice (l.32-33). While not needed in theory, this optimisation is useful in practice, especially at large depths (e.g. $D=300$).
 \end{proof}
 
 \begin{corollary}
@@ -142,4 +133,4 @@ We assume that we are given routine {\sc get-undefined-transitions}(machine) whi
 
 The decider was coded in \texttt{golang} and is accessible at this link: \url{https://github.com/bbchallenge/bbchallenge-deciders/blob/main/decider-backward-reasoning}. Note that collaborative work allowed to find a bug in the initial algorithm that was implemented\footnote{Thanks to collaborators \url{https://github.com/atticuscull} and \url{https://github.com/modderme123}.}.
 
-The decider decided 2,035,598 machines, out of 3,574,222 machines that were left after deciders for ``Cyclers'' and ``Translated Cyclers'' (Section~\ref{sec:cyclers} and Section~\ref{th:translated-cyclers}). Maximum depth was set to 300. More information about these results are available at: \url{https://discuss.bbchallenge.org/t/decider-backward-reasoning/35}.
+The decider decided 2,035,598 machines, out of 3,574,222 machines that were left after deciders for ``Cyclers'' and ``Translated Cyclers'' (Section~\ref{sec:cyclers} and Section~\ref{sec:translated-cyclers}). Maximum depth was set to 300. More information about these results are available at: \url{https://discuss.bbchallenge.org/t/decider-backward-reasoning/35}.
