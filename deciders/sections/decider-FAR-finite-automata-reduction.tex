@@ -71,7 +71,7 @@ One important aspect of the technique is that, given a Turing machine and its co
       \draw (31.9,-36.9) node [below] {$\alpha$};
     \end{tikzpicture}
   \end{center}
-  \caption{Example Nondeterministic Finite Automaton (NFA) with 3 states X,Y and Z, alphabet $\mathcal{A} = \{\alpha,\beta\}$, initial states X and Y, and accepting state Z. The linear-algebra representation of this NFA is given in Example~\ref{ex:nfa}. Example accepted words are: $\beta$, $\alpha\beta$, $\alpha\alpha\beta\beta$. Example rejected words are: $\alpha$, $\alpha\alpha$, $\alpha\alpha\alpha$.}\label{fig:example_nfa}
+  \caption{Example Nondeterministic Finite Automaton (NFA) with 3 states X, Y and Z, alphabet $\mathcal{A} = \{\alpha,\beta\}$, initial states X and Y, and accepting state Z. The linear-algebra representation of this NFA is given in Example~\ref{ex:nfa}. Example accepted words are: $\beta$, $\alpha\beta$, $\alpha\alpha\beta\beta$. Example rejected words are: $\alpha$, $\alpha\alpha$, $\alpha\alpha\alpha$.}\label{fig:example_nfa}
 \end{figure}
 
 \begin{figure}
@@ -206,10 +206,10 @@ One important aspect of the technique is that, given a Turing machine and its co
   \includegraphics*[scale=0.65]{figures/FAR-finite-automata-reduction/FAR-texts.pdf}
 
   \caption{\small A Nondeterministic Finite Automaton, used as follows to decide a 4-state Turing machine\protect\footnotemark:
-    (a) Space-time diagram showing the first few descendants of the all-0 configuration for the machine. The machine actually runs for ever from the all-0 configuration, adopting a ``counting'' behavior.
-    (b) The TM halts in 18 steps from a different configuration; these 18 rows depict \emph{eventually-halting} configurations.
-    (c) Transition table for the TM.
-    (d) A Nondeterministic Finite Automaton, constructed using the direct FAR algorithm (Section~\ref{far-algo-direct}), that recognises at least all eventually-halting configurations (with finitely many 1s) of the machine. Inputting the top row of (b), encoded as word \texttt{000A01100} (see Definition~\ref{def:wordc}), the NFA transitions by reading each successive symbol of the input, through NFA states: 0, 0, 0A, 1B, \{0B, 1B\}, \{1A, 0A\}, \{0B, 1B, $\bot$\}, \{1A, 0B, 1B, $\bot$\} and finally \{0B, 1A, 0B, 1B, $\bot$\}. Since NFA state $\bot$ is accepting (doubly circled in (d)), the NFA accepts \texttt{000A01100}, classifying this configuration as potentially eventually-halting. However, the NFA does not accept input \texttt{A0}, which corresponds to the all-0 configuration, hence this TM cannot halt from there.}
+    (a) Space-time diagram showing the first few descendants of the all-0 configuration for the machine. The machine actually runs forever from the all-0 configuration, adopting a ``counting'' behavior.
+    (b) Transition table for the TM.
+    (c) The TM halts in 18 steps from a different configuration; these 18 rows depict \emph{eventually-halting} configurations.
+    (d) A Nondeterministic Finite Automaton, constructed using the direct FAR algorithm (Section~\ref{far-algo-direct}), that recognises at least all eventually-halting configurations (with finitely many 1s) of the machine. Inputting the top row of (c), encoded as word \texttt{00A001100} (see Definition~\ref{def:wordc}), the NFA transitions by reading each successive symbol of the input, through NFA states: 0, 0, 0A, 1B, \{0B, 1B\}, \{1A, 0A\}, \{0B, 1B, $\bot$\}, \{1A, 0B, 1B, $\bot$\} and finally \{0B, 1A, 0B, 1B, $\bot$\}. Since NFA state $\bot$ is accepting (doubly circled in (d)), the NFA accepts \texttt{00A001100}, classifying this configuration as potentially eventually-halting. However, the NFA does not accept input \texttt{A0}, which corresponds to the all-0 configuration, hence this TM cannot halt from there.}
 
 
 
@@ -227,7 +227,7 @@ One important aspect of the technique is that, given a Turing machine and its co
 For a given Turing machine, we aim at building an NFA that recognises at least all its eventually-halting configurations (with finitely many 1s). In other words, the NFA recognises configurations that \textit{potentially} eventually halt, which is why we call the NFA \textit{potential-halt-recognizing}. Importantly, if the NFA does not recognise the all-0 initial configuration then we know that the Turing machine does not halt from it. Figure~\ref{fig:finite-automata-reduction} gives a potential-halt-recognizing NFA for a 4-state Turing machine, constructed using the results of Section~\ref{far-algo-direct}.
 
 
-Let's first recall how Nondeterministic Finite Automta (\textbf{NFA}) can be described using linear algebra. Let $\mathbf{2}$ denote the Boolean semiring\footnote{A semiring is a ring without the requirement to have additive inverses, e.g. the set of natural numbers $\N=\{0,1,2\dots\}$ is a semiring.} $\{0,1\}$ with operations $+$ and $\cdot$ respectively implemented by $\operatorname{OR}$ and $\operatorname{AND}$ \cite{CUNINGHAMEGREEN1991251}.
+Let's first recall how Nondeterministic Finite Automata (\textbf{NFA}) can be described using linear algebra. Let $\mathbf{2}$ denote the Boolean semiring\footnote{A semiring is a ring without the requirement to have additive inverses, e.g. the set of natural numbers $\N=\{0,1,2\dots\}$ is a semiring.} $\{0,1\}$ with operations $+$ and $\cdot$ respectively implemented by $\operatorname{OR}$ and $\operatorname{AND}$ \cite{CUNINGHAMEGREEN1991251}.
 Let $\M_{m,n}$ be the set of matrices with $m$ rows and $n$ columns over $\mathbf{2}$. We may define a Nondeterministic Finite Automaton (NFA) with $n$ states and alphabet $\mathcal{A}$ as a tuple $(q_0, \{T_\gamma\}_{\gamma \in \mathcal{A}}, a)$ where $q_0 \in \M_{1,n}$ and $a \in \M_{1,n}$ respectively represent the initial states and accepting states of the NFA. (i.e. if the $i^\text{th}$ state of the NFA is an initial state then the $i^\text{th}$ entry of $q_0$ is set to 1 and the rest are 0, and the $i^\text{th}$ entry of $a$ is set to 1 if and only if the $i^\text{th}$ state of the NFA is accepting), and where transitions are matrices $T_\gamma\in \M_{n,n}$ for each $\gamma\in\mathcal{A}$ (i.e. the entry $(i,j)$ of matrix $T_\gamma$ is set to 1 iff the NFA transitions from state $i$ to state $j$ when reading $\gamma$). Furthermore, for any word $u=\gamma_1\dots\gamma_\ell \in \mathcal{A}^*$, let $T_u = T_{\gamma_1} T_{\gamma_2} \dots T_{\gamma_\ell}$ be the state transformation resulting from reading word $u$ (Note: $T_\epsilon = I$). A word $u=\gamma_1\dots\gamma_\ell \in \mathcal{A}^*$ is accepted by the NFA iff there exists a path from an initial state to an accepting state that is labelled by the symbols of $u$, which algebraically translates to $q_0 T_u a\T = 1$ with $a\T \in \M_{n,1}$ the transposition of $a$.
 
 
@@ -241,21 +241,21 @@ Let $\M_{m,n}$ be the set of matrices with $m$ rows and $n$ columns over $\mathb
       1 & 0 & 1 \\
       1 & 0 & 0 \\
       0 & 0 & 1
-    \end{bmatrix}$. The reader can check that words $\beta$, $\alpha\beta$ and, $\alpha\alpha\beta\beta$ are accepted, i.e. $q_0T_\beta a\T = 1$, $q_0T_\alpha T_\beta a\T = 1$ and, $q_0T_\alpha T_\alpha T_\beta T_\beta a \T = 1$. But, words $\alpha$, $\alpha\alpha$ and $\alpha\alpha\alpha$ are rejected, i.e. $q_0T_\alpha a\T = 0$, $q_0T_\alpha T_\alpha a\T = 0$ and, $q_0T_\alpha T_\alpha T_\alpha a \T = 0$.
+    \end{bmatrix}$. The reader can check that words $\beta$, $\alpha\beta$ and $\alpha\alpha\beta\beta$ are accepted, i.e. $q_0T_\beta a\T = 1$, $q_0T_\alpha T_\beta a\T = 1$ and $q_0T_\alpha T_\alpha T_\beta T_\beta a \T = 1$. But, words $\alpha$, $\alpha\alpha$ and $\alpha\alpha\alpha$ are rejected, i.e. $q_0T_\alpha a\T = 0$, $q_0T_\alpha T_\alpha a\T = 0$ and $q_0T_\alpha T_\alpha T_\alpha a \T = 0$.
 \end{example}
 
 
 Now, we describe how we transform Turing machine configurations that have finitely many 1s into finite words that will be read by our NFA. First recall that a Turing machine configuration is defined by the 3-tuple: (i) state in which the machine is (ii) position of the head (iii) content of the memory tape, see Section~\ref{sec:conventions}. Then, a word-representation of a configuration is defined by:
 
 \begin{definition}[Word-representations of a configuration]\label{def:wordc}
-  Let $c$ be a Turing machine configuration with finite support, i.e. there are finitely many 1s on the memory tape of the configuration. A word-representation of the configuration $c$ is a word $\hat{c}$ constructed by concatenating (from left to right) the symbols of any finite region of the tape that contains all the 1s and, adding the head's state (a letter between A and E in the case of 5-state TMs) just before the tape symbol its currently reading.
+  Let $c$ be a Turing machine configuration with finite support, i.e. there are finitely many 1s on the memory tape of the configuration. A word-representation of the configuration $c$ is a word $\hat{c}$ constructed by concatenating (from left to right) the symbols of any finite region of the tape that contains all the 1s, and adding the state (a letter between A and E in the case of 5-state TMs) just before the position of the head.
 \end{definition}
 
 \begin{example}
   A word-representation of the configuration on the top row of Figure~\ref{fig:finite-automata-reduction}(c), is $\hat{c} = \texttt{00A001100}$.
 \end{example}
 
-Note that two word-representations of the same configuration will only differ in the number of leading and trailing 0s that they have. Hence, if $\mathcal{L}$ is the regular language of the NFA that we wish to construct to recognise the eventually-halting configurations (with finitely many 1s) of a given TM, it is natural that we ask the following:
+Note that two word-representations of the same configuration will only differ in the number of leading and trailing 0s that they have. Hence, if $\mathcal{L}$ is the regular language of the NFA that we wish to construct to recognise the eventually-halting configurations (with finitely many 1s) of a given TM, it is natural that we require the following:
 \begin{align*}
   u \in \mathcal{L} \iff 0u \in \mathcal{L} &  & \text{(leading zeros ignored)}
   \\
@@ -320,7 +320,7 @@ Combining the above, we get our main result:
 
 \begin{theorem}
   \label{far-main-theorem}
-  Machine $\mathcal{M}$ doesn't halt from the initial all-0 configuration if there are an NFA $(q_0, \{T_\gamma\}, a)$ and row vector $s$ satisfying the below:
+  Machine $\mathcal{M}$ doesn't halt from the initial all-0 configuration if there is an NFA $(q_0, \{T_\gamma\}, a)$ and row vector $s$ satisfying the below:
   \begin{align}
     \label{far-cond-first}
     q_0 T_0                                & = q_0
@@ -343,7 +343,7 @@ Combining the above, we get our main result:
                                            &                     & \text{if $(f,r) \to \bot$ is a halting transition of $\mathcal{M}$}
     \label{far-cond-halt}
     \\
-    T_b T_f T_r                            & \succeq T_t T_b T_w
+    \forall b\in\{0, 1\}: T_b T_f T_r      & \succeq T_t T_b T_w
                                            &                     & \text{if $(f,r) \to (t,w,\text{left})$ is a transition of $\mathcal{M}$}
     \label{far-cond-left}
     \\
@@ -363,7 +363,7 @@ Combining the above, we get our main result:
 
 
 \begin{remark}[Verification]\label{far-remark-verification}
-  Theorem~\ref{far-main-theorem} has the nice property of being suited for the purpose of \textit{verification}: given a TM, an NFA and a vector $s$, the task of verifying that equations \eqref{far-cond-first}--\eqref{far-cond-last} hold and thus that the TM does not halt, is computationally simple\footnote{Note that although equation~\eqref{far-cond-halt} has a $\forall$ quantifier, the set of NFA states reachable after reading an arbitrary $u \in \{0,1\}^*$ is computable, and we just have to consider one instance of equation~\eqref{far-cond-halt} replacing $q_0 T_u$ per such state.}. Verifiers have been implemented for Theorem~\ref{far-main-theorem}, see Section~\ref{sec:far-implem}.
+  Theorem~\ref{far-main-theorem} has the nice property of being suited for the purpose of \textit{verification}: given a TM, an NFA and a vector $s$, the task of verifying that equations \eqref{far-cond-first}--\eqref{far-cond-reject-start} hold and thus that the TM does not halt, is computationally simple\footnote{Note that although equation~\eqref{far-cond-halt} has a $\forall$ quantifier, the set of NFA states reachable after reading an arbitrary $u \in \{0,1\}^*$ is computable, and we just have to consider one instance of equation~\eqref{far-cond-halt} replacing $q_0 T_u$ per such state.}. Verifiers have been implemented for Theorem~\ref{far-main-theorem}, see Section~\ref{sec:far-implem}.
 \end{remark}
 
 
@@ -380,7 +380,7 @@ We design an efficient search algorithm for Theorem~\ref{far-main-theorem} that 
 
   \item The NFA is constructed from two sub-NFAs: one NFA responsible for handling the left-hand side of the tape (i.e. before reading the tape-head state) and one NFA for handling the right-hand side of the tape (i.e. after reading the tape-head state).
   \item The sub-NFA for the left-hand side of the tape is a Deterministic Finite Automaton (DFA).
-  \item Edges labelled by a tape-head state are only those that start in the left-hand side DFA and end in the right-hand side NFA. Furthermore, we require that no such two edges reach the same state in the right-hand side NFA. Hence, the right-hand side NFA has at least $5l$ states with $l$ the number of states of the left-hand side DFA.\label{pt:injective}
+  \item Edges labelled by a tape-head state are only those that start in the left-hand side DFA and end in the right-hand side NFA. Furthermore, we require that no such two edges reach the same state in the right-hand side NFA. Hence, the right-hand side NFA has at least $5l$ states with $l$ the number of states in the left-hand side DFA.\label{pt:injective}
   \item In fact, we require that the right-hand side NFA has exactly $5l+1$ states with the extra state $\bot$ that we call the \textit{halt state}.
 
 \end{enumerate}
@@ -403,8 +403,8 @@ Indeed, let's rewrite the above structural points algebraically:
         $T_f=\begin{bmatrix}0&M_f\\0&0\end{bmatrix}$ ($f\in\{A,\ldots,E\}$) with $M_f \in \M_{l,d}$,
         and acceptance $\begin{bmatrix}0&a\end{bmatrix}$ with $a \in \M_{1,d}$.
   \item $(q_0,\{L_0, L_1\})$ comes from a DFA with transition function $\delta: [l] \times \{0,1\} \to [l]$ (with $[l]$ the set $\{0,\dots,l-1\}$) that ignores leading zeros, i.e. $\delta(0,0) = 0$. That ensures \eqref{far-cond-leading-0} of Theorem~\ref{far-main-theorem}.
-  \item Row vectors of matrices $M_f$ (with $f\in\{A,\ldots,E\}$) are the standard basis row vectors $e_0,\, \dots,\, e_{5l} \in \M_{1,d}$ where basis vector $e_i$ has its $i^\text{th}$ entry set to 1 and the other entries set to 0.\label{pt:basis}
-  \item The right-hand side NFA has \textit{halt state} $\bot$ and $e_{5l+1} = e_\bot$ is its corresponding basis row vector.
+  \item Row vectors of matrices $M_f$ (with $f\in\{A,\ldots,E\}$) are the standard basis row vectors $e_0,\, \dots,\, e_{5l-1} \in \M_{1,d}$ where basis vector $e_i$ has its $i^\text{th}$ entry set to 1 and the other entries set to 0.\label{pt:basis}
+  \item The right-hand side NFA has \textit{halt state} $\bot$ and $e_{5l} = e_\bot$ as its corresponding basis row vector.
 
 \end{enumerate}
 
@@ -474,7 +474,7 @@ By minimality, a solution of (\ref{far-cond-trailing-0}') and (\ref{far-cond-ass
   \item If $a$ does not satisfy (\ref{far-cond-reject-start}') then we cannot conclude and we continue our search for an appropriate left-hand side DFA.
 \end{itemize}
 
-This method relies on a way to enumerate DFAs. In Section~\ref{far-defs-dfa} we give an efficient {\sc search-DFA} algorithm for enumerating canonically-represented DFAs. The search space of DFAs is a tree of partial transition functions and we can skip traversing some sub-trees based on a crucial observation. Solutions $R_0$, $R_1$ and $a$ (given by Lemma~\ref{lem:far-unique-min}) for partial DFA transition function $\delta$ are lower bounds of solutions for any $\delta'$ that extends $\delta$. This observation gives that if $a$, constructed from $\delta$, violates (\ref{far-cond-reject-start}') then, any $a'$, constructed from $\delta'$ extending $\delta$, will violate it too. Hence, in that case, descendants of $\delta$ in the DFA search tree can be skipped.
+This method relies on a way to enumerate DFAs. In Section~\ref{far-defs-dfa} we give an efficient {\sc search-dfa} algorithm for enumerating canonically-represented DFAs. The search space of DFAs is a tree of partial transition functions and we can skip traversing some sub-trees based on a crucial observation. Solutions $R_0$, $R_1$ and $a$ (given by Lemma~\ref{lem:far-unique-min}) for partial DFA transition function $\delta$ are lower bounds of solutions for any $\delta'$ that extends $\delta$. This observation gives that if $a$, constructed from $\delta$, violates (\ref{far-cond-reject-start}') then, any $a'$, constructed from $\delta'$ extending $\delta$, will violate it too. Hence, in that case, descendants of $\delta$ in the DFA search tree can be skipped.
 This efficient pruning technique completes the method, shown below as Algorithm \ref{alg:finite-automata-reduction-direct}.
 
 \begin{algorithm}
@@ -514,7 +514,7 @@ This efficient pruning technique completes the method, shown below as Algorithm 
 
 \subsection{Efficient enumeration of Deterministic Finite Automata}
 \label{far-defs-dfa}
-The direct FAR algorithm (Section~\ref{far-algo-direct} and Algorithm~\ref{alg:finite-automata-reduction-direct}) relies on a procedure to enumerate Deterministic Finite Automata (DFA). We first recall the formal definition of DFAs then give an efficient algorithm (Algorithm~\ref{alg:search-dfa}) to enumerate them and to prune the search space early based on using Lemma~\ref{lem:far-unique-min} on partial DFA transitions functions.
+The direct FAR algorithm (Section~\ref{far-algo-direct} and Algorithm~\ref{alg:finite-automata-reduction-direct}) relies on a procedure to enumerate Deterministic Finite Automata (DFA). We first recall the formal definition of DFAs then give an efficient algorithm (Algorithm~\ref{alg:search-dfa}) to enumerate them and to prune the search space early based on using Lemma~\ref{lem:far-unique-min} on partial DFA transition functions.
 
 Textbooks define \emph{deterministic} finite automata (on the binary alphabet, with acceptance unspecified) as tuples $(Q, \delta, q_0)$ of: a finite set $Q$ (states), a $q_0\in Q$ (initial state), and $\delta: Q\times\{0, 1\}\to Q$ (transition function).
 Though NFAs generalize DFAs, they can be emulated by (exponentially larger) power-set DFAs. \cite{Sipser}
