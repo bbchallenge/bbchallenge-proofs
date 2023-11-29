@@ -49,7 +49,7 @@ We also assume that we are given a routine {\sc get-extreme-position}(tape,sideO
 
     \State \}
     \State \textbf{struct} Configuration \{
-    \State \tabi\textbf{int} state
+    \State \tabi\textbf{State} state
     \State \tabi\textbf{int} headPosition
     \State \tabi\textbf{int $\boldsymbol{\to}$ ValueAndLastTimeVisited} tape
     \State \}
@@ -57,7 +57,7 @@ We also assume that we are given a routine {\sc get-extreme-position}(tape,sideO
 
 
     \Procedure{\textbf{bool} {\sc decider-translated-cyclers}}{\textbf{TM} machine,\textbf{int} timeLimit}
-    \State \textbf{Configuration} currConfiguration = \{.state = 0,$\,$.headPosition = 0,$\,$ .tape = \{0:\{.value = 0, .lastTimeVisited = 0\}\}\}
+    \State \textbf{Configuration} currConfiguration = \{.state = \textcolor{colorA}{A}, .headPosition = 0, .tape = \{0:\{.value = 0, .lastTimeVisited = 0\}\}\}
     \State // 0: right records, 1: left records
     \State \textbf{List$\boldsymbol{<}$Configuration$\boldsymbol{>}$}
     recordBreakingConfigurations[2] = [[],[]]
