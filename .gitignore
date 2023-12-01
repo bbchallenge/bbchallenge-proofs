@@ -1,4 +1,8 @@
 .DS_Store
+
+# Auto-generated pdf
+deciders/correctness-deciders.pdf
+
 ## Core latex/pdflatex auxiliary files:
 *.aux
 *.lof
