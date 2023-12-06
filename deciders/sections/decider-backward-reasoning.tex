@@ -56,10 +56,11 @@ Backward reasoning in the case of Figure~\ref{fig:backward-reasoning} was partic
   \begin{algorithmic}[1]
     \State{\textbf{const int} RIGHT, LEFT = 0, 1}
     \State \textbf{struct} Transition \{
-    \State \tabi\textbf{int} state, read, write, move
+    \State \tabi\textbf{State} state
+    \State \tabi\textbf{int} read, write, move
     \State \}
     \State \textbf{struct} Configuration \{
-    \State \tabi\textbf{int} state
+    \State \tabi\textbf{State} state
     \State \tabi\textbf{int} headPosition
     \State \tabi\textbf{int $\boldsymbol{\to}$ int} tape
     \State \tabi\textbf{int} depth
@@ -81,7 +82,7 @@ Backward reasoning in the case of Figure~\ref{fig:backward-reasoning} was partic
     \Procedure{\textbf{bool} {\sc decider-backward-reasoning}}{\textbf{TM} machine,\textbf{int} maxDepth}
 
     \State \textbf{Stack$\boldsymbol{<}$Configuration$\boldsymbol{>}$} configurationStack
-    \For{\textbf{Pair$\boldsymbol{<}$int, int$\boldsymbol{>}$} (state,read) \textbf{in} {\sc get-undefined-transitions}(machine)}
+    \For{\textbf{Pair$\boldsymbol{<}$State, int$\boldsymbol{>}$} (state,read) \textbf{in} {\sc get-undefined-transitions}(machine)}
     \State \textbf{Configuration} haltingConfiguration = \{.state = state, .headPosition = 0, .tape = \{0: read\}, .depth = 0\}
     \State configurationStack.\textbf{push}(haltingConfiguration)
     \EndFor
@@ -113,11 +114,11 @@ We assume that we are given routine {\sc get-undefined-transitions}(machine) whi
   Then, {\sc decider-backward-reasoning}($\mathcal{M}$,$D$) returns \texttt{true} if and only if no undefined transition of $\mathcal{M}$ can be reached in more than $D$ steps.
 \end{theorem}
 \begin{proof}
-  The tree of backward configurations is maintained in a DFS fashion through a stack (Algorithm~\ref{alg:backward-reasoning}, l.22). Initially, the stack is filled with the configurations where only one tape cell is defined and state is set such that the corresponding transition is undefined (i.e. the machine halts after that step), l.23-25.
+  The tree of backward configurations is maintained in a DFS fashion through a stack (Algorithm~\ref{alg:backward-reasoning}, l.23). Initially, the stack is filled with the configurations where only one tape cell is defined and state is set such that the corresponding transition is undefined (i.e. the machine halts after that step), l.24-26.
 
-  Then, the main loop runs until either (a) the stack is empty or (b) one leaf exceeded the maximum allowed depth, l.26 and l.28. Note that running the algorithm with increased maximum depth increases its chances to contradict all branches of the backward simulation tree. At each step of the loop, we remove the current configuration from the stack and we try to apply all the transitions that lead to this configuration backwards by calling routine {\sc apply-transition-backwards}(configuration, transition).
+  Then, the main loop runs until either (a) the stack is empty or (b) one leaf exceeded the maximum allowed depth, l.27 and l.29. Note that running the algorithm with increased maximum depth increases its chances to contradict all branches of the backward simulation tree. At each step of the loop, we remove the current configuration from the stack and we try to apply all the transitions that lead to this configuration backwards by calling routine {\sc apply-transition-backwards}(configuration, transition).
 
-  The only case where it is not possible to apply a transition backwards, i.e. the case where a contradiction is reached, is when the tape symbol at the position where the transition comes from (i.e. to the right if transition movement is left and vice-versa) is defined but is not equal to the write instruction of the transition. Indeed, that means that the future (i.e. previous backward steps) is not consistent with the current transition's write instruction. This logic is in l.15. Otherwise, we can construct the previous configuration (i.e. next backward step) and augment depth by 1. We then stack this configuration in the main routine (l.33).
+  The only case where it is not possible to apply a transition backwards, i.e. the case where a contradiction is reached, is when the tape symbol at the position where the transition comes from (i.e. to the right if transition movement is left and vice-versa) is defined but is not equal to the write instruction of the transition. Indeed, that means that the future (i.e. previous backward steps) is not consistent with the current transition's write instruction. This logic is in l.16. Otherwise, we can construct the previous configuration (i.e. next backward step) and augment depth by 1. We then stack this configuration in the main routine (l.34).
 
   The algorithm returns \texttt{true} if and only if the stack ever becomes empty which means that all leaves of the backward simulation tree of depth $D$ have reached a contradiction and thus, no undefined transition of the machine is reachable in more than $D$ steps.
 \end{proof}
