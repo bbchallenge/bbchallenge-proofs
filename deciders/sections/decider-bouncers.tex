@@ -2,6 +2,13 @@
 
 \section{Bouncers}\label{sec:bouncers}
 
+\begin{figure}[h!]
+    \centering
+    \includegraphics*[width=0.9\textwidth]{figures/bouncers/bouncers.pdf}
+    \caption{Space-time diagrams (10,000 steps) of several \textit{bouncers}: (a) simple bouncer bouncing back and forth between tape extremeties while writing 1s (b) bouncer with more complex alternating patterns left and right of the origin (c) unilateral bouncer with a complex \textit{wall} pattern at the origin (d) unilateral bouncer, main example used throughout this section (e) bouncer entering a repetitive bouncing pattern after $\sim$6,000 steps (bottom half of the image).}
+\end{figure}
+
+
 Intuitively, a \emph{bouncer} is a Turing machine that builds a tape out of
 ever-expanding repeating fragments. The decider analyses the machine to
 identify the growing \emph{repeaters} and the \emph{walls} that separate them,
@@ -12,60 +19,60 @@ write $(s)$ to mean $s$ repeated any number of times, i.e.~$s^k$ for
 an unspecified $k$.
 
 \begin{example}
-Consider machine \#88,427,177 (see \url{https://bbchallenge.org/88427177}),
-which the bouncer decider can prove to never halt. We shall now retrace the
-steps it takes, to understand the proof approach.
-After executing 25 steps from the empty tape, we reach the configuration
-\begin{equation}
-    0^\infty\; 111\; 0\; 00 \rhead D 0^\infty.
-\end{equation}
-Note that this matches the symbolic tape
-\begin{equation}
-    \label{eqn:initial-symbolic}
-    0^\infty\; (111)\; 0\; (11)\; 00 \rhead D 0^\infty.
-\end{equation}
-Straightforward simulation for 25 more steps yields
-\begin{equation}
-    0^\infty\; (111)\; 0\; (11) \lhead A 0101011\; 0^\infty.
-\end{equation}
-We note that the subtape $11 \lhead A$ turns into $\lhead A 01$ in 2 steps. By repeating
-this an appropriate number of times, we can reach the configuration
-\begin{equation}
-    0^\infty\; (111)\; 0 \lhead A (01)\; 0101011\; 0^\infty.
-\end{equation}
-One step later, we get
-\begin{equation}
-    0^\infty\; (111)\; 1 \rhead B (01)\; 0101011\; 0^\infty.
-\end{equation}
-We would now presume that the subtape $\rhead B 01$, or at the very least $1 \rhead B 01$,
-would evolve into something
-useful. However, since it doesn't enter state $B$ again, we have no hope of
-handling an arbitrary number of repeating $(01)$ in a generic manner.
+    Consider machine \#88,427,177 (see \url{https://bbchallenge.org/88427177}),
+    which the bouncer decider can prove to never halt. We shall now retrace the
+    steps it takes, to understand the proof approach.
+    After executing 25 steps from the empty tape, we reach the configuration
+    \begin{equation}
+        0^\infty\; 111\; 0\; 00 \rhead D 0^\infty.
+    \end{equation}
+    Note that this matches the symbolic tape
+    \begin{equation}
+        \label{eqn:initial-symbolic}
+        0^\infty\; (111)\; 0\; (11)\; 00 \rhead D 0^\infty.
+    \end{equation}
+    Straightforward simulation for 25 more steps yields
+    \begin{equation}
+        0^\infty\; (111)\; 0\; (11) \lhead A 0101011\; 0^\infty.
+    \end{equation}
+    We note that the subtape $11 \lhead A$ turns into $\lhead A 01$ in 2 steps. By repeating
+    this an appropriate number of times, we can reach the configuration
+    \begin{equation}
+        0^\infty\; (111)\; 0 \lhead A (01)\; 0101011\; 0^\infty.
+    \end{equation}
+    One step later, we get
+    \begin{equation}
+        0^\infty\; (111)\; 1 \rhead B (01)\; 0101011\; 0^\infty.
+    \end{equation}
+    We would now presume that the subtape $\rhead B 01$, or at the very least $1 \rhead B 01$,
+    would evolve into something
+    useful. However, since it doesn't enter state $B$ again, we have no hope of
+    handling an arbitrary number of repeating $(01)$ in a generic manner.
 
-To make progress, we must instead rewrite the tape as
-\begin{equation}
-    0^\infty\; (111)\; 1 \rhead B 010101\; (01)\; 1\; 0^\infty.
-\end{equation}
-After 12 steps of simulation, we reach
-\begin{equation}
-    0^\infty\; (111)\; 1110110 \rhead D (01)\; 1\; 0^\infty.
-\end{equation}
-Now, being in state $D$ and with a 0 to the left of the tape head, we have
-$0 \rhead D 01 \vdash^* 110 \rhead D$, and so we reach
-\begin{equation}
-    0^\infty\; (111)\; 111011\; (11)\; 0 \rhead D 1\; 0^\infty,
-\end{equation}
-and after one step, we have
-\begin{equation}
-    0^\infty\; (111)\; 111011\; (11)\; 00 \rhead D 0^\infty.
-\end{equation}
-Since this is a special case of \eqref{eqn:initial-symbolic}, we can
-conclude that this machine will never halt. \qed
+    To make progress, we must instead rewrite the tape as
+    \begin{equation}
+        0^\infty\; (111)\; 1 \rhead B 010101\; (01)\; 1\; 0^\infty.
+    \end{equation}
+    After 12 steps of simulation, we reach
+    \begin{equation}
+        0^\infty\; (111)\; 1110110 \rhead D (01)\; 1\; 0^\infty.
+    \end{equation}
+    Now, being in state $D$ and with a 0 to the left of the tape head, we have
+    $0 \rhead D 01 \vdash^* 110 \rhead D$, and so we reach
+    \begin{equation}
+        0^\infty\; (111)\; 111011\; (11)\; 0 \rhead D 1\; 0^\infty,
+    \end{equation}
+    and after one step, we have
+    \begin{equation}
+        0^\infty\; (111)\; 111011\; (11)\; 00 \rhead D 0^\infty.
+    \end{equation}
+    Since this is a special case of \eqref{eqn:initial-symbolic}, we can
+    conclude that this machine will never halt. \qed
 \end{example}
 
 We formalize this way of reasoning as follows:
 
-\begin{definition} 
+\begin{definition}
     A \emph{tape chunk} is either a symbol $s \in \{0, 1\}$,
     or a repeater $(s)$, with $s \in \{0, 1\}^*$, $s \neq \epsilon$.
     The set of all tape chunks is denoted $\mathcal C$.
@@ -74,12 +81,12 @@ We formalize this way of reasoning as follows:
 \begin{definition}
     A \emph{symbolic configuration} consists of a directed tape head, and
     possibly empty sequences of tape chunks on either side, of the form
-\begin{align}
-    0^\infty\; l_1\; \cdots\; l_m &\lhead q r_1\; \cdots\; r_n\; 0^\infty
-\shortintertext{or}
-    0^\infty\; l_1\; \cdots\; l_m &\rhead q r_1\; \cdots\; r_n\; 0^\infty
-\end{align}
-where $l_k, r_k \in \mathcal C$.
+    \begin{align}
+        0^\infty\; l_1\; \cdots\; l_m & \lhead q r_1\; \cdots\; r_n\; 0^\infty
+        \shortintertext{or}
+        0^\infty\; l_1\; \cdots\; l_m & \rhead q r_1\; \cdots\; r_n\; 0^\infty
+    \end{align}
+    where $l_k, r_k \in \mathcal C$.
 \end{definition}
 
 \begin{definition}
@@ -104,11 +111,11 @@ where $l_k, r_k \in \mathcal C$.
 \end{definition}
 
 \todo{The below is not yet coherent, but merely snippets of what might
-be useful, created through endless rewriting}
+    be useful, created through endless rewriting}
 \begin{remark} The symbolic tapes we're considering can also be understood as
-defining a regular language of tapes matching a particular step of the cycle
-being simulated. In this interpretation, we are executing the Turing machine
-on all elements of the language at the same time.
+    defining a regular language of tapes matching a particular step of the cycle
+    being simulated. In this interpretation, we are executing the Turing machine
+    on all elements of the language at the same time.
 \end{remark}
 
 We will be considering a tape language of the form

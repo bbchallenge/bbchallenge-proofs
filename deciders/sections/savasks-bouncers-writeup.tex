@@ -1,0 +1,291 @@
+\documentclass{article}
+\usepackage [utf8] {inputenc}
+\usepackage[left=1.25in, right=1.25in]{geometry}
+\usepackage{mathtools}
+\usepackage{amsthm}
+\usepackage{amssymb}
+\usepackage{url}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{proposition}{Proposition}
+\newtheorem{lemma}{Lemma}
+\newtheorem{corollary}{Corollary}
+
+\newcommand{\lhead}[1]{\stackrel{#1}\triangleleft}
+\newcommand{\rhead}[1]{\stackrel{#1}\triangleright}
+
+\title{Bouncers}
+
+\begin{document}
+\maketitle
+
+Consider a Turing machine with a finite symbol set \( \Sigma \) where \( 0 \in \Sigma \) is the blank symbol,
+a finite set of states \( S \) with an initial state \( A \in S \), and a transition function \( \delta : S \times \Sigma \to S \times \{ L, R \} \times \Sigma \).
+If for some \( s \in S \), \( x \in \Sigma \) we have \( \delta(s, x) = (s', d, x') \), \( d \in \{ L, R \} \), then the machine head writes \( x' \)
+on the current tape cell, switches to the state \( s' \) and moves in the direction \( d \), that is, left if \( d = L \) and right if \( d = R \).
+If the value of \( \delta(s, x) \) is undefined, then the machine halts.
+
+\subsection{Directional Turing machines}
+
+We will use an equivalent formulation of a Turing machine where the machine head lives in between the tape cells and can point to the left or to the right.
+We enhance the symbol set with a new symbol \( 0^\infty \) and write \( \overline{\Sigma} = \{ 0^\infty \} \cup \Sigma \).
+We also introduce \( 2 |S| \) new symbols denoting the machine head in two possible orientations, namely \( \Delta = \{ \lhead{s} \mid s \in S \} \cup \{ \rhead{s} \mid s \in S \} \).
+
+We define a \emph{tape} to be a (finite) word of the form \( u h v \), where \( u, v \in \overline{\Sigma}^* \) and \( h \in \Delta \),
+moreover, \( u \) and \( v \) have at most one occurrence of \( 0^\infty \) each, and if \( u \) contains \( 0^\infty \) then it is the first symbol of \( u \),
+and if \( v \) contains \( 0^\infty \) then it is the last symbol of \( v \).
+The initial tape is \( 0^\infty \rhead{A} 0^\infty \). Now we define tape rewrite rules which will be used to simulate the directional Turing machine.
+Given two tapes \( t \) and \( t' \), a rewrite rule transforming \( t \) into \( t' \) will be denoted by \( t \to t' \).
+Note that \( t \) and \( t' \) do not have to contain the symbol \( 0^\infty \), which is in line with the definition of a tape.
+
+Suppose that for \( s \in S \), \( x \in \Sigma \) we have \( \delta(s, x) = (s', d, x') \) where \( s' \in S \), \( d \in \{ L, R \} \), \( x' \in \Sigma \).
+If \( d = L \) then we add the following rewrite rules:
+\begin{align*}
+	x \lhead{s}\,\,\, &\to \,\,\, \lhead{s'} x'\\
+	\rhead{s} x\,\,\, &\to \,\,\, \lhead{s'} x'
+\end{align*}
+Moreover, if \( d = L \) and \( x = 0 \) we add the rules:
+\begin{align*}
+	0^\infty \lhead{s}\,\,\, &\to \,\,\, 0^\infty \lhead{s'} x'\\
+	\rhead{s} 0^\infty\,\,\, &\to \,\,\, \lhead{s'} x'\, 0^\infty
+\end{align*}
+If \( d = R \) then we add the following rewrite rules:
+\begin{align*}
+	x \lhead{s}\,\,\, &\to \,\,\, x' \rhead{s'}\\
+	\rhead{s} x\,\,\, &\to \,\,\, x' \rhead{s'}
+\end{align*}
+Moreover, if \( d = R \) and \( x = 0 \) we add the rules:
+\begin{align*}
+	0^\infty \lhead{s}\,\,\, &\to \,\,\, 0^\infty \, x' \rhead{s'}\\
+	\rhead{s} 0^\infty\,\,\, &\to \,\,\, x' \rhead{s'} 0^\infty
+\end{align*}
+
+Given a tape \( t = uvw \) and a word \( t' = uv'w \), where \( u, w \in \overline{\Sigma}^* \), \( v, v' \in (\overline{\Sigma} \cup \Delta)^* \),
+suppose that there is a rewrite rule \( v \to v' \). It is easy to see that \( t' \) also must be a tape.
+In this situation we will write \( t \vdash t' \), meaning that \( t' \) is obtained from \( t \) by one step of our simulation.
+Clearly to any given tape at most one rewrite rule applies, hence \( v \to v' \) is defined uniquely and \( \vdash \) is defined correctly.
+We will write \( t \vdash^* t' \) if there exist tapes \( t_1, \dots, t_n \), \( n \geq 2 \), such that \( t_1 = t \), \( t_n = t' \)
+and for \( i = 1, \dots, n-1 \) we have \( t_i \vdash t_{i+1} \).
+
+This reformulation of a Turing machine is equivalent to the classical one. For example, the tape \( 0^\infty uh \lhead{s} v 0^\infty \),
+where \( u,v  \in \Sigma^* \), \( h \in \Sigma \), \( s \in S \), corresponds to the classical biinfinite tape \( \dots 0 uhv 0 \dots \),
+where the Turing machine head is in state \( s \) and rests right upon the symbol \( h \).
+\medskip
+
+\noindent\textbf{Example.} Consider a Turing machine with \( \Sigma = \{ 0, 1 \} \), \( S = \{ A, B, C, D, E \} \) and the following transition table:
+\[
+	\begin{array}{l|ll}
+		& 0 & 1\\
+		\hline
+		A &1RB & 1LE\\
+		B & 1LC & 1RD\\
+		C & 1LB & 1RC\\
+		D & 1LA & 0RD\\
+		E & \mbox{---} & 0LA
+	\end{array}
+\]
+In the directional Turing machine format we will have the following rules having the state \( A \) in the left hand side:
+\begin{align*}
+	0 \lhead{A}\,\,\, &\to\,\,\, 1 \rhead{B}\\
+	\rhead{A} 0\,\,\, &\to\,\,\, 1 \rhead{B}\\
+	1 \lhead{A}\,\,\, &\to\,\,\, \lhead{E} 1\\
+	\rhead{A} 1\,\,\, &\to\,\,\, \lhead{E} 1\\
+	0^\infty \lhead{A}\,\,\, &\to\,\,\, 0^\infty 1 \rhead{B}\\
+	\rhead{A} 0^\infty\,\,\, &\to\,\,\, 1 \rhead{B} 0^\infty
+\end{align*}
+Similarly there are rules with states \( B, C, D \) and \( E \) in the left hand side.
+
+If we simulate the machine for 4 steps, starting from the initial tape, we get the following tapes:
+\begin{align*}
+	0^\infty &\rhead{A} 0^\infty\\
+	0^\infty \, 1 &\rhead{B} 0^\infty\\
+	0^\infty \, 1 &\lhead{C} 1\, 0^\infty\\
+	0^\infty \, 1 &\rhead{C} 1\, 0^\infty\\
+	0^\infty \, 1 1 &\rhead{C} 0^\infty
+\end{align*}
+For example, \( 0^\infty \, 1 \lhead{C} 1\, 0^\infty \vdash 0^\infty \, 1 \rhead{C} 1\, 0^\infty \) and \( 0^\infty \rhead{A} 0^\infty \vdash^* 0^\infty \, 1 1 \rhead{C} 0^\infty \).
+
+\subsection{Formula tapes}
+
+We will consider regular expressions over the alphabet \( \Delta \cup \overline{\Sigma} \).
+Given \( u \in \Sigma^* \) we abbreviate the regular expression \( \{ u \}^* \) as \( (u) \).
+Given a regular expression \( f \) let \( M(f) \) denote the language described by \( f \), i.e.\ the set of words over \( \Delta \cup \overline{\Sigma} \) which match it.
+Observe that for \( u \in \Sigma^* \) we have
+\[ M(\, (u)\, ) = \{ \varnothing,\, u,\, uu,\, uuu, \dots \} = \{ u^k \mid k \geq 0 \}, \]
+where \( u^k \) denotes the concatenation of \( k \) copies of~\( u \).
+
+We define a \emph{formula tape} to be a regular expression of the form
+\[ u_1 (w_1) u_2 (w_2) \dots u_n (w_n) u_{n+1}\, h\, u'_1 (w'_1) u'_2 \dots (w'_m) u'_{m+1}, \]
+if the following conditions are met:
+\begin{align*}
+	& n, m \geq 0,\\
+	& h \in \Delta,\\
+	& w_1, \dots, w_n, w'_1, \dots, w'_m \in \Sigma^* \setminus \{ \varnothing \},\\
+	& u_2, \dots, u_{n+1}, u'_1, \dots, u'_m \in \Sigma^*,\\
+	& u_1, u'_{m+1} \in \overline{\Sigma}^*.
+\end{align*}
+and, as in the definition of a tape, \( u_1 \) either does not contain the symbol \( 0^\infty \) or it starts with it, and \( u'_{m+1} \) either does not
+contain the symbol \( 0^\infty \) or it ends with it.
+
+Note that we allow \( n = m = 0 \) hence a usual tape is also a formula tape. The in-between words \( u_i,\, u'_j \) can be empty,
+while the words in brackets \( w_i,\, w'_j \), which we call \emph{repeaters}, must be nonempty.
+
+Suppose that a formula tape \( f \) decomposes as \( f = u h u' (w) v v' \), where \( h \in \Delta \), \( w, v \in \Sigma^* \setminus \{ \varnothing \} \)
+and \( u, u', v' \) are some (possibly empty) words. If for some \( w' \in \Sigma^* \setminus \{ \varnothing \} \) we have \( wv = vw' \), then the expression \( f' = u h u' v (w') v' \)
+is also a formula tape and \( M(f) = M(f') \). Indeed, this follows from the fact that for any natural \( n \) we have \( w^n v = v w'^n \).
+Similarly, if \( f \) decomposes as \( f = u' u (w) v' h v \), where \( h \in \Delta \), \( w, u \in \Sigma^* \setminus \{ \varnothing \} \)
+and \( u', v, v' \) are some words, and in addition \( uw = w'u \) for some \( w' \in \Sigma^* \setminus \{ \varnothing \} \), then \( f' = u' (w') u v' h v \)
+is a formula tape with \( M(f) = M(f') \). We will call the rewrite rules described above the alignment rules.
+
+It is easy to see that each alignment rule moves some repeater away from the Turing machine head. The order in which the alignment rules
+are applied does not matter, hence one can show that for any formula tape \( f \) there is a unique formula tape \( f' \) which can be obtained by a sequence of alignment rules,
+such that one can no longer apply any of the alignment rules to \( f' \) anymore. We will denote such \( f' \) by \( A(f) \). Clearly, \( A(f) = A(A(f)) \).
+\medskip
+
+\noindent\textbf{Example.} We use the setup of our previous example. The following is a formula tape:
+\[ f = 0 \rhead{D} (01) \]
+and \( M(f) = \{ 0 \rhead{D},\, 0 \rhead{D} 01,\, 0 \rhead{D} 0101,\, \dots \} \). This is also a formula tape:
+\[ f' = 0^\infty (111) 1110 \lhead{A} 010101 (01) 1 0^\infty. \]
+The following are examples of tapes lying in \( M(f') \):
+\begin{align*}
+	0^\infty 1110 &\lhead{A} 010101 1 0^\infty\\
+	0^\infty 1111110 &\lhead{A} 010101 1 0^\infty\\
+	0^\infty 1110 &\lhead{A} 01010101 1 0^\infty
+\end{align*}
+These strings are \emph{not} formula tapes:
+\begin{align*}
+	0 (01)\,\, \text{[no head symbol]}\\
+	10 (11) 0 () \rhead{A} 11\,\, \text{[empty repeater]}\\
+	11 (1 0^\infty 1) \lhead{B} 11\,\, [0^\infty \text{ inside the repeater]}
+\end{align*}
+Consider a formula tape
+\[ f'' = 0^\infty 101(11)0 \rhead{D} 10(100)11 0^\infty. \]
+The aligned formula tape is
+\[ A(f'') = 0^\infty 10(11)10 \rhead{D} 101(001)1 0^\infty. \]
+Here we rewrote \( 1(11) \) as \( (11)1 \) and \( (100)1 \) as \( 1(001) \).
+The formula tapes \( f \) and \( f' \), that we defined earlier, are already aligned, i.e.\ \( A(f) = f \) and \( A(f') = f' \). 
+\medskip
+
+We wish to extend the Turing machine step relation \( \vdash \) to formula tapes. Suppose that for some \( u \in \Sigma^* \) and \( v, w \in \Sigma^* \setminus \{ \varnothing \} \)
+and some state \( s \in S \) we have \( u \rhead{s} v \vdash^* w u \rhead{s} \). Then for any \( n \geq 1 \) we have \( u \rhead{s} v^n \vdash^* w^n u \rhead{s} \);
+note that if it took \( m \) simulation steps to go from the tape \( u \rhead{s} v \) to \( w u \rhead{s} \), then it takes \( n \cdot m \) steps
+to go from \( u \rhead{s} v^n \) to \( w^n u \rhead{s} \). Under above assumptions, the rewrite rule for formula tapes which replaces a subword
+\( u \rhead{s} (v) \) by \( (w) u \rhead{s} \) will be called a (right) \emph{shift rule}. Similarly, if \( v \lhead{s} u \vdash^* \lhead{s} u w \)
+one obtains a (left) shift rule which rewrites \( (v) \lhead{s} u \) into \( \lhead{s} u (w) \).
+
+Now, let \( f \) and \( f' \) be formula tapes. We will write \( f \vdash f' \) if one of the following two situations holds:
+\begin{enumerate}
+	\item[(Usual step)] If \( f = u v w \) and \( f' = u v' w \) for some words \( u, w \) and some tapes \( v \) and \( v' \) such that \( v \vdash v' \). 
+	\item[(Shift rule)] If \( f' \) is obtained from \( f \) by a left or right shift rule.
+\end{enumerate}
+
+In the ``Usual step'' case the subwords \( v \) and \( v' \) are not defined uniquely, but one can easily see that for any formula tape \( f \)
+there exists at most one formula tape \( f' \) such that \( f \vdash f' \).
+The ``Shift rule'' case can happen only if the Turing machine head points at a bracket symbol, i.e.\ if \( f \) contains a subword
+of the form \( (w) \lhead{s} \) or \( \rhead{s} (w) \) for some \( s \in S \), \( w \in \Sigma^* \setminus \{ \varnothing \} \). In particular,
+it is not possible for the ``Usual step'' and ``Shift rule'' cases to happen at the same time, so there is no ambiguity in the definition of \( \vdash \) for formula tapes.
+Clearly, for usual tapes our new definition of \( \vdash \) coincides with the old one.
+
+Given two formula tapes \( f \) and \( f' \) we will say that \( f' \) is a \emph{special case} of \( f \), if \( f' \) can
+be obtained from \( f \) by replacing subwords of the form \( (w) \), \( w \in \Sigma^* \setminus \{ \varnothing \} \) by
+\( w^n (w) w^m \) for some \( n, m \geq 0 \). Since any tape matching a regular expression \( w^n (w) w^m \) also matches \( (w) \),
+we obtain \( M(f') \subseteq M(f) \).
+\medskip
+
+\noindent\textbf{Example.} We continue with the Turing machine from the previous examples of this section.
+The rule
+\[ 0 \rhead{D} (01) \to (11) 0 \rhead{D} \]
+is a shift rule. Indeed, we have the following sequence of tapes:
+\begin{align*}
+	0 &\rhead{D} 01\\
+	0 &\lhead{A} 11\\
+	1 &\rhead{B} 11\\
+	11 &\rhead{D} 1\\
+	110 &\rhead{D}
+\end{align*}
+Hence \( 0 \rhead{D} 01 \vdash^* 110 \rhead{D} \), as required by the definition of shift rules.
+
+Consider the formula tape \( f' \) from the previous example:
+\[ 0^\infty (111) 1110 \lhead{A} 010101(01) 1 0^\infty. \]
+After performing one usual step we arrive at the formula tape
+\[ 0^\infty (111) 1111 \rhead{B} 010101(01) 1 0^\infty. \]
+After \( 12 \) more usual steps we get
+\[ 0^\infty (111) 1111110110 \rhead{D} (01) 1 0^\infty. \]
+No more usual steps apply. Now we use the shift rule \( 0 \rhead{D} (01) \to (11) 0 \rhead{D} \) to get
+\[ 0^\infty (111) 111111011 (11) 0 \rhead{D} 1 0^\infty. \]
+One more usual step gives
+\[ 0^\infty (111) 111111011 (11) 00 \rhead{D} 0^\infty. \]
+This tape is a special case of the following tape
+\[ 0^\infty (111) 1110 (11) 00 \rhead{D} 0^\infty. \]
+\medskip
+
+% As in the case of usual tapes, we write \( t \vdash^* t' \) if there exist formula tapes \( t_1, \dots, t_n \), \( n \geq 2 \), such that \( t_1 = t \), \( t_n = t' \) and for \( i = 1, \dots, n-1 \) we have \( t_i \vdash t_{i+1} \).
+
+We record some basic properties of formula tapes.
+
+\begin{proposition}\label{ftapeProps}
+	The following is true.
+	\begin{enumerate}
+		\item If \( f \) is a formula tape, then \( M(f) = M(A(f)) \).
+		\item Let \( f \) and \( f' \) be formula tapes with \( f \vdash f' \).
+			Then for all \( t \in M(f) \) there exists some \( t' \in M(f') \) such that \( t \vdash^* t' \).
+		\item If \( f \) and \( f' \) are formula tapes with \( f \vdash f' \), then there exists some formula tape \( f'' \)
+			such that \( A(f) \vdash f'' \).
+	\end{enumerate}
+\end{proposition}
+\begin{proof} (Sketch)
+
+	1. Obvious.
+
+	2. If \( f' \) follows from \( f \) by a usual step, then applying one usual step to \( t \) yields \( t' \in M(f') \).
+	If \( f' \) follows from \( f \) by a shift rule, we apply several steps to \( t \) (as many as there are in the shift rule used)
+	to obtain \( t' \in M(f') \).
+
+	3. If \( f' \) follows from \( f \) by a usual step, then \( A(f) \vdash f' \) and we may set \( f'' = f' \).
+	If \( f' \) follows from \( f \) by a shift rule, then the head in tape \( f \) points at a repeater.
+	If the head in \( A(f) \) also points at a repeater, then it is necessarily the same repeater as in \( f \)
+	and hence a shift rule applies and \( f'' \) exists. If the head in \( A(f) \) does not point at a repeater,
+	then it points at some symbol in \( \Sigma \) and a usual step potentially applies (or the machine halts).
+	By parts~1 and~2 of this proposition, for any \( t \in M(A(f)) = M(f) \) there exists \( t' \in M(f') \) such that \( t \vdash^* t' \).
+	Hence the machine does not halt and a usual step applies to \( A(f) \), proving that \( f'' \) exists.
+\end{proof}
+
+The following theorem is the main theoretical tool for deciding bouncers.
+
+\begin{theorem}\label{bouncers}
+	Assume we are given some Turing machine and suppose there exists a tape \( t \) and some formula tapes \( f_0, \dots, f_n \), \( n \geq 1 \),
+	such that \( 0^\infty \rhead{A} 0^\infty \vdash^* t \) where \( t \in M(f_0) \), and \( A(f_i) \vdash f_{i+1} \) for \( i = 0, \dots n-1 \).
+	If \( A(f_n) \) is a special case of \( A(f_0) \), then the Turing machine does not halt.
+\end{theorem}
+\begin{proof}
+	It follows from Proposition~\ref{ftapeProps} that there exist tapes \( t_0, \dots, t_n \) such that \( t_i \in M(f_i) \), \( i = 0, \dots, n \)
+	and \( t_i \vdash^* t_{i+1} \), \( i = 0, \dots, n-1 \). Since \( A(f_n) \) is a special case of \( A(f_0) \), we get \( t_n \in M(f_0) \)
+	and \( t \vdash^* t_n \). The same argument applies to \( t_n \) in place of \( t \), hence there is an infinite sequence of tapes \( t'_0, t'_1, t'_2, \dots \),
+	where \( t'_0 = t \) and \( t'_i \vdash^* t'_{i+1} \), \( i \geq 0 \). The claim is proved.
+\end{proof}
+
+\noindent\textbf{Example.} We show that the Turing machine from our series of examples in this section is a bouncer, i.e.\ it satisfies the assumptions of Theorem~\ref{bouncers}.
+
+Starting from the blank tape, after 64 steps we arrive at the tape
+\[ t = 0^\infty 11111101100 \rhead{D} 0^\infty \]
+which is a special case of the formula tape
+\[ f_0 = 0^\infty (111) 1110 (11) 00 \rhead{D} 0^\infty. \]
+After 25 usual steps we arrive at the following formula tape (here we skip intermediate tapes \( f_1, \dots, f_{24} \))
+\[ f_{25} = 0^\infty (111) 1110 (11) \lhead{A} 0101011 0^\infty. \]
+One shift rule gives us
+\[ f_{26} = 0^\infty (111) 1110 \lhead{A} (01) 0101011 0^\infty. \]
+Note that after alignment we get
+\[ A(f_{26}) = 0^\infty (111) 1110 \lhead{A} 010101 (01) 1 0^\infty \]
+and one usual step gives us \( A(f_{26}) \vdash f_{27} \) where
+\[ f_{27} = 0^\infty (111) 1111 \rhead{B} 010101 (01) 1 0^\infty. \]
+After 12 usual steps we arrive at
+\[ f_{39} = 0^\infty (111) 1111110110 \rhead{D} (01) 1 0^\infty \]
+and one shift rule gives
+\[ f_{40} = 0^\infty (111) 111111011 (11) 0 \rhead{D} 1 0^\infty. \]
+Finally, one usual step
+\[ f_{41} = 0^\infty (111) 111111011 (11) 00 \rhead{D} 0^\infty. \]
+Now, \( A(f_0) = f_0 \) and
+\[ A(f_{41}) = 0^\infty (111) 1111110 (11) 1100 \rhead{D} 0^\infty. \]
+It can be easily seen that \( A(f_{41}) \) is a special case of \( A(f_0) \), hence the assumptions of Theorem~\ref{bouncers} are met and our Turing machine does not halt.
+
+\end{document}
