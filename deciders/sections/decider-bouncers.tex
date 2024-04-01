@@ -2,128 +2,99 @@
 
 \section{Bouncers}\label{sec:bouncers}
 
+\paragraph{Acknowledgement.} To do.
+
+
 \begin{figure}[h!]
     \centering
     \includegraphics*[width=0.9\textwidth]{figures/bouncers/bouncers.pdf}
-    \caption{Space-time diagrams (10,000 steps) of several \textit{bouncers}: (a) simple bouncer bouncing back and forth between tape extremeties while writing 1s (b) bouncer with more complex alternating patterns left and right of the origin (c) unilateral bouncer with a complex \textit{wall} pattern at the origin (d) unilateral bouncer, main example used throughout this section (e) bouncer entering a repetitive bouncing pattern after $\sim$6,000 steps (bottom half of the image).}
+    \caption{Space-time diagrams (10,000 steps) of several \textit{bouncers}: (a) simple bouncer bouncing back and forth between expanding tape extremeties while writing 1s (b) bouncer with more complex alternating \textit{repeaters} patterns left and right of the origin (c) unilateral bouncer with a complex \textit{wall} pattern at the origin (d) unilateral bouncer, main example used throughout this section (e) bouncer entering a repetitive bouncing pattern after $\sim$6,000 steps (bottom half of the image).}\label{fig:bouncers}
 \end{figure}
 
+\subsection{Characterising bouncers}
 
-Intuitively, a \emph{bouncer} is a Turing machine that builds a tape out of
-ever-expanding repeating fragments. The decider analyses the machine to
-identify the growing \emph{repeaters} and the \emph{walls} that separate them,
-and then executes the machine symbolically to prove that this growth is endless.
+Intuitively, a \emph{bouncer} is a Turing machine that populates a tape with
+linearly-expanding patterns, called \textit{repeaters}, possibly separated or enclosed by fixed patterns called \textit{walls}. This intuitive definition corresponds to a wide range of behaviors, from simply bouncing back and forth between the tape's expanding extremities, Figure~\ref{fig:bouncers}~(a), to more complex bouncers that exhibit intricate \textit{repeaters} or \textit{wall} patterns, Figure~\ref{fig:bouncers}~(b)-(d), and that possibly start \textit{bouncing} repetitively only after a certain number of steps, Figure~\ref{fig:bouncers}~(e).
 
-\paragraph{Notation.} For a tape segment $s \in \{0, 1\}^*$, we will
-write $(s)$ to mean $s$ repeated any number of times, i.e.~$s^k$ for
-an unspecified $k$.
+The goal of this section is to formally characterise bouncers and show that they do not halt, see Theorem~\ref{th:bouncers}.
+
+\subsubsection*{Directional Turing machines}
+
+We build on the concept of directional Turing machine introduced in Section~\ref{sec:conventions}. Directional Turing machines are an equivalent formulation of Turing machine where the machine head lives in between the tape cells and can point to the left or to the right. We choose here to treat $0^\infty$ as a unique symbol (instead of an infinite collection of 0s) and write $\bar{\Sigma} = \{0^\infty\}\cup\Sigma$. For each Turing machine with set of state $S$ we introduce 2$|S|$ new configuration symbols (i.e. symbols used to describe machine configurations and not read/write symbols) denoting the machine head in two possible orientations, namely $\Delta = \{\lhead s | s\in S\}\cup\{\rhead s| s \in S\}$.
+
+We define a \textit{tape} to be a finite word of the form $uhv$, where $u,v\in\bar{\Sigma}^*$ and $h\in\Delta$, moreover, $u$ and $v$ must have at most one occurrence of $0^\infty$ each, respectively as first symbol for $u$ or last symbol for $v$. We choose the initial tape to be $0^\infty \rhead{\text{A}} 0^\infty$. Now, we define tape rewrite rules which will be used to simulate a directional Turing machine which we fix from now on. Given two tapes $t$ and $t'$, a rewrite rule transforming $t$ into $t'$ will be denoted by $t\to t'$. The transitive closure of $\vdash$ (i.e. applying several successive $\vdash$ operations) is noted $\vdash^*$.
+
+Suppose that for $s\in S, x\in \Sigma$ we have $\delta(s,x) = (s',d,x')$ where $s'\in S, d \in \{\text{L},\text{R}\}, x' \in \Sigma$ and $\delta$ the transition function of the machine, then we define the following tape rewrite rules:
+
+
+\begin{table}[h!]
+    \centering
+    \begin{tabular}{l|l}
+        If $d = \text{L}$                               & If $d = \text{R}$ \\
+        \hline
+        $\begin{aligned}[t]
+                 x \lhead{s}\,\,\, & \to \,\,\, \lhead{s'} x' \\
+                 \rhead{s} x\,\,\, & \to \,\,\, \lhead{s'} x'
+             \end{aligned}$ & $\begin{aligned}[t]
+                                   x \lhead{s}\,\,\, & \to \,\,\, x' \rhead{s'} \\
+                                   \rhead{s} x\,\,\, & \to \,\,\, x' \rhead{s'}
+                               \end{aligned}$     \\
+        \hline
+    \end{tabular}\\
+    \ \\ If $x=0$, also define: \\
+    \begin{tabular}{l|l}
+        \hline
+        $\begin{aligned}[t]
+                 0^\infty \lhead{s}\,\,\, & \to \,\,\, 0^\infty \lhead{s'} x'   \\
+                 \rhead{s} 0^\infty\,\,\, & \to \,\,\, \lhead{s'} x'\, 0^\infty
+             \end{aligned}$ & $\begin{aligned}[t]
+                                   0^\infty \lhead{s}\,\,\, & \to \,\,\, 0^\infty \, x' \rhead{s'} \\
+                                   \rhead{s} 0^\infty\,\,\, & \to \,\,\, x' \rhead{s'} 0^\infty
+                               \end{aligned}$ \\
+        \hline
+    \end{tabular}\\
+\end{table}
+
+Given a tape $t=uvw$ and a word $t'=uv'w$, with $u,w\in\bar{\Sigma}^*$, $v,v' \in (\bar \Sigma \cup \Delta)^*$, suppose that there is a rewrite rule $v \to v'$. Then $t'$ is also a tape and in this situation we write $t \vdash t'$ meaning that $t'$ is obtained from $t$ by one simulation step (i.e. $\vdash$ has the same meaning as for standard, non-directional, Turing machines, as introduced in Section~\ref{sec:conventions}); note that the definition is sound because, to any given tape, at most one rewrite rule applies, hence $v \to v'$ is defined uniquely and so is $t \vdash t'$.
 
 \begin{example}
-    Consider machine \#88,427,177 (see \url{https://bbchallenge.org/88427177}),
-    which the bouncer decider can prove to never halt. We shall now retrace the
-    steps it takes, to understand the proof approach.
-    After executing 25 steps from the empty tape, we reach the configuration
-    \begin{equation}
-        0^\infty\; 111\; 0\; 00 \rhead D 0^\infty.
-    \end{equation}
-    Note that this matches the symbolic tape
-    \begin{equation}
-        \label{eqn:initial-symbolic}
-        0^\infty\; (111)\; 0\; (11)\; 00 \rhead D 0^\infty.
-    \end{equation}
-    Straightforward simulation for 25 more steps yields
-    \begin{equation}
-        0^\infty\; (111)\; 0\; (11) \lhead A 0101011\; 0^\infty.
-    \end{equation}
-    We note that the subtape $11 \lhead A$ turns into $\lhead A 01$ in 2 steps. By repeating
-    this an appropriate number of times, we can reach the configuration
-    \begin{equation}
-        0^\infty\; (111)\; 0 \lhead A (01)\; 0101011\; 0^\infty.
-    \end{equation}
-    One step later, we get
-    \begin{equation}
-        0^\infty\; (111)\; 1 \rhead B (01)\; 0101011\; 0^\infty.
-    \end{equation}
-    We would now presume that the subtape $\rhead B 01$, or at the very least $1 \rhead B 01$,
-    would evolve into something
-    useful. However, since it doesn't enter state $B$ again, we have no hope of
-    handling an arbitrary number of repeating $(01)$ in a generic manner.
+    Consider \texttt{bbchallenge} machine\footnote{Accessible at \url{https://bbchallenge.org/88427177}} \#88,427,177 (Figure~\ref{fig:bouncers}~(d)), that has the following transition table:
+    \[
+        \begin{array}{l|ll}
+              & 0          & 1          \\
+            \hline
+            A & 1\text{RB} & 1\text{LE} \\
+            B & 1\text{LC} & 1\text{RD} \\
+            C & 1\text{LB} & 1\text{RC} \\
+            D & 1\text{LA} & 0\text{RD} \\
+            E & \mbox{---} & 0LA
+        \end{array}
+    \]
 
-    To make progress, we must instead rewrite the tape as
-    \begin{equation}
-        0^\infty\; (111)\; 1 \rhead B 010101\; (01)\; 1\; 0^\infty.
-    \end{equation}
-    After 12 steps of simulation, we reach
-    \begin{equation}
-        0^\infty\; (111)\; 1110110 \rhead D (01)\; 1\; 0^\infty.
-    \end{equation}
-    Now, being in state $D$ and with a 0 to the left of the tape head, we have
-    $0 \rhead D 01 \vdash^* 110 \rhead D$, and so we reach
-    \begin{equation}
-        0^\infty\; (111)\; 111011\; (11)\; 0 \rhead D 1\; 0^\infty,
-    \end{equation}
-    and after one step, we have
-    \begin{equation}
-        0^\infty\; (111)\; 111011\; (11)\; 00 \rhead D 0^\infty.
-    \end{equation}
-    Since this is a special case of \eqref{eqn:initial-symbolic}, we can
-    conclude that this machine will never halt. \qed
+    Given the above definitions, we will have the following rules with state A on the left-hand side:
+    \begin{align*}
+        0 \lhead{A}\,\,\,        & \to\,\,\, 1 \rhead{B}          \\
+        \rhead{A} 0\,\,\,        & \to\,\,\, 1 \rhead{B}          \\
+        1 \lhead{A}\,\,\,        & \to\,\,\, \lhead{E} 1          \\
+        \rhead{A} 1\,\,\,        & \to\,\,\, \lhead{E} 1          \\
+        0^\infty \lhead{A}\,\,\, & \to\,\,\, 0^\infty 1 \rhead{B} \\
+        \rhead{A} 0^\infty\,\,\, & \to\,\,\, 1 \rhead{B} 0^\infty
+    \end{align*}
+    The other rules are those with left-hand side states B, C, D and E. Simulating the machine for 4 steps, starting from initial tape yields:
+    $$ 0^\infty \rhead{\text{A}} 0^\infty \;\vdash\; 0^\infty \, 1 \rhead{\text{B}} 0^\infty \;\vdash\; 0^\infty \, 1 \lhead{\text{C}} 1\, 0^\infty\ \;\vdash\; 0^\infty \, 1 \rhead{\text{C}} 1\, 0^\infty \;\vdash\; 0^\infty \, 1 1 \rhead{\text{C}} 0^\infty$$
+
+    Hence, $0^\infty \rhead{\text{A}} 0^\infty \;\vdash^*\; 0^\infty \, 1 1 \rhead{\text{C}} 0^\infty$.
 \end{example}
 
-We formalize this way of reasoning as follows:
 
-\begin{definition}
-    A \emph{tape chunk} is either a symbol $s \in \{0, 1\}$,
-    or a repeater $(s)$, with $s \in \{0, 1\}^*$, $s \neq \epsilon$.
-    The set of all tape chunks is denoted $\mathcal C$.
-\end{definition}
 
-\begin{definition}
-    A \emph{symbolic configuration} consists of a directed tape head, and
-    possibly empty sequences of tape chunks on either side, of the form
-    \begin{align}
-        0^\infty\; l_1\; \cdots\; l_m & \lhead q r_1\; \cdots\; r_n\; 0^\infty
-        \shortintertext{or}
-        0^\infty\; l_1\; \cdots\; l_m & \rhead q r_1\; \cdots\; r_n\; 0^\infty
-    \end{align}
-    where $l_k, r_k \in \mathcal C$.
-\end{definition}
 
-\begin{definition}
-    A configuration $c$ \emph{matches} a symbolic configuration $F$,
-    written $c \in L(F)$, if one can choose a number of repeatitions for each
-    repeater in $F$ and obtain $c$.
-    \todo{Playing fast and loose here but I haven't thought of any better wording}
-\end{definition}
+\begin{theorem}\label{th:bouncers}
+    Assume we are given some Turing machine and suppose there exists a tape $t$ and some formula-tapes $f_0,\dots,f_n, n\geq 1$, such that $0^\infty \rhead{\text{A}} 0^\infty \vdash^* t$ where $t \in M(f_0)$, and $A(f_i) \vdash f_{i+1}$ for $i=0,\dots,n-1$. If $A(f_n)$ is a special case of $A(f_0)$, then the Turing machine does not halt and is called a \textit{bouncer}.
+\end{theorem}
 
-\begin{definition}[Step relation for symbolic configurations]
-    We write $F \vdash F'$ if for all $c \in L(F)$ there is a $c' \in L(F')$
-    such that $c \vdash c'$. Likewise for $\vdash^*$ and $\vdash^s$.
-    \todo{Do we want to use $\vDash$ for this?}
-\end{definition}
 
-\begin{definition}[Shift rules]
-    If $a \rhead q b\; \vdash^* b'\; a \rhead q$, we say that we have a
-    \emph{right-facing shift rule} with tail $a \in \{0, 1\}^*$
-    taking $b \in \{0, 1\}^k$ to $b' \in \{0, 1\}^k$.
-    Likewise, if $b \lhead q a \,\vdash^*\; \lhead q a\; b'$, we say that we have
-    a \emph{left-facing shift rule}.
-\end{definition}
 
-\todo{The below is not yet coherent, but merely snippets of what might
-    be useful, created through endless rewriting}
-\begin{remark} The symbolic tapes we're considering can also be understood as
-    defining a regular language of tapes matching a particular step of the cycle
-    being simulated. In this interpretation, we are executing the Turing machine
-    on all elements of the language at the same time.
-\end{remark}
 
-We will be considering a tape language of the form
-\begin{equation}
-    \{
-    0^\infty\; \lhead q w_0\; (r_1)^{k_1}\; w_1\; (r_2)^{k_2}\; w_2\: \cdots\: (r_n)^{k_n}\; w_n
-    \mid k_1, k_2, \ldots, k_n \in \N
-    \}.
-\end{equation}
-for a fixed list of \emph{walls} $w_0,\ \ldots,\ w_n \in \{0, 1\}^*$,
-a list of \emph{repeaters} $r_1,\ \ldots,\ r_n$, and a fixed state $q$.
+
+

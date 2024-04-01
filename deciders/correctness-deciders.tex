@@ -106,17 +106,15 @@ We write $c_1 \vdash \bot$ if the machine halts after executing one computation 
 When discussing concrete configurations, we write
 $0^\infty\; s_1\; \cdots\; s_{k-1}\; [s_k]_q\; s_{k+1}\; \cdots\; s_n\; 0^\infty$
 to mean the configuration where the machine is in state $q$, with the head
-positioned on the symbol $s_k$. Thus, the initial configuration of the machine
+positioned on the symbol $s_k$, and the tape both starts and end by an infinite sequence of 0s, represented $0^\infty$. Thus, the initial configuration of the machine
 can be written as $0^\infty\; [0]_A\; 0^\infty$.
 
-Moreover, we will sometimes prefer to think of the tape head as being between
-symbols. Thus, we write $l \lhead{q} r$ to mean that the head is at the rightmost symbol
+\paragraph*{Directional Turing machines.} We will sometimes prefer to think of the tape head as being between
+symbols. Thus, we write $l \lhead{q} r$, with $l,r\in\{0,1\}^*$ to mean that the head is at the rightmost symbol
 of $l$, and $l \rhead{q} r$ to mean that the head is at the leftmost symbol of $r$.
 For example, $0^\infty\; [1]_A\; 0^\infty$ can be written as
 $0^\infty\; 1 \lhead A 0^\infty$ or $0^\infty \rhead A 1\; 0^\infty$.
 
-\todo{It would probably be a good idea to say something here about subtapes, as
-used by Bouncers}
 
 \paragraph*{Space-time diagram.} We use space-time diagrams to give a visual representation of the behavior of a given machine. The space-time diagram of machine $\mathcal{M}$ is an image where the $i^\text{th}$ row of the image gives:
 \begin{enumerate}
