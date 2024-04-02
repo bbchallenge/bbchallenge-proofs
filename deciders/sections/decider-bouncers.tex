@@ -8,7 +8,7 @@
 \begin{figure}[h!]
     \centering
     \includegraphics*[width=0.9\textwidth]{figures/bouncers/bouncers.pdf}
-    \caption{Space-time diagrams (10,000 steps) of several \textit{bouncers}: (a) simple bouncer bouncing back and forth between expanding tape extremeties while writing 1s (b) bouncer with more complex alternating \textit{repeaters} patterns left and right of the origin (c) unilateral bouncer with a complex \textit{wall} pattern at the origin (d) unilateral bouncer, main example used throughout this section (e) bouncer entering a repetitive bouncing pattern after $\sim$6,000 steps (bottom half of the image).}\label{fig:bouncers}
+    \caption{Space-time diagrams (10,000 steps) of several \texttt{bbchallenge} \textit{bouncers}: (a) simple bouncer bouncing back and forth between expanding tape extremeties while writing 1s (b) bouncer with more complex alternating \textit{repeaters} patterns left and right of the origin (c) unilateral bouncer with a complex \textit{wall} pattern at the origin (d) unilateral bouncer, main example used throughout this section (e) bouncer entering a repetitive bouncing pattern after $\sim$6,000 steps (bottom half of the image).}\label{fig:bouncers}
 \end{figure}
 
 \subsection{Characterising bouncers}
@@ -18,11 +18,11 @@ linearly-expanding patterns, called \textit{repeaters}, possibly separated or en
 
 The goal of this section is to formally characterise bouncers and show that they do not halt, see Theorem~\ref{th:bouncers}.
 
-\subsubsection*{Directional Turing machines}
+\subsubsection{Directional Turing machines}
 
-We build on the concept of directional Turing machine introduced in Section~\ref{sec:conventions}. Directional Turing machines are an equivalent formulation of Turing machine where the machine head lives in between the tape cells and can point to the left or to the right. We choose here to treat $0^\infty$ as a unique symbol (instead of an infinite collection of 0s) and write $\bar{\Sigma} = \{0^\infty\}\cup\Sigma$. For each Turing machine with set of state $S$ we introduce 2$|S|$ new configuration symbols (i.e. symbols used to describe machine configurations and not read/write symbols) denoting the machine head in two possible orientations, namely $\Delta = \{\lhead s | s\in S\}\cup\{\rhead s| s \in S\}$.
+We build on the concept of directional Turing machine introduced in Section~\ref{sec:conventions}. Directional Turing machines are an equivalent formulation of Turing machine where the machine head lives in between the tape cells and can point to the left or to the right. We choose here to treat $0^\infty$ as a unique symbol (instead of an infinite collection of 0s) and write $ \overline{\Sigma} = \{0^\infty\}\cup\Sigma$. For each Turing machine with set of state $S$ we introduce 2$|S|$ new configuration symbols (i.e. symbols used to describe machine configurations and not read/write symbols) denoting the machine head in two possible orientations, namely $\Delta = \{\lhead s | s\in S\}\cup\{\rhead s| s \in S\}$.
 
-We define a \textit{tape} to be a finite word of the form $uhv$, where $u,v\in\bar{\Sigma}^*$ and $h\in\Delta$, moreover, $u$ and $v$ must have at most one occurrence of $0^\infty$ each, respectively as first symbol for $u$ or last symbol for $v$. We choose the initial tape to be $0^\infty \rhead{\text{A}} 0^\infty$. Now, we define tape rewrite rules which will be used to simulate a directional Turing machine which we fix from now on. Given two tapes $t$ and $t'$, a rewrite rule transforming $t$ into $t'$ will be denoted by $t\to t'$. The transitive closure of $\vdash$ (i.e. applying several successive $\vdash$ operations) is noted $\vdash^*$.
+We define a \textit{tape} to be a finite word of the form $uhv$, where $u,v\in \overline{\Sigma}^*$ and $h\in\Delta$, moreover, $u$ and $v$ must have at most one occurrence of $0^\infty$ each, respectively as first symbol for $u$ or last symbol for $v$. We choose the initial tape to be $0^\infty \rhead{\text{A}} 0^\infty$. Now, we define tape rewrite rules which will be used to simulate a directional Turing machine which we fix from now on. Given two tapes $t$ and $t'$, a rewrite rule transforming $t$ into $t'$ will be denoted by $t\to t'$. The transitive closure of $\vdash$ (i.e. applying several successive $\vdash$ operations) is noted $\vdash^*$.
 
 Suppose that for $s\in S, x\in \Sigma$ we have $\delta(s,x) = (s',d,x')$ where $s'\in S, d \in \{\text{L},\text{R}\}, x' \in \Sigma$ and $\delta$ the transition function of the machine, then we define the following tape rewrite rules:
 
@@ -55,7 +55,7 @@ Suppose that for $s\in S, x\in \Sigma$ we have $\delta(s,x) = (s',d,x')$ where $
     \end{tabular}\\
 \end{table}
 
-Given a tape $t=uvw$ and a word $t'=uv'w$, with $u,w\in\bar{\Sigma}^*$, $v,v' \in (\bar \Sigma \cup \Delta)^*$, suppose that there is a rewrite rule $v \to v'$. Then $t'$ is also a tape and in this situation we write $t \vdash t'$ meaning that $t'$ is obtained from $t$ by one simulation step (i.e. $\vdash$ has the same meaning as for standard, non-directional, Turing machines, as introduced in Section~\ref{sec:conventions}); note that the definition is sound because, to any given tape, at most one rewrite rule applies, hence $v \to v'$ is defined uniquely and so is $t \vdash t'$.
+Given a tape $t=uvw$ and a word $t'=uv'w$, with $u,w\in \overline{\Sigma}^*$, $v,v' \in ( \overline \Sigma \cup \Delta)^*$, suppose that there is a rewrite rule $v \to v'$. Then $t'$ is also a tape and in this situation we write $t \vdash t'$ meaning that $t'$ is obtained from $t$ by one simulation step (i.e. $\vdash$ has the same meaning as for standard, non-directional, Turing machines, as introduced in Section~\ref{sec:conventions}); note that the definition is sound because, to any given tape, at most one rewrite rule applies, hence $v \to v'$ is defined uniquely and so is $t \vdash t'$.
 
 \begin{example}
     Consider \texttt{bbchallenge} machine\footnote{Accessible at \url{https://bbchallenge.org/88427177}} \#88,427,177 (Figure~\ref{fig:bouncers}~(d)), that has the following transition table:
@@ -71,7 +71,7 @@ Given a tape $t=uvw$ and a word $t'=uv'w$, with $u,w\in\bar{\Sigma}^*$, $v,v' \i
         \end{array}
     \]
 
-    Given the above definitions, we will have the following rules with state A on the left-hand side:
+    Given the above definitions, we will have the following rewrite rules with state A on the left-hand side:
     \begin{align*}
         0 \lhead{A}\,\,\,        & \to\,\,\, 1 \rhead{B}          \\
         \rhead{A} 0\,\,\,        & \to\,\,\, 1 \rhead{B}          \\
@@ -80,11 +80,34 @@ Given a tape $t=uvw$ and a word $t'=uv'w$, with $u,w\in\bar{\Sigma}^*$, $v,v' \i
         0^\infty \lhead{A}\,\,\, & \to\,\,\, 0^\infty 1 \rhead{B} \\
         \rhead{A} 0^\infty\,\,\, & \to\,\,\, 1 \rhead{B} 0^\infty
     \end{align*}
-    The other rules are those with left-hand side states B, C, D and E. Simulating the machine for 4 steps, starting from initial tape yields:
-    $$ 0^\infty \rhead{\text{A}} 0^\infty \;\vdash\; 0^\infty \, 1 \rhead{\text{B}} 0^\infty \;\vdash\; 0^\infty \, 1 \lhead{\text{C}} 1\, 0^\infty\ \;\vdash\; 0^\infty \, 1 \rhead{\text{C}} 1\, 0^\infty \;\vdash\; 0^\infty \, 1 1 \rhead{\text{C}} 0^\infty$$
-
-    Hence, $0^\infty \rhead{\text{A}} 0^\infty \;\vdash^*\; 0^\infty \, 1 1 \rhead{\text{C}} 0^\infty$.
+    The other rewrite rules are those with left-hand side states B, C, D and E. Simulating the machine for 4 steps, starting from initial tape yields:
+    $ 0^\infty \rhead{\text{A}} 0^\infty \;\vdash\; 0^\infty \, 1 \rhead{\text{B}} 0^\infty \;\vdash\; 0^\infty \, 1 \lhead{\text{C}} 1\, 0^\infty\ \;\vdash\; 0^\infty \, 1 \rhead{\text{C}} 1\, 0^\infty \;\vdash\; 0^\infty \, 1 1 \rhead{\text{C}} 0^\infty$. Hence, $0^\infty \rhead{\text{A}} 0^\infty \;\vdash^*\; 0^\infty \, 1 1 \rhead{\text{C}} 0^\infty$.
 \end{example}
+
+\subsubsection{Formula tapes}
+
+We want to formalise the above-stated intuition that bouncers expand a tape by repeating \textit{repeaters} patterns between fixed \textit{walls}. For this, we are going to express bouncers' tapes using regular expressions over the alphabet $\Delta \cup  \overline{\Sigma}$. Given $u\in\Sigma^*$, we abbreviate the regular expression $\{u\}^*$, which represents zero or more repetitions of the word $u$, as $(u)$. We define a \textit{formula tape} to be a regular expression of the form:
+
+$$w_1(r_1)w_2(r_2)\dots w_n(r_n) w_{n+1} h w'_1(r'_1)w'_2(r'_2)\dots w'_m(r'_m) w'_{m+1}$$
+
+if the following conditions are met:
+\begin{align*}
+     & n,m \geq 0,                                                            \\
+     & h \in \Delta,                                                          \\
+     & r_1,\dots,r_n,r'_1,\dots,r'_m \in \Sigma^* \setminus \{ \varnothing \} \\
+     & w_2,\dots,w_n,w'_1,\dots,w'_m \in \Sigma^*,                            \\
+     & w_1, w'_{m+1} \in  \overline{\Sigma}^*
+\end{align*}
+
+and, as in the definition of a tape, $w_1$ (resp. $w'_{m+1}$) either does not contain the symbol $0^\infty$ or it starts with it (resp. ends with it). Patterns $w_i, w'_j$ are called \textit{walls} and can be empty, while the \textit{repeaters}, $r_i, r'_j$ must be nonempty. Note that we allow $n=m=0$, hence a usual tape is also a formula tape.
+
+Given a formula tape $f$ let $\mathcal{L}(f)$ denote the language described by $f$, i.e. the set of words over $\Delta \cup \overline{\Sigma}$ that match it.
+
+\begin{example}
+    Consider the formula tape $f = 0 \rhead{\text{D}} (01)$. We have $\mathcal{L}(f) = \{0\rhead{\text{D}},0\rhead{\text{D}}01,0\rhead{\text{D}}0101,\dots\}$. Consider the formula tape $f'=0^\infty(111)1110 \lhead{\text{A}} 010101(01)10^\infty$. Then: $0^\infty 1110 \lhead{A} 01010110^\infty$, $0^\infty 1111110 \lhead{A} 01010110^\infty$, and $0^\infty 1110 \lhead{A} 0101010110^\infty$ are three elements of $\mathcal{L}(f')$.
+\end{example}
+
+\paragraph*{Aligning formula tapes.} Consider the formula tape $f = 0^\infty 101(11)0 \rhead{\text{D}} 10(100)110^\infty$. The following formula tape $\tilde{f} = 0^\infty 10(11)10 \rhead{\text{D}} 101(001)10^\infty$ describes the same language as $f$, i.e. $\mathcal{L}(f) = \mathcal{L}(\tilde{f})$.
 
 
 
