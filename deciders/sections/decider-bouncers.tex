@@ -18,7 +18,7 @@ linearly-expanding patterns, called \textit{repeaters}, possibly separated or en
 
 The goal of this section is to formally characterise bouncers and show that they do not halt, see Theorem~\ref{th:bouncers}.
 
-\subsubsection{Directional Turing machines}
+\subsubsection{Directional Turing machines}\label{sec:bouncers:directionalTM}
 
 We build on the concept of directional Turing machine introduced in Section~\ref{sec:conventions}. Directional Turing machines are an equivalent formulation of Turing machine where the machine head lives in between the tape cells and can point to the left or to the right. We choose here to treat $0^\infty$ as a unique symbol (instead of an infinite collection of 0s) and write $ \overline{\Sigma} = \{0^\infty\}\cup\Sigma$. For each Turing machine with set of state $S$ we introduce 2$|S|$ new configuration symbols (i.e. symbols used to describe machine configurations and not read/write symbols) denoting the machine head in two possible orientations, namely $\Delta = \{\lhead s | s\in S\}\cup\{\rhead s| s \in S\}$.
 
@@ -57,7 +57,7 @@ Suppose that for $s\in S, x\in \Sigma$ we have $\delta(s,x) = (s',d,x')$ where $
 
 Given a tape $t=uvw$ and a word $t'=uv'w$, with $u,w\in \overline{\Sigma}^*$, $v,v' \in ( \overline \Sigma \cup \Delta)^*$, suppose that there is a rewrite rule $v \to v'$. Then $t'$ is also a tape and in this situation we write $t \vdash t'$ meaning that $t'$ is obtained from $t$ by one simulation step (i.e. $\vdash$ has the same meaning as for standard, non-directional, Turing machines, as introduced in Section~\ref{sec:conventions}); note that the definition is sound because, to any given tape, at most one rewrite rule applies, hence $v \to v'$ is defined uniquely and so is $t \vdash t'$.
 
-\begin{example}
+\begin{example}\label{ex:bouncer88427177}
     Consider \texttt{bbchallenge} machine\footnote{Accessible at \url{https://bbchallenge.org/88427177}} \#88,427,177 (Figure~\ref{fig:bouncers}~(d)), that has the following transition table:
     \[
         \begin{array}{l|ll}
@@ -88,14 +88,14 @@ Given a tape $t=uvw$ and a word $t'=uv'w$, with $u,w\in \overline{\Sigma}^*$, $v
 
 We want to formalise the above-stated intuition that bouncers expand a tape by repeating \textit{repeaters} patterns between fixed \textit{walls}. For this, we are going to express bouncers' tapes using regular expressions over the alphabet $\Delta \cup  \overline{\Sigma}$. Given $u\in\Sigma^*$, we abbreviate the regular expression $\{u\}^*$, which represents zero or more repetitions of the word $u$, as $(u)$. We define a \textit{formula tape} to be a regular expression of the form:
 
-$$w_1(r_1)w_2(r_2)\dots w_n(r_n) w_{n+1} h w'_1(r'_1)w'_2(r'_2)\dots w'_m(r'_m) w'_{m+1}$$
+\begin{align}\label{math:formulaTapes}w_1(r_1)w_2(r_2)\dots w_n(r_n) w_{n+1} h w'_1(r'_1)w'_2(r'_2)\dots w'_m(r'_m) w'_{m+1}\end{align}
 
 if the following conditions are met:
 \begin{align*}
      & n,m \geq 0,                                                            \\
      & h \in \Delta,                                                          \\
      & r_1,\dots,r_n,r'_1,\dots,r'_m \in \Sigma^* \setminus \{ \varnothing \} \\
-     & w_2,\dots,w_n,w'_1,\dots,w'_m \in \Sigma^*,                            \\
+     & w_2,\dots,w_{n+1},w'_1,\dots,w'_m \in \Sigma^*,                        \\
      & w_1, w'_{m+1} \in  \overline{\Sigma}^*
 \end{align*}
 
@@ -103,14 +103,36 @@ and, as in the definition of a tape, $w_1$ (resp. $w'_{m+1}$) either does not co
 
 Given a formula tape $f$ let $\mathcal{L}(f)$ denote the language described by $f$, i.e. the set of words over $\Delta \cup \overline{\Sigma}$ that match it.
 
-\begin{example}
+\begin{example}\label{ex:formulaTapes}
     Consider the formula tape $f = 0 \rhead{\text{D}} (01)$. We have $\mathcal{L}(f) = \{0\rhead{\text{D}},0\rhead{\text{D}}01,0\rhead{\text{D}}0101,\dots\}$. Consider the formula tape $f'=0^\infty(111)1110 \lhead{\text{A}} 010101(01)10^\infty$. Then: $0^\infty 1110 \lhead{A} 01010110^\infty$, $0^\infty 1111110 \lhead{A} 01010110^\infty$, and $0^\infty 1110 \lhead{A} 0101010110^\infty$ are three elements of $\mathcal{L}(f')$.
 \end{example}
 
-\paragraph*{Aligning formula tapes.} Consider the formula tape $f = 0^\infty 101(11)0 \rhead{\text{D}} 10(100)110^\infty$. The following formula tape $\tilde{f} = 0^\infty 10(11)10 \rhead{\text{D}} 101(001)10^\infty$ describes the same language as $f$, i.e. $\mathcal{L}(f) = \mathcal{L}(\tilde{f})$.
+% \paragraph*{Aligning formula tapes.}  
 
 
 
+% Consider the formula tape $f = 0^\infty 101(11)0 \rhead{\text{D}} 10(100)110^\infty$. The following formula tape $\tilde{f} = 0^\infty 10(11)10 \rhead{\text{D}} 101(001)10^\infty$ describes the same language as $f$, i.e. $\mathcal{L}(f) = \mathcal{L}(\tilde{f})$.
+
+\paragraph*{Extending $\vdash$ to formula tapes: \textit{shift rules}.} We wish to extend the Turing machine step relation $\vdash$ (see Section~\ref{sec:bouncers:directionalTM}) to formula tapes. This is quite straightforward when the formula tape's head is pointing at a symbol of a wall (one of the $w_i, w'_j$ in \eqref{math:formulaTapes}): we simply apply a standard Turing machine step, leaving the definition of $\vdash$ unchanged.
+
+However, we need to handle the case where the head is pointing at a repeater (one of the $r_i, r'_j$ in \eqref{math:formulaTapes}). Suppose that for some $u\in\Sigma^*$ and $r,\tilde{r}\in\Sigma^*\setminus\{\varnothing\}$ and some state $s\in S$ we have $u \rhead{s} r \vdash^* \tilde{r} u \rhead{s}$. Then, for any $n\geq 1$, we have $u \rhead{s} r^n \vdash^* \tilde{r}^n u \rhead{s}$. This motivates the definition of
+(right) \textit{shift rules}, rewrite rules for formula tapes, which rewrite a subword $u \rhead{s}(r)$ into $(\tilde{r})u\rhead{s}$, denoted $u \rhead{s}(r) \to (\tilde{r})u\rhead{s}$. Similarly, left shift rules are of the form $(r)\lhead{s}u \to \;\lhead{s}u(\tilde{r})$.
+
+Hence, we have two cases for defining $f \vdash f'$ with $f,f'$ formula tapes:
+\begin{enumerate}
+    \item (Usual step) Using \eqref{math:formulaTapes}, write as $f=\alpha w_{n+1} h w'_1\beta$, with $\alpha$ (resp. $\beta$) the beginning (resp. the end) of the formula tape $f$. Then, if $h$ points at a non-empty wall, we apply a usual Turing machine step, i.e. if $w_{n+1} h w'_1 \vdash \tilde{w}_{n+1} \tilde{h} \tilde{w}'_1$ with $\tilde{w}_{n+1}, \tilde{w} \in \Sigma^*$ and $\tilde{h} \in \Delta$, then $f \vdash \alpha \tilde{w}_{n+1} \tilde{h} \tilde{w}'_1 \beta = f'$.
+    \item (Shift rule) If $f'$ is obtained from $f$ by a left or right shift rule.
+\end{enumerate}
+
+% Ambiguity in shift rule application:
+% If 1 s> (r) -> (1111) 1 s> and there is a 1 to the left of the initial u=1 then, we also have 11 s> (r) -> (1111) 11 s>
+
+\begin{example}\label{ex:shiftRules}
+    Take the machine of Example~\ref{ex:bouncer88427177}, we have the right shift rule $0 \rhead{\text{D}}(01) \to (11)0\rhead{\text{D}}$. Indeed, this is because: $0 \rhead{\text{D}}(01) \vdash 0\lhead{\text{A}}11 \vdash 1\rhead{\text{B}}11 \vdash 11\rhead{\text{D}}1 \vdash 110\rhead{\text{D}}$, hence $0 \rhead{\text{D}}(01) \vdash^* 110\rhead{\text{D}}$, giving the shift rule.
+
+    Consider the tape formula of previous Example~\ref{ex:formulaTapes}: $f' = 0^\infty(111)1110 \lhead{\text{A}} 010101(01)10^\infty$. We have $f' \vdash^{13} 0^\infty (111)1111110110 \rhead{\text{D}} (01) 10^\infty$, at this point the head points to a repeater and we can apply the above shift rule, giving: $0^\infty (111)111111011(11)0 \rhead{D} 10^\infty$.
+
+\end{example}
 
 \begin{theorem}\label{th:bouncers}
     Assume we are given some Turing machine and suppose there exists a tape $t$ and some formula-tapes $f_0,\dots,f_n, n\geq 1$, such that $0^\infty \rhead{\text{A}} 0^\infty \vdash^* t$ where $t \in M(f_0)$, and $A(f_i) \vdash f_{i+1}$ for $i=0,\dots,n-1$. If $A(f_n)$ is a special case of $A(f_0)$, then the Turing machine does not halt and is called a \textit{bouncer}.
