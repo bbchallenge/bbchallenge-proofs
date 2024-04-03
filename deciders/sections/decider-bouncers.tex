@@ -120,7 +120,7 @@ However, we need to handle the case where the head is pointing at a repeater (on
 
 Hence, we have two cases for defining $f \vdash f'$ with $f,f'$ formula tapes:
 \begin{enumerate}
-    \item (Usual step) Using \eqref{math:formulaTapes}, write as $f=\alpha w_{n+1} h w'_1\beta$, with $\alpha$ (resp. $\beta$) the beginning (resp. the end) of the formula tape $f$. Then, if $h$ points at a non-empty wall, we apply a usual Turing machine step, i.e. if $w_{n+1} h w'_1 \vdash \tilde{w}_{n+1} \tilde{h} \tilde{w}'_1$ with $\tilde{w}_{n+1}, \tilde{w} \in \Sigma^*$ and $\tilde{h} \in \Delta$, then $f \vdash \alpha \tilde{w}_{n+1} \tilde{h} \tilde{w}'_1 \beta = f'$.
+    \item (Usual step) Using \eqref{math:formulaTapes}, write as $f=\alpha w_{n+1} h w'_1\beta$, with $\alpha$ (resp. $\beta$) the uniquely-defined beginning (resp.ending) of the formula tape $f$. Then, $f \vdash \alpha \tilde{w}_{n+1} \tilde{h} \tilde{w}'_1 \beta = f'$ if $w_{n+1} h w'_1 \vdash \tilde{w}_{n+1} \tilde{h} \tilde{w}'_1$ with $\tilde{w}_{n+1}, \tilde{w} \in \Sigma^*$ and $\tilde{h} \in \Delta$.
     \item (Shift rule) If $f'$ is obtained from $f$ by a left or right shift rule.
 \end{enumerate}
 
