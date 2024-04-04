@@ -118,19 +118,31 @@ Given a formula tape $f$ let $\mathcal{L}(f)$ denote the language described by $
 However, we need to handle the case where the head is pointing at a repeater (one of the $r_i, r'_j$ in \eqref{math:formulaTapes}). Suppose that for some $u\in\Sigma^*$ and $r,\tilde{r}\in\Sigma^*\setminus\{\varnothing\}$ and some state $s\in S$ we have $u \rhead{s} r \vdash^* \tilde{r} u \rhead{s}$. Then, for any $n\geq 1$, we have $u \rhead{s} r^n \vdash^* \tilde{r}^n u \rhead{s}$. This motivates the definition of
 (right) \textit{shift rules}, rewrite rules for formula tapes, which rewrite a subword $u \rhead{s}(r)$ into $(\tilde{r})u\rhead{s}$, denoted $u \rhead{s}(r) \to (\tilde{r})u\rhead{s}$. Similarly, left shift rules are of the form $(r)\lhead{s}u \to \;\lhead{s}u(\tilde{r})$.
 
-Hence, we have two cases for defining $f \vdash f'$ with $f,f'$ formula tapes:
+Hence, we have two cases to consider for defining $\vdash$ on the following formula tape $f$ (as defined in~\eqref{math:formulaTapes}):
+$$f = w_1(r_1)w_2(r_2)\dots w_n(r_n) w_{n+1} h w'_1(r'_1)w'_2(r'_2)\dots w'_m(r'_m) w'_{m+1}$$
+
 \begin{enumerate}
-    \item (Usual step) Using \eqref{math:formulaTapes}, write as $f=\alpha w_{n+1} h w'_1\beta$, with $\alpha$ (resp. $\beta$) the uniquely-defined beginning (resp.ending) of the formula tape $f$. Then, $f \vdash \alpha \tilde{w}_{n+1} \tilde{h} \tilde{w}'_1 \beta = f'$ if $w_{n+1} h w'_1 \vdash \tilde{w}_{n+1} \tilde{h} \tilde{w}'_1$ with $\tilde{w}_{n+1}, \tilde{w} \in \Sigma^*$ and $\tilde{h} \in \Delta$.
-    \item (Shift rule) If $f'$ is obtained from $f$ by a left or right shift rule.
+    \item (Usual step) If $h$ points to nonempty $w_{n+1}$ or $w'_1$, then $f \vdash \alpha \tilde{w}_{n+1} \tilde{h} \tilde{w}'_1\beta$ with $w_{n+1} h w'_1 \vdash \tilde{w}_{n+1} \tilde{h} w'_1$, $\tilde{w}_{n+1}, \tilde{w} \in \Sigma^*$, $\tilde{h} \in \Delta$, and $\alpha, \beta$ the above uniquely-defined beginning and ending of $f$.
+          % Using \eqref{math:formulaTapes}, write as $f=\alpha w_{n+1} h w'_1\beta$, with $\alpha$ (resp. $\beta$) the uniquely-defined beginning (resp.ending) of the formula tape $f$. Then, $f \vdash \alpha \tilde{w}_{n+1} \tilde{h} \tilde{w}'_1 \beta = f'$ if $w_{n+1} h w'_1 \vdash \tilde{w}_{n+1} \tilde{h} \tilde{w}'_1$ with $\tilde{w}_{n+1}, \tilde{w} \in \Sigma^*$ and $\tilde{h} \in \Delta$.
+    \item (Shift rule) Two cases:
+          \begin{enumerate}
+
+              \item Right shift rule. If $h=\;\rhead{s\in S}$ and $w'_1$ is empty, consider the set of shift rules $\mathcal{R} = \{ u \rhead{s}(r'_1) \to (\tilde{r})u\rhead{s} \; | \; \tilde{r}\in\{0,1\}^*\setminus\{\varnothing\},\; u\in\{0,1\}^* \text{ is a suffix of } w_{n+1}\}$. If $\mathcal{R}$ is not empty then apply the right shift rule of $\mathcal{R}$ with smallest $u$ (possibly empty), call the new formula $f'$, and we have $f \vdash f'$. If $\mathcal{R}$ is empty, $\vdash$ cannot be applied on $f$.
+              \item Left shift rule. If $h=\;\lhead{s\in S}$ and $w_{n+1}$ is empty, consider the set of shift rules $\mathcal{R} = \{ (r_{n})\lhead{s}u \to \;\lhead{s}u(\tilde{r}) \; | \; \tilde{r}\in\{0,1\}^*\setminus\{\varnothing\},\; u\in\{0,1\}^* \text{ is a prefix of } w'_{1}\}$. If $\mathcal{R}$ is not empty then apply the left shift rule of $\mathcal{R}$ with smallest $u$ (possibly empty), call the new formula $f'$, and we have $f \vdash f'$. If $\mathcal{R}$ is empty, $\vdash$ cannot be applied on $f$.
+
+          \end{enumerate}
+
 \end{enumerate}
+
+From the above definition of $\vdash$ on a formula tape $f$, it is clear that (i) there is at most one formula tape $f'$ such that $f \vdash f'$ and (ii) for usual tapes our new definition of $\vdash$ coincides with the old one.
 
 % Ambiguity in shift rule application:
 % If 1 s> (r) -> (1111) 1 s> and there is a 1 to the left of the initial u=1 then, we also have 11 s> (r) -> (1111) 11 s>
 
 \begin{example}\label{ex:shiftRules}
-    Take the machine of Example~\ref{ex:bouncer88427177}, we have the right shift rule $0 \rhead{\text{D}}(01) \to (11)0\rhead{\text{D}}$. Indeed, this is because: $0 \rhead{\text{D}}(01) \vdash 0\lhead{\text{A}}11 \vdash 1\rhead{\text{B}}11 \vdash 11\rhead{\text{D}}1 \vdash 110\rhead{\text{D}}$, hence $0 \rhead{\text{D}}(01) \vdash^* 110\rhead{\text{D}}$, giving the shift rule.
+    Taking the machine of Example~\ref{ex:bouncer88427177}, we have the right shift rule $0 \rhead{\text{D}}01 \to (11)0\rhead{\text{D}}$. Indeed, this is because: $0 \rhead{\text{D}}01 \vdash 0\lhead{\text{A}}11 \vdash 1\rhead{\text{B}}11 \vdash 11\rhead{\text{D}}1 \vdash 110\rhead{\text{D}}$, hence $0 \rhead{\text{D}}(01) \vdash^* 110\rhead{\text{D}}$, giving the shift rule.
 
-    Consider the tape formula of previous Example~\ref{ex:formulaTapes}: $f' = 0^\infty(111)1110 \lhead{\text{A}} 010101(01)10^\infty$. We have $f' \vdash^{13} 0^\infty (111)1111110110 \rhead{\text{D}} (01) 10^\infty$, at this point the head points to a repeater and we can apply the above shift rule, giving: $0^\infty (111)111111011(11)0 \rhead{D} 10^\infty$.
+    Consider the tape formula of previous Example~\ref{ex:formulaTapes}: $f' = 0^\infty(111)1110 \lhead{\text{A}} 010101(01)10^\infty$. We have $f' \vdash^{13} 0^\infty (111)1111110110 \rhead{\text{D}} (01) 10^\infty$, at this point the head points to a repeater and the set of applicable right shift rules is $\mathcal{R} = \{ 0 \rhead{\text{D}}01 \to (11)0\rhead{\text{D}},\; 10 \rhead{\text{D}}01 \to (11)10\rhead{\text{D}},\; 110 \rhead{\text{D}}01 \to (11)110\rhead{\text{D}}\}$, and following the definition of $\vdash$, we apply $0 \rhead{\text{D}}01 \to (11)0\rhead{\text{D}}$ as it has the smallest left-hand side, giving: $0^\infty (111)111111011(11)0 \rhead{D} 10^\infty$.
 
 \end{example}
 
