@@ -20,7 +20,7 @@ The goal of this section is to formally characterise bouncers and show that they
 
 \subsubsection{Directional Turing machines}\label{sec:bouncers:directionalTM}
 
-We build on the concept of directional Turing machine introduced in Section~\ref{sec:conventions}. Directional Turing machines are an equivalent formulation of Turing machine where the machine head lives in between the tape cells and can point to the left or to the right. We choose here to treat $0^\infty$ as a unique symbol (instead of an infinite collection of 0s) and write $ \overline{\Sigma} = \{0^\infty\}\cup\Sigma$. For each Turing machine with set of state $S$ we introduce 2$|S|$ new configuration symbols (i.e.\ symbols used to describe machine configurations and not read/write symbols) denoting the machine head in two possible orientations, namely $\Delta = \{\lhead s | s\in S\}\cup\{\rhead s| s \in S\}$.
+We build on the concept of directional Turing machine introduced in Section~\ref{sec:conventions}. Directional Turing machines are an equivalent formulation of Turing machine where the machine head lives in between the tape cells and can point to the left or to the right. We choose here to treat $0^\infty$ as a unique symbol (instead of an infinite collection of 0s) and write $\overline{\Sigma} = \{0^\infty\}\cup\Sigma$, with $\Sigma=\{0,1\}$. For each Turing machine with set of state $S$ we introduce 2$|S|$ new configuration symbols (i.e.\ symbols used to describe machine configurations and not read/write symbols) denoting the machine head in two possible orientations, namely $\Delta = \{\lhead s | s\in S\}\cup\{\rhead s| s \in S\}$.
 
 We define a \textit{tape} to be a finite word of the form $uhv$, where $u,v\in \overline{\Sigma}^*$ and $h\in\Delta$, moreover, $u$ and $v$ must have at most one occurrence of $0^\infty$ each, respectively as first symbol for $u$ or last symbol for $v$. We choose the initial tape to be $0^\infty \rhead{\text{A}} 0^\infty$. Now, we define tape rewrite rules which will be used to simulate a directional Turing machine which we fix from now on. Given two tapes $t$ and $t'$, a rewrite rule transforming $t$ into $t'$ will be denoted by $t\to t'$. The transitive closure of $\vdash$ (i.e.\ applying several successive $\vdash$ operations) is noted $\vdash^*$.
 
@@ -86,16 +86,16 @@ Given a tape $t=uvw$ and a word $t'=uv'w$, with $u,w\in \overline{\Sigma}^*$, $v
 
 \subsubsection{Wall-repeater formula tapes}
 
-We want to formalise the above-stated intuition that bouncers expand a tape by repeating \textit{repeaters} patterns between fixed \textit{walls}, and then show that bouncers do not halt, Theorem~\ref{th:bouncers}. For this, we are going to express bouncers' tapes using regular expressions over the alphabet $\Delta \cup  \overline{\Sigma}$. Given $u\in\Sigma^*$, we abbreviate the regular expression $\{u\}^*$, which represents zero or more repetitions of the word $u$, as $(u)$. We define a \textit{wall-repeater formula tape} to be a regular expression of the form:
+We want to formalise the above-stated intuition that bouncers expand a tape by repeating \textit{repeaters} patterns between fixed \textit{walls}, and then show that bouncers do not halt, Theorem~\ref{th:bouncers}. For this, we are going to express bouncers' tapes using regular expressions over the alphabet $\Delta \cup  \overline{\Sigma}$. Given $u\in\Sigma^*$, we abbreviate the regular expression $\{u\}^*$, which represents zero or more repetitions of the word $u$, as $(u)$. Also, we write $\Sigma^+ = \Sigma^* \setminus \{ \varnothing \}$. We define a \textit{wall-repeater formula tape} to be a regular expression of the form:
 
 \begin{align}\label{math:formulaTapes}w_1(r_1)w_2(r_2)\dots w_n(r_n) w_{n+1} h w'_1(r'_1)w'_2(r'_2)\dots w'_m(r'_m) w'_{m+1}\end{align}
 
 if the following conditions are met:
 \begin{align*}
-     & n,m \geq 0,                                                            \\
-     & h \in \Delta,                                                          \\
-     & r_1,\dots,r_n,r'_1,\dots,r'_m \in \Sigma^* \setminus \{ \varnothing \} \\
-     & w_2,\dots,w_{n+1},w'_1,\dots,w'_m \in \Sigma^*,                        \\
+     & n,m \geq 0,                                     \\
+     & h \in \Delta,                                   \\
+     & r_1,\dots,r_n,r'_1,\dots,r'_m \in \Sigma^+,     \\
+     & w_2,\dots,w_{n+1},w'_1,\dots,w'_m \in \Sigma^*, \\
      & w_1, w'_{m+1} \in  \overline{\Sigma}^*
 \end{align*}
 
@@ -116,7 +116,7 @@ Given a formula tape $f$ let $\mathcal{L}(f)$ denote the language described by $
 
 \paragraph*{Extending $\vdash$ to formula tapes: \textit{shift rules}.} We wish to extend the Turing machine step relation $\vdash$ (see Section~\ref{sec:bouncers:directionalTM}) to formula tapes. This is quite straightforward when the formula tape's head is pointing at a symbol of a wall (one of the $w_i, w'_j$ in \eqref{math:formulaTapes}): we simply apply a standard Turing machine step, leaving the definition of $\vdash$ unchanged.
 
-However, we need to handle the case where the head is pointing at a repeater (one of the $r_i, r'_j$ in \eqref{math:formulaTapes}). Suppose that for some $u\in\Sigma^*$ and $r,\tilde{r}\in\Sigma^*\setminus\{\varnothing\}$ and some state $s\in S$ we have $u \rhead{s} r \vdash^* \tilde{r} u \rhead{s}$. Then, for any $n\geq 1$, we have $u \rhead{s} r^n \vdash^* \tilde{r}^n u \rhead{s}$. This motivates the definition of
+However, we need to handle the case where the head is pointing at a repeater (one of the $r_i, r'_j$ in \eqref{math:formulaTapes}). Suppose that for some $u\in\Sigma^*$ and $r,\tilde{r}\in\Sigma^+$ and some state $s\in S$ we have $u \rhead{s} r \vdash^* \tilde{r} u \rhead{s}$. Then, for any $n\geq 1$, we have $u \rhead{s} r^n \vdash^* \tilde{r}^n u \rhead{s}$. This motivates the definition of
 (right) \textit{shift rules}, rewrite rules for formula tapes, which rewrite a subword $u \rhead{s}(r)$ into $(\tilde{r})u\rhead{s}$, denoted $u \rhead{s}(r) \to (\tilde{r})u\rhead{s}$. Similarly, left shift rules are of the form $(r)\lhead{s}u \to \;\lhead{s}u(\tilde{r})$ given that $r\lhead{s}u \vdash^* \;\lhead{s}u\tilde{r}$. Note that repeaters $r$ and $\tilde{r}$ of a shift rule necessarily have the same size since $\vdash$ preserves tapes' size.
 
 Hence, we have two cases to consider for defining $\vdash$ on the following formula tape $f$ (as defined in~\eqref{math:formulaTapes}):
@@ -128,8 +128,8 @@ $$f = w_1(r_1)w_2(r_2)\dots w_n(r_n) w_{n+1} h w'_1(r'_1)w'_2(r'_2)\dots w'_m(r'
     \item (Shift rule) Two cases:
           \begin{enumerate}
 
-              \item Right shift rule. If $h=\;\rhead{s\in S}$ and $w'_1$ is empty, consider the set of shift rules $\mathcal{R} = \{ u \rhead{s}(r'_1) \to (\tilde{r})u\rhead{s} \; | \; \tilde{r}\in\{0,1\}^*\setminus\{\varnothing\},\; u\in\{0,1\}^* \text{ is a suffix of } w_{n+1}\}$. If $\mathcal{R}$ is not empty then apply the right shift rule of $\mathcal{R}$ with smallest $u$ (possibly empty), call the new formula $f'$, and we have $f \vdash f'$. If $\mathcal{R}$ is empty, $\vdash$ cannot be applied on $f$.
-              \item Left shift rule. If $h=\;\lhead{s\in S}$ and $w_{n+1}$ is empty, consider the set of shift rules $\mathcal{R} = \{ (r_{n})\lhead{s}u \to \;\lhead{s}u(\tilde{r}) \; | \; \tilde{r}\in\{0,1\}^*\setminus\{\varnothing\},\; u\in\{0,1\}^* \text{ is a prefix of } w'_{1}\}$. If $\mathcal{R}$ is not empty then apply the left shift rule of $\mathcal{R}$ with smallest $u$ (possibly empty), call the new formula $f'$, and we have $f \vdash f'$. If $\mathcal{R}$ is empty, $\vdash$ cannot be applied on $f$.
+              \item Right shift rule. If $h=\;\rhead{s\in S}$ and $w'_1$ is empty, consider the set of shift rules $\mathcal{R} = \{ u \rhead{s}(r'_1) \to (\tilde{r})u\rhead{s} \; | \; \tilde{r}\in\Sigma^+,\; u\in\Sigma^* \text{ is a suffix of } w_{n+1}\}$. If $\mathcal{R}$ is not empty then apply the right shift rule of $\mathcal{R}$ with smallest $u$ (possibly empty), call the new formula $f'$, and we have $f \vdash f'$. If $\mathcal{R}$ is empty, $\vdash$ cannot be applied on $f$.
+              \item Left shift rule. If $h=\;\lhead{s\in S}$ and $w_{n+1}$ is empty, consider the set of shift rules $\mathcal{R} = \{ (r_{n})\lhead{s}u \to \;\lhead{s}u(\tilde{r}) \; | \; \tilde{r}\in\Sigma^+,\; u\in\Sigma^* \text{ is a prefix of } w'_{1}\}$. If $\mathcal{R}$ is not empty then apply the left shift rule of $\mathcal{R}$ with smallest $u$ (possibly empty), call the new formula $f'$, and we have $f \vdash f'$. If $\mathcal{R}$ is empty, $\vdash$ cannot be applied on $f$.
 
           \end{enumerate}
 
@@ -152,9 +152,9 @@ From the above definition of $\vdash$ on a formula tape $f$, it is clear that (i
 
     The alignment operator $f \mapsto \mathcal{A}(f)$ moves repeaters away from the head $h$ by repetitively applying any of the following rules until none can longer apply:
     \begin{enumerate}
-        \item Replace $(r'_{j})v$ with $v(r)$ in $f$, if $r'_j v = v r$ with $v$ a nonempty prefix of $w'_{j+1}$, $r\in\Sigma\setminus\{\varnothing\}$, and $1 \leq j \leq m$.
+        \item Replace $(r'_{j})v$ with $v(r)$ in $f$, if $r'_j v = v r$ with $v$ a nonempty prefix of $w'_{j+1}$, $r\in\Sigma^+$, and $1 \leq j \leq m$.
 
-        \item Replace $v(r_{i})$ with $(r)v$ in $f$, if $v r_i = r v$ with $v$ a nonempty suffix of $w_{i}$, $r\in\Sigma\setminus\{\varnothing\}$, and $1 \leq i \leq n$.
+        \item Replace $v(r_{i})$ with $(r)v$ in $f$, if $v r_i = r v$ with $v$ a nonempty suffix of $w_{i}$, $r\in\Sigma^+$, and $1 \leq i \leq n$.
     \end{enumerate}
 
     Clearly, the order application of these rules does not matter, i.e.\ $\mathcal{A}$ is well-defined and, $\mathcal{A}(\mathcal{A}(f)) = \mathcal{A}(f)$.
