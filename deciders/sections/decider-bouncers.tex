@@ -116,7 +116,7 @@ Given a formula tape $f$ let $\mathcal{L}(f)$ denote the language described by $
 \paragraph*{Extending $\vdash$ to formula tapes: \textit{shift rules}.} We wish to extend the Turing machine step relation $\vdash$ (see Section~\ref{sec:bouncers:directionalTM}) to formula tapes. This is quite straightforward when the formula tape's head is pointing at a symbol of a wall (one of the $w_i, w'_j$ in \eqref{math:formulaTapes}): we simply apply a standard Turing machine step, leaving the definition of $\vdash$ unchanged.
 
 However, we need to handle the case where the head is pointing at a repeater (one of the $r_i, r'_j$ in \eqref{math:formulaTapes}). Suppose that for some $u\in\Sigma^*$ and $r,\tilde{r}\in\Sigma^*\setminus\{\varnothing\}$ and some state $s\in S$ we have $u \rhead{s} r \vdash^* \tilde{r} u \rhead{s}$. Then, for any $n\geq 1$, we have $u \rhead{s} r^n \vdash^* \tilde{r}^n u \rhead{s}$. This motivates the definition of
-(right) \textit{shift rules}, rewrite rules for formula tapes, which rewrite a subword $u \rhead{s}(r)$ into $(\tilde{r})u\rhead{s}$, denoted $u \rhead{s}(r) \to (\tilde{r})u\rhead{s}$. Similarly, left shift rules are of the form $(r)\lhead{s}u \to \;\lhead{s}u(\tilde{r})$. Note that repeaters $r$ and $\tilde{r}$ of a shift rule have the same size because $u$ is present on both sides of the shift rules, which are of equal size (since applying $\vdash$ preserves the size of the tape).
+(right) \textit{shift rules}, rewrite rules for formula tapes, which rewrite a subword $u \rhead{s}(r)$ into $(\tilde{r})u\rhead{s}$, denoted $u \rhead{s}(r) \to (\tilde{r})u\rhead{s}$. Similarly, left shift rules are of the form $(r)\lhead{s}u \to \;\lhead{s}u(\tilde{r})$ given that $r\lhead{s}u \vdash^* \;\lhead{s}u\tilde{r}$. Note that repeaters $r$ and $\tilde{r}$ of a shift rule necessarily have the same size since $\vdash$ preserves tapes' size.
 
 Hence, we have two cases to consider for defining $\vdash$ on the following formula tape $f$ (as defined in~\eqref{math:formulaTapes}):
 $$f = w_1(r_1)w_2(r_2)\dots w_n(r_n) w_{n+1} h w'_1(r'_1)w'_2(r'_2)\dots w'_m(r'_m) w'_{m+1}$$
@@ -144,9 +144,7 @@ From the above definition of $\vdash$ on a formula tape $f$, it is clear that (i
 
 \end{example}
 
-One last tool that we need before characterising bouncers and proving that they do not halt (Theorem~\ref{th:bouncers}) is formula tape \textit{alignment} which transforms a formula tape into an equivalent other formula tape for the sake of being able to apply shift rules.
-
-\paragraph*{Aligning formula tapes.} We can motivate formula tape \textit{alignment} using the following example: take $f=0^\infty(111)1111\rhead{\text{B}}(01)01010110^\infty$ for the machine given in Example~\ref{ex:bouncer88427177}. One can verify that no right shift rule applies to $f$ hence $\vdash$ does not apply to $f$. However, take $f'=0^\infty(111)1111\rhead{B}010101(01)10^\infty$, we have $\mathcal{L}(f) = \mathcal{L}(f')$ but we can apply $\vdash$ to $f'$ by performing usual steps: $f'=0^\infty(111)1111\rhead{\text{B}}010101(01)10^\infty \vdash^{12} 0^\infty(111)1111110110 \rhead{D} (01)10^\infty$ and now the shift rule of Example~\ref{ex:shiftRules} can apply, giving $0^\infty(111)111111011(11)0 \rhead{\text{D}} 10^\infty$. Formula tape $f'$ is called the \textit{alignment} of $f$ and is denoted $f' = \mathcal{A}(f)$.
+\paragraph*{Aligning formula tapes.} One last tool that we need before characterising bouncers and proving that they do not halt (Theorem~\ref{th:bouncers}) is formula tape \textit{alignment} (Definition~\ref{def:alignment}): sometimes it is necessary to rewrite a formula tape in an equivalent, \textit{aligned} form in order for being able to apply shift rules.
 
 \begin{definition}[Alignment operator]\label{def:alignment}
     Take a formula tape, as given in~\eqref{math:formulaTapes}: $$f = w_1(r_1)w_2(r_2)\dots w_n(r_n) w_{n+1} h w'_1(r'_1)w'_2(r'_2)\dots w'_m(r'_m) w'_{m+1}$$
@@ -161,6 +159,8 @@ One last tool that we need before characterising bouncers and proving that they 
     Clearly, the order application of these rules does not matter, i.e.\ $\mathcal{A}$ is well-defined and, $\mathcal{A}(\mathcal{A}(f)) = \mathcal{A}(f)$.
 \end{definition}
 
+
+
 \begin{lemma}
     Let $f$ be a tape formula, then $f$ and $\mathcal{A}(f)$ describe the same sets of tapes, we have: $$\mathcal{L}(\mathcal{A}(f)) = \mathcal{L}(f)$$
 \end{lemma}
@@ -169,13 +169,18 @@ One last tool that we need before characterising bouncers and proving that they 
     Consider an alignment rule as in case (1) of Definition~\ref{def:alignment}: replacing $(r'_{j})v$ with $v(r)$ if $r'_j v = v r$. Then, for all $n\in\mathbb{N},\; {r'_j}^n v = v r^n$, hence $(r'_{j})v$ and $v(r)$ describe the same language: $\mathcal{L}((r'_{j})v) = \mathcal{L}(v(r))$. Same for case (2) and for multiple applications of (1) and (2) in any order, hence we have $\mathcal{L}(\mathcal{A}(f)) = \mathcal{L}(f)$.
 \end{proof}
 
-\begin{example}
-    Take $f=0^\infty 101(11)0 \rhead{\text{D}} 10 (100) 11 0^\infty$, we have $\mathcal{A}(f) = 0^\infty 10(11)10 \rhead{\text{D}} 101(001)10^\infty$.
+\begin{example}\label{ex:alignment}
+    Take $f=0^\infty(111)1111\rhead{\text{B}}(01)01010110^\infty$ for the machine given in Example~\ref{ex:bouncer88427177}. One can verify that no right shift rule applies to $f$ hence $\vdash$ does not apply to $f$. However, we have $ \mathcal{A}(f)=0^\infty(111)1111\rhead{B}010101(01)10^\infty$, $\mathcal{L}(\mathcal{A}(f)) = \mathcal{L}(f)$, and we can apply $\vdash$ to $ \mathcal{A}(f)$ by performing usual steps: $ \mathcal{A}(f) \vdash^{12} 0^\infty(111)1111110110 \rhead{D} (01)10^\infty$ and now the shift rule of Example~\ref{ex:shiftRules} can apply, giving $0^\infty(111)111111011(11)0 \rhead{\text{D}} 10^\infty$.
+    On other alignment example is $f=0^\infty 101(11)0 \rhead{\text{D}} 10 (100) 11 0^\infty$ for which $\mathcal{A}(f) = 0^\infty 10(11)10 \rhead{\text{D}} 101(001)10^\infty$.
 \end{example}
 
-% \begin{remark}
-%     The example used for motivating the alignment operator shows that if no shift rules applies to $f$, it is possible that a shift rule applies to $\mathcal{A}(f)$ after consuming all possible usual steps. One can show that if a shift rule applies to $f$ then it also applies to $\mathcal{A}(f)$ (after consuming all possible usual steps): using the alignment operator can only increase the number of applicable shift rules.
-% \end{remark}
+
+
+
+
+\begin{remark}[Alignment never hurts]
+    Example~\ref{ex:alignment} shows that alignment (which preserves the set of recognised tapes) can allow to run a shift rule on $f'$ with $\mathcal{A}(f) \vdash^* f'$ when no shift rule was applicable directly on $f$. In fact, one can show that the alignment operator can only \textit{increase} the number of applicable shift rules: if a shift rule is applicable on $f$ then a shift rule applicable on $f'$ with $\mathcal{A}(f) \vdash^* f'$ can always be constructed.
+\end{remark}
 
 
 \begin{theorem}\label{th:bouncers}
