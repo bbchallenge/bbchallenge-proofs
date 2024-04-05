@@ -84,9 +84,9 @@ Given a tape $t=uvw$ and a word $t'=uv'w$, with $u,w\in \overline{\Sigma}^*$, $v
     $ 0^\infty \rhead{\text{A}} 0^\infty \;\vdash\; 0^\infty \, 1 \rhead{\text{B}} 0^\infty \;\vdash\; 0^\infty \, 1 \lhead{\text{C}} 1\, 0^\infty\ \;\vdash\; 0^\infty \, 1 \rhead{\text{C}} 1\, 0^\infty \;\vdash\; 0^\infty \, 1 1 \rhead{\text{C}} 0^\infty$. Hence, $0^\infty \rhead{\text{A}} 0^\infty \;\vdash^*\; 0^\infty \, 1 1 \rhead{\text{C}} 0^\infty$.
 \end{example}
 
-\subsubsection{Formula tapes}
+\subsubsection{Wall-repeater formula tapes}
 
-We want to formalise the above-stated intuition that bouncers expand a tape by repeating \textit{repeaters} patterns between fixed \textit{walls}, and then show that bouncers do not halt, Theorem~\ref{th:bouncers}. For this, we are going to express bouncers' tapes using regular expressions over the alphabet $\Delta \cup  \overline{\Sigma}$. Given $u\in\Sigma^*$, we abbreviate the regular expression $\{u\}^*$, which represents zero or more repetitions of the word $u$, as $(u)$. We define a \textit{formula tape} to be a regular expression of the form:
+We want to formalise the above-stated intuition that bouncers expand a tape by repeating \textit{repeaters} patterns between fixed \textit{walls}, and then show that bouncers do not halt, Theorem~\ref{th:bouncers}. For this, we are going to express bouncers' tapes using regular expressions over the alphabet $\Delta \cup  \overline{\Sigma}$. Given $u\in\Sigma^*$, we abbreviate the regular expression $\{u\}^*$, which represents zero or more repetitions of the word $u$, as $(u)$. We define a \textit{wall-repeater formula tape} to be a regular expression of the form:
 
 \begin{align}\label{math:formulaTapes}w_1(r_1)w_2(r_2)\dots w_n(r_n) w_{n+1} h w'_1(r'_1)w'_2(r'_2)\dots w'_m(r'_m) w'_{m+1}\end{align}
 
@@ -99,9 +99,9 @@ if the following conditions are met:
      & w_1, w'_{m+1} \in  \overline{\Sigma}^*
 \end{align*}
 
-and, as in the definition of a tape, $w_1$ (resp. $w'_{m+1}$) either does not contain the symbol $0^\infty$ or it starts with it (resp. ends with it). Patterns $w_i, w'_j$ are called \textit{walls} and can be empty, while the \textit{repeaters}, $r_i, r'_j$ must be nonempty. Note that we allow $n=m=0$, hence a usual tape is also a formula tape.
+and, as in the definition of a tape, $w_1$ (resp. $w'_{m+1}$) either does not contain the symbol $0^\infty$ or it starts with it (resp. ends with it). Patterns $w_i, w'_j$ are called \textit{walls} and can be empty, while the \textit{repeaters}, $r_i, r'_j$ must be nonempty. Note that we allow $n=m=0$, hence a usual tape is also a wall-repeater formula tape. From now on, for short, we say formula tapes to mean wall-repeater formula tapes.
 
-Given a formula tape $f$ let $\mathcal{L}(f)$ denote the language described by $f$, i.e.\ the set of tapes that match the tape formula.
+Given a formula tape $f$ let $\mathcal{L}(f)$ denote the language described by $f$, i.e.\ the set of tapes that match it.
 
 \begin{example}\label{ex:formulaTapes}
     Consider the formula tape $f = 0 \rhead{\text{D}} (01)$. We have $\mathcal{L}(f) = \{0\rhead{\text{D}},0\rhead{\text{D}}01,0\rhead{\text{D}}0101,\dots\}$. Consider the formula tape $f'=0^\infty(111)1110 \lhead{\text{A}} 010101(01)10^\infty$. Then: $0^\infty 1110 \lhead{A} 01010110^\infty$, $0^\infty 1111110 \lhead{A} 01010110^\infty$, and $0^\infty 1110 \lhead{A} 0101010110^\infty$ are three elements of $\mathcal{L}(f')$.
@@ -184,7 +184,7 @@ From the above definition of $\vdash$ on a formula tape $f$, it is clear that (i
 
 
 \begin{theorem}\label{th:bouncers}
-    Assume we are given some Turing machine and suppose there exists a tape $t$ and some formula-tapes $f_0,\dots,f_n, n\geq 1$, such that $0^\infty \rhead{\text{A}} 0^\infty \vdash^* t$ where $t \in M(f_0)$, and $A(f_i) \vdash f_{i+1}$ for $i=0,\dots,n-1$. If $A(f_n)$ is a special case of $A(f_0)$, then the Turing machine does not halt and is called a \textit{bouncer}.
+    Assume we are given some Turing machine and suppose there exists a tape $t$ and some formula tapes $f_0,\dots,f_n, n\geq 1$, such that $0^\infty \rhead{\text{A}} 0^\infty \vdash^* t$ where $t \in M(f_0)$, and $A(f_i) \vdash f_{i+1}$ for $i=0,\dots,n-1$. If $A(f_n)$ is a special case of $A(f_0)$, then the Turing machine does not halt and is called a \textit{bouncer}.
 \end{theorem}
 
 
