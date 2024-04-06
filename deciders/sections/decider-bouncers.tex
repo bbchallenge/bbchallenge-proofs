@@ -199,8 +199,27 @@ We finally get the main result of this section, which characterises bouncers for
     It follows from Lemma~\ref{lem:vdashFormulaTapes} and Lemma~\ref{lem:sameLanguage} that there exists tapes $t_0, \dots, t_n$, such that $t_0 = t$ and $t_i\in \mathcal{L}(f_i)$ for $0 \leq i \leq n$, and $t_i \vdash^* t_{i+1}$ for $0 \leq i < n$, giving $t_0 \vdash^* t_n$. Since $\mathcal{L}(f_n) \subseteq \mathcal{L}(f_0)$, we have $t_n \in \mathcal{L}(f_0)$, we can repeat this construction indefinitely and yield an infinite sequence of tapes $(t_n)_{n\in\mathbb{N}}$ such that $t \vdash^* t_i$ for all $i\in\mathbb{N}$: the machine does not halt.
 \end{proof}
 
+\begin{example}
+    Theorem~\ref{th:bouncers} applies to the machine of Example~\ref{ex:bouncer88427177}, illustrated in Figure~\ref{fig:bouncers}~(d), used in our series of examples for this section. Indeed, we have $0^\infty \rhead{\text{A}} 0^\infty \vdash^{64} 0^\infty 11111101100 \rhead{\text{D}} 0^\infty$, this tape, $t=0^\infty \vdash^{64} 0^\infty 11111101100 \rhead{\text{D}} 0^\infty$ is in the language the following formula tape:
+    $$f_0 = 0^\infty (111)1110(11)00\rhead{\text{D}}0^\infty$$
+    At this point, and for the next 25 usual steps alignment does not affect the formulas, and we get: $$f_{25} = 0^\infty (111) 1110 (11) \lhead{\text{A}} 01010110^\infty$$
+    One shift rule gives:
+    $$ f_{26} = 0^\infty (111) 1110  \lhead{\text{A}} (01) 01010110^\infty$$
+    After alignment:
+    $$ \mathcal{A}(f_{26}) = 0^\infty (111) 1110  \lhead{\text{A}} 010101(01)10^\infty$$
+    From there, $\mathcal{A}(f_{26}) \vdash f_{27}$ with:
+    $$ f_{27} = 0^\infty (111) 1111  \rhead{\text{B}} 010101(01)10^\infty$$
+    After 12 usual steps, not affected by alignment, we arrive at:
+    $$f_{39} = 0^\infty (111)1111110110\rhead{\text{D}}(01)10^\infty$$
+    One shift rule gives:
+    $$f_{40} = 0^\infty (111)111111011(11)0\rhead{\text{D}}10^\infty$$
+    Aligning gives:
+    $$\mathcal{A}(f_{40}) = 0^\infty (111)1111110(11)110\rhead{\text{D}}10^\infty$$
+    Finally, from there $\mathcal{A}(f_{40}) \vdash f_{41}$ with one usual step:
+    $$f_{41} = 0^\infty (111)1111110(11)1100\rhead{\text{D}}0^\infty$$
 
-
+    Now, $\mathcal{L}(f_{41}) \subseteq \mathcal{L}(f_{0})$ because $f_{41}$ differs from $f_0$ only by including one repetition of repeaters $(111)$ and $(11)$ in the walls directly to their right. The assumptions of Theorem~\ref{th:bouncers} hold and our Turing machine is a bouncer: it does not halt.
+\end{example}
 
 
 
