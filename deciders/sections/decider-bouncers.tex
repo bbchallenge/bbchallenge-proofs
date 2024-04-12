@@ -22,7 +22,7 @@ The goal of this section is to formally characterise bouncers and show that they
 
 We build on the concept of directional Turing machine introduced in Section~\ref{sec:conventions}. Directional Turing machines are an equivalent formulation of Turing machine where the machine head lives in between the tape cells and can point to the left or to the right. We choose here to treat $0^\infty$ as a unique symbol (instead of an infinite collection of 0s) and write $\overline{\Sigma} = \{0^\infty\}\cup\Sigma$, with $\Sigma=\{0,1\}$. For each Turing machine with set of state $S$ we introduce 2$|S|$ new configuration symbols (i.e.\ symbols used to describe machine configurations and not read/write symbols) denoting the machine head in two possible orientations, namely $\Delta = \{\lhead s | s\in S\}\cup\{\rhead s| s \in S\}$.
 
-We define a \textit{tape} to be a finite word of the form $uhv$, where $u,v\in \overline{\Sigma}^*$ and $h\in\Delta$, moreover, $u$ and $v$ must have at most one occurrence of $0^\infty$ each, respectively as first symbol for $u$ or last symbol for $v$. We choose the initial tape to be $0^\infty \rhead{\text{A}} 0^\infty$. Now, we define tape rewrite rules which will be used to simulate a directional Turing machine which we fix from now on. Given two tapes $t$ and $t'$, a rewrite rule transforming $t$ into $t'$ will be denoted by $t\to t'$. Applying $\vdash$ successively $n\in\mathbb{N}$ times is noted $\vdash^n$. The transitive closure of $\vdash$ (i.e.\ applying $\vdash$ \textit{some} number of times) is noted $\vdash^*$.
+We define a \textit{tape}\footnote{Note that in the terminology of Section~\ref{sec:conventions}, the definition of a tape that we use here, where the head in part of the tape, corresponds to a (partial) TM configuration.} to be a finite word of the form $uhv$, where $u,v\in \overline{\Sigma}^*$ and $h\in\Delta$, moreover, $u$ and $v$ must have at most one occurrence of $0^\infty$ each, respectively as first symbol for $u$ or last symbol for $v$. We choose the initial tape to be $0^\infty \rhead{\text{A}} 0^\infty$. Now, we define tape rewrite rules which will be used to simulate a directional Turing machine which we fix from now on. Given two tapes $t$ and $t'$, a rewrite rule transforming $t$ into $t'$ will be denoted by $t\to t'$. Applying $\vdash$ successively $n\in\mathbb{N}$ times is noted $\vdash^n$. The transitive closure of $\vdash$ (i.e.\ applying $\vdash$ \textit{some} number of times) is noted $\vdash^*$.
 
 Suppose that for $s\in S, x\in \Sigma$ we have $\delta(s,x) = (s',d,x')$ where $s'\in S, d \in \{\text{L},\text{R}\}, x' \in \Sigma$ and $\delta$ the transition function of the machine, then we define the following tape rewrite rules:
 
@@ -188,15 +188,16 @@ From the above definition of $\vdash$ on a formula tape $f$, it is clear that (i
     Example~\ref{ex:alignment} shows that alignment (which preserves the set of recognised tapes) can allow to run a shift rule on $f'$ with $\mathcal{A}(f) \vdash^* f'$ when no shift rule was applicable directly on $f$. In fact, one can show that the alignment operator can only \textit{increase} the number of applicable shift rules: if a shift rule is applicable on $f$ then a shift rule applicable on $f'$ with $\mathcal{A}(f) \vdash^* f'$ can always be constructed.
 \end{remark}
 
+Given two formula tapes $f$ and $f'$ we will say that $f'$ is a \textit{special case} of $f$, if $f'$ can be obtained from $f$ by replacying subwords of the form $(w)$ by $w^n(w)w^m$ for some $n,m\geq 0$ and $w\in\Sigma^+$. If $f$ is a special case of $f'$ then $\mathcal{L}(f) \subseteq \mathcal{L}(f)$, the converse is open but conjectured true\footnote{See \url{https://discuss.bbchallenge.org/t/186}.}.
 
 We finally get the main result of this section, which characterises bouncers formally -- a bouncer is any machine on which Theorem~\ref{th:bouncers} applies:
 
 \begin{theorem}[Bouncers]\label{th:bouncers}
-    Assume we are given some Turing machine and suppose there exists a tape $t$ and some wall-repeater formula tapes $f_0,\dots,f_n, n\geq 1$, such that $0^\infty \rhead{\text{A}} 0^\infty \vdash^* t$ where $t \in \mathcal{L}(f_0)$, and $\mathcal{A}(f_i) \vdash f_{i+1}$ for $i=0,\dots,n-1$. If $\mathcal{L}(f_n) \subseteq \mathcal{L}(f_0)$, then the Turing machine does not halt.
+    Assume we are given some Turing machine and suppose there exists a tape $t$ and some wall-repeater formula tapes $f_0,\dots,f_n, n\geq 1$, such that $0^\infty \rhead{\text{A}} 0^\infty \vdash^* t$ where $t \in \mathcal{L}(f_0)$, and $\mathcal{A}(f_i) \vdash f_{i+1}$ for $i=0,\dots,n-1$. If $f_n$ is a special case of $f_0$, then the Turing machine does not halt.
 \end{theorem}
 
 \begin{proof}
-    It follows from Lemma~\ref{lem:vdashFormulaTapes} and Lemma~\ref{lem:sameLanguage} that there exists tapes $t_0, \dots, t_n$, such that $t_0 = t$ and $t_i\in \mathcal{L}(f_i)$ for $0 \leq i \leq n$, and $t_i \vdash^* t_{i+1}$ for $0 \leq i < n$, giving $t_0 \vdash^* t_n$. Since $\mathcal{L}(f_n) \subseteq \mathcal{L}(f_0)$, we have $t_n \in \mathcal{L}(f_0)$, we can repeat this construction indefinitely and yield an infinite sequence of tapes $(t_n)_{n\in\mathbb{N}}$ such that $t \vdash^* t_i$ for all $i\in\mathbb{N}$: the machine does not halt.
+    It follows from Lemma~\ref{lem:vdashFormulaTapes} and Lemma~\ref{lem:sameLanguage} that there exists tapes $t_0, \dots, t_n$, such that $t_0 = t$ and $t_i\in \mathcal{L}(f_i)$ for $0 \leq i \leq n$, and $t_i \vdash^* t_{i+1}$ for $0 \leq i < n$, giving $t_0 \vdash^* t_n$. Since $f_n$ is a special case of $f_0$, we have $\mathcal{L}(f_n) \subseteq \mathcal{L}(f_0)$ and thus, $t_n \in \mathcal{L}(f_0)$, we can repeat this construction indefinitely and yield an infinite sequence of tapes $(t_n)_{n\in\mathbb{N}}$ such that $t \vdash^* t_i$ for all $i\in\mathbb{N}$: the machine does not halt.
 \end{proof}
 
 \begin{example}
@@ -218,7 +219,7 @@ We finally get the main result of this section, which characterises bouncers for
     Finally, from there $\mathcal{A}(f_{40}) \vdash f_{41}$ with one usual step:
     $$f_{41} = 0^\infty (111)1111110(11)1100\rhead{\text{D}}0^\infty$$
 
-    Now, $\mathcal{L}(f_{41}) \subseteq \mathcal{L}(f_{0})$ because $f_{41}$ differs from $f_0$ only by including one repetition of repeaters $(111)$ and $(11)$ in the walls directly to their right. The assumptions of Theorem~\ref{th:bouncers} hold and our Turing machine is a bouncer: it does not halt.
+    Now, $f_{41}$ is a special case of $f_{0}$ because $f_{41}$ differs from $f_0$ only by including one repetition of repeaters $(111)$ and $(11)$ in the walls directly to their right. The assumptions of Theorem~\ref{th:bouncers} hold and our Turing machine is a bouncer: it does not halt.
 \end{example}
 
 
