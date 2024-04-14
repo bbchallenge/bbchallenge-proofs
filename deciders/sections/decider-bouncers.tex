@@ -188,7 +188,7 @@ From the above definition of $\vdash$ on a formula tape $f$, it is clear that (i
     Example~\ref{ex:alignment} shows that alignment (which preserves the set of recognised tapes) can allow to run a shift rule on $f'$ with $\mathcal{A}(f) \vdash^* f'$ when no shift rule was applicable directly on $f$. In fact, one can show that the alignment operator can only \textit{increase} the number of applicable shift rules: if a shift rule is applicable on $f$ then a shift rule applicable on $f'$ with $\mathcal{A}(f) \vdash^* f'$ can always be constructed.
 \end{remark}
 
-Given two formula tapes $f$ and $f'$ we will say that $f'$ is a \textit{special case} of $f$, if $f'$ can be obtained from $f$ by replacying subwords of the form $(w)$ by $w^n(w)w^m$ for some $n,m\geq 0$ and $w\in\Sigma^+$. If $f$ is a special case of $f'$ then $\mathcal{L}(f) \subseteq \mathcal{L}(f)$, the converse is open but conjectured true\footnote{See \url{https://discuss.bbchallenge.org/t/186}.} (under additional assumptions).
+Given two formula tapes $f$ and $f'$ we will say that $f'$ is a \textit{special case} of $f$, if $f'$ can be obtained from $f$ by replacying subwords of the form $(r)$ by $r^n(r)r^m$ for some $n,m\geq 0$ and $r\in\Sigma^+$. If $f$ is a special case of $f'$ then $\mathcal{L}(f) \subseteq \mathcal{L}(f)$, the converse is open but conjectured true\footnote{See \url{https://discuss.bbchallenge.org/t/186}.} (under additional assumptions).
 
 We finally get to the main result of this section, which characterises bouncers formally -- a bouncer is any machine on which Theorem~\ref{th:bouncers} applies:
 
