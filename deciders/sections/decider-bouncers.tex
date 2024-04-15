@@ -188,16 +188,16 @@ From the above definition of $\vdash$ on a formula tape $f$, it is clear that (i
     Example~\ref{ex:alignment} shows that alignment (which preserves the set of recognised tapes) can allow to run a shift rule on $f'$ with $\mathcal{A}(f) \vdash^* f'$ when no shift rule was applicable directly on $f$. In fact, one can show that the alignment operator can only \textit{increase} the number of applicable shift rules: if a shift rule is applicable on $f$ then a shift rule applicable on $f'$ with $\mathcal{A}(f) \vdash^* f'$ can always be constructed.
 \end{remark}
 
-Given two formula tapes $f$ and $f'$ we will say that $f'$ is a \textit{special case} of $f$, if $f'$ can be obtained from $f$ by replacying subwords of the form $(r)$ by $r^n(r)r^m$ for some $n,m\geq 0$ and $r\in\Sigma^+$. If $f$ is a special case of $f'$ then $\mathcal{L}(f) \subseteq \mathcal{L}(f)$, the converse is open but conjectured true\footnote{See \url{https://discuss.bbchallenge.org/t/186}.} (under additional assumptions).
+Given two formula tapes $f$ and $f'$ we will say that $f'$ is a \textit{special case} of $f$, if $\mathcal{A}(f')$ can be obtained from $\mathcal{A}(f)$ by replacying subwords of the form $(r)$ by $r^n(r)r^m$ for some $n,m\geq 0$ and $r\in\Sigma^+$. If $f$ is a special case of $f'$ then $\mathcal{L}(f) \subseteq \mathcal{L}(f)$, the converse is open but conjectured true\footnote{See \url{https://discuss.bbchallenge.org/t/186}.} (under additional assumptions).
 
 We finally get to the main result of this section, which characterises bouncers formally -- a bouncer is any machine on which Theorem~\ref{th:bouncers} applies:
 
 \begin{theorem}[Bouncers]\label{th:bouncers}
-    Assume we are given some Turing machine and suppose there exists a tape $t$ and some wall-repeater formula tapes $f_0,\dots,f_n, n\geq 1$, such that $0^\infty \rhead{\text{A}} 0^\infty \vdash^* t$ where $t \in \mathcal{L}(f_0)$, and $\mathcal{A}(f_i) \vdash f_{i+1}$ for $i=0,\dots,n-1$. If $\mathcal{A}(f_n)$ is a special case of $\mathcal{A}(f_0)$, then the Turing machine does not halt.
+    Assume we are given some Turing machine and suppose there exists a tape $t$ and some wall-repeater formula tapes $f_0,\dots,f_n, n\geq 1$, such that $0^\infty \rhead{\text{A}} 0^\infty \vdash^* t$ where $t \in \mathcal{L}(f_0)$, and $\mathcal{A}(f_i) \vdash f_{i+1}$ for $i=0,\dots,n-1$. If $f_n$ is a special case of $f_0$, then the Turing machine does not halt.
 \end{theorem}
 
 \begin{proof}
-    It follows from Lemma~\ref{lem:vdashFormulaTapes} and Lemma~\ref{lem:sameLanguage} that there exists tapes $t_0, \dots, t_n$, such that $t_0 = t$ and $t_i\in \mathcal{L}(f_i)$ for $0 \leq i \leq n$, and $t_i \vdash^* t_{i+1}$ for $0 \leq i < n$, giving $t_0 \vdash^* t_n$. Since $\mathcal{A}(f_n)$ is a special case of $\mathcal{A}(f_0)$, we have $\mathcal{L}(\mathcal{A}(f_n)) \subseteq \mathcal{L}(\mathcal{A}(f_0))$, and using Lemma~\ref{lem:sameLanguage}, we have $\mathcal{L}(f_n) \subseteq \mathcal{L}(f_0)$ and thus, $t_n \in \mathcal{L}(f_0)$, we can repeat this construction indefinitely and yield an infinite sequence of tapes $(t_n)_{n\in\mathbb{N}}$ such that $t \vdash^* t_i$ for all $i\in\mathbb{N}$: the machine does not halt.
+    It follows from Lemma~\ref{lem:vdashFormulaTapes} and Lemma~\ref{lem:sameLanguage} that there exists tapes $t_0, \dots, t_n$, such that $t_0 = t$ and $t_i\in \mathcal{L}(f_i)$ for $0 \leq i \leq n$, and $t_i \vdash^* t_{i+1}$ for $0 \leq i < n$, giving $t_0 \vdash^* t_n$. Since $f_n$ is a special case of $f_0$, we have $\mathcal{L}(\mathcal{A}(f_n)) \subseteq \mathcal{L}(\mathcal{A}(f_0))$, and using Lemma~\ref{lem:sameLanguage}, we have $\mathcal{L}(f_n) \subseteq \mathcal{L}(f_0)$ and thus, $t_n \in \mathcal{L}(f_0)$, we can repeat this construction indefinitely and yield an infinite sequence of tapes $(t_n)_{n\in\mathbb{N}}$ such that $t \vdash^* t_i$ for all $i\in\mathbb{N}$: the machine does not halt.
 \end{proof}
 
 \begin{example}
@@ -217,9 +217,9 @@ We finally get to the main result of this section, which characterises bouncers 
     Aligning gives:
     $$\mathcal{A}(f_{40}) = 0^\infty (111)1111110(11)110\rhead{\text{D}}10^\infty$$
     Finally, from there $\mathcal{A}(f_{40}) \vdash f_{41}$ with one usual step:
-    $$f_{41} = 0^\infty (111)1111110(11)1100\rhead{\text{D}}0^\infty$$
+    $$f_{41} =\mathcal{A}(f_{41}) = 0^\infty (111)1111110(11)1100\rhead{\text{D}}0^\infty$$
 
-    Now, $f_{41}$ is a special case of $f_{0}$ because $f_{41}$ differs from $f_0$ only by including one repetition of repeaters $(111)$ and $(11)$ in the walls directly to their right. The assumptions of Theorem~\ref{th:bouncers} hold and our Turing machine is a bouncer: it does not halt.
+    Now, $f_{41}$ is a special case of $f_{0}$ because $\mathcal{A}(f_{41})$ differs from $f_0=\mathcal{A}(f_0)$ only by including one repetition of repeaters $(111)$ and $(11)$ in the walls directly to their right. The assumptions of Theorem~\ref{th:bouncers} hold and our Turing machine is a bouncer: it does not halt.
 \end{example}
 
 
