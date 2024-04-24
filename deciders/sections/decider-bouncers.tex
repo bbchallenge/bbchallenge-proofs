@@ -55,7 +55,7 @@ Suppose that for $s\in S, x\in \Sigma$ we have $\delta(s,x) = (s',d,x')$ where $
     \end{tabular}\\
 \end{table}
 
-Given a tape $t=uvw$ and a word $t'=uv'w$, with $u,w\in \overline{\Sigma}^*$, $v,v' \in ( \overline \Sigma \cup \Delta)^*$, suppose that there is a rewrite rule $v \to v'$. Then $t'$ is also a tape and in this situation we write $t \vdash t'$ meaning that $t'$ is obtained from $t$ by one simulation step (i.e.\ $\vdash$ has the same meaning as for standard, non-directional, Turing machines, as introduced in Section~\ref{sec:conventions}); note that the definition is sound because, to any given tape, at most one rewrite rule applies, hence $v \to v'$ is defined uniquely and so is $t \vdash t'$. Note that the only case where $\vdash$ is not defined on a tape is if the machine halts in this configuration, i.e. an undefined transition is reached.
+Given a tape $t=uvw$ and a word $t'=uv'w$, with $u,w\in \overline{\Sigma}^*$, $v,v' \in ( \overline \Sigma \cup \Delta)^*$, suppose that there is a rewrite rule $v \to v'$. Then $t'$ is also a tape and in this situation we write $t \vdash t'$ meaning that $t'$ is obtained from $t$ by one simulation step (i.e.\ $\vdash$ has the same meaning as for standard, non-directional, Turing machines, as introduced in Section~\ref{sec:conventions}); note that the definition is sound because, to any given tape, at most one rewrite rule applies, hence $v \to v'$ is defined uniquely and so is $t \vdash t'$. Note that the only case where $\vdash$ is not defined on a tape is if the machine halts in this configuration, i.e.\ an undefined transition is reached.
 
 \begin{example}\label{ex:bouncer88427177}
     Consider \texttt{bbchallenge} machine\footnote{Accessible at \url{https://bbchallenge.org/88427177}} \#88,427,177 (Figure~\ref{fig:bouncers}~(d)), that has the following transition table:
@@ -231,20 +231,20 @@ We finally get to the main result of this section, which characterises bouncers 
 
 Theorem~\ref{th:bouncers} characterises bouncers but we lack a practical way for guessing the formula tape associated to a given machine in order to conclude that the machine is a bouncer and does not halt. In this section, we present an algorithmic method to efficiently guess formula tapes. We exclude cyclers (see Section~\ref{sec:cyclers}), that are \textit{trivial} bouncers, from the scope of this section: the method presented here is meant to recognise all bouncers but cyclers. In the following, the word bouncer is redefined to exclude cyclers.
 
-We define \textit{record-breaking tapes} to be tapes where the head is pointing at $0^\infty$, i.e.\ tapes of the form $0^\infty u \rhead{s} 0^\infty$ or $0^\infty \lhead{s} u 0^\infty$ with $u\in\Sigma^*$, and, for a given tape $t$, \textit{length} is defined as the number of symbols in $\Sigma$ that it contains (hence, excluding head and $0^\infty$). We denote an infinite sequence $u_0, u_1, \dots u_n, \dots$ with $n\in\N$ by $(u)_{n\in\N}$. We denote the infinite constant integer sequence where all terms equal $K\in\mathbb{N}$ by $(K)_{n\in\mathbb{N}}$. We define the difference operator $D: \N^\N \to \N^\N$ such that $(v)_{n\in\N} = D((u)_{n\in\N})$ if and only if $v_n = u_{n+1}-u_{n}$ for all $n\in\N$.
+We define \textit{record-breaking tapes} to be tapes where the head is pointing at $0^\infty$, i.e.\ tapes of the form $0^\infty u \rhead{s} 0^\infty$ or $0^\infty \lhead{s} u 0^\infty$ with $u\in\Sigma^*$, and, for a given tape $t$, \textit{length} is defined as the number of symbols in $\Sigma$ that it contains (hence, excluding head and $0^\infty$). Give a tape $t$, we call $\mathcal{S}(t) \in \Sigma^*$ the tape without head and $0^\infty$ symbols. We denote an infinite sequence $u_0, u_1, \dots u_n, \dots$ with $n\in\N$ by $(u)_{n\in\N}$. We denote the infinite constant integer sequence where all terms equal $K\in\mathbb{N}$ by $(K)_{n\in\mathbb{N}}$. We define the difference operator $D: \N^\N \to \N^\N$ such that $(v)_{n\in\N} = D((u)_{n\in\N})$ if and only if $v_n = u_{n+1}-u_{n}$ for all $n\in\N$.
 
 The method for guessing formula tapes proceeds by first noticing that bouncers will grow their tape such that we can extract a subsequence of record-breaking tapes with length in arithmetic progression and time steps in quadratic progression:
 
-\begin{theorem}[\textit{Linear-quadratic growth}]
-    Let $M$ be a bouncer Turing machine, i.e. it satisfies Theorem~\ref{th:bouncers} for some formula tape. Call $(t_n)_{n\in\N}$ the sequence of tapes that it visits starting from $t_0 = 0^\infty \rhead{\text{A}} 0^\infty$. Call $l_n$ the length of $t_n$ and suppose that $\text{lim}_{n\to\infty} l_n = \infty$, i.e. $M$ is not a cycler. Then, there is an integer $m \geq 1$ and non-empty $w_1, \dots, w_{m+1} \in \Sigma^+$ and $r_1, \dots, r_{m} \in \Sigma^+$, and $g: \mathbb{N} \to \mathbb{N}$ that extracts a subsequence of $(t_n)_{n\in\N}$ such that:
+\begin{theorem}[\textit{Linear-quadratic growth}]\label{th:linquad}
+    Let $M$ be a bouncer Turing machine, i.e.\ it satisfies Theorem~\ref{th:bouncers} for some formula tape. Call $(t_n)_{n\in\N}$ the sequence of tapes that it visits starting from $t_0 = 0^\infty \rhead{\text{A}} 0^\infty$. Call $l_n$ the length of $t_n$ and suppose that $\text{lim}_{n\to\infty} l_n = \infty$, i.e.\ $M$ is not a cycler. Then, there is an integer $m \geq 1$ and $w_1, \dots, w_{m+1} \in \Sigma^*$ and $r_1, \dots, r_{m} \in \Sigma^+$, and $g: \mathbb{N} \to \mathbb{N}$ that extracts a subsequence of $(t_n)_{n\in\N}$ such that:
 
     \begin{enumerate}
         \item $f = w_1 (r_1) w_2 (r_2) \dots w_m (r_m) w_{m+1}$ is a formula tape that solves the bouncer according to Theorem~\ref{th:bouncers}.
-        \item All tapes $t_{g(n)}$ are record-breaking with the same head state and pointing-direction: i.e.\ they are all either of the form $0^\infty u_n \rhead{s} 0^\infty$, or all either of the form $0^\infty \lhead{s} u_n 0^\infty$ with $u_n\in\Sigma^*$, and $n\in\mathbb{N}$ and $s$ some state of $M$.
-        \item $u_n=w_1 r_1^n w_2 r_2^n \dots w_m r_m^n w_{m+1}$ for all $n\in\N$.
+        \item All tapes $t_{g(n)}$ are record-breaking with the same head state and pointing-direction.
+        \item $\mathcal{S}(t_{g(n)})=w_1 r_1^n w_2 r_2^n \dots w_m r_m^n w_{m+1}$ for all $n\in\N$.
 
-        \item $(l_{g(n)})_{n\in\N}$ is an arithmetic progression, i.e. $D((l_{g(n)})_{n\in\N}) = (K)_{n\in\N}$ for some constant $K\in\N$.
-        \item $(g(n))_{n\in\N}$ is a quadratic progression, i.e. $D(D((g(n))_{n\in\N})) = (K')_{n\in\N}$ for some constant $K'\in\N$.
+        \item $(l_{g(n)})_{n\in\N}$ is an arithmetic progression, i.e.\ $D((l_{g(n)})_{n\in\N}) = (K)_{n\in\N}$ for some constant $K\in\N$.
+        \item $(g(n))_{n\in\N}$ is a quadratic progression, i.e.\ $D(D((g(n))_{n\in\N})) = (K')_{n\in\N}$ for some constant $K'\in\N$.
     \end{enumerate}
 \end{theorem}
 
@@ -254,15 +254,15 @@ The method for guessing formula tapes proceeds by first noticing that bouncers w
 
 % with formula tape $f=0^\infty 111(111)01111(11)\rhead{\text{C}}0^\infty$, which is another formula tape that decides the bouncer (different from the one given in Example~\ref{ex:bouncerTheory}),
 
-\begin{example}
+\begin{example}\label{ex:linquad}
     Using the machine of Example~\ref{ex:bouncer88427177} used in the previous section, we have:
     \begin{align*}
-        0^\infty \rhead{\text{A}} 0^\infty & \vdash^{37} 0^\infty 111\; 01111C> \rhead{\text{C}} 0^\infty                               & g(0) = 37,\; l_{37} = 11   \\
+        0^\infty \rhead{\text{A}} 0^\infty & \vdash^{37} 0^\infty 111\; 01111 \rhead{\text{C}} 0^\infty                                 & g(0) = 37,\; l_{37} = 11   \\
                                            & \vdash^{39}   0^\infty111\; 111 \;01111 \;11\rhead{\text{C}}0^\infty                       & g(1) = 76,\; l_{76} = 16   \\
                                            & \vdash^{45}   0^\infty111\; 111\;111\; 01111\; 11\; 11 \rhead{\text{C}}0^\infty            & g(2) = 121,\; l_{121} = 21 \\
                                            & \vdash^{51}   0^\infty111\; 111\;111\; 111\; 01111\; 11\; 11\; 11 \rhead{\text{C}}0^\infty & g(3) = 172,\; l_{172} = 26 \\
     \end{align*}
-    Each of these tapes are record-breaking and clearly an element of $\mathcal{L}(f)$. Then, in this finite sample, $l_{g(0)},...,l_{g(3)}$ with first difference $K=5$ and $g(0), ..., g(3)$ is in quadratic progression with second difference $K'=6$.
+    Each of these tapes are record-breaking using the same head $\rhead{\text{C}}$. Then, in this finite sample, $l_{g(0)},...,l_{g(3)}$ is in arithmetic progression with first difference $K=5$ and $g(0), ..., g(3)$ is in quadratic progression with second difference $K'=6$.
 
     In general, we get:
     $$0^\infty \rhead{\text{A}} 0^\infty  \vdash^{g(n)} 0^\infty 111\; (111)^n\; 01111 (11)^n\; \rhead{\text{C}} 0^\infty   \quad g(n) = 3n^2 + 36n + 37,\; l_{g(n)} = 5n+11$$
@@ -271,6 +271,61 @@ The method for guessing formula tapes proceeds by first noticing that bouncers w
 
 \end{example}
 
+\newpage
+\subsubsection{Formula tape fitting}
 
+We extend the notation $\mathcal{S}(t)$ from tapes to formula tapes in the natural way: $\mathcal{S}(f)$ is the formula tape $f$ without head and $0^\infty$ symbols. Also, the alignment operator $\mathcal{A}$ was defined on formula tapes (Definition~\ref{def:alignment}) with head symbols, and we extend it to formula tapes without head symbols by performing right-alignment.
+
+Theorem~\ref{th:linquad} assures us that, in the sequence of successive tapes of a bouncer, we'll always find a subsequence where all repeaters' repetitions successively increase by one. Given such a subsequence, we are left with the task of fitting an appropriate formula tape. It turns out that only 3 tapes, with non-empty intermediate walls, are enough and that we can fit the formula tape efficiently using a greedy algorithm:
+
+\begin{algorithm}
+    \caption{Greedy formula tape fitting algorithm {\sc Fit-FormulaTape}}\label{alg:greedy-formula-tape-fitting}
+    \begin{algorithmic}[1]
+        \State \textbf{struct} TapeTriple \{
+        \State \tabi\textbf{Tape} t0, t1, t2
+        \State \}
+        \State
+        \Procedure{\textbf{FormulaTape} {\sc Fit-FormulaTape}}{\textbf{uint} pos\_t0, \textbf{uint} total\_repeater\_size, \textbf{TapeTriple} t}
+
+        \State \textbf{uint} k = total\_repeater\_size
+        \State \textbf{uint} i0 = pos\_t0
+        \State \textbf{uint} i1 = i0 + k
+        \State \textbf{uint} i2 = i0 + 2*k
+        \State
+        \If{i0 == t.t0.\textbf{len}() \&\& i1 == t.t1.\textbf{len}()}
+        \State \Return \textbf{FormulaTape}::\textbf{empty}()
+
+        \EndIf
+        \State
+        \If{i0 $<$ t.t0.\textbf{len}() \&\& i1 $<$ t.t1.\textbf{len}() \&\& i2 $<$ t.t2.\textbf{len}() \\ \&\& t.t0[i0] == t.t1[i1] \&\& t.t1[i1] == t.t1[i2]}
+        \State \Return \textbf{FormulaTape}::\textbf{symbol}(t.t0[i0]).\textbf{concat}(\Call{{\sc Fit-FormulaTape}}{i0+1, k, t})
+        \EndIf
+        \State
+        \State
+        \textbf{uint} longest\_match\_size = \textbf{get\_longest\_match\_size}(t.t1[i1:], t.t2[i2:])
+        \State
+        \For{l = longest\_match; k $\geq$ 1; k -= 1 }
+
+        \If{i2+2*l $<$ t.t2.\textbf{len}() \&\& t.t2[i2:i2+l] == t.t2[i2+l:i2+2*l] }
+        \State \Return \textbf{FormulaTape}::\textbf{repeater}(t.t2[i2:i2+l]).\textbf{concat}(\Call{{\sc Fit-FormulaTape}}{i0, k+l, t})
+        \EndIf
+
+        \EndFor
+        \State
+        \State \textbf{raise} \textbf{Failure}
+        \EndProcedure
+    \end{algorithmic}
+\end{algorithm}
+
+\begin{theorem}
+    Let be 3 tapes $t_0, t_1, t_2$, $m\in\N$ and $w_1, \dots w_{m+1} \in \Sigma^*$ such that $w_2,\dots, w_m$ are not empty and $r_1, \dots, r_m \in\Sigma^+$ such that:
+    \begin{align*}
+        \mathcal{S}(t_0) & = w_1\; r_1\; \dots w_m\; r_m\; w_{m+1}               \\
+        \mathcal{S}(t_1) & = w_1\; r_1r_1\; \dots w_m\; r_m r_m\; w_{m+1}        \\
+        \mathcal{S}(t_2) & = w_1\; r_1 r_1 r_1 \dots w_m\; r_m r_m r_m\; w_{m+1}
+    \end{align*}
+    Then Algorithm~\ref{alg:greedy-formula-tape-fitting} does not raise failure and returns the formula tape $\mathcal{A}(f)$ with $\mathcal{S}(f) = w_1 r_1 (r_1) \dots w_m r_m (r_m) w_{m+1}$.
+
+\end{theorem}
 
 
