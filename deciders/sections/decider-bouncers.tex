@@ -200,7 +200,7 @@ We finally get to the main result of this section, which characterises bouncers 
     It follows from Lemma~\ref{lem:vdashFormulaTapes} and Lemma~\ref{lem:sameLanguage} that there exists tapes $t_0, \dots, t_n$, such that $t_0 = t$ and $t_i\in \mathcal{L}(f_i)$ for $0 \leq i \leq n$, and $t_i \vdash^* t_{i+1}$ for $0 \leq i < n$, giving $t_0 \vdash^* t_n$. Since $f_n$ is a special case of $f_0$, we have $\mathcal{L}(\mathcal{A}(f_n)) \subseteq \mathcal{L}(\mathcal{A}(f_0))$, and using Lemma~\ref{lem:sameLanguage}, we have $\mathcal{L}(f_n) \subseteq \mathcal{L}(f_0)$ and thus, $t_n \in \mathcal{L}(f_0)$, we can repeat this construction indefinitely and yield an infinite sequence of tapes $(t_n)_{n\in\mathbb{N}}$ such that $t \vdash^* t_i$ for all $i\in\mathbb{N}$: the machine does not halt.
 \end{proof}
 
-\begin{example}
+\begin{example}\label{ex:bouncerTheory}
     Theorem~\ref{th:bouncers} applies to the machine of Example~\ref{ex:bouncer88427177}, illustrated in Figure~\ref{fig:bouncers}~(d), used in our series of examples for this section. Indeed, we have $0^\infty \rhead{\text{A}} 0^\infty \vdash^{64} 0^\infty 11111101100 \rhead{\text{D}} 0^\infty$, this tape, $t=0^\infty \vdash^{64} 0^\infty 11111101100 \rhead{\text{D}} 0^\infty$ is in the language the following formula tape:
     $$f_0 = 0^\infty (111)1110(11)00\rhead{\text{D}}0^\infty$$
     At this point, and for the next 25 usual steps alignment does not affect the formulas, and we get: $$f_{25} = 0^\infty (111) 1110 (11) \lhead{\text{A}} 01010110^\infty$$
@@ -251,14 +251,16 @@ The method for guessing formula tapes proceeds by first noticing that bouncers w
 \end{proof}
 
 \begin{example}
-    Using the machine of Example~\ref{ex:bouncer88427177} used in the previous section, with formula tape $f=0^\infty (111)1110(11)00\rhead{\text{D}}0^\infty$, we have:
+    Using the machine of Example~\ref{ex:bouncer88427177} used in the previous section, with formula tape $f=0^\infty 111(111)01111(11)\rhead{\text{C}}0^\infty$, which is another formula tape that decides the bouncer (different from the one given in Example~\ref{ex:bouncerTheory}), we have:
 
     \begin{align*}
-        0^\infty \rhead{\text{A}} 0^\infty & \vdash^{64} 0^\infty 111\; 1110\; 11\; 00 \rhead{\text{D}} 0^\infty                                  & g(0) = 64,\; l_{64} = 11   \\
-                                           & \vdash^{41}   0^\infty111\; 111\; 1110\; 11\; 11\; 00 \rhead{\text{D}}0^\infty                       & g(1) = 105,\; l_{105} = 16 \\
-                                           & \vdash^{41}   0^\infty111\; 111\; 111\; 1110\; 11\; 11\; 11\; 00 \rhead{\text{D}}0^\infty            & g(2) = 105,\; l_{105} = 21 \\
-                                           & \vdash^{41}   0^\infty111\; 111\; 111\; 111\; 1110\; 11\; 11\; 11\; 11\; 00 \rhead{\text{D}}0^\infty & g(3) = 105,\; l_{105} = 26 \\
+        0^\infty \rhead{\text{A}} 0^\infty & \vdash^{*} 0^\infty 111\; 01111C> \rhead{\text{C}} 0^\infty                               & g(0) = 37,\; l_{37} = 11   \\
+                                           & \vdash^{*}   0^\infty111\; 111 \;01111 \;11\rhead{\text{C}}0^\infty                       & g(1) = 76,\; l_{76} = 16   \\
+                                           & \vdash^{*}   0^\infty111\; 111\;111\; 01111\; 11\; 11 \rhead{\text{C}}0^\infty            & g(2) = 121,\; l_{121} = 21 \\
+                                           & \vdash^{*}   0^\infty111\; 111\;111\; 111\; 01111\; 11\; 11\; 11 \rhead{\text{C}}0^\infty & g(3) = 172,\; l_{172} = 26 \\
     \end{align*}
+
+    Each of this tape is  record-breaking and clearly an element of $\mathcal{L}(f)$. Then, in this finite sample, $l_{g(0)},...,l_{g(3)}$ is arithmetic since the first difference is $C=5$. Finally, in this finite sample $g(0), ..., g(3)$ is in quadratic progression since the second difference is $C'=6$, computed as $C' = (g(2)-g(1)) - (g(1)-g(0)) = (g(3)-g(2)) - (g(2)-g(1)) = 6$.
 
 \end{example}
 
