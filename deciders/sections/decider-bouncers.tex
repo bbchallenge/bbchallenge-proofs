@@ -349,7 +349,7 @@ Theorem~\ref{th:linquad} assures us that, in the sequence of successive tapes of
 
     At the point, the greedy algorithm raises failure.
 
-    Starting from $t_0 = 1011\; 01011\; 1\; 0$ it will successfully fit $101101011(01011)1(1)0$ which is a special case of $1011(01011)(1)0$.
+    However, starting from $t_0 = 1011\; 01011\; 1\; 0$ it will successfully fit $101101011(01011)1(1)0$ which is a special case of $1011(01011)(1)0$.
 
     Hence, the greedy algorithm does not always fit \textit{minimal} formula tapes. By adding backtracking, it can easily be transformed into a Dynamic Programming algorithm that will succeed starting from $t_0$ with no repeater occurrence and hence fit minimal formula tapes, at the cost of being less efficient (quadratic vs. linear time complexity).
     Note that another approach to formula tape minimisation would be to deduce a minimal formula tape from the solution outputted by the greedy algorithm, essentially by trying to merging walls into repeaters as much as possible.
