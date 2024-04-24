@@ -327,7 +327,7 @@ Theorem~\ref{th:linquad} assures us that, in the sequence of successive tapes of
 \begin{proof}
 \end{proof}
 \begin{remark}[Minimal formula tapes]
-    While, by Theorem~\ref{th:greedy}, Algorithm~\ref{alg:greedy-formula-tape-fitting} is assured to fit a formula tape (if it exists) starting from $t_0$ when it has at least one occurrence of each repeater, it can fail when $t_0$ has none. Here is an example trying to parse $1011(01011)(1)0$ starting from $t_0 = 10110$:
+    While Algorithm~\ref{alg:greedy-formula-tape-fitting} is assured, by Theorem~\ref{th:greedy},  to fit a formula tape (if it exists) starting from $t_0$ when it has at least one occurrence of each repeater, it can fail when $t_0$ has none. Here is an example trying to parse $1011(01011)(1)0$ starting from $t_0 = 10110$:
     \begin{align*}
         t_0 & = 1011\; 0                         \\
         t_0 & = 1011\; 01011\; 1\; 0             \\
