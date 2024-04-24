@@ -188,7 +188,7 @@ From the above definition of $\vdash$ on a formula tape $f$, it is clear that (i
     Example~\ref{ex:alignment} shows that alignment (which preserves the set of recognised tapes) can allow to run a shift rule on $f'$ with $\mathcal{A}(f) \vdash^* f'$ when no shift rule was applicable directly on $f$. In fact, one can show that the alignment operator can only \textit{increase} the number of applicable shift rules: if a shift rule is applicable on $f$ then a shift rule applicable on $f'$ with $\mathcal{A}(f) \vdash^* f'$ can always be constructed.
 \end{remark}
 
-Given two formula tapes $f$ and $f'$ we will say that $f'$ is a \textit{special case} of $f$, if $\mathcal{A}(f')$ can be obtained from $\mathcal{A}(f)$ by replacying subwords of the form $(r)$ by $r^n(r)r^m$ for some $n,m\geq 0$ and $r\in\Sigma^+$. If $f$ is a special case of $f'$ then $\mathcal{L}(f) \subseteq \mathcal{L}(f)$, the converse is open but conjectured true\footnote{See \url{https://discuss.bbchallenge.org/t/186}.} (under additional assumptions).
+Given two formula tapes $f$ and $f'$ we will say that $f'$ is a \textit{special case} of $f$, if $\mathcal{A}(f')$ can be obtained from $\mathcal{A}(f)$ by replacying subwords of the form $(r)$ by $r^n(r)r^m$ for some $n,m\geq 0$ and $r\in\Sigma^+$. Note that because of alignment, $n=0$ (resp. $m=0$) if $(r)$ is to the left (resp. to the right) of the head. If $f$ is a special case of $f'$ then $\mathcal{L}(f) \subseteq \mathcal{L}(f)$, the converse is open but conjectured true\footnote{See \url{https://discuss.bbchallenge.org/t/186}.} (under additional assumptions).
 
 We finally get to the main result of this section, which characterises bouncers formally -- a bouncer is any machine on which Theorem~\ref{th:bouncers} applies:
 
@@ -221,6 +221,35 @@ We finally get to the main result of this section, which characterises bouncers 
 
     Now, $f_{41}$ is a special case of $f_{0}$ because $\mathcal{A}(f_{41})$ differs from $f_0=\mathcal{A}(f_0)$ only by including one repetition of repeaters $(111)$ and $(11)$ in the walls directly to their right. The assumptions of Theorem~\ref{th:bouncers} hold and our Turing machine is a bouncer: it does not halt.
 \end{example}
+
+\begin{remark}
+    Both Cyclers (Section~\ref{sec:cyclers}) and Translated Cyclers (Section~\ref{sec:translated-cyclers}) are special cases of bouncers, as they satisfy Theorem~\ref{th:bouncers}.
+\end{remark}
+
+
+\subsection{Deciding bouncers in practice: formula tape guessing}
+
+Theorem~\ref{th:bouncers} characterises bouncers but we lack a practical way for guessing the formula tape associated to a given machine in order to conclude that the machine is a bouncer and does not halt. In this section, we present an algorithmic method to efficiently guess formula tapes. We exclude cyclers (see Section~\ref{sec:cyclers}), that are \textit{trivial} bouncers, from the scope of this section: the method presented here is meant to recognise all bouncers but cyclers. In the following, the word bouncer is redefined to exclude cyclers.
+
+We define \textit{record-breaking tapes} to be tapes where the head is pointing at $0^\infty$, i.e.\ tapes of the form $0^\infty u \rhead{s} 0^\infty$ or $0^\infty \lhead{s} u 0^\infty$ with $u\in\Sigma^*$, and, for a given tape reached from $0^\infty \rhead{A} 0^\infty$, \textit{length} is defined as the number of cells that have been visited at the time when the tape is reached. We denote an infinite sequence $u_0, u_1, \dots u_n, \dots$ with $n\in\N$ by $(u)_{n\in\N}$. We denote the infinite constant integer sequence where all terms equal $C\in\mathbb{N}$ by $(C)_{n\in\mathbb{N}}$. We define the difference operator $D: \N^\N \to \N^\N$ such that $(v)_{n\in\N} = D((u)_{n\in\N})$ if and only if $v_n = u_{n+1}-u_{n}$ for all $n\in\N$.
+
+The method for guessing formula tapes proceeds by first noticing that bouncers will grow their tape such that we can extract a subsequence of record-breaking tapes with length in arithmetic progression and time steps in quadratic progression:
+
+\begin{theorem}[\textit{Linear-quadratic heuristic}]
+    Let $M$ be a bouncer Turing machine, i.e. it satisfies Theorem~\ref{th:bouncers} for some formula tape $f$. Call $(t_n)_{n\in\N}$ the sequence of tapes that it visits starting from $t_0 = 0^\infty \rhead{A} 0^\infty$. Call $l_n$ the length of $t_n$ and suppose that $\text{lim}_{n\to\infty} l_n = \infty$, i.e. $M$ is not a cycler. Then, there is $g: \mathbb{N} \to \mathbb{N}$ that extracts a subsequence of $(t_n)_{n\in\N}$ such that:
+
+    \begin{enumerate}
+        \item $t_{g(n)}$ is a record-breaking tape for all $n\in\mathbb{N}$, and all tapes $t_{g(n)}$ share the same head state and head pointing-direction.
+        \item $t_{g(n)} \in \mathcal{L}(f)$ for all $n\in\mathbb{N}$.
+        \item $(l_{g(n)})_{n\in\N}$ is an arithmetic progression, i.e. $D((l_{g(n)})_{n\in\N}) = (C)_{n\in\N}$ for some constant $C\in\N$.
+        \item $(g(n))_{n\in\N}$ is a quadratic progression, i.e. $D(D((g(n))_{n\in\N})) = (C')_{n\in\N}$ for some constant $C'\in\N$.
+    \end{enumerate}
+\end{theorem}
+
+\begin{proof}
+    ...
+\end{proof}
+
 
 
 
