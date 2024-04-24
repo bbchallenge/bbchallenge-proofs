@@ -330,18 +330,28 @@ Theorem~\ref{th:linquad} assures us that, in the sequence of successive tapes of
     While Algorithm~\ref{alg:greedy-formula-tape-fitting} is assured, by Theorem~\ref{th:greedy},  to fit a formula tape (if it exists) starting from $t_0$ when it has at least one occurrence of each repeater, it can fail when $t_0$ has none. Here is an example trying to parse $1011(01011)(1)0$ starting from $t_0 = 10110$:
     \begin{align*}
         t_0 & = 1011\; 0                         \\
-        t_0 & = 1011\; 01011\; 1\; 0             \\
-        t_1 & = 1011\; 01011\; 01011\; 1\; 1\; 0
+        t_1 & = 1011\; 01011\; 1\; 0             \\
+        t_2 & = 1011\; 01011\; 01011\; 1\; 1\; 0
     \end{align*}
-    The greedy algorithm will raise failure on the following configuration:
+    The greedy algorithm reach the following configuration by consuming $t_0$ which is a prefix of $t_1$ and $t_2$:
     \begin{align*}
         t'_0 & = \varnothing              \\
         t'_1 & = 1011\; 1\; 0             \\
         t'_2 & = 1011\; 01011\; 1\; 1\; 0
     \end{align*}
 
+    Then, $101$ is a prefix of $t'_1$ and $101 101$ a prefix of $t'_2$, which will yield:
+    \begin{align*}
+        t'_0 & = \varnothing     \\
+        t'_1 & = 1\; 1\; 0       \\
+        t'_2 & = 011\; 1\; 1\; 0
+    \end{align*}
+
+    At the point, the greedy algorithm raises failure.
+
     Starting from $t_0 = 1011\; 01011\; 1\; 0$ it will successfully fit $101101011(01011)1(1)0$ which is a special case of $1011(01011)(1)0$.
 
-    Hence, the greedy algorithm does not always fit \textit{minimal} formula tapes. By adding backtracking, it can easily be transformed into a Dynamic Programming algorithm that will fit minimal formula tapes, at the cost of being less efficient (quadratic vs. linear time complexity).
+    Hence, the greedy algorithm does not always fit \textit{minimal} formula tapes. By adding backtracking, it can easily be transformed into a Dynamic Programming algorithm that will succeed starting from $t_0$ with no repeater occurrence and hence fit minimal formula tapes, at the cost of being less efficient (quadratic vs. linear time complexity).
+    Note that another approach to formula tape minimisation would be to deduce a minimal formula tape from the solution outputted by the greedy algorithm, essentially by trying to merging walls into repeaters as much as possible.
 
 \end{remark}
