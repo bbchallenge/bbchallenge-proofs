@@ -281,33 +281,30 @@ Theorem~\ref{th:linquad} assures us that, in the sequence of successive tapes of
 \begin{algorithm}
     \caption{Greedy formula tape fitting algorithm {\sc Fit-FormulaTape}}\label{alg:greedy-formula-tape-fitting}
     \begin{algorithmic}[1]
-        \State \textbf{struct} TapeTriple \{
-        \State \tabi\textbf{Tape} t0, t1, t2
-        \State \}
-        \State
-        \Procedure{\textbf{FormulaTape} {\sc Fit-FormulaTape}}{\textbf{uint} pos\_t0, \textbf{uint} total\_repeater\_size, \textbf{TapeTriple} t}
+
+        \Procedure{\textbf{FormulaTape} {\sc Fit-FormulaTape}}{\textbf{uint} pos\_t0, \textbf{uint} total\_repeater\_size, \textbf{Word} t[3]}
 
         \State \textbf{uint} k = total\_repeater\_size
         \State \textbf{uint} i0 = pos\_t0
         \State \textbf{uint} i1 = i0 + k
         \State \textbf{uint} i2 = i0 + 2*k
         \State
-        \If{i0 == t.t0.\textbf{len}() \&\& i1 == t.t1.\textbf{len}()}
+        \If{i0 == t[0].\textbf{len}() \&\& i1 == t[1].\textbf{len}()}
         \State \Return \textbf{FormulaTape}::\textbf{empty}()
 
         \EndIf
         \State
-        \If{i0 $<$ t.t0.\textbf{len}() \&\& i1 $<$ t.t1.\textbf{len}() \&\& i2 $<$ t.t2.\textbf{len}() \\ \&\& t.t0[i0] == t.t1[i1] \&\& t.t1[i1] == t.t1[i2]}
-        \State \Return \textbf{FormulaTape}::\textbf{symbol}(t.t0[i0]).\textbf{concat}(\Call{{\sc Fit-FormulaTape}}{i0+1, k, t})
+        \If{i0 $<$ t[0].\textbf{len}() \&\& i1 $<$ t[1].\textbf{len}() \&\& i2 $<$ t[2].\textbf{len}() \\ \&\& t[0][i0] == t[1][i1] \&\& t[1][i1] == t[1][i2]}
+        \State \Return \textbf{FormulaTape}::\textbf{symbol}(t[0][i0]).\textbf{concat}(\Call{{\sc Fit-FormulaTape}}{i0+1, k, t})
         \EndIf
         \State
         \State
-        \textbf{uint} longest\_match\_size = \textbf{get\_longest\_match\_size}(t.t1[i1:], t.t2[i2:])
+        \textbf{uint} longest\_match\_size = \textbf{get\_longest\_match\_size}(t[1][i1:], t[2][i2:])
         \State
         \For{l = longest\_match; k $\geq$ 1; k -= 1 }
 
-        \If{i2+2*l $<$ t.t2.\textbf{len}() \&\& t.t2[i2:i2+l] == t.t2[i2+l:i2+2*l] }
-        \State \Return \textbf{FormulaTape}::\textbf{repeater}(t.t2[i2:i2+l]).\textbf{concat}(\Call{{\sc Fit-FormulaTape}}{i0, k+l, t})
+        \If{i2+2*l $<$ t[2].\textbf{len}() \&\& t[2][i2:i2+l] == t[2][i2+l:i2+2*l] }
+        \State \Return \textbf{FormulaTape}::\textbf{repeater}(t[2][i2:i2+l]).\textbf{concat}(\Call{{\sc Fit-FormulaTape}}{i0, k+l, t})
         \EndIf
 
         \EndFor
@@ -318,13 +315,13 @@ Theorem~\ref{th:linquad} assures us that, in the sequence of successive tapes of
 \end{algorithm}
 
 \begin{theorem}[Greedy formula tape fitting]
-    Let there be 3 tapes $t_0, t_1, t_2$, and an integer $m\in\N$ and $w_1, \dots w_{m+1} \in \Sigma^*$ such that $w_2,\dots, w_m$ are not empty and $r_1, \dots, r_m \in\Sigma^+$ such that:
+    Let there be 3 words $t_0, t_1, t_2 \in \Sigma^*$, and an integer $m\in\N$ and $w_1, \dots w_{m+1} \in \Sigma^*$ such that $w_2,\dots, w_m$ are not empty and $r_1, \dots, r_m \in\Sigma^+$ such that:
     \begin{align*}
-        \mathcal{S}(t_0) & = w_1\; r_1\; \dots w_m\; r_m\; w_{m+1}               \\
-        \mathcal{S}(t_1) & = w_1\; r_1r_1\; \dots w_m\; r_m r_m\; w_{m+1}        \\
-        \mathcal{S}(t_2) & = w_1\; r_1 r_1 r_1 \dots w_m\; r_m r_m r_m\; w_{m+1}
+        t_0 & = w_1\; r_1\; \dots w_m\; r_m\; w_{m+1}               \\
+        t_1 & = w_1\; r_1r_1\; \dots w_m\; r_m r_m\; w_{m+1}        \\
+        t_2 & = w_1\; r_1 r_1 r_1 \dots w_m\; r_m r_m r_m\; w_{m+1}
     \end{align*}
-    Then Algorithm~\ref{alg:greedy-formula-tape-fitting} does not raise failure and returns the formula tape $\mathcal{S}(\mathcal{A}(f))$ with $\mathcal{S}(f) = w_1 r_1 (r_1) \dots w_m r_m (r_m) w_{m+1}$.
+    Then Algorithm~\ref{alg:greedy-formula-tape-fitting} ran on {\sc Fit-FormulaTape}(0,0,$(t_0,t_1,t_2)$) does not raise failure and returns the formula tape $\mathcal{S}(\mathcal{A}(f))$ with $\mathcal{S}(f) = w_1 r_1 (r_1) \dots w_m r_m (r_m) w_{m+1}$.
 
 \end{theorem}
 
