@@ -236,11 +236,13 @@ We define \textit{record-breaking tapes} to be tapes where the head is pointing 
 The method for guessing formula tapes proceeds by first noticing that bouncers will grow their tape such that we can extract a subsequence of record-breaking tapes with length in arithmetic progression and time steps in quadratic progression:
 
 \begin{theorem}[\textit{Linear-quadratic growth}]
-    Let $M$ be a bouncer Turing machine, i.e. it satisfies Theorem~\ref{th:bouncers} for some formula tape $f$. Call $(t_n)_{n\in\N}$ the sequence of tapes that it visits starting from $t_0 = 0^\infty \rhead{\text{A}} 0^\infty$. Call $l_n$ the length of $t_n$ and suppose that $\text{lim}_{n\to\infty} l_n = \infty$, i.e. $M$ is not a cycler. Then, there is $g: \mathbb{N} \to \mathbb{N}$ that extracts a subsequence of $(t_n)_{n\in\N}$ such that:
+    Let $M$ be a bouncer Turing machine, i.e. it satisfies Theorem~\ref{th:bouncers} for some formula tape. Call $(t_n)_{n\in\N}$ the sequence of tapes that it visits starting from $t_0 = 0^\infty \rhead{\text{A}} 0^\infty$. Call $l_n$ the length of $t_n$ and suppose that $\text{lim}_{n\to\infty} l_n = \infty$, i.e. $M$ is not a cycler. Then, there is an integer $m \geq 1$ and non-empty $w_1, \dots, w_{m+1} \in \Sigma^+$ and $r_1, \dots, r_{m} \in \Sigma^+$, and $g: \mathbb{N} \to \mathbb{N}$ that extracts a subsequence of $(t_n)_{n\in\N}$ such that:
 
     \begin{enumerate}
-        \item $t_{g(n)}$ is a record-breaking tape for all $n\in\mathbb{N}$, and all tapes $t_{g(n)}$ share the same head state and head pointing-direction.
-        \item $t_{g(n)} \in \mathcal{L}(f)$ for all $n\in\mathbb{N}$.
+        \item $f = w_1 (r_1) w_2 (r_2) \dots w_m (r_m) w_{m+1}$ is a formula tape that solves the bouncer according to Theorem~\ref{th:bouncers}.
+        \item All tapes $t_{g(n)}$ are record-breaking with the same head state and pointing-direction: i.e.\ they are all either of the form $0^\infty u_n \rhead{s} 0^\infty$, or all either of the form $0^\infty \lhead{s} u_n 0^\infty$ with $u_n\in\Sigma^*$, and $n\in\mathbb{N}$ and $s$ some state of $M$.
+        \item $u_n=w_1 r_1^n w_2 r_2^n \dots w_m r_m^n w_{m+1}$ for all $n\in\N$.
+
         \item $(l_{g(n)})_{n\in\N}$ is an arithmetic progression, i.e. $D((l_{g(n)})_{n\in\N}) = (C)_{n\in\N}$ for some constant $C\in\N$.
         \item $(g(n))_{n\in\N}$ is a quadratic progression, i.e. $D(D((g(n))_{n\in\N})) = (C')_{n\in\N}$ for some constant $C'\in\N$.
     \end{enumerate}
