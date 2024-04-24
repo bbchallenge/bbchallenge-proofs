@@ -231,7 +231,7 @@ We finally get to the main result of this section, which characterises bouncers 
 
 Theorem~\ref{th:bouncers} characterises bouncers but we lack a practical way for guessing the formula tape associated to a given machine in order to conclude that the machine is a bouncer and does not halt. In this section, we present an algorithmic method to efficiently guess formula tapes. We exclude cyclers (see Section~\ref{sec:cyclers}), that are \textit{trivial} bouncers, from the scope of this section: the method presented here is meant to recognise all bouncers but cyclers. In the following, the word bouncer is redefined to exclude cyclers.
 
-We define \textit{record-breaking tapes} to be tapes where the head is pointing at $0^\infty$, i.e.\ tapes of the form $0^\infty u \rhead{s} 0^\infty$ or $0^\infty \lhead{s} u 0^\infty$ with $u\in\Sigma^*$, and, for a given tape $t$, \textit{length} is defined as the number of symbols in $\Sigma$ that it contains (hence, excluding head and $0^\infty$). We denote an infinite sequence $u_0, u_1, \dots u_n, \dots$ with $n\in\N$ by $(u)_{n\in\N}$. We denote the infinite constant integer sequence where all terms equal $C\in\mathbb{N}$ by $(C)_{n\in\mathbb{N}}$. We define the difference operator $D: \N^\N \to \N^\N$ such that $(v)_{n\in\N} = D((u)_{n\in\N})$ if and only if $v_n = u_{n+1}-u_{n}$ for all $n\in\N$.
+We define \textit{record-breaking tapes} to be tapes where the head is pointing at $0^\infty$, i.e.\ tapes of the form $0^\infty u \rhead{s} 0^\infty$ or $0^\infty \lhead{s} u 0^\infty$ with $u\in\Sigma^*$, and, for a given tape $t$, \textit{length} is defined as the number of symbols in $\Sigma$ that it contains (hence, excluding head and $0^\infty$). We denote an infinite sequence $u_0, u_1, \dots u_n, \dots$ with $n\in\N$ by $(u)_{n\in\N}$. We denote the infinite constant integer sequence where all terms equal $K\in\mathbb{N}$ by $(K)_{n\in\mathbb{N}}$. We define the difference operator $D: \N^\N \to \N^\N$ such that $(v)_{n\in\N} = D((u)_{n\in\N})$ if and only if $v_n = u_{n+1}-u_{n}$ for all $n\in\N$.
 
 The method for guessing formula tapes proceeds by first noticing that bouncers will grow their tape such that we can extract a subsequence of record-breaking tapes with length in arithmetic progression and time steps in quadratic progression:
 
@@ -243,8 +243,8 @@ The method for guessing formula tapes proceeds by first noticing that bouncers w
         \item All tapes $t_{g(n)}$ are record-breaking with the same head state and pointing-direction: i.e.\ they are all either of the form $0^\infty u_n \rhead{s} 0^\infty$, or all either of the form $0^\infty \lhead{s} u_n 0^\infty$ with $u_n\in\Sigma^*$, and $n\in\mathbb{N}$ and $s$ some state of $M$.
         \item $u_n=w_1 r_1^n w_2 r_2^n \dots w_m r_m^n w_{m+1}$ for all $n\in\N$.
 
-        \item $(l_{g(n)})_{n\in\N}$ is an arithmetic progression, i.e. $D((l_{g(n)})_{n\in\N}) = (C)_{n\in\N}$ for some constant $C\in\N$.
-        \item $(g(n))_{n\in\N}$ is a quadratic progression, i.e. $D(D((g(n))_{n\in\N})) = (C')_{n\in\N}$ for some constant $C'\in\N$.
+        \item $(l_{g(n)})_{n\in\N}$ is an arithmetic progression, i.e. $D((l_{g(n)})_{n\in\N}) = (K)_{n\in\N}$ for some constant $K\in\N$.
+        \item $(g(n))_{n\in\N}$ is a quadratic progression, i.e. $D(D((g(n))_{n\in\N})) = (K')_{n\in\N}$ for some constant $K'\in\N$.
     \end{enumerate}
 \end{theorem}
 
@@ -252,17 +252,22 @@ The method for guessing formula tapes proceeds by first noticing that bouncers w
     ...
 \end{proof}
 
+% with formula tape $f=0^\infty 111(111)01111(11)\rhead{\text{C}}0^\infty$, which is another formula tape that decides the bouncer (different from the one given in Example~\ref{ex:bouncerTheory}),
+
 \begin{example}
-    Using the machine of Example~\ref{ex:bouncer88427177} used in the previous section, with formula tape $f=0^\infty 111(111)01111(11)\rhead{\text{C}}0^\infty$, which is another formula tape that decides the bouncer (different from the one given in Example~\ref{ex:bouncerTheory}), we have:
-
+    Using the machine of Example~\ref{ex:bouncer88427177} used in the previous section, we have:
     \begin{align*}
-        0^\infty \rhead{\text{A}} 0^\infty & \vdash^{*} 0^\infty 111\; 01111C> \rhead{\text{C}} 0^\infty                               & g(0) = 37,\; l_{37} = 11   \\
-                                           & \vdash^{*}   0^\infty111\; 111 \;01111 \;11\rhead{\text{C}}0^\infty                       & g(1) = 76,\; l_{76} = 16   \\
-                                           & \vdash^{*}   0^\infty111\; 111\;111\; 01111\; 11\; 11 \rhead{\text{C}}0^\infty            & g(2) = 121,\; l_{121} = 21 \\
-                                           & \vdash^{*}   0^\infty111\; 111\;111\; 111\; 01111\; 11\; 11\; 11 \rhead{\text{C}}0^\infty & g(3) = 172,\; l_{172} = 26 \\
+        0^\infty \rhead{\text{A}} 0^\infty & \vdash^{37} 0^\infty 111\; 01111C> \rhead{\text{C}} 0^\infty                               & g(0) = 37,\; l_{37} = 11   \\
+                                           & \vdash^{39}   0^\infty111\; 111 \;01111 \;11\rhead{\text{C}}0^\infty                       & g(1) = 76,\; l_{76} = 16   \\
+                                           & \vdash^{45}   0^\infty111\; 111\;111\; 01111\; 11\; 11 \rhead{\text{C}}0^\infty            & g(2) = 121,\; l_{121} = 21 \\
+                                           & \vdash^{51}   0^\infty111\; 111\;111\; 111\; 01111\; 11\; 11\; 11 \rhead{\text{C}}0^\infty & g(3) = 172,\; l_{172} = 26 \\
     \end{align*}
+    Each of these tapes are record-breaking and clearly an element of $\mathcal{L}(f)$. Then, in this finite sample, $l_{g(0)},...,l_{g(3)}$ with first difference $K=5$ and $g(0), ..., g(3)$ is in quadratic progression with second difference $K'=6$.
 
-    Each of this tape is  record-breaking and clearly an element of $\mathcal{L}(f)$. Then, in this finite sample, $l_{g(0)},...,l_{g(3)}$ is arithmetic since the first difference is $C=5$. Finally, in this finite sample $g(0), ..., g(3)$ is in quadratic progression since the second difference is $C'=6$, computed as $C' = (g(2)-g(1)) - (g(1)-g(0)) = (g(3)-g(2)) - (g(2)-g(1)) = 6$.
+    In general, we get:
+    $$0^\infty \rhead{\text{A}} 0^\infty  \vdash^{g(n)} 0^\infty 111\; (111)^n\; 01111 (11)^n\; \rhead{\text{C}} 0^\infty   \quad g(n) = 3n^2 + 36n + 37,\; l_{g(n)} = 5n+11$$
+
+    This general expression can be verified by simulating the formula tape $f=111(111)01111(11)\rhead{\text{C}}0^\infty$ until it reaches a special case, which solves the bouncer (Theorem~\ref{th:bouncers}).
 
 \end{example}
 
