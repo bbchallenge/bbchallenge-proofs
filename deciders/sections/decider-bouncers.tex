@@ -287,16 +287,17 @@ Bouncers will grow their tape such that we can extract a subsequence of record-b
     In general, we get:
     $$0^\infty \rhead{\text{A}} 0^\infty  \vdash^{g(n)} 0^\infty 111\; (111)^n\; 01111 (11)^n\; \rhead{\text{C}} 0^\infty   \quad g(n) = 3n^2 + 36n + 37,\; l_{g(n)} = 5n+11$$
 
-    This general expression can be verified by simulating the formula tape $f=111(111)01111(11)\rhead{\text{C}}0^\infty$ until it reaches a special case, which solves the bouncer (Theorem~\ref{th:bouncers}).
+    This general expression can be verified by simulating (and aligning) the formula tape $f=111(111)01111(11)\rhead{\text{C}}0^\infty$ until it reaches a special case, which solves the bouncer (Theorem~\ref{th:bouncers}).
 
 \end{example}
 
-\subsection{Deciding bouncers in practice: formula tape guessing}
+\subsection{Deciding bouncers in practice}
+
+In this section, we use the theory presented above in order to give a practical and efficient algorithm for deciding bouncers.
+
 \subsubsection{Formula tape fitting}
 
-
-
-Theorem~\ref{th:linquad} assures us that, in the sequence of successive tapes of a bouncer, we'll always find a subsequence where all repeaters' repetitions successively increase by one. Given such a subsequence, we are left with the task of fitting an appropriate formula tape. It turns out that only 3 tapes, with non-empty intermediate walls, are enough and that we can fit the formula tape efficiently using a greedy algorithm:
+Theorem~\ref{th:linquad} assures us that, in the sequence of successive tapes of a bouncer, we'll always find a subsequence where all repeaters' repetitions successively increase by one. Given such a subsequence, we are left with the task of fitting an appropriate formula tape. It turns out that only 3 successive tapes, with at least one repetition of each repeater in the first tape, are enough to fit a formula tape efficiently using a greedy algorithm:
 
 \begin{algorithm}
     \caption{Greedy formula tape fitting algorithm {\sc Fit-FormulaTape}}\label{alg:greedy-formula-tape-fitting}
@@ -335,7 +336,7 @@ Theorem~\ref{th:linquad} assures us that, in the sequence of successive tapes of
 \end{algorithm}
 
 \begin{theorem}[Greedy formula tape fitting]\label{th:greedy}
-    Let there be 3 words $t_0, t_1, t_2 \in \Sigma^*$, and an integer $m\in\N$ and $w_1, \dots w_{m+1} \in \Sigma^*$ such that $w_2,\dots, w_m$ are not empty and $r_1, \dots, r_m \in\Sigma^+$ such that:
+    Let there be 3 words $t_0, t_1, t_2 \in \Sigma^*$, and an integer $m\in\N$ and $w_1, \dots w_{m+1} \in \Sigma^*$ such that $w_2,\dots, w_m\in\Sigma^*$ and $r_1, \dots, r_m \in\Sigma^+$ such that:
     \begin{align*}
         t_0 & = w_1\; r_1\; \dots w_m\; r_m\; w_{m+1}               \\
         t_1 & = w_1\; r_1r_1\; \dots w_m\; r_m r_m\; w_{m+1}        \\
@@ -367,11 +368,85 @@ Theorem~\ref{th:linquad} assures us that, in the sequence of successive tapes of
         t''_2 & = 011\; 1\; 1\; 0
     \end{align*}
 
-    At this point, the greedy algorithm raises failure.
+    At this point, the greedy algorithm raises failure. However, starting from $t_0 = 1011\; 01011\; 1\; 0$ it will successfully fit $101101011(01011)1(1)0$ which is a special case of $1011(01011)(1)0$.
 
-    However, starting from $t_0 = 1011\; 01011\; 1\; 0$ it will successfully fit $101101011(01011)1(1)0$ which is a special case of $1011(01011)(1)0$.
-
-    Hence, the greedy algorithm does not always fit \textit{minimal} formula tapes. By adding backtracking, it can easily be transformed into a Dynamic Programming algorithm that will succeed starting from $t_0$ with no repeater occurrence and hence fit minimal formula tapes, at the cost of being less efficient (quadratic vs. linear time complexity).
-    Note that another approach to formula tape minimisation is to deduce a minimal formula tape from the solution outputted by the greedy algorithm, essentially by trying to merging walls into repeaters as much as possible, in linear time.
+    Hence, the greedy algorithm does not always fit \textit{minimal} formula tapes. By adding backtracking and memoization, it can easily be transformed into a Dynamic Programming algorithm that will succeed starting from smaller tapes, i.e.\ $t_0$ with no repeater occurrence, and hence fit minimal formula tapes, at the cost of being less efficient (quadratic vs. linear time complexity).
+    Note that another approach to formula tape minimisation is to deduce a minimal formula tape from the solution outputted by the greedy algorithm, essentially by removing occurrences of repeaters appearing in walls as much as possible, in linear time.
 
 \end{remark}
+
+\subsubsection{Bouncers decider}
+
+Using Theorem~\ref{th:bouncers}, Theorem~\ref{th:linquad} and Algorithm~\ref{alg:greedy-formula-tape-fitting} together gives a straightforward way to decide bouncers:
+
+\begin{enumerate}
+    \item Track record-breaking tapes with same head state and pointing-direction that grow linearly in quadratic time.
+    \item Run Algorithm~\ref{alg:greedy-formula-tape-fitting} on triples of headless tapes extracted from these record-breaking sequences, until a formula tape satisfying Theorem~\ref{th:bouncers} is found or some limits are met.
+
+
+\end{enumerate}
+
+
+If the machine is a bouncer, by Theorem~\ref{th:linquad}, we are assured, at some point, of being able to extract a suite of three tapes compliant with the hypotheses of Theorem~\ref{th:greedy} (at least one repetition of each repeater), and hence, to decide the bouncer.
+
+There are multiple strategies one can implement for enumerating record-breaking tape triples that are \textit{plausible}, i.e.\ that grow linearly in quadratic time. Here we propose a simple approach consisting in enumerating record-breaking tapes with same head in increasing length and for each, looking in the previous record-breaking tapes  for 3 other tapes (so, 4 tapes total) in linear length progression and quadratic time progression. We then run Algorithm~\ref{alg:greedy-formula-tape-fitting} on the last 3 tapes of these 4 tapes and, that way, the decider should find relatively early a triple where the first tape contains at least one of each repeater, as required by Theorem~\ref{th:greedy}.
+
+\begin{algorithm}
+    \caption{{\sc Decider-Bouncers}}\label{alg:decider-bouncers}
+    \begin{algorithmic}[1]
+
+        \Procedure{\textbf{bool} {\sc Decider-Bouncers}}{\textbf{TM} machine, \textbf{uint} step\_limit, \textbf{uint} macro\_step\_limit, \textbf{uint} max\_formula\_tapes}
+
+        \State \textbf{Map[TMHead,Vec[Tape]]} record\_breaking\_tapes = \textbf{get\_record\_breaking\_tapes}(machine, step\_limit)
+
+        \State \textbf{uint} num\_tested\_formula = 0
+        \For{\textbf{TMHead} head \textbf{in} record\_breaking\_tapes}
+        \For{\textbf{uint} i, \textbf{Tape} tape4 \textbf{in} record\_breaking\_tapes[head][4:].\textbf{enumerate}()}
+
+        \For{\textbf{Tape} tape3 \textbf{in} record\_breaking\_tapes[head][4:][:i]}
+        \State \textbf{uint} len\_diff = tape4.\textbf{len}() - tape3.\textbf{len}()
+        \State \textbf{uint} tape2\_len = tape3.\textbf{len}() - len\_diff
+        \State \textbf{Tape or None} tape\_2 = record\_breaking\_tapes[head][4:][:i].\textbf{binary\_search\_len}(tape2\_len)
+        \If{tape\_2 \textbf{is} None}
+        \State \textbf{continue}
+        \EndIf
+        \State
+        \State \textbf{uint} tape1\_len = tape2.\textbf{len}() - len\_diff
+        \State \textbf{Tape or None} tape\_1 = record\_breaking\_tapes[head][4:][:i].\textbf{binary\_search\_len}(tape1\_len)
+        \If{tape\_1 \textbf{is} None}
+        \State \textbf{continue}
+        \EndIf
+        \State
+        \If{\textbf{not} \textbf{is\_quadratic}([tape\_1.step,tape\_2.step,tape\_3.step,tape\_4.step])}
+        \State \textbf{continue}
+        \EndIf
+
+        \State
+
+        \State \textbf{try} \textbf{FormulaTape} f = {\sc Fit-FormulaTape}(0,0,(tape\_2,tape\_3,tape\_4))
+        \If{\textbf{Failure} was raised}
+        \State \textbf{continue}
+        \EndIf
+        \State
+        \If{f.\textbf{reaches\_special\_case}(macro\_step\_limit)}
+
+        \State \Return \textbf{true}
+
+        \EndIf
+
+        \State
+        \State num\_tested\_formula += 1
+
+        \State
+        \If{num\_tested\_formula == max\_formula\_tapes}
+        \State \Return \textbf{false}
+        \EndIf
+
+
+        \EndFor
+        \EndFor
+        \EndFor
+        \State \Return \textbf{false}
+        \EndProcedure
+    \end{algorithmic}
+\end{algorithm}
