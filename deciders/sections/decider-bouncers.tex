@@ -632,18 +632,18 @@ Here are the implementations of the decider that were realised:
 % Acknowledgements should point to djmati1111 and mateon1 implementations (pinned in Discord)
 \textbf{Verifiers.} Verifiers for Theorem~\ref{th:bouncers} -- i.e. programs that check that a given formula tape gives a valid nonhalting proof for a given bouncer -- have also been given as part of the above implementations. Mei's implementation provides a Coq implementation of the verifier. There is an ongoing effort for standardising bouncers certificates (and certificates in general) but the following are enough for practical verifiation: (1) formula tape (2) time step at which a tape of the formula tape is reached (2) number of macro steps needed to reach special case. Other useful information can be added such as the set of shift rules used by the formula tape simulation.
 
-\paragraph*{Results.} Using limits of 250,000 steps and 50,000 macro steps and 10 formula tapes, the method decides 29,799 machines out of the 32,632 remaining machines (91\%) after FAR (Section~\ref{sec:finite-automata-reduction}), in less than 3 seconds using mei's implementation\footnote{Only step limit is used in this implementation, macro step limit is deduced from step limit and there is no formula tapes limit.} and in approximatively 1 minute using cosmo's. Hence, after bouncers on a standard laptop, we have 29,799 machines left to be decided.
+\paragraph*{Results.} Using limits of 250,000 steps and 50,000 macro steps and 10 formula tapes, the method decides 29,799 machines out of the 32,632 remaining machines (91\%) after FAR (Section~\ref{sec:finite-automata-reduction}), in less than 3 seconds using mei's implementation\footnote{Only step limit is used in this implementation, macro step limit is deduced from step limit and there is no formula tapes limit.} and in approximatively 1 minute using cosmo's on a standard laptop. Hence, after bouncers, we have 29,799 machines left to be decided.
 
 \begin{figure}[h!]
     \centering
     \includegraphics[scale=0.35]{figures/bouncers/5608043.png}
-    \caption{\small 50,000-step space-time diagram of \url{https://bbchallenge.org/5608043}. Out of the 29,799 decided bouncers, this bouncer takes the most steps (141,509) to be detected and fits the biggest formula tape (378 0/1 symbols), using the method presented in this section.}
+    \caption{\small 50,000-step space-time diagram of \url{https://bbchallenge.org/5608043}. Out of the 29,799 decided bouncers, this bouncer takes the most steps (141,509) to be detected and fits the biggest formula tape (378 0/1 symbols), using the method presented in this section.}\label{fig:big-bounce}
 \end{figure}
 \vspace{-2.5ex}
 \paragraph*{Remarkable bouncers.} Out of the 29,799 bouncers that were decided using the method presented in this section, here are some remarkable facts:
 \begin{enumerate}
     \item Only two bouncers have 3 repeaters and that's the maximum: \url{https://bbchallenge.org/347505} and \url{https://bbchallenge.org/8131743}. Otherwise, 2132 bouncers have 2 repeaters and the rest has only 1.
-    \item\label{pt:big-formula-tape} The biggest fitted formula tapes by the algorithm (but note that the formulas is not necessarily minimal, see Remark~\ref{rk:minimal-formula-tapes}) have 378 symbols (summing walls and repeater symbols), there are two of them, such as for machine \url{https://bbchallenge.org/5608043}:
+    \item\label{pt:big-formula-tape} The biggest fitted formula tapes by the algorithm (but note that formulas are not necessarily minimal, see Remark~\ref{rk:minimal-formula-tapes}) have 378 symbols (summing walls and repeater symbols), there are two of them, such as for machine \url{https://bbchallenge.org/5608043}, see Figure~\ref{fig:big-bounce}:
           \begin{align*}
                & 0^\infty\lhead{\text{A}} 1000001110001110000001110000111011100111011100111000011100 0011101110011100001110
               \\ &1110011101110011100001110000111011100111000011100001110000111000011101110011101110011\\ &1011100111011100111011100111011100111011100111011100111011100111011100 (111011100111011\\
