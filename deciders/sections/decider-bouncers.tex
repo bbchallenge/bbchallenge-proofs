@@ -239,7 +239,7 @@ Bouncers will grow their tape such that we can extract a subsequence of record-b
     Let $M$ be a bouncer Turing machine, i.e.\ it satisfies Theorem~\ref{th:bouncers} for some formula tape. Call $(t_n)_{n\in\N}$ the sequence of tapes that it visits starting from $t_0 = 0^\infty \rhead{\text{A}} 0^\infty$. Call $l_n$ the length of $t_n$ and suppose that $\Lim{n\to\infty} l_n = +\infty$, i.e.\ $M$ is not a cycler. Then, there is an integer $m \geq 1$ and $w_1, \dots, w_{m+1} \in \Sigma^*$ and $r_1, \dots, r_{m} \in \Sigma^+$, and $g: \mathbb{N} \to \mathbb{N}$ with $g(n) \geq n$ for all $n\in\N$ that extracts a subsequence of $(t_n)_{n\in\N}$ such that:
 
     \begin{enumerate}
-        \item $f = w_1 (r_1) w_2 (r_2) \dots w_m (r_m) w_{m+1}$ is a formula tape that solves the bouncer according to Theorem~\ref{th:bouncers}.
+        \item There is a formula tape $f$ with head pointing at $0^\infty$ that solves the bouncer according to Theorem~\ref{th:bouncers} and with $\mathcal{S}(f) = w_1 (r_1) w_2 (r_2) \dots w_m (r_m) w_{m+1} $.
         \item All tapes $t_{g(n)}$ are record-breaking with the same head state and pointing-direction.
         \item $\mathcal{S}(t_{g(n)})=w_1 r_1^n w_2 r_2^n \dots w_m r_m^n w_{m+1}$ for all $n\in\N$.
 
@@ -290,7 +290,7 @@ Bouncers will grow their tape such that we can extract a subsequence of record-b
     This general expression can be verified by simulating (and aligning) the formula tape $f=111(111)01111(11)\rhead{\text{C}}0^\infty$ until it reaches a special case, which solves the bouncer (Theorem~\ref{th:bouncers}).
 
 \end{example}
-
+\newpage
 \subsection{Deciding bouncers in practice}
 
 In this section, we use the theory presented above in order to give a practical and efficient algorithm for deciding bouncers.
@@ -320,9 +320,9 @@ Theorem~\ref{th:linquad} assures us that, in the sequence of successive tapes of
         \EndIf
         \State
         \State
-        \textbf{uint} longest\_match\_size = \textbf{get\_longest\_match\_size}(t[1][i1:], t[2][i2:])
+        \textbf{uint} longest\_prefix\_size = \textbf{get\_longest\_prefix\_size}(t[1][i1:], t[2][i2:])
         \State
-        \For{l = longest\_match; k $\geq$ 1; k -= 1 }
+        \For{l = longest\_prefix\_size; k $\geq$ 1; k -= 1 }
 
         \If{i2+2*l $<$ t[2].\textbf{len}() \&\& t[2][i2:i2+l] == t[2][i2+l:i2+2*l] }
         \State \Return \textbf{FormulaTape}::\textbf{repeater}(t[2][i2:i2+l]).\textbf{concat}(\Call{{\sc Fit-FormulaTape}}{i0, k+l, t})
@@ -335,7 +335,9 @@ Theorem~\ref{th:linquad} assures us that, in the sequence of successive tapes of
     \end{algorithmic}
 \end{algorithm}
 
-\newpage
+\begin{remark}
+    In Algorithm~\ref{alg:greedy-formula-tape-fitting}, we assume that we are given a \textbf{FormulaTape} construct (see Equation~\eqref{math:formulaTapes}) and a function \textbf{get\_longest\_match\_size} which returns the size of the longest prefix of two words. Furthermore, for an array \texttt{a}, we use the notation \texttt{a[b:e]} to mean the slice of this array between indices \texttt{b} and \texttt{e}, excluding \texttt{e}.
+\end{remark}
 
 % \begin{lemma}\label{lem:greedy}
 %     Let there be 3 words $t_0, t_1, t_2 \in \Sigma^*$, and an integer $m\in\N$ and $w_1, w_2 \in \Sigma^*$ and $r \in\Sigma^+$ the longest word such that $t_0 = w_1\; r\; w_2$, and $t_1 = w_1\; rr\; w_2$ and $t_2 = w_1\; rrr\; w_2$, then we have:
@@ -371,7 +373,7 @@ Theorem~\ref{th:linquad} assures us that, in the sequence of successive tapes of
 % \end{proof}
 
 
-\begin{theorem}[Greedy formula tape fitting]\label{th:greedy}
+\begin{theorem}[Greedy formula tape fitting]\label{th:greedy-formula-tape-fitting}
     Let there be 3 words $t_0, t_1, t_2 \in \Sigma^*$, and an integer $m\in\N$ and $w_1, \dots w_{m+1} \in \Sigma^*$ and $r_1, \dots, r_m \in\Sigma^+$ the longest repeaters such that:
     \begin{align*}
         t_0 & = w_1\; r_1\; \dots w_m\; r_m\; w_{m+1}               \\
@@ -478,7 +480,7 @@ Theorem~\ref{th:linquad} assures us that, in the sequence of successive tapes of
 
 \end{proof}
 \begin{remark}[Minimal formula tapes]
-    While Algorithm~\ref{alg:greedy-formula-tape-fitting} is assured, by Theorem~\ref{th:greedy},  to fit a formula tape (if it exists) starting from $t_0$ containing at least one occurrence of each repeater, the algorithm can fail when $t_0$ has none. Here is an example trying to parse $1011(01011)(1)0$ starting from $t_0 = 10110$:
+    While Algorithm~\ref{alg:greedy-formula-tape-fitting} is assured, by Theorem~\ref{th:greedy-formula-tape-fitting},  to fit a formula tape (if it exists) starting from $t_0$ containing at least one occurrence of each repeater, the algorithm can fail when $t_0$ has none. Here is an example trying to parse $1011(01011)(1)0$ starting from $t_0 = 10110$:
     \begin{align*}
         t_0 & = 1011\; 0                         \\
         t_1 & = 1011\; 01011\; 1\; 0             \\
@@ -517,11 +519,36 @@ Using Theorem~\ref{th:bouncers}, Theorem~\ref{th:linquad} and Algorithm~\ref{alg
 \end{enumerate}
 
 
-If the machine is a bouncer, by Theorem~\ref{th:linquad}, we are assured, at some point, of being able to extract a suite of three tapes compliant with the hypotheses of Theorem~\ref{th:greedy} (at least one repetition of each repeater), and hence, to decide the bouncer.
+If the machine is a bouncer, by Theorem~\ref{th:linquad}, we are assured, at some point, of being able to extract a suite of three tapes compliant with the hypotheses of Theorem~\ref{th:greedy-formula-tape-fitting} (at least one repetition of each repeater), and hence, to decide the bouncer.
 
-There are multiple strategies one can implement for enumerating record-breaking tape triples that are \textit{plausible}, i.e.\ that grow linearly in quadratic time. Here we propose a simple approach consisting in enumerating record-breaking tapes with same head in increasing length and for each, looking in the previous record-breaking tapes  for 3 other tapes (so, 4 tapes total) in linear length progression and quadratic time progression. We then run Algorithm~\ref{alg:greedy-formula-tape-fitting} on the last 3 tapes of these 4 tapes and, that way, the decider should find relatively early a triple where the first tape contains at least one of each repeater, as required by Theorem~\ref{th:greedy}.
+There are multiple strategies one can implement for enumerating record-breaking tape triples that are \textit{plausible}, i.e.\ that grow linearly in quadratic time. Here we propose a simple approach consisting in enumerating record-breaking tapes with same head in increasing length and for each, looking in the previous record-breaking tapes  for 3 other tapes (so, 4 tapes total) in linear length progression and quadratic time progression. We then run Algorithm~\ref{alg:greedy-formula-tape-fitting} on the last 3 tapes of these 4 tapes and, that way, the decider should find relatively early a triple where the first tape contains at least one of each repeater, as required by Theorem~\ref{th:greedy-formula-tape-fitting}.
 
-\begin{algorithm}
+This strategy is implemented in Algorithm~\ref{alg:decider-bouncers}, where we assume that we are given: (1) a \textbf{get\_record breaking\_tapes} routine which returns the record-breaking tapes for each tape head $h\in\Delta$ (i.e.\ tape head state and pointing-direction), in increasing length (2) a \textbf{binary\_search\_len} routine which finds by binary search a tape of a given length, or returns \textbf{None} if it does not exist and (3) a \textbf{reaches\_special\_case} routine on formula tapes which returns \textbf{true} if successive simulation and alignment of the formula tape, as described in Theorem~\ref{th:bouncers}, reaches a special case in a given amount of macro steps, where a macro step consists in either performing a usual step or a shift rule step.
+
+\begin{theorem}[Deciding bouncers]
+    Let $M$ be a bouncer Turing machine in the sense of Theorem~\ref{th:bouncers}. Then, there exists a step limit $s\in\N$, a macro step limit $m\in\N$ and a formula tape testing limit $l$ such that Algorithm~\ref{alg:decider-bouncers}, {\sc Decider-Bouncers}($M$,$s$,$m$,$l$) outputs \textbf{true}.
+\end{theorem}
+\begin{proof}
+
+    Algorithm~\ref{alg:decider-bouncers} enumerates all record-breaking tapes triple that grow linearly in quadratic time. If $s$ is large enough, by Theorem~\ref{th:linquad}, it will, given a large enough formula tape testing limit $l$, eventually meet a triple of the form:
+    \begin{align*}
+        t_0 & = w_1\; r_1\; \dots w_m\; r_m\; w_{m+1}               \\
+        t_1 & = w_1\; r_1r_1\; \dots w_m\; r_m r_m\; w_{m+1}        \\
+        t_2 & = w_1\; r_1 r_1 r_1 \dots w_m\; r_m r_m r_m\; w_{m+1}
+    \end{align*}
+
+    Such that tapes of this triple are instances of a formula tape $f$ with headless form
+
+    $\mathcal{S}(f) = w_1 (r_1) w_2 (r_2) \dots w_m (r_m) w_{m+1} $ that solves the bouncer according to Theorem~\ref{th:bouncers}. Algorithm~\ref{alg:decider-bouncers}, line 21, will call Algorithm~\ref{alg:greedy-formula-tape-fitting} on this triple which will, by Theorem~\ref{th:greedy-formula-tape-fitting}, return $\mathcal{S}(\mathcal{A}(\tilde{f}))$ with $\tilde{f}=  w_1 r_1(r_1) w_2 r_2(r_2) \dots w_m r_m(r_m) w_{m+1}$, which is a special case of $f$, hence that will also solve the bouncer when calling \textbf{reaches\_special\_case} in Algorithm~\ref{alg:decider-bouncers}, line 25, given that we give a large enough macro step limit $m$.
+\end{proof}
+
+
+
+
+
+
+
+\begin{algorithm}[h!]
     \caption{{\sc Decider-Bouncers}}\label{alg:decider-bouncers}
     \begin{algorithmic}[1]
 
