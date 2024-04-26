@@ -336,7 +336,7 @@ Theorem~\ref{th:linquad} assures us that, in the sequence of successive tapes of
 \end{algorithm}
 
 \begin{remark}
-    In Algorithm~\ref{alg:greedy-formula-tape-fitting}, we assume that we are given a \textbf{FormulaTape} construct (see Equation~\eqref{math:formulaTapes}) and a function \textbf{get\_longest\_match\_size} which returns the size of the longest prefix of two words. Furthermore, for an array \texttt{a}, we use the notation \texttt{a[b:e]} to mean the slice of this array between indices \texttt{b} and \texttt{e}, excluding \texttt{e}.
+    In Algorithm~\ref{alg:greedy-formula-tape-fitting}, we assume that we are given a \textbf{FormulaTape} construct (see Equation~\eqref{math:formulaTapes}) that we use for headless formula tapes and a function \textbf{get\_longest\_match\_size} which returns the size of the longest prefix of two words. Furthermore, for an array \texttt{a}, we use the notation \texttt{a[b:e]} to mean the slice of this array between indices \texttt{b} and \texttt{e}, excluding \texttt{e}.
 \end{remark}
 
 % \begin{lemma}\label{lem:greedy}
@@ -523,7 +523,7 @@ If the machine is a bouncer, by Theorem~\ref{th:linquad}, we are assured, at som
 
 There are multiple strategies one can implement for enumerating record-breaking tape triples that are \textit{plausible}, i.e.\ that grow linearly in quadratic time. Here we propose a simple approach consisting in enumerating record-breaking tapes with same head in increasing length and for each, looking in the previous record-breaking tapes  for 3 other tapes (so, 4 tapes total) in linear length progression and quadratic time progression. We then run Algorithm~\ref{alg:greedy-formula-tape-fitting} on the last 3 tapes of these 4 tapes and, that way, the decider should find relatively early a triple where the first tape contains at least one of each repeater, as required by Theorem~\ref{th:greedy-formula-tape-fitting}.
 
-This strategy is implemented in Algorithm~\ref{alg:decider-bouncers}, where we assume that we are given: (1) a \textbf{get\_record breaking\_tapes} routine which returns the record-breaking tapes for each tape head $h\in\Delta$ (i.e.\ tape head state and pointing-direction), in increasing length (2) a \textbf{binary\_search\_len} routine which finds by binary search a tape of a given length, or returns \textbf{None} if it does not exist and (3) a \textbf{reaches\_special\_case} routine on formula tapes which returns \textbf{true} if successive simulation and alignment of the formula tape, as described in Theorem~\ref{th:bouncers}, reaches a special case in a given amount of macro steps, where a macro step consists in either performing a usual step or a shift rule step.
+This strategy is implemented in Algorithm~\ref{alg:decider-bouncers}, where we assume that we are given: (1) a \textbf{get\_record breaking\_tapes} routine which returns the record-breaking tapes for each tape head $h\in\Delta$ (i.e.\ tape head state and pointing-direction), in increasing length (2) a \textbf{binary\_search\_len} routine which finds by binary search a tape of a given length, or returns \textbf{None} if it does not exist and (3) a \textbf{is\_quadratic} which tests that a sequence of integers is in quadratic progression (for instance by computing second differences and testing they are constant), (4) routines \textbf{headless} and \textbf{attach\_head} to manipulate tapes/formula tapes with and without head, and (5) a \textbf{reaches\_special\_case} routine on formula tapes which returns \textbf{true} if successive simulation and alignment of the formula tape, as described in Theorem~\ref{th:bouncers}, reaches a special case in a given amount of macro steps, where a macro step consists in either performing a usual step or a shift rule step.
 
 \begin{theorem}[Deciding bouncers]
     Let $M$ be a bouncer Turing machine in the sense of Theorem~\ref{th:bouncers}. Then, there exists a step limit $s\in\N$, a macro step limit $m\in\N$ and a formula tape testing limit $l$ such that Algorithm~\ref{alg:decider-bouncers}, {\sc Decider-Bouncers}($M$,$s$,$m$,$l$) outputs \textbf{true}.
@@ -580,11 +580,12 @@ This strategy is implemented in Algorithm~\ref{alg:decider-bouncers}, where we a
 
         \State
 
-        \State \textbf{try} \textbf{FormulaTape} f = {\sc Fit-FormulaTape}(0,0,(tape\_2,tape\_3,tape\_4))
+        \State \textbf{try} \textbf{FormulaTape} f = {\sc Fit-FormulaTape}(0,0,(tape\_2,tape\_3,tape\_4).\textbf{headless}())
         \If{\textbf{Failure} was raised}
         \State \textbf{continue}
         \EndIf
         \State
+        \State f.\textbf{attach\_head}(tape\_1.head)
         \If{f.\textbf{reaches\_special\_case}(macro\_step\_limit)}
 
         \State \Return \textbf{true}
