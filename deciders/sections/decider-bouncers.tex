@@ -337,34 +337,52 @@ Theorem~\ref{th:linquad} assures us that, in the sequence of successive tapes of
 
 \newpage
 
-\begin{lemma}\label{lem:greedy}
-    Let there be 3 words $t_0, t_1, t_2 \in \Sigma^*$, and an integer $m\in\N$ and $w_1, w_2 \in \Sigma^*$ and $r \in\Sigma^+$ the longest word such that $t_0 = w_1\; r\; w_2$, and $t_1 = w_1\; rr\; w_2$ and $t_2 = w_1\; rrr\; w_2$, then we have:
-    \setlength{\columnsep}{-6.5cm}
-    \begin{multicols}{3}
-        \noindent
-        \begin{align*}
-            t_0 & = w_1\; r\; w_2   \\
-            t_1 & = w_1\; rr\; w_2  \\
-            t_2 & = w_1\; rrr\; w_2 \\
-            f   & = \varnothing
-        \end{align*}
-        \begin{align*}
-             &                                                                   \\
-            \to_{\text{Algorithm~\ref{alg:greedy-formula-tape-fitting} goes to}} \\
-             &                                                                   \\
-             &
-        \end{align*}
-        \begin{align*}
-            t_0 & = \varnothing              \\
-            t_1 & = \varnothing              \\
-            t_2 & = \varnothing              \\
-            f   & = \mathcal{A}(w_1r(r) w_2)
-        \end{align*}
-    \end{multicols}
-    Meaning that Algorithm~\ref{alg:greedy-formula-tape-fitting} function call {\sc Fit-FormulaTape}(0,0,$(t_0,t_1,t_2)$) does not raise failure and returns the right-aligned headless formula tape $\mathcal{A}(w_1r(r) w_2)$.
-\end{lemma}
-\begin{proof}
+% \begin{lemma}\label{lem:greedy}
+%     Let there be 3 words $t_0, t_1, t_2 \in \Sigma^*$, and an integer $m\in\N$ and $w_1, w_2 \in \Sigma^*$ and $r \in\Sigma^+$ the longest word such that $t_0 = w_1\; r\; w_2$, and $t_1 = w_1\; rr\; w_2$ and $t_2 = w_1\; rrr\; w_2$, then we have:
+%     \setlength{\columnsep}{-6.5cm}
+%     \begin{multicols}{3}
+%         \noindent
+%         \begin{align*}
+%             t_0 & = w_1\; r\; w_2   \\
+%             t_1 & = w_1\; rr\; w_2  \\
+%             t_2 & = w_1\; rrr\; w_2 \\
+%             f   & = \varnothing
+%         \end{align*}
+%         \begin{align*}
+%              &                                                                   \\
+%             \to_{\text{Algorithm~\ref{alg:greedy-formula-tape-fitting} goes to}} \\
+%              &                                                                   \\
+%              &
+%         \end{align*}
+%         \begin{align*}
+%             t_0 & = \varnothing              \\
+%             t_1 & = \varnothing              \\
+%             t_2 & = \varnothing              \\
+%             f   & = \mathcal{A}(w_1r(r) w_2)
+%         \end{align*}
+%     \end{multicols}
+%     Meaning that Algorithm~\ref{alg:greedy-formula-tape-fitting} function call {\sc Fit-FormulaTape}(0,0,$(t_0,t_1,t_2)$) does not raise failure and returns the right-aligned headless formula tape $\mathcal{A}(w_1r(r) w_2)$.
+% \end{lemma}
+% \begin{proof}
 
+
+
+
+% \end{proof}
+
+
+\begin{theorem}[Greedy formula tape fitting]\label{th:greedy}
+    Let there be 3 words $t_0, t_1, t_2 \in \Sigma^*$, and an integer $m\in\N$ and $w_1, \dots w_{m+1} \in \Sigma^*$ and $r_1, \dots, r_m \in\Sigma^+$ the longest repeaters such that:
+    \begin{align*}
+        t_0 & = w_1\; r_1\; \dots w_m\; r_m\; w_{m+1}               \\
+        t_1 & = w_1\; r_1r_1\; \dots w_m\; r_m r_m\; w_{m+1}        \\
+        t_2 & = w_1\; r_1 r_1 r_1 \dots w_m\; r_m r_m r_m\; w_{m+1}
+    \end{align*}
+    Then Algorithm~\ref{alg:greedy-formula-tape-fitting} ran on {\sc Fit-FormulaTape}(0,0,$(t_0,t_1,t_2)$) does not raise failure and returns the right-aligned headless formula tape $\mathcal{A}(w_1 r_1 (r_1) \dots w_m r_m (r_m) w_{m+1})$.
+
+\end{theorem}
+\begin{proof}
+    Let's first prove the case $m=1$ and write $r_1 = r$.
     Notation: if a word $w\in\Sigma^*$ is not empty we use the notation $w[0]$ to mean the first symbol of $w$. Using the case of Algorithm~\ref{alg:greedy-formula-tape-fitting}, line 10, we get:
     \setlength{\columnsep}{-7.5cm}
     \begin{multicols}{3}
@@ -372,24 +390,19 @@ Theorem~\ref{th:linquad} assures us that, in the sequence of successive tapes of
         \begin{align*}
             t_0 & = w_1\; r\;  w_2     \\
             t_1 & = w_1\; rr\;  w_2    \\
-            t_2 & = w_1\; r r r\;  w_2 \\
-            f   & = \varnothing
+            t_2 & = w_1\; r r r\;  w_2
         \end{align*}
         \begin{align*}
-             &                                                                   \\
-            \to_{\text{Algorithm~\ref{alg:greedy-formula-tape-fitting} goes to}} \\
-             &                                                                   \\
-             &
+             & \\
+            \to_{\text{Algorithm~\ref{alg:greedy-formula-tape-fitting} goes to}}
         \end{align*}
         \begin{align*}
             t_0 & = w_2        \\
             t_1 & = r\;  w_2   \\
-            t_2 & = r r\;  w_2 \\
-            f   & = w_1r
+            t_2 & = r r\;  w_2
         \end{align*}
     \end{multicols}
-
-    From there, we have 3 cases (1) if $w_2 = \varnothing$ then the greedy algorithm returns $f = w_1 r$ as needed, (2) if $w_2[0] \neq r[0]$ ($r$ is not empty by hypothesis), then the greedy algorithm returns $f = w_1 r (r) w_2$ which is right-aligned (because $w_2[0] \neq r[0]$), as needed and (3) if $w_2[0] = r[0]$ then, call $w_2 = a w_2'$ and $r = ar'$ with $|a| > 0$ and  $w_2'[0] \neq r'[0]$ if they are both nonempty, the system rewrites as:
+    From there, we have three cases (1) if $w_2 = \varnothing$ then the greedy algorithm returns $f = w_1 r$ as needed, (2) if $w_2[0] \neq r[0]$ ($r$ is not empty by hypothesis), then the greedy algorithm returns $f = w_1 r (r) w_2$ which is right-aligned (because $w_2[0] \neq r[0]$), as needed and (3) if $w_2[0] = r[0]$ then, call $w_2 = a w_2'$ and $r = ar'$ with $|a| > 0$ and  $w_2'[0] \neq r'[0]$ if they are both nonempty, the system rewrites as:
 
     \setlength{\columnsep}{-7.5cm}
     \begin{multicols}{3}
@@ -397,20 +410,17 @@ Theorem~\ref{th:linquad} assures us that, in the sequence of successive tapes of
         \begin{align*}
             t_0 & = a w_2'            \\
             t_1 & = ar'\;  a w_2'     \\
-            t_2 & = ar' ar'\;  a w_2' \\
-            f   & = w_1 ar'
+            t_2 & = ar' ar'\;  a w_2'
         \end{align*}
         \begin{align*}
              &                                                                   \\
             \to_{\text{Algorithm~\ref{alg:greedy-formula-tape-fitting} goes to}} \\
-             &                                                                   \\
              &
         \end{align*}
         \begin{align*}
             t_0 & = w_2'             \\
             t_1 & = r'\;  a w_2'     \\
-            t_2 & = r' ar'\;  a w_2' \\
-            f   & = w_1 ar' a
+            t_2 & = r' ar'\;  a w_2'
         \end{align*}
     \end{multicols}
 
@@ -419,70 +429,45 @@ Theorem~\ref{th:linquad} assures us that, in the sequence of successive tapes of
     Now, if $r'$ is nonempty, we are exactly in the previous case $(w_2,rw_2,rrw_2)$ before the rewrite (by assimilating  $w_2'$ to $w_2$ and $ar'$ to $r$) except that case (3) cannot happen since we've chosen $w_2'$ and $r'$ such that $w_2'[0] \neq r'[0]$ if they are both nonempty. Hence, the outputted formula is $f = w_1 a r' a (r' a) w_2' = w_1 r a (r' a) w_2'$  which is the right-aligned version of $w_1r(r)w_2$ (because $w_2'[0] \neq r_1'[0]$, if both nonempty), as needed.
 
     If $r'$ is empty, we have $r = a$ and, going back to the initial tapes we had:
-
-
     \setlength{\columnsep}{-7.5cm}
     \begin{multicols}{3}
         \noindent
         \begin{align*}
             t_0 & = w_1\; r\;  r w_2'     \\
             t_1 & = w_1\; rr\;  r w_2'    \\
-            t_2 & = w_1\; r r r\;  r w_2' \\
+            t_2 & = w_1\; r r r\;  r w_2'
         \end{align*}
         \begin{align*}
              & \\
             =  \\
-             & \\
-             &
         \end{align*}
         \begin{align*}
             t_0 & = w_1\; \tilde{r}\;  w_2'                  \\
             t_1 & = w_1\; \tilde{r}\tilde{r}\;w_2'           \\
-            t_2 & = w_1\; \tilde{r}\tilde{r}\tilde{r}\; w_2' \\
+            t_2 & = w_1\; \tilde{r}\tilde{r}\tilde{r}\; w_2'
         \end{align*}
     \end{multicols}
 
-    With $\tilde{r} = rr$, which is in contradiction with the hypothesis that $r$ was the longest word allowing to write the system as it. Hence, $r'$ is never empty and we have the result.
+    With $\tilde{r} = rr$, $|\tilde{r}| > |r|$, which is in contradiction with the hypothesis that $r$ was the longest word allowing to write the system as it. This justifies why prefixes are enumerated from longest match in Algorithm~\ref{alg:greedy-formula-tape-fitting}, line 16. Hence, $r'$ is never empty, and we have the result for $m=1$.
 
-
-
-\end{proof}
-
-
-\begin{theorem}[Greedy formula tape fitting]\label{th:greedy}
-    Let there be 3 words $t_0, t_1, t_2 \in \Sigma^*$, and an integer $m\in\N$ and $w_1, \dots w_{m+1} \in \Sigma^*$ and $r_1, \dots, r_m \in\Sigma^+$ such that:
-    \begin{align*}
-        t_0 & = w_1\; r_1\; \dots w_m\; r_m\; w_{m+1}               \\
-        t_1 & = w_1\; r_1r_1\; \dots w_m\; r_m r_m\; w_{m+1}        \\
-        t_2 & = w_1\; r_1 r_1 r_1 \dots w_m\; r_m r_m r_m\; w_{m+1}
-    \end{align*}
-    Then Algorithm~\ref{alg:greedy-formula-tape-fitting} ran on {\sc Fit-FormulaTape}(0,0,$(t_0,t_1,t_2)$) does not raise failure and returns the headless formula tape $\mathcal{S}(\mathcal{A}(f))$ with $\mathcal{S}(f) = w_1 r_1 (r_1) \dots w_m r_m (r_m) w_{m+1}$.
-
-\end{theorem}
-\begin{proof}
-
-
-    Using Lemma~\ref{lem:greedy}, we know that there is a right-aligned formula tape $f'$ such that:
+    In the general case, using the case $m=1$ we have:
     \setlength{\columnsep}{-1.9cm}
     \begin{multicols}{3}
         \noindent
         \begin{align*}
             t_0 & = w_1\; r_1\; w_2 r_2\; \dots w_m\; r_m\; w_{m+1}                         \\
             t_1 & = w_1\; r_1r_1\; w_2 r_2 r_2\; \dots w_m\; r_m r_m\; w_{m+1}              \\
-            t_2 & = w_1\; r_1 r_1 r_1\; w_2 r_2 r_2 r_2\; \dots w_m\; r_m r_m r_m\; w_{m+1} \\
-            f   & = \varnothing
+            t_2 & = w_1\; r_1 r_1 r_1\; w_2 r_2 r_2 r_2\; \dots w_m\; r_m r_m r_m\; w_{m+1}
         \end{align*}
         \begin{align*}
-             &                            \\
-            \to_{\text{greedily goes to}} \\
-             &                            \\
+             &                                                                   \\
+            \to_{\text{Algorithm~\ref{alg:greedy-formula-tape-fitting} goes to}} \\
              &
         \end{align*}
         \begin{align*}
             t_0 & = r_2\; \dots w_m\; r_m\; w_{m+1}                 \\
             t_1 & = r_2 r_2\; \dots w_m\; r_m r_m\; w_{m+1}         \\
-            t_2 & = r_2 r_2 r_2\; \dots w_m\; r_m r_m r_m\; w_{m+1} \\
-            f   & = f'
+            t_2 & = r_2 r_2 r_2\; \dots w_m\; r_m r_m r_m\; w_{m+1}
         \end{align*}
     \end{multicols}
     From there, we get the theorem by induction.
