@@ -9,13 +9,13 @@ Others have contributed to this method by producing alternative implementations 
 \begin{figure}[h!]
     \centering
     \includegraphics*[width=0.9\textwidth]{figures/bouncers/bouncers.pdf}
-    \caption{Space-time diagrams (10,000 steps) of several \texttt{bbchallenge} \textit{bouncers}: (a) simple bouncer bouncing back and forth between expanding tape extremeties while writing 1s (b) bouncer with more complex alternating \textit{repeaters} patterns left and right of the origin (c) unilateral bouncer with a complex \textit{wall} pattern at the origin (d) unilateral bouncer, main example used throughout this section (e) bouncer entering a repetitive bouncing pattern after $\sim$6,000 steps (bottom half of the image).}\label{fig:bouncers}
+    \caption{Space-time diagrams (10,000 steps) of several \texttt{bbchallenge} \textit{bouncers}: (a) simple bouncer bouncing back and forth between expanding tape extremeties while writing 1s (b) bouncer with more complex alternating \textit{repeater} patterns left and right of the origin (c) unilateral bouncer with a complex \textit{wall} pattern at the origin (d) unilateral bouncer, main example used throughout this section (e) bouncer entering a repetitive bouncing pattern after $\sim$6,000 steps (bottom half of the image).}\label{fig:bouncers}
 \end{figure}
 
 \subsection{Characterising bouncers}
 
 Intuitively, a \emph{bouncer} is a Turing machine that populates a tape with
-linearly-expanding patterns, called \textit{repeaters}, possibly separated or enclosed by fixed patterns called \textit{walls}. This intuitive definition corresponds to a wide range of behaviors, from simply bouncing back and forth between the tape's expanding extremities, Figure~\ref{fig:bouncers}~(a), to more complex bouncers that exhibit intricate \textit{repeaters} or \textit{wall} patterns, Figure~\ref{fig:bouncers}~(b)-(d), and that possibly start \textit{bouncing} repetitively only after a certain number of steps, Figure~\ref{fig:bouncers}~(e). What we call bouncers is a generalisation of the various classes of ``Christmas trees'' used to solve $BB(4)$ \cite{Brady83}.
+linearly-expanding patterns, called \textit{repeaters}, possibly separated or enclosed by fixed patterns called \textit{walls}. This intuitive definition corresponds to a wide range of behaviors, from simply bouncing back and forth between the tape's expanding extremities, Figure~\ref{fig:bouncers}~(a), to complex traversal of \textit{repeater} and \textit{wall} patterns, Figure~\ref{fig:bouncers}~(b)-(d), and possibly a delayed onset of the \textit{bouncing} pattern, Figure~\ref{fig:bouncers}~(e). What we call bouncers is a generalisation of the various classes of ``Christmas trees'' used to solve $BB(4)$ \cite{Brady83}.
 
 The goal of this section is to formally characterise bouncers and show that they do not halt, see Theorem~\ref{th:bouncers}.
 
@@ -23,7 +23,7 @@ The goal of this section is to formally characterise bouncers and show that they
 
 We build on the concept of directional Turing machine introduced in Section~\ref{sec:conventions}. Directional Turing machines are an equivalent formulation of Turing machine where the machine head lives in between the tape cells and can point to the left or to the right. We choose here to treat $0^\infty$ as a unique symbol (instead of an infinite collection of 0s) and write $\overline{\Sigma} = \{0^\infty\}\cup\Sigma$, with $\Sigma=\{0,1\}$. For each Turing machine with set of state $S$ we introduce 2$|S|$ new configuration symbols (i.e.\ symbols used to describe machine configurations and not read/write symbols) denoting the machine head in two possible orientations, namely $\Delta = \{\lhead s | s\in S\}\cup\{\rhead s| s \in S\}$.
 
-We define a \textit{tape}\footnote{Note that in the terminology of Section~\ref{sec:conventions}, the definition of a tape that we use here, where the head in part of the tape, corresponds to a (partial) TM configuration.} to be a finite word of the form $uhv$, where $u,v\in \overline{\Sigma}^*$ and $h\in\Delta$, moreover, $u$ and $v$ must have at most one occurrence of $0^\infty$ each, respectively as first symbol for $u$ or last symbol for $v$. We choose the initial tape to be $0^\infty \rhead{\text{A}} 0^\infty$. Now, we define tape rewrite rules which will be used to simulate a directional Turing machine which we fix from now on. Given two tapes $t$ and $t'$, a rewrite rule transforming $t$ into $t'$ will be denoted by $t\to t'$. Applying $\vdash$ successively $n\in\mathbb{N}$ times is noted $\vdash^n$. The transitive closure of $\vdash$ (i.e.\ applying $\vdash$ \textit{some} number of times) is noted $\vdash^*$.
+We define a \textit{tape}\footnote{Note that in the terminology of Section~\ref{sec:conventions}, the definition of a tape that we use here, where the head in part of the tape, corresponds to a (partial) TM configuration.} to be a finite word of the form $uhv$, where $u,v\in \overline{\Sigma}^*$ and $h\in\Delta$, moreover, $u$ and $v$ must have at most one occurrence of $0^\infty$ each, respectively as first symbol for $u$ or last symbol for $v$. We choose the initial tape to be $0^\infty \rhead{\text{A}} 0^\infty$. Now, we define tape rewrite rules which will be used to simulate a directional Turing machine which we fix from now on. Given two tapes $t$ and $t'$, $t\vdash t'$ will denote that a rewrite rule transforms $t$ into $t'$. Applying $\vdash$ successively $n\in\mathbb{N}$ times is written $\vdash^n$. The transitive closure of $\vdash$ (i.e.\ applying $\vdash$ \textit{some} number of times) is written $\vdash^*$.
 
 Suppose that for $s\in S, x\in \Sigma$ we have $\delta(s,x) = (s',d,x')$ where $s'\in S, d \in \{\text{L},\text{R}\}, x' \in \Sigma$ and $\delta$ the transition function of the machine, then we define the following tape rewrite rules:
 
@@ -87,7 +87,7 @@ Given a tape $t=uvw$ and a word $t'=uv'w$, with $u,w\in \overline{\Sigma}^*$, $v
 
 \subsubsection{Wall-repeater formula tapes}
 
-We want to formalise the above-stated intuition that bouncers expand a tape by repeating \textit{repeaters} patterns between fixed \textit{walls}, and then show that bouncers do not halt, Theorem~\ref{th:bouncers}. For this, we are going to express bouncers' tapes using regular expressions over the alphabet $\Delta \cup  \overline{\Sigma}$. Given $u\in\Sigma^*$, we abbreviate the regular expression $\{u\}^*$, which represents zero or more repetitions of the word $u$, as $(u)$. Also, we write $\Sigma^+ = \Sigma^* \setminus \{ \varnothing \}$. We define a \textit{wall-repeater formula tape} to be a regular expression of the form:
+We want to formalise the above-stated intuition that bouncers expand a tape by repeating \textit{repeater} patterns between fixed \textit{walls}, and then show that bouncers do not halt, Theorem~\ref{th:bouncers}. For this, we are going to express bouncers' tapes using regular expressions over the alphabet $\Delta \cup  \overline{\Sigma}$. Given $u\in\Sigma^*$, we abbreviate the regular expression $(u)^*$, which represents zero or more repetitions of the word $u$, as $(u)$. Also, we write $\Sigma^+ = \Sigma^* \setminus \{ \varnothing \}$. We define a \textit{wall-repeater formula tape} to be a regular expression of the form:
 
 \begin{align}\label{math:formulaTapes}w_1(r_1)w_2(r_2)\dots w_n(r_n) w_{n+1} h w'_1(r'_1)w'_2(r'_2)\dots w'_m(r'_m) w'_{m+1}\end{align}
 
@@ -100,7 +100,7 @@ if the following conditions are met:
      & w_1, w'_{m+1} \in  \overline{\Sigma}^*
 \end{align*}
 
-and, as in the definition of a tape, $w_1$ (resp. $w'_{m+1}$) either does not contain the symbol $0^\infty$ or it starts with it (resp. ends with it). Patterns $w_i, w'_j$ are called \textit{walls} and can be empty, while the \textit{repeaters}, $r_i, r'_j$ must be nonempty. Note that we allow $n=m=0$, hence a usual tape is also a wall-repeater formula tape. From now on, for short, we say \textit{formula tapes} to mean wall-repeater formula tapes.
+and, as in the definition of a tape, $w_1$ (resp. $w'_{m+1}$) either does not contain the symbol $0^\infty$ or it starts with it (resp. ends with it). Patterns $w_i, w'_j$ are called \textit{walls} and can be empty, while the \textit{repeaters}, $r_i, r'_j$ must be nonempty. Note that we allow $n=m=0$, hence a usual tape is also a wall-repeater formula tape. For the rest of this section, we abbreviate wall-repeater formula tapes as \textit{formula tapes}.
 
 Given a formula tape $f$ let $\mathcal{L}(f)$ denote the language described by $f$, i.e.\ the set of tapes that match it.
 % Given two formula tapes $f$ and $f'$ we will say that $f'$ is a \textit{special case} of $f$ if $\mathcal{L}(f') \subseteq \mathcal{L}(f)$. Note that it is equivalent to saying that $f'$ can be obtained from $f$ by replacing subwords of the form $(r), r\in\Sigma^*\setminus\{\varnothing\}$ by $r^n(r)r^m$ for some $n,m\geq 0$.
@@ -129,14 +129,14 @@ $$f = w_1(r_1)w_2(r_2)\dots w_n(r_n) w_{n+1} h w'_1(r'_1)w'_2(r'_2)\dots w'_m(r'
     \item (Shift rule) Two cases:
           \begin{enumerate}
 
-              \item Right shift rule. If $h=\;\rhead{s\in S}$ and $w'_1$ is empty, consider the set of shift rules $\mathcal{R} = \{ u \rhead{s}(r'_1) \to (\tilde{r})u\rhead{s} \; | \; \tilde{r}\in\Sigma^+,\; u\in\Sigma^* \text{ is a suffix of } w_{n+1}\}$. If $\mathcal{R}$ is not empty then apply the right shift rule of $\mathcal{R}$ with smallest $u$ (possibly empty), call the new formula $f'$, and we have $f \vdash f'$. If $\mathcal{R}$ is empty, $\vdash$ cannot be applied on $f$.
-              \item Left shift rule. If $h=\;\lhead{s\in S}$ and $w_{n+1}$ is empty, consider the set of shift rules $\mathcal{R} = \{ (r_{n})\lhead{s}u \to \;\lhead{s}u(\tilde{r}) \; | \; \tilde{r}\in\Sigma^+,\; u\in\Sigma^* \text{ is a prefix of } w'_{1}\}$. If $\mathcal{R}$ is not empty then apply the left shift rule of $\mathcal{R}$ with smallest $u$ (possibly empty), call the new formula $f'$, and we have $f \vdash f'$. If $\mathcal{R}$ is empty, $\vdash$ cannot be applied on $f$.
+              \item Right shift rule. If $h=\;\rhead{s\in S}$ and $w'_1$ is empty, consider the set of shift rules $\mathcal{R} = \{ u \rhead{s}(r'_1) \to (\tilde{r})u\rhead{s} \; | \; \tilde{r}\in\Sigma^+,\; u\in\Sigma^* \text{ is a suffix of } w_{n+1}\}$. If $\mathcal{R}$ is not empty then apply the right shift rule of $\mathcal{R}$ with smallest $u$ (possibly empty), call the new formula $f'$, and we have $f \vdash f'$. If $\mathcal{R}$ is empty, $\vdash$ cannot be applied to $f$.
+              \item Left shift rule. If $h=\;\lhead{s\in S}$ and $w_{n+1}$ is empty, consider the set of shift rules $\mathcal{R} = \{ (r_{n})\lhead{s}u \to \;\lhead{s}u(\tilde{r}) \; | \; \tilde{r}\in\Sigma^+,\; u\in\Sigma^* \text{ is a prefix of } w'_{1}\}$. If $\mathcal{R}$ is not empty then apply the left shift rule of $\mathcal{R}$ with smallest $u$ (possibly empty), call the new formula $f'$, and we have $f \vdash f'$. If $\mathcal{R}$ is empty, $\vdash$ cannot be applied to $f$.
 
           \end{enumerate}
 
 \end{enumerate}
 
-From the above definition of $\vdash$ on a formula tape $f$, it is clear that (i) for usual tapes our new definition of $\vdash$ coincides with the old one (ii) there is at most one formula tape $f'$ such that $f \vdash f'$ and (iii) the only cases where $\vdash$ is not defined on a formula tape are either, in the usual step case, if the machine halts or, in the shift rule case, if no shift rule applies. Moreover, we get the following result:
+From the above definition of $\vdash$ on a formula tape $f$, it is clear that (i) for usual tapes our new definition of $\vdash$ coincides with the old one, (ii) there is at most one formula tape $f'$ such that $f \vdash f'$, and (iii) the only cases where $\vdash$ is not defined on a formula tape are when the machine halts (usual step case) or no shift rule applies (shift rule case). Moreover, we get the following result:
 
 \begin{lemma}\label{lem:vdashFormulaTapes} Let $f$ and $f'$ be formula tapes with $f \vdash f'$. Then, for all $t \in \mathcal{L}(f)$, there exists some $t' \in \mathcal{L}(f')$ such that $t \vdash^* t'$.
 \end{lemma}
@@ -152,19 +152,19 @@ From the above definition of $\vdash$ on a formula tape $f$, it is clear that (i
 
 \end{example}
 
-\paragraph*{Aligning formula tapes.} One last tool that we need before characterising bouncers and proving that they do not halt (Theorem~\ref{th:bouncers}) is formula tape \textit{alignment} (Definition~\ref{def:alignment}): sometimes it is necessary to rewrite a formula tape in an equivalent, \textit{aligned} form in order for being able to apply shift rules.
+\paragraph*{Aligning formula tapes.} One last tool that we need before characterising bouncers and proving that they do not halt (Theorem~\ref{th:bouncers}) is formula tape \textit{alignment} (Definition~\ref{def:alignment}): sometimes it is necessary to rewrite a formula tape in an equivalent, \textit{aligned} form in order for any shift rules to apply.
 
 \begin{definition}[Alignment operator]\label{def:alignment}
     Take a formula tape, as given in~\eqref{math:formulaTapes}: $$f = w_1(r_1)w_2(r_2)\dots w_n(r_n) w_{n+1} h w'_1(r'_1)w'_2(r'_2)\dots w'_m(r'_m) w'_{m+1}$$
 
-    The alignment operator $f \mapsto \mathcal{A}(f)$ moves repeaters away from the head $h$ by repetitively applying any of the following rules until none can longer apply:
+    The alignment operator $f \mapsto \mathcal{A}(f)$ moves repeaters away from the head $h$ by repeatedly applying any of the following rules until none apply anymore:
     \begin{enumerate}
         \item Replace $(r'_{j})v$ with $v(r)$ in $f$, if $r'_j v = v r$ with $v$ a nonempty prefix of $w'_{j+1}$, $r\in\Sigma^+$, and $1 \leq j \leq m$.
 
         \item Replace $v(r_{i})$ with $(r)v$ in $f$, if $v r_i = r v$ with $v$ a nonempty suffix of $w_{i}$, $r\in\Sigma^+$, and $1 \leq i \leq n$.
     \end{enumerate}
 
-    Clearly, the order application of these rules does not matter, i.e.\ $\mathcal{A}$ is well-defined and, $\mathcal{A}(\mathcal{A}(f)) = \mathcal{A}(f)$.
+    Clearly, the order application of these rules does not matter, i.e.\ $\mathcal{A}$ is well-defined, and $\mathcal{A}(\mathcal{A}(f)) = \mathcal{A}(f)$.
 \end{definition}
 
 
@@ -178,7 +178,7 @@ From the above definition of $\vdash$ on a formula tape $f$, it is clear that (i
 
 \begin{example}\label{ex:alignment}
     Take $f=0^\infty(111)1111\rhead{\text{B}}(01)01010110^\infty$ for the machine given in Example~\ref{ex:bouncer88427177}. One can verify that no right shift rule applies to $f$ hence $\vdash$ does not apply to $f$. However, we have $ \mathcal{A}(f)=0^\infty(111)1111\rhead{B}010101(01)10^\infty$, $\mathcal{L}(\mathcal{A}(f)) = \mathcal{L}(f)$, and we can apply $\vdash$ to $ \mathcal{A}(f)$ by performing usual steps: $ \mathcal{A}(f) \vdash^{12} 0^\infty(111)1111110110 \rhead{D} (01)10^\infty$ and now the shift rule of Example~\ref{ex:shiftRules} can apply, giving $0^\infty(111)111111011(11)0 \rhead{\text{D}} 10^\infty$.
-    On other alignment example is $f=0^\infty 101(11)0 \rhead{\text{D}} 10 (100) 11 0^\infty$ for which $\mathcal{A}(f) = 0^\infty 10(11)10 \rhead{\text{D}} 101(001)10^\infty$.
+    Another alignment example is $f=0^\infty 101(11)0 \rhead{\text{D}} 10 (100) 11 0^\infty$ for which $\mathcal{A}(f) = 0^\infty 10(11)10 \rhead{\text{D}} 101(001)10^\infty$.
 \end{example}
 
 
@@ -186,12 +186,12 @@ From the above definition of $\vdash$ on a formula tape $f$, it is clear that (i
 
 
 \begin{remark}[Alignment never hurts]
-    Example~\ref{ex:alignment} shows that alignment (which preserves the set of recognised tapes) can allow to run a shift rule on $f'$ with $\mathcal{A}(f) \vdash^* f'$ when no shift rule was applicable directly on $f$. In fact, one can show that the alignment operator can only \textit{increase} the number of applicable shift rules: if a shift rule is applicable on $f$ then a shift rule applicable on $f'$ with $\mathcal{A}(f) \vdash^* f'$ can always be constructed.
+    Example~\ref{ex:alignment} shows that alignment (which preserves the set of recognised tapes) can allow to run a shift rule on $f'$ with $\mathcal{A}(f) \vdash^* f'$ when no shift rule was applicable directly to $f$. In fact, one can show that the alignment operator can only \textit{increase} the number of applicable shift rules: if a shift rule is applicable to $f$ then a shift rule applicable to $f'$ with $\mathcal{A}(f) \vdash^* f'$ can always be constructed.
 \end{remark}
 
 Given two formula tapes $f$ and $f'$ we will say that $f'$ is a \textit{special case} of $f$, if $\mathcal{A}(f')$ can be obtained from $\mathcal{A}(f)$ by replacying subwords of the form $(r)$ by $r^n(r)r^m$ for some $n,m\geq 0$ and $r\in\Sigma^+$. Note that because of alignment, $n=0$ (resp. $m=0$) if $(r)$ is to the left (resp. to the right) of the head. If $f$ is a special case of $f'$ then $\mathcal{L}(f) \subseteq \mathcal{L}(f)$, the converse is open but conjectured true\footnote{See \url{https://discuss.bbchallenge.org/t/186}.} (under additional assumptions).
 
-We finally get to the main result of this section, which characterises bouncers formally -- a bouncer is any machine on which Theorem~\ref{th:bouncers} applies:
+We finally get to the main result of this section, which characterises bouncers formally -- a bouncer is any machine to which Theorem~\ref{th:bouncers} applies:
 
 \begin{theorem}[Bouncers]\label{th:bouncers}
     Assume we are given some Turing machine and suppose there exists a tape $t$ and some wall-repeater formula tapes $f_0,\dots,f_n, n\geq 1$, such that $0^\infty \rhead{\text{A}} 0^\infty \vdash^* t$ where $t \in \mathcal{L}(f_0)$, and $\mathcal{A}(f_i) \vdash f_{i+1}$ for $i=0,\dots,n-1$. If $f_n$ is a special case of $f_0$, then the Turing machine does not halt.
@@ -232,7 +232,7 @@ We finally get to the main result of this section, which characterises bouncers 
 
 Theorem~\ref{th:bouncers} characterises bouncers but we lack a practical criterion for recognising a bouncer from its sequence of successive tapes starting from $0^\infty \rhead{\text{A}} 0^\infty$. We make a step in that direction by showing that if a bouncer is not a cycler (Section~\ref{sec:cyclers}), we can expect to see tapes of the form $w_1 r_1^n w_2 r_2^n \dots w_m r_m^n w_{m+1}$ for some $m\in\N$ and for all successive $n\in\mathbb{N}$ as a subsequence of the sequence of all tapes visited by the bouncer.
 
-We define \textit{record-breaking tapes} to be tapes where the head is pointing at $0^\infty$, i.e.\ tapes of the form $0^\infty u \rhead{s} 0^\infty$ or $0^\infty \lhead{s} u 0^\infty$ with $u\in\Sigma^*$. Give a tape $t$, we call $\mathcal{S}(t) \in \Sigma^*$ the \textit{headless} version of $t$ which is the tape without head and $0^\infty$ symbols. The \textit{length} of a tape $t$ is defined as the number of symbols in $\mathcal{S}(t)$. We also introduce headless formula tapes: $\mathcal{S}(f)$ is $f$ without head and $0^\infty$ symbols. Also, we extend the alignment operator $\mathcal{A}$ (Definition~\ref{def:alignment}) to headless formula tapes by performing right-alignment. We denote an infinite sequence $u_0, u_1, \dots u_n, \dots$ with $n\in\N$ by $(u)_{n\in\N}$. We denote the infinite constant integer sequence where all terms equal $K\in\mathbb{N}$ by $(K)_{n\in\mathbb{N}}$. We define the difference operator $D: \N^\N \to \N^\N$ such that $(v)_{n\in\N} = D((u)_{n\in\N})$ if and only if $v_n = u_{n+1}-u_{n}$ for all $n\in\N$.
+We define \textit{record-breaking tapes} to be tapes where the head is pointing at $0^\infty$, i.e.\ tapes of the form $0^\infty u \rhead{s} 0^\infty$ or $0^\infty \lhead{s} u 0^\infty$ with $u\in\Sigma^*$. Give a tape $t$, we call $\mathcal{S}(t) \in \Sigma^*$ the \textit{headless} version of $t$ which is the tape without head and $0^\infty$ symbols. The \textit{length} of a tape $t$ is defined as the number of symbols in $\mathcal{S}(t)$. We also introduce headless formula tapes: $\mathcal{S}(f)$ is $f$ without head and $0^\infty$ symbols. Also, we extend the alignment operator $\mathcal{A}$ (Definition~\ref{def:alignment}) to headless formula tapes by performing right-alignment. We denote an infinite sequence $u_0, u_1, \dots u_n, \dots$ with $n\in\N$ by $(u_n)_{n\in\N}$. We define the difference operator $D: \N^\N \to \N^\N$ via $D((u_n)_{n\in\N})=(u_{n+1}-u_{n})_{n\in\N}$.
 
 Bouncers will grow their tape such that we can extract a subsequence of record-breaking tapes of the form $w_1 r_1^n w_2 r_2^n \dots w_m r_m^n w_{m+1}$ with length in arithmetic progression and time steps in quadratic progression:
 
@@ -256,9 +256,9 @@ Bouncers will grow their tape such that we can extract a subsequence of record-b
 
     There is also $\tilde{f}_0 = \tilde{f}$, $\tilde{f}_1, \dots \tilde{f}_k$ with $k \in \N$ such that $\mathcal{A}(\tilde{f}_i) \vdash \tilde{f}_{i+1}$ for $0 \geq i < k$ and $\tilde{f}_k$ is a special case of $\tilde{f}_0$.
 
-    Because $\Lim{n\to\infty} l_n = +\infty$, there must be $0 \leq j < k$ such that the head of $\tilde{f}_{j}$ is pointing to $0^\infty$ (otherwise the tape would never grow). Hence, without loss of generality, by rotating the sequence of formula tapes, we can assume that the head of $\tilde{f}_{0}=\tilde{f}$ is pointing at $0^\infty$, so does the head of $\tilde{f}_k$, by special case. Furthermore, we can assume that each wall preceding a repeater in $\tilde{f}_k$ is bigger than its corresponding wall in $\tilde{f}_0$, otherwise the repeater is useless (it never grows) and can be merged into its preceding wall in both formula.
+    Because $\Lim{n\to\infty} l_n = +\infty$, there must be $0 \leq j < k$ such that the head of $\tilde{f}_{j}$ is pointing to $0^\infty$ (otherwise the tape would never grow). Hence, without loss of generality, by rotating the sequence of formula tapes, we can assume that the head of $\tilde{f}_{0}=\tilde{f}$ is pointing at $0^\infty$, so does the head of $\tilde{f}_k$, by special case. Furthermore, we can assume that each wall preceding a repeater in $\tilde{f}_k$ is bigger than its corresponding wall in $\tilde{f}_0$, otherwise the repeater is useless (it never grows) and can be merged into its preceding wall in both formulas.
 
-    Hence, from the above and because $\tilde{f}_k$ is a special case of $\tilde{f}_0$, renaming the walls and repeaters symbols we get:
+    Hence, from the above and because $\tilde{f}_k$ is a special case of $\tilde{f}_0$, renaming the walls' and repeaters' symbols we get:
     \begin{align*}
         \mathcal{A}(\mathcal{S}(\tilde{f}))   & = \tilde{w}_1(\tilde{r}_1)\tilde{w}_2(\tilde{r}_2)\dots \tilde{w}_n(\tilde{r}_n) \tilde{w}_{n+1}                                                    \\
         \mathcal{A}(\mathcal{S}(\tilde{f}_k)) & = \tilde{w}_1\tilde{r}_1^{m_1}(\tilde{r}_1)\tilde{w}_2\tilde{r}_2^{m_2}(\tilde{r}_2)\dots \tilde{w}_n\tilde{r}_2^{m_n}(\tilde{r}_n) \tilde{w}_{n+1}
@@ -405,7 +405,7 @@ Theorem~\ref{th:linquad} assures us that, in the sequence of successive tapes of
             t_2 & = r r\;  w_2
         \end{align*}
     \end{multicols}
-    From there, we have three cases (1) if $w_2 = \varnothing$ then the greedy algorithm returns $f = w_1 r$ as needed, (2) if $w_2[0] \neq r[0]$ ($r$ is not empty by hypothesis), then the greedy algorithm returns $f = w_1 r (r) w_2$ which is right-aligned (because $w_2[0] \neq r[0]$), as needed and (3) if $w_2[0] = r[0]$ then, call $w_2 = a w_2'$ and $r = ar'$ with $|a| > 0$ and  $w_2'[0] \neq r'[0]$ if they are both nonempty, the system rewrites as:
+    From there, we have three cases: (1) if $w_2 = \varnothing$ then the greedy algorithm returns $f = w_1 r$ as needed, (2) if $w_2[0] \neq r[0]$ ($r$ is not empty by hypothesis), then the greedy algorithm returns $f = w_1 r (r) w_2$ which is right-aligned (because $w_2[0] \neq r[0]$), as needed and (3) if $w_2[0] = r[0]$ then, call $w_2 = a w_2'$ and $r = ar'$ with $|a| > 0$ and  $w_2'[0] \neq r'[0]$ if they are both nonempty, the system rewrites as:
 
     \setlength{\columnsep}{-7.5cm}
     \begin{multicols}{3}
@@ -522,7 +522,7 @@ Using Theorem~\ref{th:bouncers}, Theorem~\ref{th:linquad} and Algorithm~\ref{alg
 
 If the machine is a bouncer, by Theorem~\ref{th:linquad}, we are assured, at some point, of being able to extract a suite of three tapes compliant with the hypotheses of Theorem~\ref{th:greedy-formula-tape-fitting} (at least one repetition of each repeater), and hence, to decide the bouncer.
 
-There are multiple strategies one can implement for enumerating record-breaking tape triples that are \textit{plausible}, i.e.\ that grow linearly in quadratic time. Here we propose a simple approach consisting in enumerating record-breaking tapes with same head in increasing length and for each, looking in the previous record-breaking tapes  for 3 other tapes (so, 4 tapes total) in linear length progression and quadratic time progression. We then run Algorithm~\ref{alg:greedy-formula-tape-fitting} on the last 3 tapes of these 4 tapes and, that way, the decider should find relatively early a triple where the first tape contains at least one of each repeater, as required by Theorem~\ref{th:greedy-formula-tape-fitting}.
+There are multiple strategies one can implement for enumerating record-breaking tape triples that are \textit{plausible}, i.e.\ that grow linearly in quadratic time. Here we propose a simple approach consisting of enumerating record-breaking tapes with same head in increasing length and for each, looking in the previous record-breaking tapes  for 3 other tapes (so, 4 tapes total) in linear length progression and quadratic time progression. We then run Algorithm~\ref{alg:greedy-formula-tape-fitting} on the last 3 tapes of these 4 tapes and, that way, the decider should find relatively early a triple where the first tape contains at least one of each repeater, as required by Theorem~\ref{th:greedy-formula-tape-fitting}.
 
 This strategy is implemented in Algorithm~\ref{alg:decider-bouncers}, where we assume that we are given: (1) a \textbf{get\_record breaking\_tapes} routine which returns the record-breaking tapes for each tape head $h\in\Delta$ (i.e.\ tape head state and pointing-direction), in increasing length (2) a \textbf{binary\_search\_len} routine which finds by binary search a tape of a given length, or returns \textbf{None} if it does not exist and (3) a \textbf{is\_quadratic} which tests that a sequence of integers is in quadratic progression (for instance by computing second differences and testing they are constant), (4) routines \textbf{headless} and \textbf{attach\_head} to manipulate tapes/formula tapes with and without head, and (5) a \textbf{reaches\_special\_case} routine on formula tapes which returns \textbf{true} if successive simulation and alignment of the formula tape, as described in Theorem~\ref{th:bouncers}, reaches a special case in a given amount of macro steps, where a macro step consists in either performing a usual step or a shift rule step.
 
@@ -619,7 +619,7 @@ Here are the implementations of the decider that were realised:
 \begin{enumerate}
     \item Tony Guilfoyle's C++ initial implementation (does not use the theory presented in this section): \url{https://github.com/TonyGuil/bbchallenge/tree/main/Bouncers}
     \item Iijil's Go implementation (does not use the theory presented in this section): \url{https://github.com/Iijil1/Bouncers}
-    \item savask's haskell implementation (basis to the theory presented in this section): \url{https://gist.github.com/savask/888aa5e058559c972413790c29d7ad72}
+    \item savask's Haskell implementation (basis of the theory presented in this section): \url{https://gist.github.com/savask/888aa5e058559c972413790c29d7ad72}
     \item mei's optimised Rust implementation, reproducing savask's: \url{https://github.com/meithecatte/busycoq/}. This implementation outputs certificates that are verified using Coq, more details about this approach will be given in future versions of this text.
     \item Tristan Stérin (cosmo)'s Rust implementation, reproducing savask's and mei's: \url{https://github.com/bbchallenge/bbchallenge-deciders/tree/main/decider-bouncers-reproduction}. This implementation follows this text to the letter, reproducing each concept and algorithm as presented here. It is less efficient than mei's.
 
