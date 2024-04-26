@@ -2,8 +2,8 @@
 
 \section{Bouncers}\label{sec:bouncers}
 
-\paragraph{Acknowledgement.}  Sincere thanks to Tony Guilfoyle who initially implemented a decider for bouncers\footnote{See: \url{https://github.com/TonyGuil/bbchallenge/tree/main/Bouncers}.}. Many thanks to savask who wrote the initial version of this section and was closely involved in building the theory presented here.
-Others have contributed to this method by producing alternative implementations (see Section~\ref{sec:bouncers-implem}) or discussing and writing the formal proof presented here: Iijil, mei, Tristan Stérin (cosmo).
+\paragraph{Acknowledgement.}  Sincere thanks to Tony Guilfoyle who initially implemented a decider for bouncers\footnote{See: \url{https://github.com/TonyGuil/bbchallenge/tree/main/Bouncers}.}.
+Others have contributed to this method by producing alternative implementations (see Section~\ref{sec:bouncers-implem}) or discussing and writing the formal proof presented here: savask, Iijil, mei, Tristan Stérin (cosmo).
 
 
 \begin{figure}[h!]
@@ -559,18 +559,19 @@ This strategy is implemented in Algorithm~\ref{alg:decider-bouncers}, where we a
 
         \State \textbf{uint} num\_tested\_formula = 0
         \For{\textbf{TMHead} head \textbf{in} record\_breaking\_tapes}
-        \For{\textbf{uint} i, \textbf{Tape} tape4 \textbf{in} record\_breaking\_tapes[head][4:].\textbf{enumerate}()}
-
-        \For{\textbf{Tape} tape3 \textbf{in} record\_breaking\_tapes[head][4:][:i]}
+        \For{\textbf{uint} i, \textbf{Tape} tape4 \textbf{in} record\_breaking\_tapes[head].\textbf{enumerate}()}
+        \State \textbf{if} i $<$ 3 \textbf{then continue}
+        \For{\textbf{uint} i, \textbf{Tape} tape3 \textbf{in} record\_breaking\_tapes[head][:i].\textbf{enumerate}()}
+        \State \textbf{if} j $<$ 2 \textbf{then continue}
         \State \textbf{uint} len\_diff = tape4.\textbf{len}() - tape3.\textbf{len}()
         \State \textbf{uint} tape2\_len = tape3.\textbf{len}() - len\_diff
-        \State \textbf{Tape or None} tape\_2 = record\_breaking\_tapes[head][4:][:i].\textbf{binary\_search\_len}(tape2\_len)
+        \State \textbf{Tape or None} tape\_2 = record\_breaking\_tapes[head][:i].\textbf{binary\_search\_len}(tape2\_len)
         \If{tape\_2 \textbf{is} None}
         \State \textbf{continue}
         \EndIf
         \State
         \State \textbf{uint} tape1\_len = tape2.\textbf{len}() - len\_diff
-        \State \textbf{Tape or None} tape\_1 = record\_breaking\_tapes[head][4:][:i].\textbf{binary\_search\_len}(tape1\_len)
+        \State \textbf{Tape or None} tape\_1 = record\_breaking\_tapes[head][:i].\textbf{binary\_search\_len}(tape1\_len)
         \If{tape\_1 \textbf{is} None}
         \State \textbf{continue}
         \EndIf
@@ -611,3 +612,24 @@ This strategy is implemented in Algorithm~\ref{alg:decider-bouncers}, where we a
 \end{algorithm}
 
 \subsection{Implementations and results}\label{sec:bouncers-implem}
+
+
+Here are the implementations of the decider that were realised:
+
+\begin{enumerate}
+    \item Tony Guilfoyle's C++ initial implementation (does not use the theory presented in this section): \url{https://github.com/TonyGuil/bbchallenge/tree/main/Bouncers}
+    \item Iijil's Go implementation (does not use the theory presented in this section): \url{https://github.com/Iijil1/Bouncers}
+    \item savask's haskell implementation (basis to the theory presented in this section): \url{https://gist.github.com/savask/888aa5e058559c972413790c29d7ad72}
+    \item mei's optimised Rust implementation, reproducing savask's: \url{https://github.com/meithecatte/busycoq/}. This implementation outputs certificates that are verified using Coq, more details about this approach will be given in future versions of this text.
+    \item Tristan Stérin (cosmo)'s Rust implementation, reproducing savask's and mei's: \url{https://github.com/bbchallenge/bbchallenge-deciders/tree/cosmo_bouncers_reproduction/decider-bouncers-reproduction}. This implementation follows this text to the letter, reproducing each concept and algorithm as presented here. It is less efficient than mei's.
+
+
+\end{enumerate}
+
+
+% MitM-DFA impl notes:
+% It uses Kissat\cite{Biere_2020} as its \textsc{SAT} solver.
+% Acknowledgements should point to djmati1111 and mateon1 implementations (pinned in Discord)
+\textbf{Verifiers.} Verifiers for Theorem~\ref{th:bouncers} -- i.e. programs that check that a given formula tape gives a valid nonhalting proof for a given bouncer -- have also been given as part of the above implementations. Mei's implementation provides a Coq implementation of the verifier. There is an ongoing effort for standardising bouncers certificates (and certificates in general) but the following are enough for practical verifiation: (1) formula tape (2) time step at which a tape of the formula tape is reached (2) number of macro steps needed to reach special case. Other useful information can be added such as the set of shift rules used by the formula tape simulation.
+
+\paragraph*{Results.} Using limits of 250,000 steps and 50,000 macro steps and 10 formula tapes, the method decides 29,799 machines out of the 32,632 remaining machines (91\%) after FAR (Section~\ref{sec:finite-automata-reduction}), in less than 3 seconds using mei's implementation\footnote{Only step limit is used in this implementation, macro step limit is deduced from step limit and there is no formula tapes limit.} and in approximatively 1 minute using cosmo's. Hence, after bouncers on a standard laptop, we have 29,799 machines left to be decided.
