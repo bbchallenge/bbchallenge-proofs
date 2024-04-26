@@ -621,7 +621,7 @@ Here are the implementations of the decider that were realised:
     \item Iijil's Go implementation (does not use the theory presented in this section): \url{https://github.com/Iijil1/Bouncers}
     \item savask's haskell implementation (basis to the theory presented in this section): \url{https://gist.github.com/savask/888aa5e058559c972413790c29d7ad72}
     \item mei's optimised Rust implementation, reproducing savask's: \url{https://github.com/meithecatte/busycoq/}. This implementation outputs certificates that are verified using Coq, more details about this approach will be given in future versions of this text.
-    \item Tristan Stérin (cosmo)'s Rust implementation, reproducing savask's and mei's: \url{https://github.com/bbchallenge/bbchallenge-deciders/tree/cosmo_bouncers_reproduction/decider-bouncers-reproduction}. This implementation follows this text to the letter, reproducing each concept and algorithm as presented here. It is less efficient than mei's.
+    \item Tristan Stérin (cosmo)'s Rust implementation, reproducing savask's and mei's: \url{https://github.com/bbchallenge/bbchallenge-deciders/tree/main/decider-bouncers-reproduction}. This implementation follows this text to the letter, reproducing each concept and algorithm as presented here. It is less efficient than mei's.
 
 
 \end{enumerate}
@@ -633,3 +633,17 @@ Here are the implementations of the decider that were realised:
 \textbf{Verifiers.} Verifiers for Theorem~\ref{th:bouncers} -- i.e. programs that check that a given formula tape gives a valid nonhalting proof for a given bouncer -- have also been given as part of the above implementations. Mei's implementation provides a Coq implementation of the verifier. There is an ongoing effort for standardising bouncers certificates (and certificates in general) but the following are enough for practical verifiation: (1) formula tape (2) time step at which a tape of the formula tape is reached (2) number of macro steps needed to reach special case. Other useful information can be added such as the set of shift rules used by the formula tape simulation.
 
 \paragraph*{Results.} Using limits of 250,000 steps and 50,000 macro steps and 10 formula tapes, the method decides 29,799 machines out of the 32,632 remaining machines (91\%) after FAR (Section~\ref{sec:finite-automata-reduction}), in less than 3 seconds using mei's implementation\footnote{Only step limit is used in this implementation, macro step limit is deduced from step limit and there is no formula tapes limit.} and in approximatively 1 minute using cosmo's. Hence, after bouncers on a standard laptop, we have 29,799 machines left to be decided.
+
+\paragraph*{Remarkable bouncers.} Out of the 29,799 bouncers that were decided here are some remarkable facts:
+\begin{enumerate}
+    \item Only two bouncers have 3 repeaters and that's the maximum: \url{https://bbchallenge.org/347505} and \url{https://bbchallenge.org/8131743}. Otherwise, 2132 bouncers have 2 repeaters and the rest has only 1.
+    \item The biggest fitted formula tapes have 378 symbols (summing walls and repeater symbols), there are two of them, such as \url{https://bbchallenge.org/5608043}:
+          \begin{align*}
+               & 0^\infty\lhead{\text{A}} 1000001110001110000001110000111011100111011100111000011100 0011101110011100001110
+              \\ &1110011101110011100001110000111011100111000011100001110000111000011101110011101110011\\ &1011100111011100111011100111011100111011100111011100111011100111011100 (111011100111011\\
+               & 100111011100111011100)000111000011100000011100111111111111111
+              0000111111111111111(11111                                                                                     \\ &1111111)                                                                            001110000000111000000111111001111110^\infty
+          \end{align*}
+
+
+\end{enumerate}
