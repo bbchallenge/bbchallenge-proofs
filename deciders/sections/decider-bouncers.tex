@@ -2,7 +2,7 @@
 
 \section{Bouncers}\label{sec:bouncers}
 
-\paragraph{Acknowledgement.}  Sincere thanks to Tony Guilfoyle who initially implemented a decider for bouncers\footnote{See: \url{https://github.com/TonyGuil/bbchallenge/tree/main/Bouncers}.}. Many thanks to savask who built and implemented\footnote{See: \url{https://gist.github.com/savask/888aa5e058559c972413790c29d7ad72}.} a theory upon Tony's ideas, wrote the initial version of this section and was closely involved in the process of building this text.
+\paragraph{Acknowledgement.}  Sincere thanks to Tony Guilfoyle who initially implemented a decider for bouncers\footnote{See: \url{https://github.com/TonyGuil/bbchallenge/tree/main/Bouncers}.}. Many thanks to savask who wrote the initial version of this section and was closely involved in building the theory presented here.
 Others have contributed to this method by producing alternative implementations (see Section~\ref{sec:bouncers-implem}) or discussing and writing the formal proof presented here: Iijil, mei, Tristan Stérin (cosmo).
 
 
@@ -15,7 +15,7 @@ Others have contributed to this method by producing alternative implementations 
 \subsection{Characterising bouncers}
 
 Intuitively, a \emph{bouncer} is a Turing machine that populates a tape with
-linearly-expanding patterns, called \textit{repeaters}, possibly separated or enclosed by fixed patterns called \textit{walls}. This intuitive definition corresponds to a wide range of behaviors, from simply bouncing back and forth between the tape's expanding extremities, Figure~\ref{fig:bouncers}~(a), to more complex bouncers that exhibit intricate \textit{repeaters} or \textit{wall} patterns, Figure~\ref{fig:bouncers}~(b)-(d), and that possibly start \textit{bouncing} repetitively only after a certain number of steps, Figure~\ref{fig:bouncers}~(e).
+linearly-expanding patterns, called \textit{repeaters}, possibly separated or enclosed by fixed patterns called \textit{walls}. This intuitive definition corresponds to a wide range of behaviors, from simply bouncing back and forth between the tape's expanding extremities, Figure~\ref{fig:bouncers}~(a), to more complex bouncers that exhibit intricate \textit{repeaters} or \textit{wall} patterns, Figure~\ref{fig:bouncers}~(b)-(d), and that possibly start \textit{bouncing} repetitively only after a certain number of steps, Figure~\ref{fig:bouncers}~(e). What we call bouncers is a generalisation of the various classes of ``Christmas trees'' used to solve $BB(4)$ \cite{Brady83}.
 
 The goal of this section is to formally characterise bouncers and show that they do not halt, see Theorem~\ref{th:bouncers}.
 
