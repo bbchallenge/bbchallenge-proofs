@@ -388,7 +388,8 @@ Theorem~\ref{th:linquad} assures us that, in the sequence of successive tapes of
         \begin{align*}
             t_0 & = w_1\; r\;  w_2     \\
             t_1 & = w_1\; rr\;  w_2    \\
-            t_2 & = w_1\; r r r\;  w_2
+            t_2 & = w_1\; r r r\;  w_2 \\
+            f   & = \varnothing
         \end{align*}
         \begin{align*}
              & \\
@@ -397,7 +398,8 @@ Theorem~\ref{th:linquad} assures us that, in the sequence of successive tapes of
         \begin{align*}
             t_0 & = w_2        \\
             t_1 & = r\;  w_2   \\
-            t_2 & = r r\;  w_2
+            t_2 & = r r\;  w_2 \\
+            f   & = w_1 r
         \end{align*}
     \end{multicols}
     From there, we have three cases: (1) if $w_2 = \varnothing$ then the greedy algorithm returns $f = w_1 r$ as needed, (2) if $w_2[0] \neq r[0]$ ($r$ is not empty by hypothesis), then the greedy algorithm returns $f = w_1 r (r) w_2$ which is right-aligned (because $w_2[0] \neq r[0]$), as needed and (3) if $w_2[0] = r[0]$ then, call $w_2 = a w_2'$ and $r = ar'$ with $|a| > 0$ and  $w_2'[0] \neq r'[0]$ if they are both nonempty, the system rewrites as:
@@ -408,7 +410,8 @@ Theorem~\ref{th:linquad} assures us that, in the sequence of successive tapes of
         \begin{align*}
             t_0 & = a w_2'            \\
             t_1 & = ar'\;  a w_2'     \\
-            t_2 & = ar' ar'\;  a w_2'
+            t_2 & = ar' ar'\;  a w_2' \\
+            f   & = w_1 ar'
         \end{align*}
         \begin{align*}
              &                                                                   \\
@@ -418,7 +421,8 @@ Theorem~\ref{th:linquad} assures us that, in the sequence of successive tapes of
         \begin{align*}
             t_0 & = w_2'             \\
             t_1 & = r'\;  a w_2'     \\
-            t_2 & = r' ar'\;  a w_2'
+            t_2 & = r' ar'\;  a w_2' \\
+            f   & = w_1 ar' a
         \end{align*}
     \end{multicols}
 
