@@ -298,7 +298,7 @@ In this section, we use the theory presented above in order to give a practical 
 
 \subsubsection{Formula tape fitting}
 
-Theorem~\ref{th:linquad} assures us that, in the sequence of successive tapes of a bouncer, we'll always find a subsequence where all repeaters' repetitions successively increase by one. Given such a subsequence, we are left with the task of fitting an appropriate formula tape. It turns out that only 3 successive tapes, with at least one repetition of each repeater in the first tape, are enough to fit a formula tape efficiently using a greedy algorithm which recursively constructs the biggest possible left-most wall and then tries to fit repeaters of decreasing size:
+Theorem~\ref{th:linquad} assures us that, in the sequence of successive tapes of a bouncer, we'll always find a subsequence where all repeaters' repetitions successively increase by one. Given such a subsequence, we are left with the task of fitting an appropriate formula tape. It turns out that only 3 successive tapes $(t_0,t_1,t_2)$, with at least one repetition of each repeater in the first tape, are enough to fit a formula tape efficiently using a greedy algorithm which recursively constructs the left-most wall using the biggest common prefix of $t_0, t_1$ and $t_2$ and then fits as left-most repeater the longest prefix $r$ of $t_1$ such that $rr$ is a prefix of $t_2$:
 
 \begin{algorithm}
     \caption{Greedy formula tape fitting algorithm {\sc Fit-FormulaTape}}\label{alg:greedy-formula-tape-fitting}
@@ -520,7 +520,7 @@ Theorem~\ref{th:linquad} assures us that, in the sequence of successive tapes of
     %     t''_2 & = 011\; 1\; 1\; 0
     % \end{align*}
 
-    At this point, the greedy algorithm raises failure. However, starting from $t_0 = 1011\; 01011\; 1\; 0$ it will successfully fit $101101011(01011)1(1)0$ which is a special case of $1011(01011)(1)0$.
+    At this point, the greedy algorithm raises failure since there are no more wall symbols in $t_0$ and no prefix $r$ of $t_1$ such that $rr$ is a prefix of $t_2$. However, starting from $t_0 = 1011\; 01011\; 1\; 0$ it will successfully fit $101101011(01011)1(1)0$ which is a special case of $1011(01011)(1)0$.
 
     Hence, the greedy algorithm does not always fit \textit{minimal} formula tapes. By adding backtracking and memoization, it can easily be transformed into a Dynamic Programming algorithm that will succeed starting from smaller tapes, i.e.\ $t_0$ with no repeater occurrence, and hence fit minimal formula tapes, at the cost of being less efficient (quadratic vs. linear time complexity).
     Note that another approach to formula tape minimisation is to deduce a minimal formula tape from the solution outputted by the greedy algorithm, essentially by removing occurrences of repeaters appearing in walls as much as possible, in linear time.
