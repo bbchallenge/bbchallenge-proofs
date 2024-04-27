@@ -477,24 +477,48 @@ Theorem~\ref{th:linquad} assures us that, in the sequence of successive tapes of
 \end{proof}
 \begin{remark}[Minimal formula tapes]\label{rk:minimal-formula-tapes}
     While Algorithm~\ref{alg:greedy-formula-tape-fitting} is assured, by Theorem~\ref{th:greedy-formula-tape-fitting},  to fit a formula tape (if it exists) starting from $t_0$ containing at least one occurrence of each repeater, the algorithm can fail when $t_0$ has none. Here is an example trying to parse $1011(01011)(1)0$ starting from $t_0 = 10110$:
-    \begin{align*}
-        t_0 & = 1011\; 0                         \\
-        t_1 & = 1011\; 01011\; 1\; 0             \\
-        t_2 & = 1011\; 01011\; 01011\; 1\; 1\; 0
-    \end{align*}
-    The greedy algorithm reaches the following configuration by consuming $t_0$ which is a prefix of $t_1$ and $t_2$:
-    \begin{align*}
-        t'_0 & = \varnothing              \\
-        t'_1 & = 1011\; 1\; 0             \\
-        t'_2 & = 1011\; 01011\; 1\; 1\; 0
-    \end{align*}
 
-    Then, $101$ is a prefix of $t'_1$ and $101 101$ a prefix of $t'_2$, which will yield:
-    \begin{align*}
-        t''_0 & = \varnothing     \\
-        t''_1 & = 1\; 1\; 0       \\
-        t''_2 & = 011\; 1\; 1\; 0
-    \end{align*}
+
+    \begin{multicols}{5}
+        \noindent
+        \begin{align*}
+            t_0 & = 1011\; 0                         \\
+            t_1 & = 1011\; 01011\; 1\; 0             \\
+            t_2 & = 1011\; 01011\; 01011\; 1\; 1\; 0 \\
+            f   & = \varnothing
+        \end{align*}
+        \begin{align*}
+             &                                                                   \\
+            \to_{\text{Algorithm~\ref{alg:greedy-formula-tape-fitting} goes to}} \\
+             &
+        \end{align*}
+        \begin{align*}
+            t_0 & = \varnothing              \\
+            t_1 & = 1011\; 1\; 0             \\
+            t_2 & = 1011\; 01011\; 1\; 1\; 0 \\
+            f   & = 1011 0
+        \end{align*}
+        \begin{align*}
+             &                                                                   \\
+            \to_{\text{Algorithm~\ref{alg:greedy-formula-tape-fitting} goes to}} \\
+             &
+        \end{align*}
+        \begin{align*}
+            t_0 & = \varnothing     \\
+            t_1 & = 1\; 1\; 0       \\
+            t_2 & = 011\; 1\; 1\; 0 \\
+            f   & = 1011 0 (101)
+        \end{align*}
+    \end{multicols}
+
+
+
+    % Then, $101$ is a prefix of $t'_1$ and $101 101$ a prefix of $t'_2$, which will yield:
+    % \begin{align*}
+    %     t''_0 & = \varnothing     \\
+    %     t''_1 & = 1\; 1\; 0       \\
+    %     t''_2 & = 011\; 1\; 1\; 0
+    % \end{align*}
 
     At this point, the greedy algorithm raises failure. However, starting from $t_0 = 1011\; 01011\; 1\; 0$ it will successfully fit $101101011(01011)1(1)0$ which is a special case of $1011(01011)(1)0$.
 
