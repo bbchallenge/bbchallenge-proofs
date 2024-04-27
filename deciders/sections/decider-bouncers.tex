@@ -304,29 +304,24 @@ Theorem~\ref{th:linquad} assures us that, in the sequence of successive tapes of
     \caption{Greedy formula tape fitting algorithm {\sc Fit-FormulaTape}}\label{alg:greedy-formula-tape-fitting}
     \begin{algorithmic}[1]
 
-        \Procedure{\textbf{FormulaTape} {\sc Fit-FormulaTape}}{\textbf{uint} pos\_t0, \textbf{uint} total\_repeater\_size, \textbf{Word} t[3]}
+        \Procedure{\textbf{FormulaTape} {\sc Fit-FormulaTape}}{\textbf{Word} t0, \textbf{Word} t1, \textbf{Word} t2}
 
-        \State \textbf{uint} k = total\_repeater\_size
-        \State \textbf{uint} i0 = pos\_t0
-        \State \textbf{uint} i1 = i0 + k
-        \State \textbf{uint} i2 = i0 + 2*k
-        \State
-        \If{i0 == t[0].\textbf{len}() \&\& i1 == t[1].\textbf{len}()}
+        \If{t0.\textbf{empty}() \&\& t1.\textbf{empty}() \&\& t2.\textbf{empty}()}
         \State \Return \textbf{FormulaTape}::\textbf{empty}()
 
         \EndIf
         \State
-        \If{i0 $<$ t[0].\textbf{len}() \&\& i1 $<$ t[1].\textbf{len}() \&\& i2 $<$ t[2].\textbf{len}() \\ \&\& t[0][i0] == t[1][i1] \&\& t[1][i1] == t[1][i2]}
-        \State \Return \textbf{FormulaTape}::\textbf{symbol}(t[0][i0]).\textbf{concat}(\Call{{\sc Fit-FormulaTape}}{i0+1, k, t})
+        \If{t0.\textbf{len}() $>$ 0 \&\& t1.\textbf{len}() $>$ 0 \&\& t2.\textbf{len}() $>$ 0 \&\& t0[0] == t1[0] \&\& t1[0] == t2[0]}
+        \State \Return \textbf{FormulaTape}::\textbf{symbol}(t0[0]).\textbf{concat}(\Call{{\sc Fit-FormulaTape}}{t0[1:], t1[1:], t2[1:]})
         \EndIf
         \State
         \State
-        \textbf{uint} longest\_prefix\_size = \textbf{get\_longest\_prefix\_size}(t[1][i1:], t[2][i2:])
+        \textbf{uint} longest\_prefix\_size = \textbf{get\_longest\_prefix\_size}(t1, t2)
         \State
         \For{l = longest\_prefix\_size; k $\geq$ 1; k -= 1 }
 
-        \If{i2+2*l $<$ t[2].\textbf{len}() \&\& t[2][i2:i2+l] == t[2][i2+l:i2+2*l] }
-        \State \Return \textbf{FormulaTape}::\textbf{repeater}(t[2][i2:i2+l]).\textbf{concat}(\Call{{\sc Fit-FormulaTape}}{i0, k+l, t})
+        \If{2*l $<$ t2.\textbf{len}() \&\& t2[:l] == t2[l:2*l] }
+        \State \Return \textbf{FormulaTape}::\textbf{repeater}(t2[:l]).\textbf{concat}(\Call{{\sc Fit-FormulaTape}}{t0, t1[l:], t2[2*l:]})
         \EndIf
 
         \EndFor
@@ -364,7 +359,7 @@ Theorem~\ref{th:linquad} assures us that, in the sequence of successive tapes of
 %             f   & = \mathcal{A}(w_1r(r) w_2)
 %         \end{align*}
 %     \end{multicols}
-%     Meaning that Algorithm~\ref{alg:greedy-formula-tape-fitting} function call {\sc Fit-FormulaTape}(0,0,$(t_0,t_1,t_2)$) does not raise failure and returns the right-aligned headless formula tape $\mathcal{A}(w_1r(r) w_2)$.
+%     Meaning that Algorithm~\ref{alg:greedy-formula-tape-fitting} function call {\sc Fit-FormulaTape}($t_0$, $t_1$, $t_2$) does not raise failure and returns the right-aligned headless formula tape $\mathcal{A}(w_1r(r) w_2)$.
 % \end{lemma}
 % \begin{proof}
 
@@ -375,13 +370,13 @@ Theorem~\ref{th:linquad} assures us that, in the sequence of successive tapes of
 
 
 \begin{theorem}[Greedy formula tape fitting]\label{th:greedy-formula-tape-fitting}
-    Let there be 3 words $t_0, t_1, t_2 \in \Sigma^*$, and an integer $m\in\N$ and $w_1, \dots w_{m+1} \in \Sigma^*$ and $r_1, \dots, r_m \in\Sigma^+$ the longest repeaters such that:
+    Let there be 3 words $t_0, t_1, t_2 \in \Sigma^*$, and an integer $m>0$ and $w_1, \dots w_{m+1} \in \Sigma^*$ and $r_1, \dots, r_m \in\Sigma^+$ the longest repeaters such that:
     \begin{align*}
         t_0 & = w_1\; r_1\; \dots w_m\; r_m\; w_{m+1}               \\
         t_1 & = w_1\; r_1r_1\; \dots w_m\; r_m r_m\; w_{m+1}        \\
         t_2 & = w_1\; r_1 r_1 r_1 \dots w_m\; r_m r_m r_m\; w_{m+1}
     \end{align*}
-    Then Algorithm~\ref{alg:greedy-formula-tape-fitting} ran on {\sc Fit-FormulaTape}(0,0,$(t_0,t_1,t_2)$) does not raise failure and returns the right-aligned headless formula tape $\mathcal{A}(w_1 r_1 (r_1) \dots w_m r_m (r_m) w_{m+1})$.
+    Then Algorithm~\ref{alg:greedy-formula-tape-fitting} ran on {\sc Fit-FormulaTape}($t_0$, $t_1$, $t_2$) does not raise failure and returns the right-aligned headless formula tape $\mathcal{A}(w_1 r_1 (r_1) \dots w_m r_m (r_m) w_{m+1})$.
 
 \end{theorem}
 \begin{proof}
@@ -451,7 +446,7 @@ Theorem~\ref{th:linquad} assures us that, in the sequence of successive tapes of
         \end{align*}
     \end{multicols}
 
-    With $\tilde{r} = rr$, $|\tilde{r}| > |r|$, which is in contradiction with the hypothesis that $r$ was the longest word allowing to write the system as it. This justifies why prefixes are enumerated from longest match in Algorithm~\ref{alg:greedy-formula-tape-fitting}, line 16. Hence, $r'$ is never empty, and we have the result for $m=1$.
+    With $\tilde{r} = rr$, $|\tilde{r}| > |r|$, which contradicts the hypothesis that $r$ was as long as possible. This justifies why prefixes are enumerated from longest match in Algorithm~\ref{alg:greedy-formula-tape-fitting}, line 16. Hence, $r'$ is never empty, and we have the result for $m=1$.
 
     In the general case, using the case $m=1$ we have:
     \setlength{\columnsep}{-1.9cm}
@@ -561,7 +556,7 @@ This strategy is implemented in Algorithm~\ref{alg:decider-bouncers}, where we a
         \For{\textbf{TMHead} head \textbf{in} record\_breaking\_tapes}
         \For{\textbf{uint} i, \textbf{Tape} tape4 \textbf{in} record\_breaking\_tapes[head].\textbf{enumerate}()}
         \State \textbf{if} i $<$ 3 \textbf{then continue}
-        \For{\textbf{uint} i, \textbf{Tape} tape3 \textbf{in} record\_breaking\_tapes[head][:i].\textbf{enumerate}()}
+        \For{\textbf{uint} j, \textbf{Tape} tape3 \textbf{in} record\_breaking\_tapes[head][:i].\textbf{enumerate}()}
         \State \textbf{if} j $<$ 2 \textbf{then continue}
         \State \textbf{uint} len\_diff = tape4.\textbf{len}() - tape3.\textbf{len}()
         \State \textbf{uint} tape2\_len = tape3.\textbf{len}() - len\_diff
@@ -582,7 +577,7 @@ This strategy is implemented in Algorithm~\ref{alg:decider-bouncers}, where we a
 
         \State
 
-        \State \textbf{try} \textbf{FormulaTape} f = {\sc Fit-FormulaTape}(0,0,(tape\_2,tape\_3,tape\_4).\textbf{headless}())
+        \State \textbf{try} \textbf{FormulaTape} f = {\sc Fit-FormulaTape}(tape\_2, tape\_3, tape\_4).\textbf{headless}())
         \If{\textbf{Failure} was raised}
         \State \textbf{continue}
         \EndIf
