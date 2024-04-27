@@ -370,25 +370,25 @@ Theorem~\ref{th:linquad} assures us that, in the sequence of successive tapes of
 
 
 \begin{theorem}[Greedy formula tape fitting]\label{th:greedy-formula-tape-fitting}
-    Let there be 3 words $t_0, t_1, t_2 \in \Sigma^*$, and an integer $m>0$ and $w_1, \dots w_{m+1} \in \Sigma^*$ and $r_1, \dots, r_m \in\Sigma^+$ the longest repeaters such that:
+    Let there be 3 words $t_0, t_1, t_2 \in \Sigma^*$, an integer $m>0$ and nonempty intermediary walls $w_2, \dots w_m \in \Sigma^+$ and possibly-empty initial and final walls $\alpha, \beta \in \Sigma^*$ and nonempty repeaters $r_1, \dots, r_m \in\Sigma^+$ so that they are the longest repeaters for $t_0, t_1, t_2$ to be written as:
     \begin{align*}
-        t_0 & = w_1\; r_1\; \dots w_m\; r_m\; w_{m+1}               \\
-        t_1 & = w_1\; r_1r_1\; \dots w_m\; r_m r_m\; w_{m+1}        \\
-        t_2 & = w_1\; r_1 r_1 r_1 \dots w_m\; r_m r_m r_m\; w_{m+1}
+        t_0 & = \alpha\; w_2 \dots w_m\; \beta                       \\
+        t_1 & = \alpha\; r_1\; w_2\; \dots w_m\; r_m\; \beta         \\
+        t_2 & = \alpha\; r_1 r_1\; w_2\; \dots w_m\; r_m r_m\; \beta
     \end{align*}
-    Then Algorithm~\ref{alg:greedy-formula-tape-fitting} ran on {\sc Fit-FormulaTape}($t_0$, $t_1$, $t_2$) does not raise failure and returns the right-aligned headless formula tape $\mathcal{A}(w_1 r_1 (r_1) \dots w_m r_m (r_m) w_{m+1})$.
+    Then Algorithm~\ref{alg:greedy-formula-tape-fitting} ran on {\sc Fit-FormulaTape}($t_0$, $t_1$, $t_2$) does not raise failure and returns the right-aligned headless formula tape $\mathcal{A}(\alpha (r_1) w_2 (r_2)\dots w_m (r_m) \beta)$.
 
 \end{theorem}
 \begin{proof}
-    Let's first prove the case $m=1$ and write $r_1 = r$.
+    Let's first prove the case $m=1$ and write $r = r_1$.
     Notation: if a word $w\in\Sigma^*$ is not empty we use the notation $w[0]$ to mean the first symbol of $w$. Using the case of Algorithm~\ref{alg:greedy-formula-tape-fitting}, line 10, we get:
     \setlength{\columnsep}{-7.5cm}
     \begin{multicols}{3}
         \noindent
         \begin{align*}
-            t_0 & = w_1\; r\;  w_2     \\
-            t_1 & = w_1\; rr\;  w_2    \\
-            t_2 & = w_1\; r r r\;  w_2 \\
+            t_0 & = \alpha\;  \beta      \\
+            t_1 & = \alpha\; r\;  \beta  \\
+            t_2 & = \alpha\; r r\; \beta \\
             f   & = \varnothing
         \end{align*}
         \begin{align*}
@@ -396,22 +396,22 @@ Theorem~\ref{th:linquad} assures us that, in the sequence of successive tapes of
             \to_{\text{Algorithm~\ref{alg:greedy-formula-tape-fitting} goes to}}
         \end{align*}
         \begin{align*}
-            t_0 & = w_2        \\
-            t_1 & = r\;  w_2   \\
-            t_2 & = r r\;  w_2 \\
-            f   & = w_1 r
+            t_0 & = \beta        \\
+            t_1 & = r\;  \beta   \\
+            t_2 & = r r\;  \beta \\
+            f   & = \alpha
         \end{align*}
     \end{multicols}
-    From there, we have three cases: (1) if $w_2 = \varnothing$ then the greedy algorithm returns $f = w_1 r$ as needed, (2) if $w_2[0] \neq r[0]$ ($r$ is not empty by hypothesis), then the greedy algorithm returns $f = w_1 r (r) w_2$ which is right-aligned (because $w_2[0] \neq r[0]$), as needed and (3) if $w_2[0] = r[0]$ then, call $w_2 = a w_2'$ and $r = ar'$ with $|a| > 0$ and  $w_2'[0] \neq r'[0]$ if they are both nonempty, the system rewrites as:
+    From there, we have three cases: (1) if $\beta = \varnothing$ then the greedy algorithm returns $f = \alpha (r)$, right-aligned, as needed, (2) if $\beta[0] \neq r[0]$ ($r$ is not empty by hypothesis), then the greedy algorithm returns $f = \alpha (r) \beta$ which is right-aligned (because $\beta[0] \neq r[0]$), as needed and (3) if $\beta[0] = r[0]$ then, call $\beta = u \beta'$ and $r = ur'$ with $|u| > 0$ and  $\beta'[0] \neq r'[0]$ if they are both nonempty, the system rewrites as:
 
     \setlength{\columnsep}{-7.5cm}
     \begin{multicols}{3}
         \noindent
         \begin{align*}
-            t_0 & = a w_2'            \\
-            t_1 & = ar'\;  a w_2'     \\
-            t_2 & = ar' ar'\;  a w_2' \\
-            f   & = w_1 ar'
+            t_0 & = u \beta'            \\
+            t_1 & = ur'\;  u \beta'     \\
+            t_2 & = ur' ur'\;  u \beta' \\
+            f   & = \alpha
         \end{align*}
         \begin{align*}
              &                                                                   \\
@@ -419,38 +419,21 @@ Theorem~\ref{th:linquad} assures us that, in the sequence of successive tapes of
              &
         \end{align*}
         \begin{align*}
-            t_0 & = w_2'             \\
-            t_1 & = r'\;  a w_2'     \\
-            t_2 & = r' ar'\;  a w_2' \\
-            f   & = w_1 ar' a
+            t_0 & = \beta'             \\
+            t_1 & = r'\;  u \beta'     \\
+            t_2 & = r' ur'\;  u \beta' \\
+            f   & = \alpha u
         \end{align*}
     \end{multicols}
 
+    Two cases:
+    \begin{itemize}
+        \item If $r'$ is nonempty, we are in the previously seen case $(\beta,r\beta,rr\beta)$ by assimilating  $\beta'$ to $\beta$ and $ur'$ to $r$, except that case (3) cannot happen since we've chosen $\beta'$ and $r'$ such that $\beta'[0] \neq r'[0]$ if they are both nonempty. Hence, the outputted formula is $f = \alpha u (r' u) \beta'$  which is the right-aligned version of $\alpha(r)\beta$ (because $\beta'[0] \neq r'[0]$, if both nonempty), as needed.
+        \item If $r'$ is empty, we are also in the previously seen case $(\beta,r\beta,rr\beta)$ by assimilating  $\beta'$ to $\beta$ and $u$ to $r$, however $|\beta'| < |\beta|$, hence, by induction, using the same set of 3 cases, this system will eventually reach case (1) $\beta' = \varnothing$ or case (2) $\beta'[0] = u[0]$ where we can conclude.
+    \end{itemize}
 
 
-    Now, if $r'$ is nonempty, we are exactly in the previous case $(w_2,rw_2,rrw_2)$ before the rewrite (by assimilating  $w_2'$ to $w_2$ and $ar'$ to $r$) except that case (3) cannot happen since we've chosen $w_2'$ and $r'$ such that $w_2'[0] \neq r'[0]$ if they are both nonempty. Hence, the outputted formula is $f = w_1 a r' a (r' a) w_2' = w_1 r a (r' a) w_2'$  which is the right-aligned version of $w_1r(r)w_2$ (because $w_2'[0] \neq r_1'[0]$, if both nonempty), as needed.
-
-    If $r'$ is empty, we have $r = a$ and, going back to the initial tapes we had:
-    \setlength{\columnsep}{-7.5cm}
-    \begin{multicols}{3}
-        \noindent
-        \begin{align*}
-            t_0 & = w_1\; r\;  r w_2'     \\
-            t_1 & = w_1\; rr\;  r w_2'    \\
-            t_2 & = w_1\; r r r\;  r w_2'
-        \end{align*}
-        \begin{align*}
-             & \\
-            =  \\
-        \end{align*}
-        \begin{align*}
-            t_0 & = w_1\; \tilde{r}\;  w_2'                  \\
-            t_1 & = w_1\; \tilde{r}\tilde{r}\;w_2'           \\
-            t_2 & = w_1\; \tilde{r}\tilde{r}\tilde{r}\; w_2'
-        \end{align*}
-    \end{multicols}
-
-    With $\tilde{r} = rr$, $|\tilde{r}| > |r|$, which contradicts the hypothesis that $r$ was as long as possible. This justifies why prefixes are enumerated from longest match in Algorithm~\ref{alg:greedy-formula-tape-fitting}, line 16. Hence, $r'$ is never empty, and we have the result for $m=1$.
+    % With $\tilde{r} = rr$, $|\tilde{r}| > |r|$, which contradicts the hypothesis that $r$ was as long as possible. This justifies why prefixes are enumerated from longest match in Algorithm~\ref{alg:greedy-formula-tape-fitting}, line 16. Hence, $r'$ is never empty, and we have the result for $m=1$.
 
     In the general case, using the case $m=1$ we have:
     \setlength{\columnsep}{-1.9cm}
