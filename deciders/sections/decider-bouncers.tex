@@ -15,17 +15,15 @@ Others have contributed to this method by producing alternative implementations 
 \subsection{Characterising bouncers}
 
 Intuitively, a \emph{bouncer} is a Turing machine that populates a tape with
-linearly-expanding patterns, called \textit{repeaters}, possibly separated or enclosed by fixed patterns called \textit{walls}. This intuitive definition corresponds to a wide range of behaviors, from simply bouncing back and forth between the tape's expanding extremities, Figure~\ref{fig:bouncers}~(a), to complex traversal of \textit{repeater} and \textit{wall} patterns, Figure~\ref{fig:bouncers}~(b)-(d), and possibly a delayed onset of the \textit{bouncing} pattern, Figure~\ref{fig:bouncers}~(e). What we call bouncers is a generalisation of the various classes of ``Christmas trees'' used to solve $BB(4)$ \cite{Brady83}.
+linearly-expanding patterns, called \textit{repeaters}, possibly separated or enclosed by fixed patterns called \textit{walls}. This intuitive definition corresponds to a wide range of behaviors, from simply bouncing back and forth between the tape's expanding extremities, Figure~\ref{fig:bouncers}~(a), to complex traversal of \textit{repeater} and \textit{wall} patterns, Figure~\ref{fig:bouncers}~(b)-(d), and possibly a delayed onset of the \textit{bouncing} pattern, Figure~\ref{fig:bouncers}~(e). What we call bouncers is a generalisation of the various classes of ``Christmas trees'' used to solve $\text{BB}(4)$ \cite{Brady83}.
 
-The goal of this section is to formally characterise bouncers and show that they do not halt, see Theorem~\ref{th:bouncers}.
+The goal of this section is to formally characterise bouncers and show that they do not halt, see Theorem~\ref{th:bouncers}. Then, in Section~\ref{sec:bouncers-implem}, we show how do detect bouncers algorithmically in practice, see Algorithm~\ref{alg:decider-bouncers}.
 
 \subsubsection{Directional Turing machines}\label{sec:bouncers:directionalTM}
 
-We build on the concept of directional Turing machine introduced in Section~\ref{sec:conventions}. Directional Turing machines are an equivalent formulation of Turing machine where the machine head lives in between the tape cells and can point to the left or to the right. We choose here to treat $0^\infty$ as a unique symbol (instead of an infinite collection of 0s) and write $\overline{\Sigma} = \{0^\infty\}\cup\Sigma$, with $\Sigma=\{0,1\}$. For each Turing machine with set of state $S$ we introduce 2$|S|$ new configuration symbols (i.e.\ symbols used to describe machine configurations and not read/write symbols) denoting the machine head in two possible orientations, namely $\Delta = \{\lhead s | s\in S\}\cup\{\rhead s| s \in S\}$.
+We build on the concept of directional Turing machine introduced in Section~\ref{sec:conventions}. Directional Turing machines are an equivalent formulation of Turing machines where the machine head lives in between the tape cells and can point to the left or to the right. We choose here to treat $0^\infty$ as a unique symbol (instead of an infinite collection of 0s) and write $\overline{\Sigma} = \{0^\infty\}\cup\Sigma$, with $\Sigma$ the tape alphabet of the machine -- in the context of $\text{BB}(5)$, we have $\Sigma=\{0,1\}$. For each Turing machine with set of states $S$ we introduce 2$|S|$ new configuration symbols (i.e.\ symbols used to describe machine configurations and not read/write symbols) denoting the machine head in two possible orientations, namely $\Delta = \{\lhead s | s\in S\}\cup\{\rhead s| s \in S\}$.
 
-We define a \textit{tape}\footnote{Note that in the terminology of Section~\ref{sec:conventions}, the definition of a tape that we use here, where the head in part of the tape, corresponds to a (partial) TM configuration.} to be a finite word of the form $uhv$, where $u,v\in \overline{\Sigma}^*$ and $h\in\Delta$, moreover, $u$ and $v$ must have at most one occurrence of $0^\infty$ each, respectively as first symbol for $u$ or last symbol for $v$. We choose the initial tape to be $0^\infty \rhead{\text{A}} 0^\infty$. Now, we define tape rewrite rules which will be used to simulate a directional Turing machine which we fix from now on. Given two tapes $t$ and $t'$, $t\vdash t'$ will denote that a rewrite rule transforms $t$ into $t'$. Applying $\vdash$ successively $n\in\mathbb{N}$ times is written $\vdash^n$. The transitive closure of $\vdash$ (i.e.\ applying $\vdash$ \textit{some} number of times) is written $\vdash^*$.
-
-Suppose that for $s\in S, x\in \Sigma$ we have $\delta(s,x) = (s',d,x')$ where $s'\in S, d \in \{\text{L},\text{R}\}, x' \in \Sigma$ and $\delta$ the transition function of the machine, then we define the following tape rewrite rules:
+We define a \textit{tape}\footnote{Note that in the terminology of Section~\ref{sec:conventions}, the definition of a tape that we use here, where the head in part of the tape, corresponds to a (partial) TM configuration.} to be a finite word of the form $uhv$, where $u,v\in \overline{\Sigma}^*$ and $h\in\Delta$, moreover, $u$ and $v$ must have at most one occurrence of $0^\infty$ each, respectively as first symbol for $u$ or last symbol for $v$. We choose the initial tape to be $0^\infty \rhead{\text{A}} 0^\infty$. Now, we define tape rewrite rules which will be used to simulate a directional Turing machine which we fix from now on. Suppose that for $s\in S, x\in \Sigma$ we have $\delta(s,x) = (s',d,x')$ where $s'\in S, d \in \{\text{L},\text{R}\}, x' \in \Sigma$ and $\delta$ the transition function of the machine, then we define the following tape rewrite rules:
 
 
 \begin{table}[h!]
@@ -56,7 +54,7 @@ Suppose that for $s\in S, x\in \Sigma$ we have $\delta(s,x) = (s',d,x')$ where $
     \end{tabular}\\
 \end{table}
 
-Given a tape $t=uvw$ and a word $t'=uv'w$, with $u,w\in \overline{\Sigma}^*$, $v,v' \in ( \overline \Sigma \cup \Delta)^*$, suppose that there is a rewrite rule $v \to v'$. Then $t'$ is also a tape and in this situation we write $t \vdash t'$ meaning that $t'$ is obtained from $t$ by one simulation step (i.e.\ $\vdash$ has the same meaning as for standard, non-directional, Turing machines, as introduced in Section~\ref{sec:conventions}); note that the definition is sound because, to any given tape, at most one rewrite rule applies, hence $v \to v'$ is defined uniquely and so is $t \vdash t'$. Note that the only case where $\vdash$ is not defined on a tape is if the machine halts in this configuration, i.e.\ an undefined transition is reached.
+Given a tape $t=uvw$ and a word $t'=uv'w$, with $u,w\in \overline{\Sigma}^*$, $v,v' \in ( \overline \Sigma \cup \Delta)^*$, suppose that there is a rewrite rule $v \to v'$. Then $t'$ is also a tape and in this situation we write $t \vdash t'$ meaning that $t'$ is obtained from $t$ by one simulation step; note that the definition is sound because, to any given tape, at most one rewrite rule applies, hence $v \to v'$ is defined uniquely and so is $t \vdash t'$. Note that the only case where $\vdash$ is not defined on a tape is if the machine halts in this configuration, i.e.\ an undefined transition is reached. Applying $\vdash$ successively $n\in\mathbb{N}$ times is written $\vdash^n$. The transitive closure of $\vdash$ (i.e.\ applying $\vdash$ \textit{some} nonzero number of times) is written $\vdash^*$.
 
 \begin{example}\label{ex:bouncer88427177}
     Consider \texttt{bbchallenge} machine\footnote{Accessible at \url{https://bbchallenge.org/88427177}} \#88,427,177 (Figure~\ref{fig:bouncers}~(d)), that has the following transition table:
@@ -87,8 +85,7 @@ Given a tape $t=uvw$ and a word $t'=uv'w$, with $u,w\in \overline{\Sigma}^*$, $v
 
 \subsubsection{Wall-repeater formula tapes}
 
-We want to formalise the above-stated intuition that bouncers expand a tape by repeating \textit{repeater} patterns between fixed \textit{walls}, and then show that bouncers do not halt, Theorem~\ref{th:bouncers}. For this, we are going to express bouncers' tapes using regular expressions over the alphabet $\Delta \cup  \overline{\Sigma}$. Given $u\in\Sigma^*$, we abbreviate the regular expression $(u)^*$, which represents zero or more repetitions of the word $u$, as $(u)$. Also, we write $\Sigma^+ = \Sigma^* \setminus \{ \varnothing \}$. We define a \textit{wall-repeater formula tape} to be a regular expression of the form:
-
+We want to formalise the above-stated intuition that bouncers expand a tape by repeating \textit{repeater} patterns between fixed \textit{walls}, and then show that bouncers do not halt, Theorem~\ref{th:bouncers}. For this, we are going to express bouncers' tapes using regular expressions over the alphabet $\Delta \cup  \overline{\Sigma}$. Given $u\in\Sigma^*$, we abbreviate the regular expression $\{u\}^*$, which represents zero or more repetitions of the word $u$, as $(u)$. Also, we write $\Sigma^+ = \Sigma^* \setminus \{ \varnothing \}$. We define a \textit{wall-repeater formula tape} to be a regular expression of the form:
 \begin{align}\label{math:formulaTapes}w_1(r_1)w_2(r_2)\dots w_n(r_n) w_{n+1} h w'_1(r'_1)w'_2(r'_2)\dots w'_m(r'_m) w'_{m+1}\end{align}
 
 if the following conditions are met:
@@ -100,13 +97,13 @@ if the following conditions are met:
      & w_1, w'_{m+1} \in  \overline{\Sigma}^*
 \end{align*}
 
-and, as in the definition of a tape, $w_1$ (resp. $w'_{m+1}$) either does not contain the symbol $0^\infty$ or it starts with it (resp. ends with it). Patterns $w_i, w'_j$ are called \textit{walls} and can be empty, while the \textit{repeaters}, $r_i, r'_j$ must be nonempty. Note that we allow $n=m=0$, hence a usual tape is also a wall-repeater formula tape. For the rest of this section, we abbreviate wall-repeater formula tapes as \textit{formula tapes}.
+and, as in the definition of a tape, $w_1$ (resp. $w'_{m+1}$) either does not contain the symbol $0^\infty$ or it starts with it (resp. ends with it). Words $w_i, w'_j$ are called \textit{walls} and can be empty, while the \textit{repeaters}, $r_i, r'_j$ must be nonempty. Note that we allow $n=m=0$, hence a usual tape is also a wall-repeater formula tape. For the rest of this section, we abbreviate wall-repeater formula tapes as \textit{formula tapes}.
 
-Given a formula tape $f$ let $\mathcal{L}(f)$ denote the language described by $f$, i.e.\ the set of tapes that match it.
+Given a formula tape $f$ let $\mathcal{L}(f)$ denote the language described by $f$, i.e.\ the set of tapes that match~it.
 % Given two formula tapes $f$ and $f'$ we will say that $f'$ is a \textit{special case} of $f$ if $\mathcal{L}(f') \subseteq \mathcal{L}(f)$. Note that it is equivalent to saying that $f'$ can be obtained from $f$ by replacing subwords of the form $(r), r\in\Sigma^*\setminus\{\varnothing\}$ by $r^n(r)r^m$ for some $n,m\geq 0$.
 
 \begin{example}\label{ex:formulaTapes}
-    Consider the formula tape $f = 0 \rhead{\text{D}} (01)$. We have $\mathcal{L}(f) = \{0\rhead{\text{D}},0\rhead{\text{D}}01,0\rhead{\text{D}}0101,\dots\}$. Consider the formula tape $f'=0^\infty(111)1110 \lhead{\text{A}} 010101(01)10^\infty$. Then: $0^\infty 1110 \lhead{A} 01010110^\infty$, $0^\infty 1111110 \lhead{A} 01010110^\infty$, and $0^\infty 1110 \lhead{A} 0101010110^\infty$ are three elements of $\mathcal{L}(f')$.
+    Consider the formula tape $f = 0 \rhead{\text{D}} (01)$. We have $\mathcal{L}(f) = \{0\rhead{\text{D}},0\rhead{\text{D}}01,0\rhead{\text{D}}0101,\dots\}$. Consider the formula tape $f'=0^\infty(111)1110 \lhead{\text{A}} 010101(01)10^\infty$. Then: $0^\infty 1110 \lhead{A} 01010110^\infty$, $0^\infty 1111110 \lhead{A} 01010110^\infty$, and $0^\infty 1110 \lhead{A} 0101010110^\infty$ are elements of $\mathcal{L}(f')$.
 \end{example}
 
 % \paragraph*{Aligning formula tapes.}  
@@ -115,16 +112,16 @@ Given a formula tape $f$ let $\mathcal{L}(f)$ denote the language described by $
 
 % Consider the formula tape $f = 0^\infty 101(11)0 \rhead{\text{D}} 10(100)110^\infty$. The following formula tape $\tilde{f} = 0^\infty 10(11)10 \rhead{\text{D}} 101(001)10^\infty$ describes the same language as $f$, i.e.\ $\mathcal{L}(f) = \mathcal{L}(\tilde{f})$.
 
-\paragraph*{Extending $\vdash$ to formula tapes: \textit{shift rules}.} We wish to extend the Turing machine step relation $\vdash$ (see Section~\ref{sec:bouncers:directionalTM}) to formula tapes. This is quite straightforward when the formula tape's head is pointing at a symbol of a wall (one of the $w_i, w'_j$ in \eqref{math:formulaTapes}): we simply apply a standard Turing machine step, leaving the definition of $\vdash$ unchanged.
+\paragraph*{Extending $\vdash$ to formula tapes: \textit{shift rules}.} We wish to extend the Turing machine step relation $\vdash$ (see Section~\ref{sec:bouncers:directionalTM}) to formula tapes. This is quite straightforward when the head is pointing at a symbol of a wall (one of the $w_i, w'_j$ in \eqref{math:formulaTapes}): we simply apply a standard Turing machine step, leaving the definition of $\vdash$ unchanged.
 
 However, we need to handle the case where the head is pointing at a repeater (one of the $r_i, r'_j$ in \eqref{math:formulaTapes}). Suppose that for some $u\in\Sigma^*$ and $r,\tilde{r}\in\Sigma^+$ and some state $s\in S$ we have $u \rhead{s} r \vdash^* \tilde{r} u \rhead{s}$. Then, for any $n\geq 0$, we have $u \rhead{s} r^n \vdash^* \tilde{r}^n u \rhead{s}$. This motivates the definition of
-(right) \textit{shift rules}, rewrite rules for formula tapes, which rewrite a subword $u \rhead{s}(r)$ into $(\tilde{r})u\rhead{s}$, denoted $u \rhead{s}(r) \to (\tilde{r})u\rhead{s}$. Similarly, left shift rules are of the form $(r)\lhead{s}u \to \;\lhead{s}u(\tilde{r})$ given that $r\lhead{s}u \vdash^* \;\lhead{s}u\tilde{r}$. Note that repeaters $r$ and $\tilde{r}$ of a shift rule necessarily have the same size since $\vdash$ preserves tapes' size.
+(right) \textit{shift rules}, that is, rewrite rules for formula tapes, which rewrite a subword $u \rhead{s}(r)$ into $(\tilde{r})u\rhead{s}$, denoted by $u \rhead{s}(r) \to (\tilde{r})u\rhead{s}$. Similarly, left shift rules are of the form $(r)\lhead{s}u \to \;\lhead{s}u(\tilde{r})$ given that $r\lhead{s}u \vdash^* \;\lhead{s}u\tilde{r}$. Note that repeaters $r$ and $\tilde{r}$ of a shift rule necessarily have the same size.
 
 Hence, we have two cases to consider for defining $\vdash$ on the following formula tape $f$ (as defined in~\eqref{math:formulaTapes}):
 $$f = w_1(r_1)w_2(r_2)\dots w_n(r_n) w_{n+1} h w'_1(r'_1)w'_2(r'_2)\dots w'_m(r'_m) w'_{m+1}$$
 
 \begin{enumerate}
-    \item (Usual step) If $h$ points to nonempty $w_{n+1}$ or $w'_1$, then $f \vdash \alpha \tilde{w}_{n+1} \tilde{h} \tilde{w}'_1\beta$ if $w_{n+1} h w'_1 \vdash \tilde{w}_{n+1} \tilde{h} w'_1$, $\tilde{w}_{n+1}, \tilde{w} \in \Sigma^*$, $\tilde{h} \in \Delta$, and $\alpha, \beta$ the above uniquely-defined beginning and ending of $f$. As for tapes, $\vdash$ is undefined if $w_{n+1} h w'_1$ corresponds to a halting configuration (i.e.\ undefined transition).
+    \item (Usual step) If $h$ points to nonempty $w_{n+1}$ or $w'_1$, then $f \vdash \alpha \tilde{w}_{n+1} \tilde{h} \tilde{w}'_1\beta$ if $w_{n+1} h w'_1 \vdash \tilde{w}_{n+1} \tilde{h} w'_1$, $\tilde{w}_{n+1}, \tilde{w} \in \Sigma^*$, $\tilde{h} \in \Delta$, and $\alpha=w_1(r_1)w_2(r_2)\dots w_n(r_n)$ and $\beta=(r'_1)w'_2(r'_2)\dots w'_m(r'_m) w'_{m+1}$. As for tapes, $\vdash$ is undefined if $w_{n+1} h w'_1$ corresponds to a halting configuration (i.e.\ undefined transition).
           % Using \eqref{math:formulaTapes}, write as $f=\alpha w_{n+1} h w'_1\beta$, with $\alpha$ (resp. $\beta$) the uniquely-defined beginning (resp.ending) of the formula tape $f$. Then, $f \vdash \alpha \tilde{w}_{n+1} \tilde{h} \tilde{w}'_1 \beta = f'$ if $w_{n+1} h w'_1 \vdash \tilde{w}_{n+1} \tilde{h} \tilde{w}'_1$ with $\tilde{w}_{n+1}, \tilde{w} \in \Sigma^*$ and $\tilde{h} \in \Delta$.
     \item (Shift rule) Two cases:
           \begin{enumerate}
@@ -292,13 +289,15 @@ Bouncers will grow their tape such that we can extract a subsequence of record-b
 
 \end{example}
 \newpage
-\subsection{Deciding bouncers in practice}
+\subsection{Deciding bouncers in practice}\label{sec:bouncers-algo}
 
 In this section, we use the theory presented above in order to give a practical and efficient algorithm for deciding bouncers.
 
 \subsubsection{Formula tape fitting}
 
-Theorem~\ref{th:linquad} assures us that, in the sequence of successive tapes of a bouncer, we'll always find a subsequence where all repeaters' repetitions successively increase by one. Given such a subsequence, we are left with the task of fitting an appropriate formula tape. It turns out that only 3 successive tapes $(t_0,t_1,t_2)$ in such subsequence, with at least one repetition of each repeater in the first tape, are enough to fit a formula tape efficiently using a greedy algorithm which recursively constructs the left-most wall using the biggest common prefix of $t_0, t_1$ and $t_2$ and then fits the left-most repeater using the longest prefix $r$ of $t_1$ such that $rr$ is a prefix of $t_2$:
+Theorem~\ref{th:linquad} assures us that, in the sequence of successive tapes of a bouncer, we'll always find a subsequence where all repeaters' repetitions successively increase by one. Given such a subsequence, we are left with the task of fitting an appropriate formula tape.
+
+%It turns out that only 3 successive tapes $(t_0,t_1,t_2)$ in such subsequence, with at least one repetition of each repeater in the first tape, are enough to fit a formula tape efficiently using a greedy algorithm which recursively constructs the left-most wall using the biggest common prefix of $t_0, t_1$ and $t_2$ and then fits the left-most repeater using the longest prefix $r$ of $t_1$ such that $rr$ is a prefix of $t_2$:
 
 \begin{algorithm}
     \caption{Greedy formula tape fitting algorithm {\sc Fit-FormulaTape}}\label{alg:greedy-formula-tape-fitting}
@@ -370,25 +369,25 @@ Theorem~\ref{th:linquad} assures us that, in the sequence of successive tapes of
 
 
 \begin{theorem}[Greedy formula tape fitting]\label{th:greedy-formula-tape-fitting}
-    Let there be 3 words $t_0, t_1, t_2 \in \Sigma^*$, an integer $m>0$ and nonempty intermediary walls $w_2, \dots w_m \in \Sigma^+$ and possibly-empty initial and final walls $\alpha, \beta \in \Sigma^*$ and nonempty repeaters $r_1, \dots, r_m \in\Sigma^+$ so that they are the longest repeaters for $t_0, t_1, t_2$ to be written as:
+    Let there be a right-aligned headless formula tape $f$ with nonempty intermediary walls: $f = w_1 (r_1) w_2 (r_2)\dots w_m (r_m) w$ with $m\in\N$, $r_i, w_i \in \Sigma^+$ with $1 \leq i \leq m$, and $w_1, w \in \Sigma^*$. Take $t_0, t_1, t_2 \in \Sigma^+$ such that:
     \begin{align*}
-        t_0 & = \alpha\; w_2 \dots w_m\; \beta                       \\
-        t_1 & = \alpha\; r_1\; w_2\; \dots w_m\; r_m\; \beta         \\
-        t_2 & = \alpha\; r_1 r_1\; w_2\; \dots w_m\; r_m r_m\; \beta
+        t_0 & = w_1\; w_2 \dots w_m\; w                       \\
+        t_1 & = w_1\; r_1\; w_2\; \dots w_m\; r_m\; w         \\
+        t_2 & = w_1\; r_1 r_1\; w_2\; \dots w_m\; r_m r_m\; w
     \end{align*}
-    Then Algorithm~\ref{alg:greedy-formula-tape-fitting} ran on {\sc Fit-FormulaTape}($t_0$, $t_1$, $t_2$) does not raise failure and returns the right-aligned headless formula tape $\mathcal{A}(\alpha (r_1) w_2 (r_2)\dots w_m (r_m) \beta)$.
+    Then Algorithm~\ref{alg:greedy-formula-tape-fitting} ran on {\sc Fit-FormulaTape}($t_0$, $t_1$, $t_2$) does not raise failure and returns $f$.
 
 \end{theorem}
 \begin{proof}
-    Let's first prove the case $m=1$ and write $r = r_1$.
-    Notation: if a word $w\in\Sigma^*$ is not empty we use the notation $w[0]$ to mean the first symbol of $w$. Using the case of Algorithm~\ref{alg:greedy-formula-tape-fitting}, line 10, we get:
+    Notation: if a word $u\in\Sigma^*$ is not empty we use the notation $u[0]$ to mean the first symbol of $u$.
+    Let's first prove the case $m=1$ and write $r = r_1$. Using the case of Algorithm~\ref{alg:greedy-formula-tape-fitting}, line 10, we get:
     \setlength{\columnsep}{-7.5cm}
     \begin{multicols}{3}
         \noindent
         \begin{align*}
-            t_0 & = \alpha\;  \beta      \\
-            t_1 & = \alpha\; r\;  \beta  \\
-            t_2 & = \alpha\; r r\; \beta \\
+            t_0 & = w_1\;  w      \\
+            t_1 & = w_1\; r\;  w  \\
+            t_2 & = w_1\; r r\; w \\
             f   & = \varnothing
         \end{align*}
         \begin{align*}
@@ -396,82 +395,24 @@ Theorem~\ref{th:linquad} assures us that, in the sequence of successive tapes of
             \to_{\text{Algorithm~\ref{alg:greedy-formula-tape-fitting} goes to}}
         \end{align*}
         \begin{align*}
-            t_0 & = \beta        \\
-            t_1 & = r\;  \beta   \\
-            t_2 & = r r\;  \beta \\
-            f   & = \alpha
+            t_0 & = w        \\
+            t_1 & = r\;  w   \\
+            t_2 & = r r\;  w \\
+            f   & = w_1
         \end{align*}
     \end{multicols}
-    From there, we have three cases: (1) if $\beta = \varnothing$ then the greedy algorithm returns $f = \alpha (r)$, right-aligned, as needed, (2) if $\beta[0] \neq r[0]$ ($r$ is not empty by hypothesis), then the greedy algorithm returns $f = \alpha (r) \beta$ which is right-aligned (because $\beta[0] \neq r[0]$), as needed and (3) if $\beta[0] = r[0]$ then, call $\beta = u \beta'$ and $r = ur'$ with $|u| > 0$ and  $\beta'[0] \neq r'[0]$ if they are both nonempty, the system rewrites as:
-
-    \setlength{\columnsep}{-7.5cm}
-    \begin{multicols}{3}
-        \noindent
-        \begin{align*}
-            t_0 & = u \beta'            \\
-            t_1 & = ur'\;  u \beta'     \\
-            t_2 & = ur' ur'\;  u \beta' \\
-            f   & = \alpha
-        \end{align*}
-        \begin{align*}
-             &                                                                   \\
-            \to_{\text{Algorithm~\ref{alg:greedy-formula-tape-fitting} goes to}} \\
-             &
-        \end{align*}
-        \begin{align*}
-            t_0 & = \beta'             \\
-            t_1 & = r'\;  u \beta'     \\
-            t_2 & = r' ur'\;  u \beta' \\
-            f   & = \alpha u
-        \end{align*}
-    \end{multicols}
-
-    Two cases:
-    \begin{itemize}
-        \item If $r'$ is nonempty, we are in the previously seen case $(\beta,r\beta,rr\beta)$ by assimilating  $\beta'$ to $\beta$ and $ur'$ to $r$, except that case (3) cannot happen since we've chosen $\beta'$ and $r'$ such that $\beta'[0] \neq r'[0]$ if they are both nonempty. Hence, the outputted formula is $f = \alpha u (r' u) \beta'$  which is the right-aligned version of $\alpha(r)\beta$ (because $\beta'[0] \neq r'[0]$, if both nonempty), as needed.
-        \item If $r'$ is empty, we are also in the previously seen case $(\beta,r\beta,rr\beta)$ by assimilating  $\beta'$ to $\beta$ and $u$ to $r$, however $|\beta'| < |\beta|$, hence, by induction, using the same set of 3 cases, this system will eventually reach case (1) $\beta' = \varnothing$ or case (2) $\beta'[0] = u[0]$ where we can conclude.
-    \end{itemize}
+    From there, we have two cases: (1) if $w = \varnothing$ then the greedy algorithm returns $f = w_1 (r)$, as needed, (2) if $w \neq \varnothing$, because $f$ is right-aligned, we must have $w[0] \neq r[0]$ ($r$ is not empty by hypothesis), and then the greedy algorithm returns $f = w_1 (r) w$, as needed.
 
 
     % With $\tilde{r} = rr$, $|\tilde{r}| > |r|$, which contradicts the hypothesis that $r$ was as long as possible. This justifies why prefixes are enumerated from longest match in Algorithm~\ref{alg:greedy-formula-tape-fitting}, line 16. Hence, $r'$ is never empty, and we have the result for $m=1$.
-
-    In the general case, using the case $m=1$ we have:
+    Assuming $m\geq 2$, we have:
     \setlength{\columnsep}{-1.9cm}
     \begin{multicols}{3}
         \noindent
         \begin{align*}
-            t_0 & = w_1\; r_1\; w_2 r_2\; \dots w_m\; r_m\; w_{m+1}                         \\
-            t_1 & = w_1\; r_1r_1\; w_2 r_2 r_2\; \dots w_m\; r_m r_m\; w_{m+1}              \\
-            t_2 & = w_1\; r_1 r_1 r_1\; w_2 r_2 r_2 r_2\; \dots w_m\; r_m r_m r_m\; w_{m+1}
-        \end{align*}
-        \begin{align*}
-             &                                                                   \\
-            \to_{\text{Algorithm~\ref{alg:greedy-formula-tape-fitting} goes to}} \\
-             &
-        \end{align*}
-        \begin{align*}
-            t_0 & = r_2\; \dots w_m\; r_m\; w_{m+1}                 \\
-            t_1 & = r_2 r_2\; \dots w_m\; r_m r_m\; w_{m+1}         \\
-            t_2 & = r_2 r_2 r_2\; \dots w_m\; r_m r_m r_m\; w_{m+1}
-        \end{align*}
-    \end{multicols}
-    From there, we get the theorem by induction.
-
-
-
-
-
-\end{proof}
-\begin{remark}[Minimal formula tapes]\label{rk:minimal-formula-tapes}
-    While Algorithm~\ref{alg:greedy-formula-tape-fitting} is assured, by Theorem~\ref{th:greedy-formula-tape-fitting},  to fit a formula tape (if it exists) starting from $t_0$ containing at least one occurrence of each repeater, the algorithm can fail when $t_0$ has none. Here is an example trying to parse $1011(01011)(1)0$ starting from $t_0 = 1011\;0$:
-
-
-    \begin{multicols}{5}
-        \noindent
-        \begin{align*}
-            t_0 & = 1011\; 0                         \\
-            t_1 & = 1011\; 01011\; 1\; 0             \\
-            t_2 & = 1011\; 01011\; 01011\; 1\; 1\; 0 \\
+            t_0 & = w_1\; w_2\;\dots w_m\; w                              \\
+            t_1 & = w_1\; r_1\; w_2\; r_2\; \dots w_m\; r_m\; w           \\
+            t_2 & = w_1\; r_1r_1\; w_2\;  r_2r_2\; \dots w_m\; r_mr_m\; w \\
             f   & = \varnothing
         \end{align*}
         \begin{align*}
@@ -480,39 +421,84 @@ Theorem~\ref{th:linquad} assures us that, in the sequence of successive tapes of
              &
         \end{align*}
         \begin{align*}
-            t_0 & = \varnothing              \\
-            t_1 & = 1011\; 1\; 0             \\
-            t_2 & = 1011\; 01011\; 1\; 1\; 0 \\
-            f   & = 1011 0
-        \end{align*}
-        \begin{align*}
-             &                                                                   \\
-            \to_{\text{Algorithm~\ref{alg:greedy-formula-tape-fitting} goes to}} \\
-             &
-        \end{align*}
-        \begin{align*}
-            t_0 & = \varnothing     \\
-            t_1 & = 1\; 1\; 0       \\
-            t_2 & = 011\; 1\; 1\; 0 \\
-            f   & = 1011 0 (101)
+            t_0 & = w_2\;\dots w_m\; w                              \\
+            t_1 & = r_1\; w_2\; r_2\; \dots w_m\; r_m\; w           \\
+            t_2 & = r_1r_1\; w_2\;  r_2r_2\; \dots w_m\; r_mr_m\; w \\
+            f   & = w_1
         \end{align*}
     \end{multicols}
+    By hypothesis, $w_2$ and $r_1$ are not empty and, because $f$ is right-aligned, we get $w_2[0] \neq r_1[0]$. Hence, Algorithm~\ref{alg:greedy-formula-tape-fitting} enters the repeater-fitting case on line 8 and goes to:
+    \begin{align*}
+        t_0 & = w_2\;\dots w_m\; w                     \\
+        t_1 & = w_2\; r_2\; \dots w_m\; r_m\; w        \\
+        t_2 & = w_2\;  r_2r_2\; \dots w_m\; r_mr_m\; w \\
+        f   & = w_1 (r_1)
+    \end{align*}
+    From here we can inductively conclude that Algorithm~\ref{alg:greedy-formula-tape-fitting} will reach:
+    \begin{align*}
+        t_0 & = w_m\; w                           \\
+        t_1 & = w_m\; r_m\; w                     \\
+        t_2 & = w_m\; r_mr_m\; w                  \\
+        f   & = w_1 (r_1) \dots w_{m-1} (r_{m-1})
+    \end{align*}
+
+    Using the same argument as for $m=1$, we get that Algorithm~\ref{alg:greedy-formula-tape-fitting} returns $f = w_1 (r_1) \dots w_m (r_m) w$, as needed.
 
 
 
-    % Then, $101$ is a prefix of $t'_1$ and $101 101$ a prefix of $t'_2$, which will yield:
-    % \begin{align*}
-    %     t''_0 & = \varnothing     \\
-    %     t''_1 & = 1\; 1\; 0       \\
-    %     t''_2 & = 011\; 1\; 1\; 0
-    % \end{align*}
 
-    At this point, the greedy algorithm raises failure since there are no more wall symbols in $t_0$ and no prefix $r$ of $t_1$ such that $rr$ is a prefix of $t_2$ since $t_1[0] \neq t_2[0]$. However, starting from $t_0 = 1011\; 01011\; 1\; 0$ it will successfully fit $101101011(01011)1(1)0$ which is a special case of $1011(01011)(1)0$.
+\end{proof}
+% \begin{remark}[Minimal formula tapes]\label{rk:minimal-formula-tapes}
+%     While Algorithm~\ref{alg:greedy-formula-tape-fitting} is assured, by Theorem~\ref{th:greedy-formula-tape-fitting},  to fit a formula tape (if it exists) starting from $t_0$ containing at least one occurrence of each repeater, the algorithm can fail when $t_0$ has none. Here is an example trying to parse $1011(01011)(1)0$ starting from $t_0 = 1011\;0$:
 
-    Hence, the greedy algorithm does not always fit \textit{minimal} formula tapes. By adding backtracking and memoization, it can easily be transformed into a Dynamic Programming algorithm that will succeed starting from smaller tapes, i.e.\ $t_0$ with no repeater occurrence, and hence fit minimal formula tapes, at the cost of being less efficient (quadratic vs. linear time complexity).
-    Note that another approach to formula tape minimisation is to deduce a minimal formula tape from the solution outputted by the greedy algorithm, essentially by removing occurrences of repeaters appearing in walls as much as possible, in linear time.
 
-\end{remark}
+%     \begin{multicols}{5}
+%         \noindent
+%         \begin{align*}
+%             t_0 & = 1011\; 0                         \\
+%             t_1 & = 1011\; 01011\; 1\; 0             \\
+%             t_2 & = 1011\; 01011\; 01011\; 1\; 1\; 0 \\
+%             f   & = \varnothing
+%         \end{align*}
+%         \begin{align*}
+%              &                                                                   \\
+%             \to_{\text{Algorithm~\ref{alg:greedy-formula-tape-fitting} goes to}} \\
+%              &
+%         \end{align*}
+%         \begin{align*}
+%             t_0 & = \varnothing              \\
+%             t_1 & = 1011\; 1\; 0             \\
+%             t_2 & = 1011\; 01011\; 1\; 1\; 0 \\
+%             f   & = 1011 0
+%         \end{align*}
+%         \begin{align*}
+%              &                                                                   \\
+%             \to_{\text{Algorithm~\ref{alg:greedy-formula-tape-fitting} goes to}} \\
+%              &
+%         \end{align*}
+%         \begin{align*}
+%             t_0 & = \varnothing     \\
+%             t_1 & = 1\; 1\; 0       \\
+%             t_2 & = 011\; 1\; 1\; 0 \\
+%             f   & = 1011 0 (101)
+%         \end{align*}
+%     \end{multicols}
+
+
+
+%     % Then, $101$ is a prefix of $t'_1$ and $101 101$ a prefix of $t'_2$, which will yield:
+%     % \begin{align*}
+%     %     t''_0 & = \varnothing     \\
+%     %     t''_1 & = 1\; 1\; 0       \\
+%     %     t''_2 & = 011\; 1\; 1\; 0
+%     % \end{align*}
+
+%     At this point, the greedy algorithm raises failure since there are no more wall symbols in $t_0$ and no prefix $r$ of $t_1$ such that $rr$ is a prefix of $t_2$ since $t_1[0] \neq t_2[0]$. However, starting from $t_0 = 1011\; 01011\; 1\; 0$ it will successfully fit $101101011(01011)1(1)0$ which is a special case of $1011(01011)(1)0$.
+
+%     Hence, the greedy algorithm does not always fit \textit{minimal} formula tapes. By adding backtracking and memoization, it can easily be transformed into a Dynamic Programming algorithm that will succeed starting from smaller tapes, i.e.\ $t_0$ with no repeater occurrence, and hence fit minimal formula tapes, at the cost of being less efficient (quadratic vs. linear time complexity).
+%     Note that another approach to formula tape minimisation is to deduce a minimal formula tape from the solution outputted by the greedy algorithm, essentially by removing occurrences of repeaters appearing in walls as much as possible, in linear time.
+
+% \end{remark}
 
 \subsubsection{Bouncers decider}
 
