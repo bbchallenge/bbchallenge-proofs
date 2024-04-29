@@ -83,7 +83,7 @@ Given a tape $t=uvw$ and a word $t'=uv'w$, with $u,w\in \overline{\Sigma}^*$, $v
     $ 0^\infty \rhead{\text{A}} 0^\infty \;\vdash\; 0^\infty \, 1 \rhead{\text{B}} 0^\infty \;\vdash\; 0^\infty \, 1 \lhead{\text{C}} 1\, 0^\infty\ \;\vdash\; 0^\infty \, 1 \rhead{\text{C}} 1\, 0^\infty \;\vdash\; 0^\infty \, 1 1 \rhead{\text{C}} 0^\infty$. Hence, $0^\infty \rhead{\text{A}} 0^\infty \;\vdash^*\; 0^\infty \, 1 1 \rhead{\text{C}} 0^\infty$.
 \end{example}
 
-\subsubsection{Wall-repeater formula tapes}
+\subsubsection{Wall-repeater formula tapes}\label{sec:bouncers:formula-tapes}
 
 We want to formalise the above-stated intuition that bouncers expand a tape by repeating \textit{repeater} patterns between fixed \textit{walls}, and then show that bouncers do not halt, Theorem~\ref{th:bouncers}. For this, we are going to express bouncers' tapes using regular expressions over the alphabet $\Delta \cup  \overline{\Sigma}$. Given $u\in\Sigma^*$, we abbreviate the regular expression $\{u\}^*$, which represents zero or more repetitions of the word $u$, as $(u)$. Also, we write $\Sigma^+ = \Sigma^* \setminus \{ \varnothing \}$. We define a \textit{wall-repeater formula tape} to be a regular expression of the form:
 \begin{align}\label{math:formulaTapes}w_1(r_1)w_2(r_2)\dots w_n(r_n) w_{n+1} h w'_1(r'_1)w'_2(r'_2)\dots w'_m(r'_m) w'_{m+1}\end{align}
@@ -309,7 +309,7 @@ Theorem~\ref{th:bouncers} characterises bouncers but we lack a practical criteri
 \newpage
 \subsection{Deciding bouncers in practice}\label{sec:bouncers-algo}
 
-In this section, we use the theory presented above in order to give a practical and efficient algorithm for deciding bouncers.
+In this section, we use the theory presented above in order to give a practical and efficient algorithm for deciding bouncers in practice.
 
 \subsubsection{Formula tape fitting}
 
@@ -325,14 +325,28 @@ In this section, we use the theory presented above in order to give a practical 
 
 % First, we prove that without loss of generality, in order to facilitate detection, we can focus on record-breaking right-aligned formula tapes that have nonempty intermediary walls:
 
+
+We introduce $\mathcal{A}_r$, the \textit{right-alignment} operator on formula tapes which only applies rule of type 1 in Definition~\ref{def:alignment} to all repeaters, both before and after the formula's head, bubbling them to the right.
+
+In this section, we give a linear-time, greedy, algorithm (Algorithm~\ref{alg:greedy-formula-tape-fitting}) that fits a formula tape $f$ only given three tapes: $C_f(0)$, $C_f(1)$ and $C_f(2)$. The algorithm is guaranteed to work on right-aligned formula tapes with nonempty \textit{intermediary walls}, which are all walls but the first and last one, see Theorem~\ref{th:greedy-formula-tape-fitting}. However, first, we must show that the precondition of having nonempty intermediary walls is without loss of generality, i.e.\ that all bouncers can be solved using such formulas. We prove this result in Lemma~\ref{lem:formula-tapes-WLOG}, using two technical lemmas, Lemmas~\ref{lem:right-alignement}~and~\ref{lem:word-theory}.
+
+
+
 \begin{lemma}\label{lem:right-alignement}
-    Assume that $M$ is a bouncer solved by formula tape $f$ according to Theorem~\ref{th:bouncers}, then:
+    Assume that $M$ is a bouncer solved by some formula tape $f$ according to Theorem~\ref{th:bouncers}, then:
     \begin{enumerate}
-        \item Any special case $f'$ of $f$ also solves the bouncer according to Theorem~\ref{th:bouncers}.
         \item $\mathcal{A}_r(f)$ also solves the bouncer.
+        \item Any special case $f'$ of $f$ also solves the bouncer.
+
     \end{enumerate}
 \end{lemma}
 \begin{proof}
+
+    \begin{enumerate}
+        \item We have $\mathcal{A}(\mathcal{A}_r(f)) = \mathcal{A}(f)$ hence, Theorem~\ref{th:bouncers} will reach $\mathcal{A}(f)$ after one application of $\mathcal{A}$ in any case and the bouncer will get solved in the same way.
+        \item By definition of special case $f'$ can be constructed from $f$ by replacing any $(r)$ by $r^n(r)r^m$ for some $n,m\in\N$. Aligning $f'$ will have the same effect as aligning $f$ with the addition that repeaters before the head will look like $(r)r^{n+m}$  and after the head $r^{n+m}(r)$. Then, shift rule will apply similarly to $f'$ and $f$, with the addition in $f'$ that segments of the form $r^{n+m}$ will be handled by simulating the same shift rule as for $(r)$ through usual steps. Hence, $f'$ solves the bouncer.
+    \end{enumerate}
+
 \end{proof}
 
 \begin{lemma}\label{lem:word-theory}
@@ -345,19 +359,19 @@ In this section, we use the theory presented above in order to give a practical 
 \end{proof}
 
 \begin{lemma}\label{lem:formula-tapes-WLOG}
-    Let a machine $M$ be a bouncer, then there is a right-aligned formula tape with nonempty intermediary walls that solves the bouncer according to Theorem~\ref{th:bouncers}.
+    Let a machine $M$ be a bouncer solved by formula tape $f$, then, $f$ can be transformed into a right-aligned formula tape with nonempty intermediary walls that solves the bouncer according to Theorem~\ref{th:bouncers}.
 \end{lemma}
 \begin{proof}
     By Lemma~\ref{lem:right-alignement}, $\mathcal{A}_r(f)$ also solves the bouncer. For each case $\dots (r_1)(r_2) \dots$ where two repeaters in $\mathcal{A}_r(f)$ are separated by an empty wall, apply the following transformation to $\mathcal{A}_r(f)$, according to two cases:
 
     \begin{enumerate}
-        \item If there is $k\geq 1$ such that right-aligning $(r_1)r_2^k(r_2)$ yields a non-empty intermediary wall, replace $(r_1)(r_2)$ by $\mathcal{A}_r((r_1)r_2^k(r_2))$, yielding a new formula tape $f'$. Noticing that $(r_1)r_2^k(r_2)$ is a special case of $(r_1)(r_2)$ and combining both points of Theorem~\ref{th:bouncers} we get that $f'$ still solves the bouncer.
+        \item If there is $k\geq 1$ such that right-aligning $(r_1)r_2^k(r_2)$ yields a non-empty intermediary wall, replace $(r_1)(r_2)$ by $\mathcal{A}_r((r_1)r_2^k(r_2))$, yielding a new formula tape $f'$. Noticing that $(r_1)r_2^k(r_2)$ is a special case of $(r_1)(r_2)$ and combining both points of Lemma~\ref{lem:right-alignement} we get that $f'$ still solves the bouncer.
 
         \item If for all $k\geq 1$ there's $r'_k\in\Sigma^+$ such that we have $\mathcal{A}_r((r_1)r_2^k(r_2)) = r_2^k (r'_k)(r_2)$ by the definition of right-alignment (Definition~\ref{def:alignment}, rule 1). We deduce that $r_1[i \text{ mod } |r_1|] = r_2^\infty[i]$ for all $i\in\N$. By Lemma~\ref{lem:word-theory} we get that there is $c$ such that $r_1 = c^m$ and $r_2 = c^n$. Hence, we can replace $(r_1)(r_2) = (c^m)(c^n)$ by $(c^m c^n) = (r_1 r_2)$ in the formula tape and still solve the bouncer with this new formula tape. Indeed, because $f$ solves the bouncer we have $u \in\Sigma^*$, $s\in S$, $r', r'' \in \Sigma^+$ and two shift rules, for instance, right shift rules: $u \rhead{s} (c^m) \to (r') u \rhead{s}$ and $u \rhead{s} (c^n) \to (r'') u \rhead{s}$. Hence, considering $u  \rhead{s} c^m c^n$, we get $u  \rhead{s} c^m c^n \vdash^* r' u  \rhead{s} c^n \vdash^* r' r'' u  \rhead{s}$, meaning that we have a right shift rule $u \rhead{s} (c^m c^n) \to (r'r'') u \rhead{s}$, as needed.
 
     \end{enumerate}
 
-    Applying case (1) or (2) to all repeaters of $\mathcal{A}_r(f)$ that are separated by an empty wall, we get the result.
+    Applying case (1) or (2) to all repeaters of $\mathcal{A}_r(f)$ that are separated by an empty wall, and we get a right-aligned transformation of $f$ with nonempty intermediary walls, as needed.
 
 \end{proof}
 
@@ -406,7 +420,9 @@ In this section, we use the theory presented above in order to give a practical 
     \end{algorithmic}
 \end{algorithm}
 
-\begin{remark}
+Given a tape $t$, we call $\mathcal{S}(t) \in \Sigma^*$ the \textit{headless} version of $t$ which is the tape without head and $0^\infty$ symbols. We also introduce headless formula tapes: $\mathcal{S}(f)$ is $f$ without head and $0^\infty$ symbols. We introduce these notions because we formulate Algorithm~\ref{alg:greedy-formula-tape-fitting} as taking as inputs headless tapes (i.e.\ words in $\Sigma^*$) and outputting headless formula tapes. Justification is that before feeding tapes to Algorithm~\ref{alg:greedy-formula-tape-fitting}, we will check that these tapes have the same head in $\Delta$ and strip the head and $0^\infty$ from them (i.e. $\mathcal{S}$ is applied) and glue it back to outputted headless formula tape.
+
+\begin{remark}[Implementation details of Algorithm~\ref{alg:greedy-formula-tape-fitting}]
     In Algorithm~\ref{alg:greedy-formula-tape-fitting}, we assume that we are given a \textbf{HeadLessFormulaTape} construct which is a \textbf{FormulaTape} (see Equation~\eqref{math:formulaTapes}) without head or symbols $0^\infty$, and a function \textbf{get\_longest\_match\_size} which returns the size of the longest prefix of two words. Furthermore, for an array \texttt{a}, we use the notation \texttt{a[b:e]} to mean the slice of this array between indices \texttt{b} and \texttt{e}, excluding \texttt{e}.
 \end{remark}
 
@@ -578,45 +594,33 @@ In this section, we use the theory presented above in order to give a practical 
 
 \subsubsection{Bouncers decider}
 
-We finally present a complete decider for bouncers, Algorithm~\ref{alg:decider-bouncers} which is proven correct in Theorem~\ref{th:bouncer-decider}. The motivation for focusing on record-breaking formula tapes is that is considerably decreases the number of tapes and tapes triples to consider in the algorithm.
+We finally present a complete decider for bouncers (excluding cyclers, decided in Section~\ref{sec:cyclers}), Algorithm~\ref{alg:decider-bouncers} which is proven correct in Theorem~\ref{th:bouncer-decider}. If a machine is a bouncer that is not a cycler, solved by some formula tape $f$, we know that it is also solved by $f'$ a right-aligned formula tape with nonempty intermediary walls that we can obtain from $f$ (Lemma~\ref{lem:formula-tapes-WLOG}). By Theorem~\ref{th:linquad}, we know that $(C_f'(n))_{n\in\N}$ is a subsequence of the tapes visited by the machine from $0^\infty \rhead{\text{A}} 0^\infty$ and that we can detect such subsequence because it grows linearly in quadratic time. Hence, given enough time, we can eventually find $(C_f'(0), C_f'(1), C_f'(2))$ from all \textit{plausible} subsequences of tapes (i.e.\ subsequences that grow linearly in quadratic time), run the formula tape fitting Algorithm~\ref{alg:greedy-formula-tape-fitting}, deduce $f'$ and verify it satisfies Theorem~\ref{th:bouncers}, hence deciding the bouncer.
 
-Using Lemma~\ref{lem:formula-tapes-WLOG}, Theorem~\ref{th:linquad} and Algorithm~\ref{alg:greedy-formula-tape-fitting} together gives a straightforward way to decide bouncers:
+In practice, in order to drastically limit the amount of plausible subsequences to check, we limit our interest to \textit{record-breaking} formula tapes, which are formula tapes where the head is pointing at $0^\infty$. In order to fit them, we can simply track record-breaking tapes that share the same head, i.e.\ tapes where the head is pointing at $0^\infty$. We first show that this is without loss of generality:
 
-\begin{enumerate}
-    \item Track record-breaking tapes with same head state and pointing-direction that grow linearly in quadratic time.
-    \item Run Algorithm~\ref{alg:greedy-formula-tape-fitting} on triples of headless tapes extracted from these record-breaking sequences, until a formula tape satisfying Lemma~\ref{lem:formula-tapes-WLOG} (and hence, Theorem~\ref{th:bouncers}), which the algorithm can fit (Theorem~\ref{alg:greedy-formula-tape-fitting}) is found, or some limits are met.
-
-
-\end{enumerate}
-
-If the machine is a bouncer, by Theorem~\ref{th:linquad}, we are assured, at some point, of being able to extract a suite of three tapes compliant with the hypotheses of Theorem~\ref{th:greedy-formula-tape-fitting} (at least one repetition of each repeater), and hence, to decide the bouncer.
-
-There are multiple strategies one can implement for enumerating record-breaking tape triples that are \textit{plausible}, i.e.\ that grow linearly in quadratic time. Here we propose a simple approach consisting of enumerating record-breaking tapes with same head in increasing length and for each, looking in the previous record-breaking tapes  for 3 other tapes (so, 4 tapes total) in linear length progression and quadratic time progression. We then run Algorithm~\ref{alg:greedy-formula-tape-fitting} on the last 3 tapes of these 4 tapes and, that way, the decider should find relatively early a triple where the first tape contains at least one of each repeater, as required by Theorem~\ref{th:greedy-formula-tape-fitting}.
-
-This strategy is implemented in Algorithm~\ref{alg:decider-bouncers}, where we assume that we are given: (1) a \textbf{get\_record breaking\_tapes} routine which returns the record-breaking tapes for each tape head $h\in\Delta$ (i.e.\ tape head state and pointing-direction), in increasing length (2) a \textbf{binary\_search\_len} routine which finds by binary search a tape of a given length, or returns \textbf{None} if it does not exist and (3) a \textbf{is\_quadratic} which tests that a sequence of integers is in quadratic progression (for instance by computing second differences and testing they are constant), (4) routines \textbf{headless} and \textbf{attach\_head} to manipulate tapes/formula tapes with and without head, and (5) a \textbf{reaches\_special\_case} routine on formula tapes which returns \textbf{true} if successive simulation and alignment of the formula tape, as described in Theorem~\ref{th:bouncers}, reaches a special case in a given amount of macro steps, where a macro step consists in performing alignment followed by either performing a usual step or a shift rule step as.
-
-\begin{theorem}[Deciding bouncers]\label{th:bouncer-decider}
-    Let $M$ be a bouncer Turing machine in the sense of Theorem~\ref{th:bouncers}. Then, there exists a step limit $s\in\N$, a macro step limit $m\in\N$ and a formula tape testing limit $l$ such that Algorithm~\ref{alg:decider-bouncers}, {\sc Decider-Bouncers}($M$,$s$,$m$,$l$) outputs \textbf{true}.
-\end{theorem}
+\begin{lemma}\label{lem:record-breaking}
+    If $M$ is a bouncer solved by a formula tape $f$, then there is a record-breaking formula tape that also solves the bouncer according to Theorem~\ref{th:bouncers}.
+\end{lemma}
 \begin{proof}
-
-    Algorithm~\ref{alg:decider-bouncers} enumerates all record-breaking tapes triple that grow linearly in quadratic time. If $s$ is large enough, by Theorem~\ref{th:linquad}, it will, given a large enough formula tape testing limit $l$, eventually meet a triple of the form:
-    \begin{align*}
-        t_0 & = w_1\; r_1\; \dots w_m\; r_m\; w_{m+1}               \\
-        t_1 & = w_1\; r_1r_1\; \dots w_m\; r_m r_m\; w_{m+1}        \\
-        t_2 & = w_1\; r_1 r_1 r_1 \dots w_m\; r_m r_m r_m\; w_{m+1}
-    \end{align*}
-
-    Such that tapes of this triple are instances of a formula tape $f$ with headless form
-
-    $\mathcal{S}(f) = w_1 (r_1) w_2 (r_2) \dots w_m (r_m) w_{m+1} $ that solves the bouncer according to Theorem~\ref{th:bouncers}. Algorithm~\ref{alg:decider-bouncers}, line 21, will call Algorithm~\ref{alg:greedy-formula-tape-fitting} on this triple which will, by Theorem~\ref{th:greedy-formula-tape-fitting}, return $\mathcal{S}(\mathcal{A}(\tilde{f}))$ with $\tilde{f}=  w_1 r_1(r_1) w_2 r_2(r_2) \dots w_m r_m(r_m) w_{m+1}$, which is a special case of $f$, hence that will also solve the bouncer when calling \textbf{reaches\_special\_case} in Algorithm~\ref{alg:decider-bouncers}, line 25, given that we give a large enough macro step limit $m$.
+    TODO.
 \end{proof}
 
+Algorithm~\ref{alg:decider-bouncers} proceeds by (1) tracking record-breaking tapes with same head (i.e.\ same state and pointing-direction) that grow linearly in quadratic time, (2) fitting formula tapes from triples from these plausible subsequences until a formula tape solves the bouncer is found or some limits are met.
+
+% Using Lemma~\ref{lem:formula-tapes-WLOG}, Theorem~\ref{th:linquad} and Algorithm~\ref{alg:greedy-formula-tape-fitting} together gives a straightforward way to decide bouncers:
+
+% \begin{enumerate}
+%     \item Track record-breaking tapes with same head state and pointing-direction that grow linearly in quadratic time.
+%     \item Run Algorithm~\ref{alg:greedy-formula-tape-fitting} on triples of headless tapes extracted from these record-breaking sequences, until a formula tape satisfying Lemma~\ref{lem:formula-tapes-WLOG} (and hence, Theorem~\ref{th:bouncers}), which the algorithm can fit (Theorem~\ref{alg:greedy-formula-tape-fitting}) is found, or some limits are met.
 
 
+% \end{enumerate}
 
+% If the machine is a bouncer, by Theorem~\ref{th:linquad}, we are assured, at some point, of being able to extract a suite of three tapes compliant with the hypotheses of Theorem~\ref{th:greedy-formula-tape-fitting} (at least one repetition of each repeater), and hence, to decide the bouncer.
 
+% There are multiple strategies one can implement for enumerating record-breaking tape triples that are \textit{plausible}, i.e.\ that grow linearly in quadratic time. Here we propose a simple approach consisting of enumerating record-breaking tapes with same head in increasing length and for each, looking in the previous record-breaking tapes  for 3 other tapes (so, 4 tapes total) in linear length progression and quadratic time progression. We then run Algorithm~\ref{alg:greedy-formula-tape-fitting} on the last 3 tapes of these 4 tapes and, that way, the decider should find relatively early a triple where the first tape contains at least one of each repeater, as required by Theorem~\ref{th:greedy-formula-tape-fitting}.
 
+% This strategy is implemented in Algorithm~\ref{alg:decider-bouncers}, where we assume that we are given: (1) a \textbf{get\_record breaking\_tapes} routine which returns the record-breaking tapes for each tape head $h\in\Delta$ (i.e.\ tape head state and pointing-direction), in increasing length (2) a \textbf{binary\_search\_len} routine which finds by binary search a tape of a given length, or returns \textbf{None} if it does not exist and (3) a \textbf{is\_quadratic} which tests that a sequence of integers is in quadratic progression (for instance by computing second differences and testing they are constant), (4) routines \textbf{headless} and \textbf{attach\_head} to manipulate tapes/formula tapes with and without head, and (5) a \textbf{reaches\_special\_case} routine on formula tapes which returns \textbf{true} if successive simulation and alignment of the formula tape, as described in Theorem~\ref{th:bouncers}, reaches a special case in a given amount of macro steps, where a macro step consists in performing alignment followed by either performing a usual step or a shift rule step as.
 
 \begin{algorithm}[h!]
     \caption{{\sc Decider-Bouncers}}\label{alg:decider-bouncers}
@@ -679,6 +683,33 @@ This strategy is implemented in Algorithm~\ref{alg:decider-bouncers}, where we a
         \EndProcedure
     \end{algorithmic}
 \end{algorithm}
+
+\begin{theorem}[Deciding bouncers]\label{th:bouncer-decider}
+    Let $M$ be a bouncer Turing machine in the sense of Theorem~\ref{th:bouncers}. Then, there exists a step limit $s\in\N$, a macro step limit $m\in\N$ and a formula tape testing limit $l$ such that Algorithm~\ref{alg:decider-bouncers}, {\sc Decider-Bouncers}($M$,$s$,$m$,$l$) outputs \textbf{true}.
+\end{theorem}
+\begin{proof}
+    Because $M$ is a bouncer, using Lemmas~\ref{lem:formula-tapes-WLOG}~and~\ref{lem:record-breaking}, we know that there is a right-aligned formula tape $f$ with nonempty intermediary walls which solves the bouncer according to Theorem~\ref{th:bouncers}.
+
+    Algorithm~\ref{alg:decider-bouncers} enumerates all record-breaking tapes triple that grow linearly in quadratic time. If $s$ is large enough, by Theorem~\ref{th:linquad}, it will, given a large enough limit $l$ for testing formula tapes, eventually meet a triple of the form:
+    \begin{align*}
+        t_0 & = C_f(0) \\
+        t_1 & = C_f(1) \\
+        t_2 & = C_f(2)
+    \end{align*}
+
+    Then, at line 23, Algorithm~\ref{alg:decider-bouncers} will feed $(\mathcal{S}(C_f(0)),\mathcal{S}(C_f(1)),\mathcal{S}(C_f(2)))$ to Algorithm~\ref{alg:greedy-formula-tape-fitting}, which will output $\mathcal{S}(f)$ which be reconstructed into $f$ at line 27. From there, Theorem~\ref{th:bouncers} will be verified using \textbf{reaches\_special\_case} at line 28, which by hypothesis will output \textbf{true}, and we have the result.
+\end{proof}
+
+\begin{remark}[Implementation details of Algorithm~\ref{alg:decider-bouncers}]
+    In Algorithm~\ref{alg:decider-bouncers}, we assume that we are given (1) a \textbf{get\_record breaking\_tapes} routine which returns the record-breaking tapes for each tape head $h\in\Delta$ (i.e.\ tape head state and pointing-direction), in increasing length (2) a \textbf{binary\_search\_len} routine which finds by binary search a tape of a given length, or returns \textbf{None} if it does not exist and (3) a \textbf{is\_quadratic} which tests that a sequence of integers is in quadratic progression (for instance by computing second differences and testing they are constant), (4) routines \textbf{headless} and \textbf{attach\_head} to manipulate tapes/formula tapes with and without head, and (5) a \textbf{reaches\_special\_case} routine on formula tapes which returns \textbf{true} if successive simulation and alignment of the formula tape, as described in Theorem~\ref{th:bouncers}, reaches a special case in a given amount of macro steps, where a macro step consists in performing alignment followed by either performing a usual step or a shift rule step as. We can note that when detecting shift rules (see Section~\ref{sec:bouncers:formula-tapes}), it is important to implement cycler detection which as it is possible for a machine to cycle indefinitely on a finite tape.
+\end{remark}
+
+
+
+
+
+
+
 
 \subsection{Implementations and results}\label{sec:bouncers-implem}
 
