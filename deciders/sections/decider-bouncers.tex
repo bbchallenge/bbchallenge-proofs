@@ -192,7 +192,7 @@ We finally get to the main result of this section, which characterises bouncers 
     It follows from Lemma~\ref{lem:vdashFormulaTapes} and Lemma~\ref{lem:sameLanguage} that there exist tapes $t_0, \dots, t_n$, such that $t_0 = t$ and $t_i\in \mathcal{L}(f_i)$ for $0 \leq i \leq n$, and $t_i \vdash^* t_{i+1}$ for $0 \leq i < n$, giving $t_0 \vdash^* t_n$. Since $f_n$ is a special case of $f_0$, we have $\mathcal{L}(\mathcal{A}(f_n)) \subseteq \mathcal{L}(\mathcal{A}(f_0))$, and using Lemma~\ref{lem:sameLanguage}, we have $\mathcal{L}(f_n) \subseteq \mathcal{L}(f_0)$ and thus, $t_n \in \mathcal{L}(f_0)$. We can repeat this construction indefinitely and yield an infinite sequence of tapes $(t_n)_{n\in\mathbb{N}}$ such that $t \vdash^* t_i$ for all $i\in\mathbb{N}$n hence the machine does not halt.
 \end{proof}
 
-\begin{definition}[Bouncer certificate]\label{def:certificate}
+\begin{definition}[Bouncer certificate]\label{def:bouncer-certificate}
     For a given bouncer, i.e. a machine on which Theorem~\ref{th:bouncers} applies, a bouncer certificate consists at least of the following, using same notation as in Theorem~\ref{th:bouncers}:
     \begin{enumerate}
         \item The formula tape $f_0$. We say that $f_0$ \textit{solves} the bouncer.
@@ -223,7 +223,7 @@ We finally get to the main result of this section, which characterises bouncers 
 
     Now, $f_{41}$ is a special case of $f_{0}$ because $\mathcal{A}(f_{41})$ differs from $f_0=\mathcal{A}(f_0)$ only by including one repetition of repeaters $(111)$ and $(11)$ in the walls directly to their right. The assumptions of Theorem~\ref{th:bouncers} hold and our Turing machine is a bouncer: it does not halt.
 
-    A bouncer certificate (Definition~\ref{def:certificate}) for this machine is $f_0 = 0^\infty (111)1110(11)00\rhead{\text{D}}0^\infty$, time step $64$ at which $0^\infty 11111101100 \rhead{\text{D}} 0^\infty \in \mathcal{L}(f_0)$ is reached and $41$ macro steps which transform $f_0$ into special case $f_{41}$ under successive $\vdash$ and alignement applications.
+    A bouncer certificate (Definition~\ref{def:bouncer-certificate}) for this machine is $f_0 = 0^\infty (111)1110(11)00\rhead{\text{D}}0^\infty$, time step $64$ at which $0^\infty 11111101100 \rhead{\text{D}} 0^\infty \in \mathcal{L}(f_0)$ is reached and $41$ macro steps which transform $f_0$ into special case $f_{41}$ under successive $\vdash$ and alignement applications.
 \end{example}
 
 Note that Cyclers (Section~\ref{sec:cyclers}) and Translated Cyclers (Section~\ref{sec:translated-cyclers}) are special cases of bouncers, as they satisfy Theorem~\ref{th:bouncers}.
@@ -231,9 +231,11 @@ Note that Cyclers (Section~\ref{sec:cyclers}) and Translated Cyclers (Section~\r
 
 \subsubsection{Linear-quadratic growth}
 
-For a given formula tape $f$ call $C_f(k) \in \mathcal{L}(f)$ the tape where each repeater is used exactly $k \in \N$ times.
+For a given formula tape, using the notation of Equation~\ref{math:formulaTapes}: $$f=w_1(r_1)w_2(r_2)\dots w_n(r_n) w_{n+1} h w'_1(r'_1)w'_2(r'_2)\dots w'_m(r'_m) w'_{m+1}$$ call $C_f(k) \in \mathcal{L}(f)$ the tape where each repeater is used exactly $k \in \N$ times: $$C_f(k)=w_1 r_1^k w_2 r_2^k\dots w_n r_n^k w_{n+1} h w'_1 {r'_1}^k w'_2 {r'_2}^k \dots w'_m {r'_m}^k w'_{m+1}$$
 
-Theorem~\ref{th:bouncers} characterises bouncers but we lack a practical criterion for recognising a bouncer from its sequence of successive tapes starting from $0^\infty \rhead{\text{A}} 0^\infty$. We make a step in that direction by showing that if a bouncer is not a cycler (Section~\ref{sec:cyclers}), we can expect to see tapes of the form  for some $m\in\N$ and for all successive $n\in\mathbb{N}$ as a subsequence of the sequence of all tapes visited by the bouncer.
+We denote an infinite sequence $u_0, u_1, \dots u_n, \dots$ with $n\in\N$ by $(u_n)_{n\in\N}$. We define the difference operator $D: \Z^\N \to \Z^\N$ via $D((u_n)_{n\in\N})=(u_{n+1}-u_{n})_{n\in\N}$. The \textit{length} of a tape $t$ is the number of symbols of $\Sigma$ in $t$, i.e.\ ignoring head and $0^\infty$.
+
+Theorem~\ref{th:bouncers} characterises bouncers but we lack a practical criterion for recognising a bouncer from its sequence of successive tapes starting from $0^\infty \rhead{\text{A}} 0^\infty$. We make a step in that direction by showing that if a bouncer is not a cycler (Section~\ref{sec:cyclers}) and is solved by formula tape $f$ according to Theorem~\ref{th:bouncers}, we can expect to see tapes of the form $C_f(k)$ for all successive $k\in\mathbb{N}$ as a subsequence of the sequence of all tapes visited by the bouncer. Importantly for being detected in practice, the length of tapes $C_f(k)$ grows linearly in quadratic time:
 
 % We define \textit{record-breaking tapes} to be tapes where the head is pointing at $0^\infty$, i.e.\ tapes of the form $0^\infty u \rhead{s} 0^\infty$ or $0^\infty \lhead{s} u 0^\infty$ with $u\in\Sigma^*$ and $s\in S$. Similarly, \textit{record-breaking formula tapes} are formula tapes where the head is pointing at $0^\infty$.
 
@@ -242,22 +244,17 @@ Theorem~\ref{th:bouncers} characterises bouncers but we lack a practical criteri
 
 % The definition of the alignment operator $\mathcal{A}$ (Definition~\ref{def:alignment}) on formula tapes is dependent on the head and hence is not applicable to headless formula tapes as it. We introduce the \textit{right-alignment} operator $\mathcal{A}_r$ that is defined on headless formula tapes by performing only rules of type 2 in Definition~\ref{def:alignment}. Note that in general, $\mathcal{S}(\mathcal{A}(f)) \neq \mathcal{A}_r(\mathcal{S}(f))$.
 
-We denote an infinite sequence $u_0, u_1, \dots u_n, \dots$ with $n\in\N$ by $(u_n)_{n\in\N}$. We define the difference operator $D: \Z^\N \to \Z^\N$ via $D((u_n)_{n\in\N})=(u_{n+1}-u_{n})_{n\in\N}$.
 
-Bouncers will grow their tape such that we can extract a subsequence of record-breaking tapes of the form $w_1 r_1^n w_2 r_2^n \dots w_m r_m^n w_{m+1}$ with length in arithmetic progression and time steps in quadratic progression:
+
+% Bouncers will grow their tape such that we can extract a subsequence of record-breaking tapes of the form $w_1 r_1^n w_2 r_2^n \dots w_m r_m^n w_{m+1}$ with length in arithmetic progression and time steps in quadratic progression:
 
 \begin{theorem}[Linear-quadratic growth]\label{th:linquad}
-    Let $M$ be a bouncer Turing machine, i.e.\ it satisfies Theorem~\ref{th:bouncers} for some formula tape $f = w_1(r_1)w_2(r_2)\dots w_n(r_n) w_{n+1} h w'_1(r'_1)w'_2(r'_2)\dots w'_m(r'_m) w'_{m+1}$.
+    Let $M$ be a bouncer Turing machine, i.e.\ it satisfies Theorem~\ref{th:bouncers} for some formula tape $f$. Call $(t_n)_{n\in\N}$ the sequence of tapes that it visits starting from $t_0 = 0^\infty \rhead{\text{A}} 0^\infty$. Call $l_n$ the length of $t_n$ and suppose that $\text{lim}_{n\to\infty} l_n = +\infty$, i.e.\ $M$ is not a cycler.
 
-
-
-    Call $(t_n)_{n\in\N}$ the sequence of tapes that it visits starting from $t_0 = 0^\infty \rhead{\text{A}} 0^\infty$. Call $l_n$ the length of $t_n$ and suppose that $\text{lim}_{n\to\infty} l_n = +\infty$, i.e.\ $M$ is not a cycler. Then, there is an integer $m \geq 1$ and $w_1, \dots, w_{m+1} \in \Sigma^*$ and $r_1, \dots, r_{m} \in \Sigma^+$, and $g: \mathbb{N} \to \mathbb{N}$ with $g(n) \geq n$ for all $n\in\N$ that extracts a subsequence of $(t_n)_{n\in\N}$ such that:
+    Then, there is an extraction function $g: \mathbb{N} \to \mathbb{N}$ with $g(n) \geq n$ for all $n\in\N$, such that:
 
     \begin{enumerate}
-        \item There is a formula tape $f$ with head pointing at $0^\infty$ that solves the bouncer according to Theorem~\ref{th:bouncers} and with $\mathcal{S}(f) = w_1 (r_1) w_2 (r_2) \dots w_m (r_m) w_{m+1} $.
-        \item All tapes $t_{g(n)}$ are record-breaking with the same head state and pointing-direction.
-        \item $\mathcal{S}(t_{g(n)})=w_1 r_1^n w_2 r_2^n \dots w_m r_m^n w_{m+1}$ for all $n\in\N$.
-
+        \item For all $n\in\N$, $t_{g(n)} = C_f(n)$.
         \item $(l_{g(n)})_{n\in\N}$ is an arithmetic progression, i.e.\ $D((l_{g(n)})_{n\in\N}) = (K)_{n\in\N}$ for some constant $K\in\N$.
         \item $(g(n))_{n\in\N}$ is a quadratic progression, i.e.\ $D(D((g(n))_{n\in\N})) = (K')_{n\in\N}$ for some constant $K'\in\N$.
     \end{enumerate}
@@ -639,7 +636,7 @@ Here are the implementations of the decider that were realised:
 % MitM-DFA impl notes:
 % It uses Kissat\cite{Biere_2020} as its \textsc{SAT} solver.
 % Acknowledgements should point to djmati1111 and mateon1 implementations (pinned in Discord)
-\textbf{Verifiers.} Verifiers for Theorem~\ref{th:bouncers}, i.e.\ programs that verify bouncer certificates (Definition~\ref{def:certificate}) have also been given as part of the above implementations. Mei's implementation provides a Coq implementation of the verifier. There is an ongoing effort for standardising the format of bouncers certificates (and certificates in general).
+\textbf{Verifiers.} Verifiers for Theorem~\ref{th:bouncers}, i.e.\ programs that verify bouncer certificates (Definition~\ref{def:bouncer-certificate}) have also been given as part of the above implementations. Mei's implementation provides a Coq implementation of the verifier. There is an ongoing effort for standardising the format of bouncers certificates (and certificates in general).
 
 \paragraph*{Results.} Using limits of 250,000 steps and 50,000 macro steps and 10 formula tapes, the method decides 29,799 machines out of the 32,632 remaining machines (91\%) after FAR (Section~\ref{sec:finite-automata-reduction}), in less than 3 seconds using mei's implementation\footnote{Only step limit is used in this implementation, macro step limit is deduced from step limit and there is no formula tapes limit.} and in approximatively 1 minute using cosmo's on a standard laptop. Hence, after bouncers, we have 29,799 machines left to be decided.
 
