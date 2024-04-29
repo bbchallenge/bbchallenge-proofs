@@ -737,21 +737,18 @@ Here are the implementations of the decider that were realised:
 \begin{figure}[h!]
     \centering
     \includegraphics[scale=0.35]{figures/bouncers/5608043.png}
-    \caption{\small 50,000-step space-time diagram of \url{https://bbchallenge.org/5608043}. Out of the 29,799 decided bouncers, this bouncer takes the most steps (141,509) to be detected and fits the biggest formula tape (378 0/1 symbols), using the method presented in this section.}\label{fig:big-bounce}
+    \caption{\small 50,000-step space-time diagram of \url{https://bbchallenge.org/5608043}. Out of the 29,799 decided bouncers, this bouncer takes the most steps (141,509) to be detected and fits the biggest formula tape, using Algorithm~\ref{alg:decider-bouncers} presented in this section.}\label{fig:big-bounce}
 \end{figure}
 \vspace{-2.5ex}
-\paragraph*{Remarkable bouncers.} Out of the 29,799 bouncers that were decided using the method presented in this section, here are some remarkable facts:
+\paragraph*{Remarkable bouncers.} Out of the 29,799 bouncers that were decided using Algorithm~\ref{alg:decider-bouncers}, here are some remarkable facts:
 \begin{enumerate}
-    \item Only two bouncers have 3 repeaters and that's the maximum: \url{https://bbchallenge.org/347505} and \url{https://bbchallenge.org/8131743}. Otherwise, 2132 bouncers have 2 repeaters and the rest has only 1.
-    \item\label{pt:big-formula-tape} The biggest fitted formula tapes by the algorithm (but note that formulas are not necessarily minimal, see Remark~\ref{rk:minimal-formula-tapes}) have 378 symbols (summing walls and repeater symbols), there are two of them, such as for machine \url{https://bbchallenge.org/5608043}, see Figure~\ref{fig:big-bounce}:
+    \item Using Algorithm~\ref{alg:decider-bouncers}, only two bouncers with 3 repeaters were found (and that's the maximum): \url{https://bbchallenge.org/347505} and \url{https://bbchallenge.org/8131743}. Otherwise, 2132 bouncers have 2 repeaters and the rest has only 1.
+    \item\label{pt:big-formula-tape} The biggest fitted formula tapes by the algorithm have 328 symbols (summing walls and repeater symbols, not counting head and $0^\infty$), there are two of them, such as for machine \url{https://bbchallenge.org/5608043}, see Figure~\ref{fig:big-bounce}:
           \begin{align*}
-               & 0^\infty\lhead{\text{A}} 1000001110001110000001110000111011100111011100111000011100 0011101110011100001110
-              \\ &1110011101110011100001110000111011100111000011100001110000111000011101110011101110011\\ &1011100111011100111011100111011100111011100111011100111011100111011100 (111011100111011\\
-               & 100111011100111011100)000111000011100000011100111111111111111
-              0000111111111111111(11111                                                                                     \\ &1111111)                                                                            001110000000111000000111111001111110^\infty
+               & 0^\infty\lhead{\text{A}}  10000011100011100000011100001110111001110111001110000111 \\ &0000111011100111000011101110011101110011100001110000111011100\\ &1110000111000011100001110000111011100111011100111011100111011\\ &100111011100111011100(111011100111011100111011100111011100)000\\ &1110000111000000111001111111111111110000111(111111111111)00111\\ &000000011100000011111100111111(0)^\infty
           \end{align*}
 
-    \item The above machine of Point~\ref{pt:big-formula-tape} is also the machine that is detected after the most steps: 141,509. Over this dataset, it took 202 steps on average.
-    \item The most macro steps (i.e.\ number of usual or shift rule steps in formula tape simulation) needed to conclude using Theorem~\ref{th:bouncers} was 44,898 for \url{https://bbchallenge.org/347505}. Otherwise, it took 107 macro steps on average.
+    \item The above machine of Point~\ref{pt:big-formula-tape} is also the machine that is detected after the most steps: 141,509. Over this dataset, it took 207 steps on average.
+    \item The most macro steps (i.e.\ number of usual or shift rule steps in formula tape simulation) needed to conclude using Theorem~\ref{th:bouncers} was 41,628 for \url{https://bbchallenge.org/347505}. Otherwise, it took 66 macro steps on average.
 
 \end{enumerate}
