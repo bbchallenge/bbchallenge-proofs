@@ -292,7 +292,7 @@ In this section, we use the theory presented above in order to give a practical 
 
 We introduce $\mathcal{A}_r$, the \textit{right-alignment} operator on formula tapes which only applies rule of type 1 in Definition~\ref{def:alignment} to all repeaters, both before and after the formula's head, bubbling them to the right.
 
-In this section, we give a linear-time, greedy, algorithm (Algorithm~\ref{alg:greedy-formula-tape-fitting}) that fits a formula tape $f$ only given three tapes: $C_f(0)$, $C_f(1)$ and $C_f(2)$. The algorithm is guaranteed to work on right-aligned formula tapes with nonempty \textit{intermediary walls}, which are all walls but the first and last one, see Theorem~\ref{th:greedy-formula-tape-fitting}. First, we must show that the precondition of having nonempty intermediary walls is without loss of generality, i.e.\ that all bouncers can be solved using such formulas. We prove this result in Lemma~\ref{lem:formula-tapes-WLOG}, using two technical lemmas, Lemmas~\ref{lem:right-alignement}~and~\ref{lem:word-theory}.
+In this section, we give a greedy algorithm (Algorithm~\ref{alg:greedy-formula-tape-fitting}) that fits a formula tape $f$ only given three tapes: $C_f(0)$, $C_f(1)$ and $C_f(2)$. The algorithm is guaranteed to work on right-aligned formula tapes with nonempty \textit{intermediary walls}, which are all walls but the first and last one, see Theorem~\ref{th:greedy-formula-tape-fitting}. First, we must show that the precondition of having nonempty intermediary walls is without loss of generality, i.e.\ that all bouncers can be solved using such formulas. We prove this result in Lemma~\ref{lem:formula-tapes-WLOG}, using two technical lemmas, Lemmas~\ref{lem:right-alignement}~and~\ref{lem:word-theory}.
 
 
 
