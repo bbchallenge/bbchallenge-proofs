@@ -260,7 +260,7 @@ Theorem~\ref{th:bouncers} characterises bouncers but we lack a practical criteri
 \end{theorem}
 
 \begin{proof}
-    Without loss of generality we suppose that $f$ is aligned. For simplicity of notations, we also suppose that there are no repeaters after the tape head in $f$, as the same argument applies if there are some. Using Equation~\eqref{math:formulaTapes}, we write $f=w_1(r_1)w_2(r_2)\dots w_n(r_n) w_{n+1} h w$ with $n \geq 1$, $w_i \in \Sigma^*$ for $2 \leq i \leq n+1$, $w_1,w \in \overline{\Sigma}^*$ and $r_i \in \Sigma^+$ for $1 \leq i \leq n$ and $h\in\Delta$.
+    Without loss of generality we suppose that $f$ is aligned. For simplicity of notations, we also suppose that there are no repeaters after the tape head in $f$, as we would apply exactly the same transformations after the head. Using Equation~\eqref{math:formulaTapes}, we write $f=w_1(r_1)w_2(r_2)\dots w_n(r_n) w_{n+1} h w$ with $n \geq 1$, $w_i \in \Sigma^*$ for $2 \leq i \leq n+1$, $w_1,w \in \overline{\Sigma}^*$ and $r_i \in \Sigma^+$ for $1 \leq i \leq n$ and $h\in\Delta$.
     Because $f$ solves the bouncer, by Definition~\ref{def:bouncers}, the machine eventually reaches tape $t$ of the form $t = w_1 r_1^{k_1} w_2 r_2^{k_2} \dots r_n^{k_n} w_{n+1} h w$ with $k_1, \dots, k_n \in \N$. Because $f \vdash_\mathcal{A}^* f'$ and $f'$ is a special case of $f$, we have $t \vdash^* t'$ with $t' \in \mathcal{L}(f')$ and $t' = w_1 r_1^{k_1 + p_1} w_2 r_2^{k_2 + p_2} \dots r_n^{k_n + p_n} w_{n+1} h w$ with $p_1, \dots, p_n \in \N$. Note that $p_i$ is positive because shift rules preserve the size of repeaters. Because $t'\in\mathcal{L}(f') \subseteq \mathcal{L}(f)$ we can repeat this indefinitely and get $t \vdash^* w_1 r_1^{k_1 + Np_1} w_2 r_2^{k_2 + Np_2} \dots r_n^{k_n + Np_n} w_{n+1} h w$ for all $N \in \N$.
 
     Hence, define $\text{linquad}(f) = w_1 r_1^{k_1} (r^{p_1}) w_2 r_2^{k_2} (r^{p_2}) \dots w_n r_n^{k_n} (r^{p_n}) w_{n+1} h w$. When $p_i=0$, then $r^{p_i} = \varnothing$ and we discard it. All $p_i$ cannot be $0$, otherwise the machine is a cycler which is excluded. Altogether, we can write: $\text{linquad}(f) = \tilde{w_1} (\tilde{r}_1) \tilde{w}_2 (\tilde{r}_2) \dots \tilde{w}_m (\tilde{r}_m) \tilde{w}_{m+1} h w$ with $2 \leq m \leq n$ and nonempty $\tilde{r}_i$, which is a valid formula tape which also solves the bouncer. By construction, the machine will reach tapes of the form $C_{\tilde{f}}(n)$ for all $n\in\N$ at increasing time steps. We immediately get Point 2 because $C_{\tilde{f}}(n+1)$ contains $K = \sum_{i=1}^n |\tilde{r}_i|$ more symbols than $C_{\tilde{f}}(n)$, which is a constant.
@@ -546,6 +546,79 @@ Algorithm~\ref{alg:greedy-formula-tape-fitting} is a greedy algorithm which fits
 
 % \end{remark}
 
+\begin{example}
+    Consider the headless right-aligned formula tape with nonempty intermediary walls $f=100(100)0000(0)$. Then the Algorithm~\ref{alg:greedy-formula-tape-fitting} proceeds as follows:
+
+    %\setlength{\columnsep}{-1.9cm}
+    \begin{multicols}{5}
+        \noindent
+        \begin{align*}
+            t_0 & = 100\; 0000                      \\
+            t_1 & = 100\; 100\; 0000 \; 0           \\
+            t_2 & = 100\; 100\; 100\; 0000 \; 0\; 0 \\
+            f   & = \varnothing
+        \end{align*}
+        \begin{align*}
+             &                                                                   \\
+            \to_{\text{Algorithm~\ref{alg:greedy-formula-tape-fitting} goes to}} \\
+             &
+        \end{align*}
+        \begin{align*}
+            t_0 & = 0000                      \\
+            t_1 & = 100\; 0000 \; 0           \\
+            t_2 & = 100\; 100\; 0000 \; 0\; 0 \\
+            f   & = 100
+        \end{align*}
+        \begin{align*}
+             &                                                                   \\
+            \to_{\text{Algorithm~\ref{alg:greedy-formula-tape-fitting} goes to}} \\
+             &
+        \end{align*}
+        \begin{align*}
+            t_0 & = 0000           \\
+            t_1 & =  0000 \; 0     \\
+            t_2 & =  0000 \; 0\; 0 \\
+            f   & = 100 (100)
+        \end{align*}
+    \end{multicols}
+    \begin{multicols}{5}
+        \noindent
+        \begin{align*}
+            t_0 & = 0000           \\
+            t_1 & =  0000 \; 0     \\
+            t_2 & =  0000 \; 0\; 0 \\
+            f   & = 100 (100)
+        \end{align*}
+        \begin{align*}
+             &                                                                   \\
+            \to_{\text{Algorithm~\ref{alg:greedy-formula-tape-fitting} goes to}} \\
+             &
+        \end{align*}
+        \begin{align*}
+            t_0 & = \varnothing    \\
+            t_1 & =   0            \\
+            t_2 & =   0\; 0        \\
+            f   & = 100 (100) 0000
+        \end{align*}
+        \begin{align*}
+             &                                                                   \\
+            \to_{\text{Algorithm~\ref{alg:greedy-formula-tape-fitting} goes to}} \\
+             &
+        \end{align*}
+        \begin{align*}
+            t_0 & = \varnothing        \\
+            t_1 & =  \varnothing       \\
+            t_2 & =  \varnothing       \\
+            f   & = 100 (100) 0000 (0)
+        \end{align*}
+    \end{multicols}
+
+    Hence, the output is $f$, as claimed in Theorem~\ref{th:greedy-formula-tape-fitting}.
+
+    Note that in some case, Algorithm~\ref{alg:greedy-formula-tape-fitting} is able to fit formula tapes that have some empty intermediary walls, such as $f=10110(110)(101)$. But in other cases, it cannot, such as with $f = 01 (1) (0111) 1$, which raises failure.
+
+\end{example}
+
 \subsubsection{Bouncers decider}
 
 We finally piece all the elements of this text together and describe a decider for bouncers (excluding cyclers, decided in Section~\ref{sec:cyclers}), Algorithm~\ref{alg:decider-bouncers} which is proven correct in Theorem~\ref{th:bouncer-decider}.
@@ -558,6 +631,13 @@ In order to drastically limit the amount of plausible subsequences to check, we 
 \end{lemma}
 \begin{proof}
     Let $M$ be a bouncer that is not a cycler and $f$ a formula tape that solves it. Then we have $f \vdash_\mathcal{A} f_1 \vdash_\mathcal{A} f_2 \dots \vdash_\mathcal{A} f_n$ with $n \geq 1$ and $f_n$ is a special case of $f$. There is $1 \leq i \leq n$ such that $f_{i}$ is record-breaking otherwise, the formula tapes do not grow and $M$ is a cycler, which is excluded. Because $f_n$ is a special case of $f$, it will eventually reach, under applications of $\vdash_\mathcal{A}$,  $f'$ that is special case of $f_i$ and we have the result.
+\end{proof}
+
+\begin{lemma}\label{lem:linquad-intermediary-walls}
+    Let $f$ be a right-aligned formula tape with nonempty intermediary walls then $\text{linquad}(f)$ built in Theorem~\ref{th:linquad} is also right-aligned with nonempty intermediary walls.
+\end{lemma}
+\begin{proof}
+    The construction of $\text{linquad}(f)$ only involves (1) removing some repeaters (2) replacing some repeaters by some powers of themselves (3) increasing the size of some walls. Hence, $\text{linquad}(f)$ has nonempty intermediary walls. As per alignment, the transformation increases walls to the left of repeaters with repeaters' repetitions, both before and after the head, this mean that right-alignment is preserved.
 \end{proof}
 
 Algorithm~\ref{alg:decider-bouncers} proceeds by (1) tracking record-breaking tapes with same head (i.e.\ same state and pointing-direction) that grow linearly in quadratic time, (2) fitting formula tapes from triples from these plausible subsequences until a formula tape solves the bouncer is found or some limits are met.
@@ -640,20 +720,23 @@ Algorithm~\ref{alg:decider-bouncers} proceeds by (1) tracking record-breaking ta
 \end{algorithm}
 
 \begin{theorem}[Deciding bouncers]\label{th:bouncer-decider}
-    Let $M$ be a bouncer Turing machine in the sense of Theorem~\ref{th:bouncers}. Then, there exists a step limit $s\in\N$, a macro step limit $m\in\N$ and a formula tape testing limit $l$ such that Algorithm~\ref{alg:decider-bouncers}, {\sc Decider-Bouncers}($M$,$s$,$m$,$l$) outputs \textbf{true}.
+    Let $M$ be a bouncer (Definition~\ref{def:bouncers}). Then, there exists a step limit $s\in\N$, a macro step limit $m\in\N$ and a formula tape testing limit $l$ such that Algorithm~\ref{alg:decider-bouncers}, {\sc Decider-Bouncers}($M$,$s$,$m$,$l$) outputs \textbf{true}.
 \end{theorem}
 \begin{proof}
-    Because $M$ is a bouncer, using Lemmas~\ref{lem:formula-tapes-WLOG}~and~\ref{lem:record-breaking}, we know that there is a right-aligned formula tape $f$ with nonempty intermediary walls which solves the bouncer according to Theorem~\ref{th:bouncers}.
+    Because $M$ is a bouncer, using Lemma~\ref{lem:record-breaking} we know that there is a record-breaking formula tape $\tilde{f}$ that solves the bouncer. By Lemma~\ref{lem:formula-tapes-WLOG} we know that we can transform $\tilde{f}$ into $f$ that is a right-aligned with nonempty intermediary walls and that also solves the bouncer.
 
-    Algorithm~\ref{alg:decider-bouncers} enumerates all record-breaking tapes triple that grow linearly in quadratic time. If $s$ is large enough, by Theorem~\ref{th:linquad}, it will, given a large enough limit $l$ for testing formula tapes, eventually meet a triple of the form:
-    \begin{align*}
-        t_0 & = C_f(0) \\
-        t_1 & = C_f(1) \\
-        t_2 & = C_f(2)
+    Algorithm~\ref{alg:decider-bouncers} enumerates all record-breaking tapes triple that grow linearly in quadratic time. If $s$ is large enough, by Theorem~\ref{th:linquad}, we know that it will, given a large enough limit $l$ for testing formula tapes, eventually meet a triple of the form: \begin{align*}
+        t_0 & = C_{\text{linquad}(f)}(0)  \\
+        t_1 & = C_{\text{linquad}(f)}f(1) \\
+        t_2 & = C_{\text{linquad}(f)}f(2)
     \end{align*}
 
-    Then, at line 23, Algorithm~\ref{alg:decider-bouncers} will feed $(\mathcal{S}(C_f(0)),\mathcal{S}(C_f(1)),\mathcal{S}(C_f(2)))$ to Algorithm~\ref{alg:greedy-formula-tape-fitting}, which will output $\mathcal{S}(f)$ which be reconstructed into $f$ at line 27. From there, Theorem~\ref{th:bouncers} will be verified using \textbf{reaches\_special\_case} at line 28, which by hypothesis will output \textbf{true}, and we have the result.
+    By Lemma~\ref{lem:linquad-intermediary-walls}, $f'=\text{linquad}(f)$ is right-aligned with nonempty intermediary walls and, at line 23, Algorithm~\ref{alg:decider-bouncers} will feed $(\mathcal{S}(C_{f'}(0)),\mathcal{S}(C_{f'}(1)),\mathcal{S}(C_{f'}(2)))$ to Algorithm~\ref{alg:greedy-formula-tape-fitting}, which, by Theorem~\ref{th:greedy-formula-tape-fitting}, will output $\mathcal{S}(\text{linquad}(f))$ which be reconstructed into $\text{linquad}(f)$ at line 27. By Theorem~\ref{th:linquad}, we know that $\text{linquad}(f)$ also solves the bouncer and Theorem~\ref{th:bouncers} will be verified on $\text{linquad}(f)$ using \textbf{reaches\_special\_case} at line 28, which, by hypothesis will output \textbf{true}, and we have the result.
 \end{proof}
+
+\begin{remark}
+    While Theorem~\ref{th:bouncer-decider} assures us that the decider will be able to detect a bouncer, if given enough time, the formula tapes found in practice by the algorithm can be smaller than the ones constructed using $\text{linquad}(f)$ with nonempty intermediary walls in the proof.
+\end{remark}
 
 \begin{remark}[Implementation details of Algorithm~\ref{alg:decider-bouncers}]
     In Algorithm~\ref{alg:decider-bouncers}, we assume that we are given (1) a \textbf{get\_record breaking\_tapes} routine which returns the record-breaking tapes for each tape head $h\in\Delta$ (i.e.\ tape head state and pointing-direction), in increasing length (2) a \textbf{binary\_search\_len} routine which finds by binary search a tape of a given length, or returns \textbf{None} if it does not exist and (3) a \textbf{is\_quadratic} which tests that a sequence of integers is in quadratic progression (for instance by computing second differences and testing they are constant), (4) routines \textbf{headless} and \textbf{attach\_head} to manipulate tapes/formula tapes with and without head, and (5) a \textbf{reaches\_special\_case} routine on formula tapes which returns \textbf{true} if successive simulation and alignment of the formula tape, as described in Theorem~\ref{th:bouncers}, reaches a special case in a given amount of macro steps, where a macro step consists in performing alignment followed by either performing a usual step or a shift rule step as. We can note that when detecting shift rules (see Section~\ref{sec:bouncers:formula-tapes}), it is important to implement cycler detection which as it is possible for a machine to cycle indefinitely on a finite tape.
