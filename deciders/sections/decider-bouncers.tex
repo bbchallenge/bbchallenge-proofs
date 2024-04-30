@@ -276,7 +276,7 @@ Theorem~\ref{th:bouncers} characterises bouncers but we lack a practical criteri
 
     Hence, define $\text{linquad}(f) = w_1 r_1^{k_1} (r^{p_1}) w_2 r_2^{k_2} (r^{p_2}) \dots w_n r_n^{k_n} (r^{p_n}) w_{n+1} h w$. When $p_i=0$, then $r^{p_i} = \varnothing$ and we discard it. All $p_i$ cannot be $0$, otherwise the machine is a cycler which is excluded. Altogether, we can write: $\text{linquad}(f) = \tilde{w_1} (\tilde{r}_1) \tilde{w}_2 (\tilde{r}_2) \dots \tilde{w}_m (\tilde{r}_m) \tilde{w}_{m+1} h w$ with $2 \leq m \leq n$ and nonempty $\tilde{r}_i$, which is a valid formula tape which also solves the bouncer. By construction, the machine will reach tapes of the form $C_{\tilde{f}}(n)$ for all $n\in\N$ at increasing time steps. We immediately get Point 2 because $C_{\tilde{f}}(n+1)$ contains $K = \sum_{i=1}^n |\tilde{r}_i|$ more symbols than $C_{\tilde{f}}(n)$, which is a constant.
 
-    Concerning Point 3, call $g(n)$ the time step at which $C_{\tilde{f}}(n)$ is reached. By construction, $g(n) \geq n$. The number of macro steps $M \geq 1$ such that we get $f \vdash_\mathcal{A}^M f'$ is a constant. We write $M = M_u + M_s$ with $ M_u$ the number of usual steps and $M_s$ the number of shift rule applications. When processing $C_{\tilde{f}}(n)$, each shift rule is confronted to $n$ repetitions of a repeater (because shift rules preserve the number of repetitions), hence we get: $g(n+1) - g(n) = M_u + n M_s$, which means $D(D((g(n))_{n\in\N})) = (M_s)_{n\in\N}$ which is constant, as needed.
+    Concerning Point 3, call $g(n)$ the time step at which $C_{\tilde{f}}(n)$ is reached. By construction, $g(n) \geq n$. The number of macro steps $M \geq 1$ such that we get $\text{linquad}(f) \vdash_\mathcal{A}^M f''$ with $f''$ special case of $\text{linquad}(f)$ is a constant. We write $M = M_u + M_s$ with $ M_u$ the number of usual steps and $M_s$ the number of shift rule applications. Call $M'_s$ the number of Turing machine steps taken in total to perform each of the $M_s$ shift rules. When processing $C_{\tilde{f}}(n)$, each shift rule is confronted to $n$ repetitions of a repeater (because shift rules preserve the number of repetitions), hence we get: $g(n+1) - g(n) = M_u + n M'_s$, which means $D(D((g(n))_{n\in\N})) = (M'_s)_{n\in\N}$ which is constant, as needed.
 
 
 
@@ -307,9 +307,12 @@ Theorem~\ref{th:bouncers} characterises bouncers but we lack a practical criteri
 % with formula tape $f=0^\infty 111(111)01111(11)\rhead{\text{C}}0^\infty$, which is another formula tape that decides the bouncer (different from the one given in Example~\ref{ex:bouncerTheory}),
 
 \begin{example}\label{ex:linquad}
-    Using Example~\ref{ex:bouncerTheory}, we get that $f = 0^\infty (111)1110(11)00\rhead{\text{D}}0^\infty$ solves the bouncer given in Example~\ref{ex:bouncer88427177}. We have $f \vdash_\mathcal{A}^{M} f'$ with $M = 41$ and $f'$ special case of $f$. We can decompose $M = M_u + M_s$ with $M_u = 39$ usual steps and $M_s = 2$ shift rule applications.
+    Using Example~\ref{ex:bouncerTheory}, we get that $f = 0^\infty (111)1110(11)00\rhead{\text{D}}0^\infty$ solves the bouncer given in Example~\ref{ex:bouncer88427177}. Using Theorem~\ref{th:linquad}, we have $\text{linquad}(f)= 0^\infty (111)1111110(11)11 00\rhead{\text{D}}0^\infty$.
+    We have $\text{linquad}(f) \vdash_\mathcal{A}^{M} f'$ with $M = 47$ and $f'$ special case of $\text{linquad}(f)$. Note that $47 > 41$ found in Example~\ref{ex:bouncerTheory} because $\text{linquad}(f)$ is a bit bigger than $f$.
 
-    Using Theorem~\ref{th:linquad}, we have $\text{linquad}(f)= 0^\infty (111)1111110(11)11 00\rhead{\text{D}}0^\infty$. Calling $g(n)$ the time step at which $C_{\text{linquad}(f)}(n)$ is reached, we have $g(0)= 64$. Using the proof of Theorem~\ref{th:linquad}, $g(n+1)-g(n) = M_u + n M_s = 39 + 2n$, hence, $g(n) = n^2 + 39n + 64$. We also have $l_{g(n)} = 11 + 5n$.
+    We can decompose $M = M_u + M_s$ with $M_u = 45$ usual steps and $M_s = 2$ shift rule applications. The shift rules that are used are $0 \rhead{\text{D}}(01) \to (11)0\rhead{\text{D}}$ which takes $4$ Turing machine steps to execute (Example~\ref{ex:shiftRules}) and $(11) \lhead{\text{A}}\to  \lhead{\text{A}} (01)$ which takes $2$, hence $M'_s = 6$.
+
+    Calling $g(n)$ the time step at which $C_{\text{linquad}(f)}(n)$ is reached, we have $g(0)= 64$. Using the proof of Theorem~\ref{th:linquad}, $g(n+1)-g(n) = M_u + n M'_s = 45 + 6n$, hence, $g(n) = 3n^2 + 42n + 64$. We also have $l_{g(n)} = 11 + 5n$. One can verify by simulation that tapes $C_{\text{linquad}(f)}(n)$ are reached at time steps $g(n)$.
 
 
 \end{example}
