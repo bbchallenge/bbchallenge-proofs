@@ -260,8 +260,9 @@ Theorem~\ref{th:bouncers} characterises bouncers but we lack a practical criteri
 \end{theorem}
 
 \begin{proof}
-    Without loss of generality we suppose that $f$ is aligned. For simplicity of notations, we also suppose that there are no repeaters after the tape head in $f$, as we would apply exactly the same transformations after the head. Using Equation~\eqref{math:formulaTapes}, we write $f=w_1(r_1)w_2(r_2)\dots w_n(r_n) w_{n+1} h w$ with $n \geq 1$, $w_i \in \Sigma^*$ for $2 \leq i \leq n+1$, $w_1,w \in \overline{\Sigma}^*$ and $r_i \in \Sigma^+$ for $1 \leq i \leq n$ and $h\in\Delta$.
-    Because $f$ solves the bouncer, by Definition~\ref{def:bouncers}, the machine eventually reaches tape $t$ of the form $t = w_1 r_1^{k_1} w_2 r_2^{k_2} \dots r_n^{k_n} w_{n+1} h w$ with $k_1, \dots, k_n \in \N$. Because $f \vdash_\mathcal{A}^* f'$ and $f'$ is a special case of $f$, we have $t \vdash^* t'$ with $t' \in \mathcal{L}(f')$ and $t' = w_1 r_1^{k_1 + p_1} w_2 r_2^{k_2 + p_2} \dots r_n^{k_n + p_n} w_{n+1} h w$ with $p_1, \dots, p_n \in \N$. Note that $p_i$ is positive because shift rules preserve the size of repeaters. Because $t'\in\mathcal{L}(f') \subseteq \mathcal{L}(f)$ we can repeat this indefinitely and get $t \vdash^* w_1 r_1^{k_1 + Np_1} w_2 r_2^{k_2 + Np_2} \dots r_n^{k_n + Np_n} w_{n+1} h w$ for all $N \in \N$.
+    For simplicity of notations, we suppose that there are no repeaters after the tape head in $f$, as we would apply exactly the same transformations after the head. Using Equation~\eqref{math:formulaTapes}, we write $f=w_1(r_1)w_2(r_2)\dots w_n(r_n) w_{n+1} h w$ with $n \geq 1$, $w_i \in \Sigma^*$ for $2 \leq i \leq n+1$, $w_1,w \in \overline{\Sigma}^*$ and $r_i \in \Sigma^+$ for $1 \leq i \leq n$ and $h\in\Delta$. Without loss of generality we suppose that $f$ is aligned (otherwise we just apply $\mathcal{A}$ to it).
+
+    Because $f$ solves the bouncer, by Definition~\ref{def:bouncers}, the machine eventually reaches tape $t$ of the form $t = w_1 r_1^{k_1} w_2 r_2^{k_2} \dots r_n^{k_n} w_{n+1} h w$ with $k_1, \dots, k_n \in \N$. Because $f \vdash_\mathcal{A}^* f'$ and $f'$ is a special case of $f$, we have $t \vdash^* t'$ with $t' \in \mathcal{L}(f')$ and $t' = w_1 r_1^{k_1 + p_1} w_2 r_2^{k_2 + p_2} \dots r_n^{k_n + p_n} w_{n+1} h w$ with $p_1, \dots, p_n \in \N$ and same $w_i$ and $r_i$ than $f$ because $f$ is aligned. Note that $p_i$ is positive because shift rules preserve the size of repeaters. Because $t'\in\mathcal{L}(f') \subseteq \mathcal{L}(f)$ we can repeat this indefinitely and get $t \vdash^* w_1 r_1^{k_1 + Np_1} w_2 r_2^{k_2 + Np_2} \dots r_n^{k_n + Np_n} w_{n+1} h w$ for all $N \in \N$.
 
     Hence, define $\text{linquad}(f) = w_1 r_1^{k_1} (r^{p_1}) w_2 r_2^{k_2} (r^{p_2}) \dots w_n r_n^{k_n} (r^{p_n}) w_{n+1} h w$. When $p_i=0$, then $r^{p_i} = \varnothing$ and we discard it. All $p_i$ cannot be $0$, otherwise the machine is a cycler which is excluded. Altogether, we can write: $\text{linquad}(f) = \tilde{w_1} (\tilde{r}_1) \tilde{w}_2 (\tilde{r}_2) \dots \tilde{w}_m (\tilde{r}_m) \tilde{w}_{m+1} h w$ with $2 \leq m \leq n$ and nonempty $\tilde{r}_i$, which is a valid formula tape which also solves the bouncer. By construction, the machine will reach tapes of the form $C_{\tilde{f}}(n)$ for all $n\in\N$ at increasing time steps. We immediately get Point 2 because $C_{\tilde{f}}(n+1)$ contains $K = \sum_{i=1}^n |\tilde{r}_i|$ more symbols than $C_{\tilde{f}}(n)$, which is a constant.
 
@@ -322,7 +323,7 @@ In this section, we give a linear-time, greedy, algorithm (Algorithm~\ref{alg:gr
 \end{proof}
 
 \begin{lemma}\label{lem:formula-tapes-WLOG}
-    Let a machine $M$ be a bouncer solved by formula tape $f$, then, $f$ can be transformed into a right-aligned formula tape with nonempty intermediary walls that solves the bouncer.
+    Let a machine $M$ be a bouncer solved by formula tape $f$, then, $f$ can be transformed into a formula tape $f'$ such that $\mathcal{A}_r(f')$ has nonempty intermediary walls that solves the bouncer.
 \end{lemma}
 \begin{proof}
     By Lemma~\ref{lem:right-alignement}, $\mathcal{A}_r(f)$ also solves the bouncer. For each case $\dots (r_1)(r_2) \dots$ where two repeaters in $\mathcal{A}_r(f)$ are separated by an empty wall, apply the following transformation to $\mathcal{A}_r(f)$, according to two cases:
@@ -334,7 +335,7 @@ In this section, we give a linear-time, greedy, algorithm (Algorithm~\ref{alg:gr
 
     \end{enumerate}
 
-    By applying case (1) or (2) to all repeaters of $\mathcal{A}_r(f)$ that are separated by an empty wall, we get a right-aligned transformation of $f$ with nonempty intermediary walls that solves the bouncer, as needed.
+    By applying case (1) or (2) to all repeaters of $\mathcal{A}_r(f)$ that are separated by an empty wall, we get $f'$, a transformation of $f$ with nonempty intermediary walls that solves the bouncer. Because $f'$ is right-aligned by construction, $\mathcal{A}_r(f') = f'$  and we get the result.
 
 \end{proof}
 
@@ -415,13 +416,13 @@ Algorithm~\ref{alg:greedy-formula-tape-fitting} is a greedy algorithm which fits
 
 
 \begin{theorem}[Greedy formula tape fitting]\label{th:greedy-formula-tape-fitting}
-    Let there be a right-aligned headless formula tape $f$ with nonempty intermediary walls: $f = w_1 (r_1) w_2 (r_2)\dots w_m (r_m) w$ with $m\in\N$, $r_i, w_i \in \Sigma^+$ with $1 \leq i \leq m$, and $w_1, w \in \Sigma^*$. Take $t_0, t_1, t_2 \in \Sigma^+$ such that:
+    Let $f$ be a headless formula tape with nonempty intermediary walls such that $\mathcal{A}_r(f) = w_1 (r_1) w_2 (r_2)\dots w_m (r_m) w$ with $m\in\N$, $r_i, w_i \in \Sigma^+$ with $1 \leq i \leq m$, and $w_1, w \in \Sigma^*$. Take $t_0, t_1, t_2 \in \Sigma^+$ satisfying:
     \begin{align*}
         t_0 & = \mathcal{S}(C_f(0))  = w_1\; w_2 \dots w_m\; w                       \\
         t_1 & = \mathcal{S}(C_f(1))  = w_1\; r_1\; w_2\; \dots w_m\; r_m\; w         \\
         t_2 & = \mathcal{S}(C_f(2))  = w_1\; r_1 r_1\; w_2\; \dots w_m\; r_m r_m\; w
     \end{align*}
-    Then Algorithm~\ref{alg:greedy-formula-tape-fitting} ran on {\sc Fit-FormulaTape}($t_0$, $t_1$, $t_2$) does not raise failure and returns $f$.
+    Then Algorithm~\ref{alg:greedy-formula-tape-fitting} ran on {\sc Fit-FormulaTape}($t_0$, $t_1$, $t_2$) does not raise failure and returns $\mathcal{A}_r(f)$.
 
 \end{theorem}
 \begin{proof}
@@ -431,23 +432,23 @@ Algorithm~\ref{alg:greedy-formula-tape-fitting} is a greedy algorithm which fits
     \begin{multicols}{3}
         \noindent
         \begin{align*}
-            t_0 & = w_1\;  w      \\
-            t_1 & = w_1\; r\;  w  \\
-            t_2 & = w_1\; r r\; w \\
-            f   & = \varnothing
+            t_0          & = w_1\;  w      \\
+            t_1          & = w_1\; r\;  w  \\
+            t_2          & = w_1\; r r\; w \\
+            f_\text{out} & = \varnothing
         \end{align*}
         \begin{align*}
              & \\
             \to_{\text{Algorithm~\ref{alg:greedy-formula-tape-fitting} goes to}}
         \end{align*}
         \begin{align*}
-            t_0 & = w        \\
-            t_1 & = r\;  w   \\
-            t_2 & = r r\;  w \\
-            f   & = w_1
+            t_0          & = w        \\
+            t_1          & = r\;  w   \\
+            t_2          & = r r\;  w \\
+            f_\text{out} & = w_1
         \end{align*}
     \end{multicols}
-    From there, we have two cases: (1) if $w = \varnothing$ then the greedy algorithm returns $f = w_1 (r)$, as needed, (2) if $w \neq \varnothing$, because $f$ is right-aligned, we must have $w[0] \neq r[0]$ ($r$ is not empty by hypothesis), and then the greedy algorithm returns $f = w_1 (r) w$, as needed.
+    From there, we have two cases: (1) if $w = \varnothing$ then the greedy algorithm returns $f_\text{out} = w_1 (r) = \mathcal{A}_r(f)$, as needed, (2) if $w \neq \varnothing$, because $\mathcal{A}_r(f)$ is right-aligned, we must have $w[0] \neq r[0]$ ($r$ is not empty by hypothesis), and then the greedy algorithm returns $f_\text{out} = w_1 (r) w = \mathcal{A}_r(f)$, as needed.
 
 
     % With $\tilde{r} = rr$, $|\tilde{r}| > |r|$, which contradicts the hypothesis that $r$ was as long as possible. This justifies why prefixes are enumerated from longest match in Algorithm~\ref{alg:greedy-formula-tape-fitting}, line 16. Hence, $r'$ is never empty, and we have the result for $m=1$.
@@ -456,10 +457,10 @@ Algorithm~\ref{alg:greedy-formula-tape-fitting} is a greedy algorithm which fits
     \begin{multicols}{3}
         \noindent
         \begin{align*}
-            t_0 & = w_1\; w_2\;\dots w_m\; w                              \\
-            t_1 & = w_1\; r_1\; w_2\; r_2\; \dots w_m\; r_m\; w           \\
-            t_2 & = w_1\; r_1r_1\; w_2\;  r_2r_2\; \dots w_m\; r_mr_m\; w \\
-            f   & = \varnothing
+            t_0          & = w_1\; w_2\;\dots w_m\; w                              \\
+            t_1          & = w_1\; r_1\; w_2\; r_2\; \dots w_m\; r_m\; w           \\
+            t_2          & = w_1\; r_1r_1\; w_2\;  r_2r_2\; \dots w_m\; r_mr_m\; w \\
+            f_\text{out} & = \varnothing
         \end{align*}
         \begin{align*}
              &                                                                   \\
@@ -467,28 +468,28 @@ Algorithm~\ref{alg:greedy-formula-tape-fitting} is a greedy algorithm which fits
              &
         \end{align*}
         \begin{align*}
-            t_0 & = w_2\;\dots w_m\; w                              \\
-            t_1 & = r_1\; w_2\; r_2\; \dots w_m\; r_m\; w           \\
-            t_2 & = r_1r_1\; w_2\;  r_2r_2\; \dots w_m\; r_mr_m\; w \\
-            f   & = w_1
+            t_0          & = w_2\;\dots w_m\; w                              \\
+            t_1          & = r_1\; w_2\; r_2\; \dots w_m\; r_m\; w           \\
+            t_2          & = r_1r_1\; w_2\;  r_2r_2\; \dots w_m\; r_mr_m\; w \\
+            f_\text{out} & = w_1
         \end{align*}
     \end{multicols}
-    By hypothesis, $w_2$ and $r_1$ are not empty and, because $f$ is right-aligned, we get $w_2[0] \neq r_1[0]$. Hence, Algorithm~\ref{alg:greedy-formula-tape-fitting} enters the repeater-fitting case on line 8 and goes to:
+    By hypothesis, $w_2$ and $r_1$ are not empty and, because $\mathcal{A}_r(f)$ is right-aligned, we get $w_2[0] \neq r_1[0]$. Hence, Algorithm~\ref{alg:greedy-formula-tape-fitting} enters the repeater-fitting case on line 8 and goes to:
     \begin{align*}
-        t_0 & = w_2\;\dots w_m\; w                     \\
-        t_1 & = w_2\; r_2\; \dots w_m\; r_m\; w        \\
-        t_2 & = w_2\;  r_2r_2\; \dots w_m\; r_mr_m\; w \\
-        f   & = w_1 (r_1)
+        t_0          & = w_2\;\dots w_m\; w                     \\
+        t_1          & = w_2\; r_2\; \dots w_m\; r_m\; w        \\
+        t_2          & = w_2\;  r_2r_2\; \dots w_m\; r_mr_m\; w \\
+        f_\text{out} & = w_1 (r_1)
     \end{align*}
     From here we can inductively conclude that Algorithm~\ref{alg:greedy-formula-tape-fitting} will reach:
     \begin{align*}
-        t_0 & = w_m\; w                           \\
-        t_1 & = w_m\; r_m\; w                     \\
-        t_2 & = w_m\; r_mr_m\; w                  \\
-        f   & = w_1 (r_1) \dots w_{m-1} (r_{m-1})
+        t_0          & = w_m\; w                           \\
+        t_1          & = w_m\; r_m\; w                     \\
+        t_2          & = w_m\; r_mr_m\; w                  \\
+        f_\text{out} & = w_1 (r_1) \dots w_{m-1} (r_{m-1})
     \end{align*}
 
-    Using the same argument as for $m=1$, we get that Algorithm~\ref{alg:greedy-formula-tape-fitting} returns $f = w_1 (r_1) \dots w_m (r_m) w$, as needed.
+    Using the same argument as for $m=1$, we get that Algorithm~\ref{alg:greedy-formula-tape-fitting} returns $f_\text{out} = w_1 (r_1) \dots w_m (r_m) w = \mathcal{A}_r(f)$, as needed.
 
 
 
@@ -553,10 +554,10 @@ Algorithm~\ref{alg:greedy-formula-tape-fitting} is a greedy algorithm which fits
     \begin{multicols}{5}
         \noindent
         \begin{align*}
-            t_0 & = 100\; 0000                      \\
-            t_1 & = 100\; 100\; 0000 \; 0           \\
-            t_2 & = 100\; 100\; 100\; 0000 \; 0\; 0 \\
-            f   & = \varnothing
+            t_0          & = 100\; 0000                      \\
+            t_1          & = 100\; 100\; 0000 \; 0           \\
+            t_2          & = 100\; 100\; 100\; 0000 \; 0\; 0 \\
+            f_\text{out} & = \varnothing
         \end{align*}
         \begin{align*}
              &                                                                   \\
@@ -564,10 +565,10 @@ Algorithm~\ref{alg:greedy-formula-tape-fitting} is a greedy algorithm which fits
              &
         \end{align*}
         \begin{align*}
-            t_0 & = 0000                      \\
-            t_1 & = 100\; 0000 \; 0           \\
-            t_2 & = 100\; 100\; 0000 \; 0\; 0 \\
-            f   & = 100
+            t_0          & = 0000                      \\
+            t_1          & = 100\; 0000 \; 0           \\
+            t_2          & = 100\; 100\; 0000 \; 0\; 0 \\
+            f_\text{out} & = 100
         \end{align*}
         \begin{align*}
              &                                                                   \\
@@ -575,10 +576,10 @@ Algorithm~\ref{alg:greedy-formula-tape-fitting} is a greedy algorithm which fits
              &
         \end{align*}
         \begin{align*}
-            t_0 & = 0000           \\
-            t_1 & =  0000 \; 0     \\
-            t_2 & =  0000 \; 0\; 0 \\
-            f   & = 100 (100)
+            t_0          & = 0000           \\
+            t_1          & =  0000 \; 0     \\
+            t_2          & =  0000 \; 0\; 0 \\
+            f_\text{out} & = 100 (100)
         \end{align*}
     \end{multicols}
     \begin{multicols}{5}
@@ -595,10 +596,10 @@ Algorithm~\ref{alg:greedy-formula-tape-fitting} is a greedy algorithm which fits
              &
         \end{align*}
         \begin{align*}
-            t_0 & = \varnothing    \\
-            t_1 & =   0            \\
-            t_2 & =   0\; 0        \\
-            f   & = 100 (100) 0000
+            t_0          & = \varnothing    \\
+            t_1          & =   0            \\
+            t_2          & =   0\; 0        \\
+            f_\text{out} & = 100 (100) 0000
         \end{align*}
         \begin{align*}
              &                                                                   \\
@@ -606,10 +607,10 @@ Algorithm~\ref{alg:greedy-formula-tape-fitting} is a greedy algorithm which fits
              &
         \end{align*}
         \begin{align*}
-            t_0 & = \varnothing        \\
-            t_1 & =  \varnothing       \\
-            t_2 & =  \varnothing       \\
-            f   & = 100 (100) 0000 (0)
+            t_0          & = \varnothing        \\
+            t_1          & =  \varnothing       \\
+            t_2          & =  \varnothing       \\
+            f_\text{out} & = 100 (100) 0000 (0)
         \end{align*}
     \end{multicols}
 
@@ -634,10 +635,10 @@ In order to drastically limit the amount of plausible subsequences to check, we 
 \end{proof}
 
 \begin{lemma}\label{lem:linquad-intermediary-walls}
-    Let $f$ be a right-aligned formula tape with nonempty intermediary walls then $\text{linquad}(f)$ built in Theorem~\ref{th:linquad} is also right-aligned with nonempty intermediary walls.
+    Let $f$ be a formula tape with nonempty intermediary walls then $\text{linquad}(f)$ built in Theorem~\ref{th:linquad} has nonempty intermediary walls.
 \end{lemma}
 \begin{proof}
-    The construction of $\text{linquad}(f)$ only involves (1) removing some repeaters (2) replacing some repeaters by some powers of themselves (3) increasing the size of some walls. Hence, $\text{linquad}(f)$ has nonempty intermediary walls. As per alignment, the transformation increases walls to the left of repeaters with repeaters' repetitions, both before and after the head, this mean that right-alignment is preserved.
+    The construction of $\text{linquad}(f)$ only involves (1) removing some repeaters (2) replacing some repeaters by some powers of themselves (3) increasing the size of some walls. Hence, $\text{linquad}(f)$ has nonempty intermediary walls.
 \end{proof}
 
 Algorithm~\ref{alg:decider-bouncers} proceeds by (1) tracking record-breaking tapes with same head (i.e.\ same state and pointing-direction) that grow linearly in quadratic time, (2) fitting formula tapes from triples from these plausible subsequences until a formula tape solves the bouncer is found or some limits are met.
@@ -723,15 +724,15 @@ Algorithm~\ref{alg:decider-bouncers} proceeds by (1) tracking record-breaking ta
     Let $M$ be a bouncer (Definition~\ref{def:bouncers}). Then, there exists a step limit $s\in\N$, a macro step limit $m\in\N$ and a formula tape testing limit $l$ such that Algorithm~\ref{alg:decider-bouncers}, {\sc Decider-Bouncers}($M$,$s$,$m$,$l$) outputs \textbf{true}.
 \end{theorem}
 \begin{proof}
-    Because $M$ is a bouncer, using Lemma~\ref{lem:record-breaking} we know that there is a record-breaking formula tape $\tilde{f}$ that solves the bouncer. By Lemma~\ref{lem:formula-tapes-WLOG} we know that we can transform $\tilde{f}$ into $f$ that is a right-aligned with nonempty intermediary walls and that also solves the bouncer.
+    Because $M$ is a bouncer, using Lemma~\ref{lem:record-breaking} we know that there is a record-breaking formula tape $\tilde{f}$ that solves the bouncer. By Lemma~\ref{lem:formula-tapes-WLOG} we know that we can transform $\tilde{f}$ into $f$ with nonempty intermediary walls and that also solves the bouncer.
 
-    Algorithm~\ref{alg:decider-bouncers} enumerates all record-breaking tapes triple that grow linearly in quadratic time. If $s$ is large enough, by Theorem~\ref{th:linquad}, we know that it will, given a large enough limit $l$ for testing formula tapes, eventually meet a triple of the form: \begin{align*}
+    Algorithm~\ref{alg:decider-bouncers} enumerates all record-breaking tapes triple that grow linearly in quadratic time. If $s$ and $l$ are large enough, by Theorem~\ref{th:linquad}, we know that it will, eventually meet a triple of the form: \begin{align*}
         t_0 & = C_{\text{linquad}(f)}(0)  \\
         t_1 & = C_{\text{linquad}(f)}f(1) \\
         t_2 & = C_{\text{linquad}(f)}f(2)
     \end{align*}
 
-    By Lemma~\ref{lem:linquad-intermediary-walls}, $f'=\text{linquad}(f)$ is right-aligned with nonempty intermediary walls and, at line 23, Algorithm~\ref{alg:decider-bouncers} will feed $(\mathcal{S}(C_{f'}(0)),\mathcal{S}(C_{f'}(1)),\mathcal{S}(C_{f'}(2)))$ to Algorithm~\ref{alg:greedy-formula-tape-fitting}, which, by Theorem~\ref{th:greedy-formula-tape-fitting}, will output $\mathcal{S}(\text{linquad}(f))$ which be reconstructed into $\text{linquad}(f)$ at line 27. By Theorem~\ref{th:linquad}, we know that $\text{linquad}(f)$ also solves the bouncer and Theorem~\ref{th:bouncers} will be verified on $\text{linquad}(f)$ using \textbf{reaches\_special\_case} at line 28, which, by hypothesis will output \textbf{true}, and we have the result.
+    By Lemma~\ref{lem:linquad-intermediary-walls}, $f'=\text{linquad}(f)$ is with nonempty intermediary walls and, at line 23, Algorithm~\ref{alg:decider-bouncers} will feed $(\mathcal{S}(C_{f'}(0)),\mathcal{S}(C_{f'}(1)),\mathcal{S}(C_{f'}(2)))$ to Algorithm~\ref{alg:greedy-formula-tape-fitting}, which, by Theorem~\ref{th:greedy-formula-tape-fitting}, will output $\mathcal{S}(\mathcal{A}_r(\text{linquad}(f)))$ which be reconstructed into $\mathcal{A}_r(\text{linquad}(f))$ at line 27. By Theorem~\ref{th:linquad}, we know that $\text{linquad}(f)$ also solves the bouncer, and by Lemma~\ref{lem:right-alignement}, $\mathcal{A}_r(\text{linquad}(f))$ also solves the bouncer. Theorem~\ref{th:bouncers} will be verified on $\mathcal{A}_r(\text{linquad}(f))$ using \textbf{reaches\_special\_case} at line 28, which, by hypothesis will output \textbf{true}, and we have the result.
 \end{proof}
 
 \begin{remark}
