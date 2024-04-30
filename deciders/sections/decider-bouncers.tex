@@ -373,9 +373,12 @@ In this section, we give a linear-time, greedy, algorithm (Algorithm~\ref{alg:gr
 
 Given a tape $t$, we call $\mathcal{S}(t) \in \Sigma^*$ the \textit{headless} version of $t$ which is the tape without head and $0^\infty$ symbols. We also introduce headless formula tapes: $\mathcal{S}(f)$ is $f$ without head and $0^\infty$ symbols.
 
-We now give Algorithm~\ref{alg:greedy-formula-tape-fitting} which fits a headless formula tape given three headless tapes $t_0, t_1, t_2$ and prove that it is correct, Theorem~\ref{th:greedy-formula-tape-fitting}. We assume that we are given a \textbf{HeadLessFormulaTape} construct, and a function \textbf{get\_longest\_match\_size} which returns the size of the longest prefix of two words. Furthermore, for an array \texttt{a}, we use the notation \texttt{a[b:e]} to mean the slice of this array between indices \texttt{b} and \texttt{e}, excluding \texttt{e}.
 
-Algorithm~\ref{alg:greedy-formula-tape-fitting} is a greedy algorithm which recursively constructs the left-most wall using the biggest common prefix of $t_0, t_1$ and $t_2$ and then fits the left-most repeater using the longest prefix $r$ of $t_1$ such that $rr$ is a prefix of $t_2$, we have:
+\begin{remark}[Implementation details of Algorithm~\ref{alg:greedy-formula-tape-fitting}]
+    We assume that we are given a \textbf{HeadLessFormulaTape} construct, and a function \textbf{get\_longest\_match\_size} which returns the size of the longest prefix of two words. Furthermore, for an array \texttt{a}, we use the notation \texttt{a[b:e]} to mean the slice of this array between indices \texttt{b} and \texttt{e}, excluding \texttt{e}.
+\end{remark}
+
+Algorithm~\ref{alg:greedy-formula-tape-fitting} is a greedy algorithm which fits a headless formula tape given three headless tapes $t_0, t_1, t_2$. The algorithm proceeds by recursively constructs the left-most wall using the biggest common prefix of $t_0, t_1$ and $t_2$ and then fits the left-most repeater using the longest prefix $r$ of $t_1$ such that $rr$ is a prefix of $t_2$, we have:
 
 % \begin{lemma}\label{lem:greedy}
 %     Let there be 3 words $t_0, t_1, t_2 \in \Sigma^*$, and an integer $m\in\N$ and $w_1, w_2 \in \Sigma^*$ and $r \in\Sigma^+$ the longest word such that $t_0 = w_1\; r\; w_2$, and $t_1 = w_1\; rr\; w_2$ and $t_2 = w_1\; rrr\; w_2$, then we have:
@@ -555,13 +558,6 @@ In order to drastically limit the amount of plausible subsequences to check, we 
 \end{lemma}
 \begin{proof}
     Let $M$ be a bouncer that is not a cycler and $f$ a formula tape that solves it. Then we have $f \vdash_\mathcal{A} f_1 \vdash_\mathcal{A} f_2 \dots \vdash_\mathcal{A} f_n$ with $n \geq 1$ and $f_n$ is a special case of $f$. There is $1 \leq i \leq n$ such that $f_{i}$ is record-breaking otherwise, the formula tapes do not grow and $M$ is a cycler, which is excluded. Because $f_n$ is a special case of $f$, it will eventually reach, under applications of $\vdash_\mathcal{A}$,  $f'$ that is special case of $f_i$ and we have the result.
-\end{proof}
-
-\begin{lemma}\label{lem:linquad-nonemptywalls}
-    If $f$ is a right-aligned formula tape $f$ with nonempty intermediary walls then $\text{linquad}(f)$, as constructed in Thoerem~\ref{th:linquad} is also right-aligned with nonempty intermediary walls.
-\end{lemma}
-\begin{proof}
-
 \end{proof}
 
 Algorithm~\ref{alg:decider-bouncers} proceeds by (1) tracking record-breaking tapes with same head (i.e.\ same state and pointing-direction) that grow linearly in quadratic time, (2) fitting formula tapes from triples from these plausible subsequences until a formula tape solves the bouncer is found or some limits are met.
