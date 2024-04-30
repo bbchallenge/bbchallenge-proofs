@@ -545,15 +545,23 @@ Algorithm~\ref{alg:greedy-formula-tape-fitting} is a greedy algorithm which recu
 
 \subsubsection{Bouncers decider}
 
-We finally present a complete decider for bouncers (excluding cyclers, decided in Section~\ref{sec:cyclers}), Algorithm~\ref{alg:decider-bouncers} which is proven correct in Theorem~\ref{th:bouncer-decider}. If a machine is a bouncer that is not a cycler, solved by some formula tape $f$, we know that it is also solved by $f'$ a right-aligned formula tape with nonempty intermediary walls that we can obtain from $f$ (Lemma~\ref{lem:formula-tapes-WLOG}). By Theorem~\ref{th:linquad}, we know that $(C_f'(n))_{n\in\N}$ is a subsequence of the tapes visited by the machine from $0^\infty \rhead{\text{A}} 0^\infty$ and that we can detect such subsequence because it grows linearly in quadratic time. Hence, given enough time, we can eventually find $(C_f'(0), C_f'(1), C_f'(2))$ from all \textit{plausible} subsequences of tapes (i.e.\ subsequences that grow linearly in quadratic time), run the formula tape fitting Algorithm~\ref{alg:greedy-formula-tape-fitting}, deduce $f'$ and verify it satisfies Theorem~\ref{th:bouncers}, hence deciding the bouncer.
+We finally piece all the elements of this text together and describe a decider for bouncers (excluding cyclers, decided in Section~\ref{sec:cyclers}), Algorithm~\ref{alg:decider-bouncers} which is proven correct in Theorem~\ref{th:bouncer-decider}.
+%If a machine is a bouncer that is not a cycler, solved by some formula tape $f$, we know that it is also solved by $f'$ a right-aligned formula tape with nonempty intermediary walls that we can obtain from $f$ (Lemma~\ref{lem:formula-tapes-WLOG}). By Theorem~\ref{th:linquad}, we know that formula tape $\text{linquad}(f')$ also solves the bouncer and that $(C_{\text{linquad(f')}}(n))_{n\in\N}$ is a subsequence of the tapes visited by the machine from $0^\infty \rhead{\text{A}} 0^\infty$ and that we can detect such subsequence because it grows linearly in quadratic time. Hence, given enough time, we can eventually find $(C_{\text{linquad(f')}}(0), C_{\text{linquad(f')}}(1), C_{\text{linquad(f')}}(2))$ from all \textit{plausible} subsequences of tapes (i.e.\ subsequences that grow linearly in quadratic time), run the formula tape fitting Algorithm~\ref{alg:greedy-formula-tape-fitting}, deduce $f'$ and verify it satisfies Theorem~\ref{th:bouncers}, hence deciding the bouncer.
 
-In practice, in order to drastically limit the amount of plausible subsequences to check, we limit our interest to \textit{record-breaking} formula tapes, which are formula tapes where the head is pointing at $0^\infty$. In order to fit them, we can simply track record-breaking tapes that share the same head, i.e.\ tapes where the head is pointing at $0^\infty$. We first show that this is without loss of generality:
+In order to drastically limit the amount of plausible subsequences to check, we limit our interest to \textit{record-breaking} formula tapes, which are formula tapes where the head is pointing at $0^\infty$. In order to fit them, we can simply track record-breaking tapes that share the same head, i.e.\ tapes where the head is pointing at $0^\infty$. We first show that this is without loss of generality:
 
 \begin{lemma}\label{lem:record-breaking}
     If $M$ is a bouncer solved by a formula tape $f$, then there is a record-breaking formula tape that also solves the bouncer according to Theorem~\ref{th:bouncers}.
 \end{lemma}
 \begin{proof}
     TODO.
+\end{proof}
+
+\begin{lemma}\label{lem:linquad-nonemptywalls}
+    If $f$ is a right-aligned formula tape $f$ with nonempty intermediary walls then $\text{linquad}(f)$, as constructed in Thoerem~\ref{th:linquad} is also right-aligned with nonempty intermediary walls.
+\end{lemma}
+\begin{proof}
+
 \end{proof}
 
 Algorithm~\ref{alg:decider-bouncers} proceeds by (1) tracking record-breaking tapes with same head (i.e.\ same state and pointing-direction) that grow linearly in quadratic time, (2) fitting formula tapes from triples from these plausible subsequences until a formula tape solves the bouncer is found or some limits are met.
