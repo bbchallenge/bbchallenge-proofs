@@ -178,26 +178,37 @@ From the above definition of $\vdash$ on a formula tape $f$, it is clear that (i
     Another alignment example is $f=0^\infty 101(11)0 \rhead{\text{D}} 10 (100) 11 0^\infty$ for which $\mathcal{A}(f) = 0^\infty 10(11)10 \rhead{\text{D}} 101(001)10^\infty$.
 \end{example}
 
-The above example shows that alignment (which preserves the set of recognised tapes) can allow to run a shift rule on $f'$ with $\mathcal{A}(f) \vdash^* f'$ when no shift rule was applicable directly to $f$. In fact, one can show that the alignment operator can only \textit{increase} the number of applicable shift rules: if a shift rule is applicable to $f$ then a shift rule applicable to $f'$ with $\mathcal{A}(f) \vdash^* f'$ can always be found.
+The above example shows that alignment (which preserves the set of recognised tapes) can allow to run a shift rule on $f'$ with $\mathcal{A}(f) \vdash^* f'$ when no shift rule was applicable directly to $f$. In fact, one can show that the alignment operator can only \textit{increase} the number of applicable shift rules: if a shift rule is applicable to $f$ then a shift rule applicable to $f'$ with $\mathcal{A}(f) \vdash^* f'$ can always be found. This motivates the introduction of the notation $f \vdash_\mathcal{A} f'$ which means that we have $\mathcal{A}(f) \vdash f'$.
 
 Given two formula tapes $f$ and $f'$ we will say that $f'$ is a \textit{special case} of $f$, if $\mathcal{A}(f')$ can be obtained from $\mathcal{A}(f)$ by replacing subwords of the form $(r)$ in $\mathcal{A}(f)$ by $r^n(r)r^m$ for some $n,m\geq 0$ and $r\in\Sigma^+$. Note that because of alignment, $n=0$ (resp. $m=0$) if $(r)$ in $\mathcal{A}(f)$ is to the left (resp. to the right) of the head. If $f'$ is a special case of $f$ then $\mathcal{L}(f') \subseteq \mathcal{L}(f)$, and the authors conjecture that the converse is true under some mild additional assumptions\footnote{See \url{https://discuss.bbchallenge.org/t/186}.}.
 
 We finally get to the main result of this section, which characterises bouncers formally -- a bouncer is any machine to which Theorem~\ref{th:bouncers} applies:
 
-\begin{theorem}[Bouncers]\label{th:bouncers}
-    Assume we are given some Turing machine and suppose there exists a tape $t$ and a wall-repeater formula tape $f_0$ such that $0^\infty \rhead{\text{A}} 0^\infty \vdash^* t$ where $t \in \mathcal{L}(f_0)$ and such that there is $n \geq 1$ and formula tapes $f_1,\dots,f_n$ with $\mathcal{A}(f_i) \vdash f_{i+1}$ for $i=0,\dots,n-1$ such that $f_n$ is a special case of $f_0$. Then, the Turing machine does not halt.
+\begin{definition}[Bouncers]\label{def:bouncers}
+    A bouncer is a Turing machine such that there exists a wall-repeater formula tape $f$ which satisfies:
+    \begin{enumerate}
+        \item There is a reachable tape $t\in\mathcal{L}(f)$, i.e.\ $0^\infty \rhead{\text{A}} 0^\infty \vdash^* t$
+        \item There is a formula tape $f'$ such that $f \vdash_\mathcal{A}^* f'$ and $f'$ is a special case of $f$
+    \end{enumerate}
+\end{definition}
+
+\begin{theorem}\label{th:bouncers}
+    A bouncer does not halt.
 \end{theorem}
 
 \begin{proof}
+    Unraveling $f \vdash_\mathcal{A}^* f'$ gives $n\in\N$ and $f_1, \dots, f_n$ with $f_n = f'$ and $\mathcal{A}(f_i) \vdash f_{i+1}$ for $0 \leq i < n$.
     It follows from Lemma~\ref{lem:vdashFormulaTapes} and Lemma~\ref{lem:sameLanguage} that there exist tapes $t_0, \dots, t_n$, such that $t_0 = t$ and $t_i\in \mathcal{L}(f_i)$ for $0 \leq i \leq n$, and $t_i \vdash^* t_{i+1}$ for $0 \leq i < n$, giving $t_0 \vdash^* t_n$. Since $f_n$ is a special case of $f_0$, we have $\mathcal{L}(\mathcal{A}(f_n)) \subseteq \mathcal{L}(\mathcal{A}(f_0))$, and using Lemma~\ref{lem:sameLanguage}, we have $\mathcal{L}(f_n) \subseteq \mathcal{L}(f_0)$ and thus, $t_n \in \mathcal{L}(f_0)$. We can repeat this construction indefinitely and yield an infinite sequence of tapes $(t_n)_{n\in\mathbb{N}}$ such that $t \vdash^* t_i$ for all $i\in\mathbb{N}$n hence the machine does not halt.
 \end{proof}
 
+
+
 \begin{definition}[Bouncer certificate]\label{def:bouncer-certificate}
-    For a given bouncer, i.e. a machine on which Theorem~\ref{th:bouncers} applies, a bouncer certificate consists at least of the following, using same notation as in Theorem~\ref{th:bouncers}:
+    For a given bouncer, a bouncer certificate consists at least of the following:
     \begin{enumerate}
-        \item The formula tape $f_0$. We say that $f_0$ \textit{solves} the bouncer.
+        \item The formula tape $f$ of Definition~\ref{def:bouncers}. We say that $f$ \textit{solves} the bouncer.
         \item The time step at which tape $t$ such that $t\in\mathcal{L}(f_0)$ is reached from  $0^\infty \rhead{\text{A}} 0^\infty$.
-        \item The number of \textit{macro steps} $n$ needed for $f_0$ to reach special case $f_n$ where a macro step on a formula tape consists in applying alignment followed by $\vdash$ (i.e.\ either one usual step or one shift rule step).
+        \item The number of \textit{macro steps} $n$ such that $f \vdash_\mathcal{A}^n f'$ with $f'$ special case of $f$, where a macro step on a formula tape consists in applying $\vdash_\mathcal{A}$, i.e.\ alignment followed by $\vdash$ (one usual step or one shift rule step).
     \end{enumerate}
     Given such certificate, one can verify that the machine is a bouncer by applying Theorem~\ref{th:bouncers} or that the certificate is erroneous. Additional information, such has the list of used shift rules can be added to the certificate for convenience.
 \end{definition}
