@@ -551,10 +551,10 @@ We finally piece all the elements of this text together and describe a decider f
 In order to drastically limit the amount of plausible subsequences to check, we limit our interest to \textit{record-breaking} formula tapes, which are formula tapes where the head is pointing at $0^\infty$. In order to fit them, we can simply track record-breaking tapes that share the same head, i.e.\ tapes where the head is pointing at $0^\infty$. We first show that this is without loss of generality:
 
 \begin{lemma}\label{lem:record-breaking}
-    If $M$ is a bouncer solved by a formula tape $f$, then there is a record-breaking formula tape that also solves the bouncer according to Theorem~\ref{th:bouncers}.
+    If $M$ is a bouncer that is not a cycler, solved by a formula tape $f$, then there is a record-breaking formula tape that also solves it.
 \end{lemma}
 \begin{proof}
-    TODO.
+    Let $M$ be a bouncer that is not a cycler and $f$ a formula tape that solves it. Then we have $f \vdash_\mathcal{A} f_1 \vdash_\mathcal{A} f_2 \dots \vdash_\mathcal{A} f_n$ with $n \geq 1$ and $f_n$ is a special case of $f$. There is $1 \leq i \leq n$ such that $f_{i}$ is record-breaking otherwise, the formula tapes do not grow and $M$ is a cycler, which is excluded. Because $f_n$ is a special case of $f$, it will eventually reach, under applications of $\vdash_\mathcal{A}$,  $f'$ that is special case of $f_i$ and we have the result.
 \end{proof}
 
 \begin{lemma}\label{lem:linquad-nonemptywalls}
