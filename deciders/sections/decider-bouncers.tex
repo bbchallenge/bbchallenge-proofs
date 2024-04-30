@@ -85,7 +85,7 @@ Given a tape $t=uvw$ and a word $t'=uv'w$, with $u,w\in \overline{\Sigma}^*$, $v
 
 \subsubsection{Wall-repeater formula tapes}\label{sec:bouncers:formula-tapes}
 
-We want to formalise the above-stated intuition that bouncers expand a tape by repeating \textit{repeater} patterns between fixed \textit{walls}, and then show that bouncers do not halt, Theorem~\ref{th:bouncers}. For this, we are going to express bouncers' tapes using regular expressions over the alphabet $\Delta \cup  \overline{\Sigma}$. Given $u\in\Sigma^*$, we abbreviate the regular expression $\{u\}^*$, which represents zero or more repetitions of the word $u$, as $(u)$. Also, we write $\Sigma^+ = \Sigma^* \setminus \{ \varnothing \}$. We define a \textit{wall-repeater formula tape} to be a regular expression of the form:
+In this section, we formalise the above-stated intuition that bouncers expand a tape by repeating \textit{repeater} patterns between fixed \textit{walls}. Then, we formally define bouncers in Definition~\ref{def:bouncers} and show that they do not halt in Theorem~\ref{th:bouncers}. For this, we are going to express bouncers' tapes using regular expressions over the alphabet $\Delta \cup  \overline{\Sigma}$. Given $u\in\Sigma^*$, we abbreviate the regular expression $\{u\}^*$, which represents zero or more repetitions of the word $u$, as $(u)$. Also, we write $\Sigma^+ = \Sigma^* \setminus \{ \varnothing \}$. We define a \textit{wall-repeater formula tape} to be a regular expression of the form:
 \begin{align}\label{math:formulaTapes}w_1(r_1)w_2(r_2)\dots w_n(r_n) w_{n+1} h w'_1(r'_1)w'_2(r'_2)\dots w'_m(r'_m) w'_{m+1}\end{align}
 
 if the following conditions are met:
@@ -190,6 +190,7 @@ We finally get to the main result of this section, which characterises bouncers 
         \item There is a reachable tape $t\in\mathcal{L}(f)$, i.e.\ $0^\infty \rhead{\text{A}} 0^\infty \vdash^* t$
         \item There is a formula tape $f'$ such that $f \vdash_\mathcal{A}^* f'$ and $f'$ is a special case of $f$
     \end{enumerate}
+    We say that formula tape $f$ \textit{solves} the bouncer.
 \end{definition}
 
 \begin{theorem}\label{th:bouncers}
@@ -206,7 +207,7 @@ We finally get to the main result of this section, which characterises bouncers 
 \begin{definition}[Bouncer certificate]\label{def:bouncer-certificate}
     For a given bouncer, a bouncer certificate consists at least of the following:
     \begin{enumerate}
-        \item The formula tape $f$ of Definition~\ref{def:bouncers}. We say that $f$ \textit{solves} the bouncer.
+        \item The formula tape $f$ of Definition~\ref{def:bouncers} that solves the bouncer.
         \item The time step at which tape $t$ such that $t\in\mathcal{L}(f_0)$ is reached from  $0^\infty \rhead{\text{A}} 0^\infty$.
         \item The number of \textit{macro steps} $n$ such that $f \vdash_\mathcal{A}^n f'$ with $f'$ special case of $f$, where a macro step on a formula tape consists in applying $\vdash_\mathcal{A}$, i.e.\ alignment followed by $\vdash$ (one usual step or one shift rule step).
     \end{enumerate}
@@ -260,19 +261,26 @@ Theorem~\ref{th:bouncers} characterises bouncers but we lack a practical criteri
 % Bouncers will grow their tape such that we can extract a subsequence of record-breaking tapes of the form $w_1 r_1^n w_2 r_2^n \dots w_m r_m^n w_{m+1}$ with length in arithmetic progression and time steps in quadratic progression:
 
 \begin{theorem}[Linear-quadratic growth]\label{th:linquad}
-    Let $M$ be a bouncer Turing machine, i.e.\ it satisfies Theorem~\ref{th:bouncers} for some formula tape $f$. Call $(t_n)_{n\in\N}$ the sequence of tapes that it visits starting from $t_0 = 0^\infty \rhead{\text{A}} 0^\infty$. Call $l_n$ the length of $t_n$ and suppose that $\text{lim}_{n\to\infty} l_n = +\infty$, i.e.\ $M$ is not a cycler.
-
-    Then, there is an extraction function $g: \mathbb{N} \to \mathbb{N}$ with $g(n) \geq n$ for all $n\in\N$, such that:
+    Let $M$ be a bouncer, solved by some formula tape $f$. Call $(t_n)_{n\in\N}$ the sequence of tapes that it visits starting from $t_0 = 0^\infty \rhead{\text{A}} 0^\infty$. Call $l_n$ the length of $t_n$ and suppose that $\text{lim}_{n\to\infty} l_n = +\infty$, i.e.\ $M$ is not a cycler. Then, there is a formula tape $\tilde{f}$, called $\text{linquad}(f)$, that also solves the bouncer such that there is an extraction function $g: \mathbb{N} \to \mathbb{N}$ with $g(n) \geq n$ for all $n\in\N$, satisfying:
 
     \begin{enumerate}
-        \item For all $n\in\N$, $t_{g(n)} = C_f(n)$.
+        \item For all $n\in\N$, $t_{g(n)} = C_{\tilde{f}}(n)$.
         \item $(l_{g(n)})_{n\in\N}$ is an arithmetic progression, i.e.\ $D((l_{g(n)})_{n\in\N}) = (K)_{n\in\N}$ for some constant $K\in\N$.
         \item $(g(n))_{n\in\N}$ is a quadratic progression, i.e.\ $D(D((g(n))_{n\in\N})) = (K')_{n\in\N}$ for some constant $K'\in\N$.
     \end{enumerate}
 \end{theorem}
 
 \begin{proof}
-    TODO
+    Without loss of generality we suppose that $f$ is aligned. For simplicity, we also suppose that there are no repeaters after the tape head in $f$, as the same argument will apply if there were some. Using Equation~\eqref{math:formulaTapes}, we write $f=w_1(r_1)w_2(r_2)\dots w_n(r_n) w_{n+1} h w$ with $n \geq 1$, $w_i \in \Sigma^*$ for $2 \leq i \leq n+1$, $w_1,w \in \overline{\Sigma}^*$ and $r_i \in \Sigma^+$ for $1 \leq i \leq n$ and $h\in\Delta$.
+    Because $f$ solves the bouncer, by Definition~\ref{def:bouncers}, the machine eventually reaches tape $t$ of the form $t = w_1 r_1^{k_1} w_2 r_2^{k_2} \dots r_n^{k_n} w_{n+1} h w$ with $k_1, \dots, k_n \in \N$. Because $f \vdash_\mathcal{A}^* f'$ and $f'$ is a special case of $f$, we have $t \vdash^* t'$ with $t' \in \mathcal{L}(f')$ and $t' = w_1 r_1^{k_1 + p_1} w_2 r_2^{k_2 + p_2} \dots r_n^{k_n + p_n} w_{n+1} h w$ with $p_1, \dots, p_n \in \N$. Note that $p_i$ is positive because shift rules preserve the size of repeaters. Because $t'\in\mathcal{L}(f') \subseteq \mathcal{L}(f)$ we can repeat this indefinitely and get $t \vdash^* w_1 r_1^{k_1 + Np_1} w_2 r_2^{k_2 + Np_2} \dots r_n^{k_n + Np_n} w_{n+1} h w$ for all $N \in \N$.
+
+    Hence, define $\text{linquad}(f) = w_1 r_1^{k_1} (r^{p_1}) w_2 r_2^{k_2} (r^{p_2}) \dots w_n r_n^{k_n} (r^{p_n}) w_{n+1} h w$. When $p_i=0$, then $r^{p_i} = \varnothing$ and we discard it. All $p_i$ cannot be $0$, otherwise the machine is a cycler which is excluded. Altogether, we can write: $\text{linquad}(f) = \tilde{w_1} (\tilde{r}_1) \tilde{w}_2 (\tilde{r}_2) \dots \tilde{w}_m (\tilde{r}_m) \tilde{w}_{m+1} h w$ with $2 \leq m \leq n$ and nonempty $\tilde{r}_i$, which is a valid formula tape which also solves the bouncer. By construction, the machine will reach tapes of the form $C_{\tilde{f}}(n)$ for all $n\in\N$ at increasing time steps. We immediately get Point 2 because $C_{\tilde{f}}(n+1)$ contains $K = \sum_{i=1}^n |\tilde{r}_i|$ more symbols than $C_{\tilde{f}}(n)$, which is a constant.
+
+    Concerning Point 3, call $g(n)$ the time step at which $C_{\tilde{f}}(n)$ is reached. By construction, $g(n) \geq n$. The number of macro steps $M \geq 1$ such that $f \vdash_\mathcal{A}^M f'$ is a constant, which we can write $M = M_u + M_s$ with $ M_u$ the number of usual steps and $M_s$ the number of shift rule applications. When processing $C_{\tilde{f}}(n)$, each shift rule is confronted to $n$ repetitions of a repeater (because shift rules preserve the number of repetitions), hence we get: $g(n+1) - g(n) = M_u + n M_s$, which means $D(D((g(n))_{n\in\N})) = (M_s)_{n\in\N}$ which is constant, as needed.
+
+
+
+
     % Because $M$ is a bouncer, there is a formula tape (See~\eqref{math:formulaTapes}): $$\tilde{f} = 0^\infty\tilde{w}_1(\tilde{r}_1)\tilde{w}_2(\tilde{r}_2)\dots \tilde{w}_n(\tilde{r}_n) \tilde{w}_{n+1} h \tilde{w'}_1(r'_1)\tilde{w'}_2(\tilde{r'}_2)\dots \tilde{w'}_m(\tilde{r'}_m) \tilde{w'}_{m+1}0^\infty$$
 
     % With $h\in\Delta$, $\tilde{w}_i, \tilde{w}'_j \in \Sigma^*$, $\tilde{r}_i, \tilde{r}_j \in \sigma^+$.
