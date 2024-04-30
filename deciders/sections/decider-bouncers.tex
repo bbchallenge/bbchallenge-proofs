@@ -215,7 +215,7 @@ We finally get to the main result of this section, which characterises bouncers 
 \end{definition}
 
 \begin{example}\label{ex:bouncerTheory}
-    Theorem~\ref{th:bouncers} applies to the machine of Example~\ref{ex:bouncer88427177}, illustrated in Figure~\ref{fig:bouncers}~(d), used in our series of examples for this section. Indeed, we have $0^\infty \rhead{\text{A}} 0^\infty \vdash^{64} 0^\infty 11111101100 \rhead{\text{D}} 0^\infty$. The tape $t=0^\infty \vdash^{64} 0^\infty 11111101100 \rhead{\text{D}} 0^\infty$ is in the language the following formula tape:
+    The machine of Example~\ref{ex:bouncer88427177} (Figure~\ref{fig:bouncers}~(d)) that is used in our series of examples for this section, is a bouncer. Indeed, we have $0^\infty \rhead{\text{A}} 0^\infty \vdash^{64} 0^\infty 11111101100 \rhead{\text{D}} 0^\infty$. The tape $t=0^\infty \vdash^{64} 0^\infty 11111101100 \rhead{\text{D}} 0^\infty$ is in the language the following formula tape:
     $$f_0 = 0^\infty (111)1110(11)00\rhead{\text{D}}0^\infty$$
     At this point, and for the next 25 usual steps alignment does not affect the formulas, and we get: $$f_{25} = 0^\infty (111) 1110 (11) \lhead{\text{A}} 01010110^\infty$$
     One shift rule gives:
@@ -247,7 +247,7 @@ For a given formula tape, using the notation of Equation~\ref{math:formulaTapes}
 
 We denote an infinite sequence $u_0, u_1, \dots u_n, \dots$ with $n\in\N$ by $(u_n)_{n\in\N}$. We define the difference operator $D: \Z^\N \to \Z^\N$ via $D((u_n)_{n\in\N})=(u_{n+1}-u_{n})_{n\in\N}$. The \textit{length} of a tape $t$ is the number of symbols of $\Sigma$ in $t$, i.e.\ ignoring head and $0^\infty$.
 
-Theorem~\ref{th:bouncers} characterises bouncers but we lack a practical criterion for recognising a bouncer from its sequence of successive tapes starting from $0^\infty \rhead{\text{A}} 0^\infty$. We make a step in that direction by showing that if a bouncer is not a cycler (Section~\ref{sec:cyclers}) and is solved by formula tape $f$ according to Theorem~\ref{th:bouncers}, we can expect to see tapes of the form $C_f(k)$ for all successive $k\in\mathbb{N}$ as a subsequence of the sequence of all tapes visited by the bouncer. Importantly for being detected in practice, the length of tapes $C_f(k)$ grows linearly in quadratic time:
+Theorem~\ref{th:bouncers} characterises bouncers but we lack a practical criterion for recognising a bouncer from its sequence of successive tapes starting from $0^\infty \rhead{\text{A}} 0^\infty$. We make a step in that direction by showing that if a bouncer is not a cycler (Section~\ref{sec:cyclers}), solved by formula tape $f$, we can expect to see tapes of the form $C_{\tilde{f}}(k)$ for all successive $k\in\mathbb{N}$ with $\tilde{f}$ a slight transformation of $f$, as a subsequence of the sequence of all tapes visited by the bouncer. Importantly for being detected in practice, the length of tapes $C_{\tilde{f}}(k)$ grows linearly in quadratic time:
 
 % We define \textit{record-breaking tapes} to be tapes where the head is pointing at $0^\infty$, i.e.\ tapes of the form $0^\infty u \rhead{s} 0^\infty$ or $0^\infty \lhead{s} u 0^\infty$ with $u\in\Sigma^*$ and $s\in S$. Similarly, \textit{record-breaking formula tapes} are formula tapes where the head is pointing at $0^\infty$.
 
@@ -271,12 +271,12 @@ Theorem~\ref{th:bouncers} characterises bouncers but we lack a practical criteri
 \end{theorem}
 
 \begin{proof}
-    Without loss of generality we suppose that $f$ is aligned. For simplicity, we also suppose that there are no repeaters after the tape head in $f$, as the same argument will apply if there were some. Using Equation~\eqref{math:formulaTapes}, we write $f=w_1(r_1)w_2(r_2)\dots w_n(r_n) w_{n+1} h w$ with $n \geq 1$, $w_i \in \Sigma^*$ for $2 \leq i \leq n+1$, $w_1,w \in \overline{\Sigma}^*$ and $r_i \in \Sigma^+$ for $1 \leq i \leq n$ and $h\in\Delta$.
+    Without loss of generality we suppose that $f$ is aligned. For simplicity of notations, we also suppose that there are no repeaters after the tape head in $f$, as the same argument applies if there are some. Using Equation~\eqref{math:formulaTapes}, we write $f=w_1(r_1)w_2(r_2)\dots w_n(r_n) w_{n+1} h w$ with $n \geq 1$, $w_i \in \Sigma^*$ for $2 \leq i \leq n+1$, $w_1,w \in \overline{\Sigma}^*$ and $r_i \in \Sigma^+$ for $1 \leq i \leq n$ and $h\in\Delta$.
     Because $f$ solves the bouncer, by Definition~\ref{def:bouncers}, the machine eventually reaches tape $t$ of the form $t = w_1 r_1^{k_1} w_2 r_2^{k_2} \dots r_n^{k_n} w_{n+1} h w$ with $k_1, \dots, k_n \in \N$. Because $f \vdash_\mathcal{A}^* f'$ and $f'$ is a special case of $f$, we have $t \vdash^* t'$ with $t' \in \mathcal{L}(f')$ and $t' = w_1 r_1^{k_1 + p_1} w_2 r_2^{k_2 + p_2} \dots r_n^{k_n + p_n} w_{n+1} h w$ with $p_1, \dots, p_n \in \N$. Note that $p_i$ is positive because shift rules preserve the size of repeaters. Because $t'\in\mathcal{L}(f') \subseteq \mathcal{L}(f)$ we can repeat this indefinitely and get $t \vdash^* w_1 r_1^{k_1 + Np_1} w_2 r_2^{k_2 + Np_2} \dots r_n^{k_n + Np_n} w_{n+1} h w$ for all $N \in \N$.
 
     Hence, define $\text{linquad}(f) = w_1 r_1^{k_1} (r^{p_1}) w_2 r_2^{k_2} (r^{p_2}) \dots w_n r_n^{k_n} (r^{p_n}) w_{n+1} h w$. When $p_i=0$, then $r^{p_i} = \varnothing$ and we discard it. All $p_i$ cannot be $0$, otherwise the machine is a cycler which is excluded. Altogether, we can write: $\text{linquad}(f) = \tilde{w_1} (\tilde{r}_1) \tilde{w}_2 (\tilde{r}_2) \dots \tilde{w}_m (\tilde{r}_m) \tilde{w}_{m+1} h w$ with $2 \leq m \leq n$ and nonempty $\tilde{r}_i$, which is a valid formula tape which also solves the bouncer. By construction, the machine will reach tapes of the form $C_{\tilde{f}}(n)$ for all $n\in\N$ at increasing time steps. We immediately get Point 2 because $C_{\tilde{f}}(n+1)$ contains $K = \sum_{i=1}^n |\tilde{r}_i|$ more symbols than $C_{\tilde{f}}(n)$, which is a constant.
 
-    Concerning Point 3, call $g(n)$ the time step at which $C_{\tilde{f}}(n)$ is reached. By construction, $g(n) \geq n$. The number of macro steps $M \geq 1$ such that $f \vdash_\mathcal{A}^M f'$ is a constant, which we can write $M = M_u + M_s$ with $ M_u$ the number of usual steps and $M_s$ the number of shift rule applications. When processing $C_{\tilde{f}}(n)$, each shift rule is confronted to $n$ repetitions of a repeater (because shift rules preserve the number of repetitions), hence we get: $g(n+1) - g(n) = M_u + n M_s$, which means $D(D((g(n))_{n\in\N})) = (M_s)_{n\in\N}$ which is constant, as needed.
+    Concerning Point 3, call $g(n)$ the time step at which $C_{\tilde{f}}(n)$ is reached. By construction, $g(n) \geq n$. The number of macro steps $M \geq 1$ such that we get $f \vdash_\mathcal{A}^M f'$ is a constant. We write $M = M_u + M_s$ with $ M_u$ the number of usual steps and $M_s$ the number of shift rule applications. When processing $C_{\tilde{f}}(n)$, each shift rule is confronted to $n$ repetitions of a repeater (because shift rules preserve the number of repetitions), hence we get: $g(n+1) - g(n) = M_u + n M_s$, which means $D(D((g(n))_{n\in\N})) = (M_s)_{n\in\N}$ which is constant, as needed.
 
 
 
@@ -306,23 +306,11 @@ Theorem~\ref{th:bouncers} characterises bouncers but we lack a practical criteri
 
 % with formula tape $f=0^\infty 111(111)01111(11)\rhead{\text{C}}0^\infty$, which is another formula tape that decides the bouncer (different from the one given in Example~\ref{ex:bouncerTheory}),
 
-\begin{example}\label{ex:linquad} TODO
-    % Using the machine of Example~\ref{ex:bouncer88427177} used in the previous section, we have that $f= 0^\infty 111 (111) 01111 (11) \rhead{\text{C}} 0^\infty$ solves the bouncer according to Theorem~\ref{th:bouncers}:
-    % \begin{align*}
-    %     0^\infty \rhead{\text{A}} 0^\infty & \vdash^{37} 0^\infty 111\; 01111 \rhead{\text{C}} 0^\infty                                 & g(0) = 37,\; l_{37} = 11   \\
-    %                                        & \vdash^{39}   0^\infty111\; 111 \;01111 \;11\rhead{\text{C}}0^\infty                       & g(1) = 76,\; l_{76} = 16   \\
-    %                                        & \vdash^{45}   0^\infty111\; 111\;111\; 01111\; 11\; 11 \rhead{\text{C}}0^\infty            & g(2) = 121,\; l_{121} = 21 \\
-    %                                        & \vdash^{51}   0^\infty111\; 111\;111\; 111\; 01111\; 11\; 11\; 11 \rhead{\text{C}}0^\infty & g(3) = 172,\; l_{172} = 26 \\
-    % \end{align*}
+\begin{example}\label{ex:linquad}
+    Using Example~\ref{ex:bouncerTheory}, we get that $f = 0^\infty (111)1110(11)00\rhead{\text{D}}0^\infty$ solves the bouncer given in Example~\ref{ex:bouncer88427177}. We have $f \vdash_\mathcal{A}^{M} f'$ with $M = 41$ and $f'$ special case of $f$. We can decompose $M = M_u + M_s$ with $M_u = 39$ usual steps and $M_s = 2$ shift rule applications.
 
-    % In
+    Using Theorem~\ref{th:linquad}, we have $\text{linquad}(f)= 0^\infty (111)1111110(11)11 00\rhead{\text{D}}0^\infty$. Calling $g(n)$ the time step at which $C_{\text{linquad}(f)}(n)$ is reached, we have $g(0)= 64$. Using the proof of Theorem~\ref{th:linquad}, $g(n+1)-g(n) = M_u + n M_s = 39 + 2n$, hence, $g(n) = n^2 + 39n + 64$. We also have $l_{g(n)} = 11 + 5n$.
 
-    % Then, in this finite sample, $l_{g(0)},...,l_{g(3)}$ is in arithmetic progression with first difference $K=5$ and $g(0), ..., g(3)$ is in quadratic progression with second difference $K'=6$.
-
-    % In general, we get:
-    % $$0^\infty \rhead{\text{A}} 0^\infty  \vdash^{g(n)} 0^\infty 111\; (111)^n\; 01111 (11)^n\; \rhead{\text{C}} 0^\infty   \quad g(n) = 3n^2 + 36n + 37,\; l_{g(n)} = 5n+11$$
-
-    % This general expression can be verified by simulating (and aligning) the formula tape $f=111(111)01111(11)\rhead{\text{C}}0^\infty$ until it reaches a special case, which solves the bouncer (Theorem~\ref{th:bouncers}).
 
 \end{example}
 \newpage
