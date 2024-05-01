@@ -421,7 +421,7 @@ Algorithm~\ref{alg:greedy-formula-tape-fitting} is a greedy algorithm which fits
 
 
 \begin{theorem}[Greedy formula tape fitting]\label{th:greedy-formula-tape-fitting}
-    Let $f$ be a headless formula tape with nonempty intermediary walls such that $\mathcal{A}_r(f) = w_1 (r_1) w_2 (r_2)\dots w_m (r_m) w$ with $m\in\N$, $r_i, w_i \in \Sigma^+$ with $1 \leq i \leq m$, and $w_1, w \in \Sigma^*$. Take $t_0, t_1, t_2 \in \Sigma^+$ satisfying:
+    Let $f$ be a headless formula tape with nonempty intermediary walls such that $\mathcal{A}_r(f) = w_1 (r_1) w_2 (r_2)\dots w_m (r_m) w$ with $m\in\N$, $r_i, w_i \in \Sigma^+$ with $1 \leq i \leq m$, and $w_1, w \in \overline{\Sigma}^*$. Take $t_0, t_1, t_2 \in \Sigma^+$ satisfying:
     \begin{align*}
         t_0 & = \mathcal{S}(C_f(0))  = w_1\; w_2 \dots w_m\; w                       \\
         t_1 & = \mathcal{S}(C_f(1))  = w_1\; r_1\; w_2\; \dots w_m\; r_m\; w         \\
