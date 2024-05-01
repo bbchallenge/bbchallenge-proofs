@@ -122,7 +122,7 @@ $$f = w_1(r_1)w_2(r_2)\dots w_n(r_n) w_{n+1} h w'_1(r'_1)w'_2(r'_2)\dots w'_m(r'
 
 \begin{enumerate}
     \item (Usual step) If $h$ points at nonempty $w_{n+1}$ or $w'_1$, and $w_{n+1} h w'_1 \vdash \tilde{w}_{n+1} \tilde{h} \tilde{w}'_1$ as tapes, replace the terms $w_{n+1} h w'_1(r'_1)$ of $f$ with $\tilde{w}_{n+1} \tilde{h} \tilde{w}'_1$. Call the new formula $f'$, and define $f \vdash f'$.
-    As for tapes, $\vdash$ is undefined if $w_{n+1} h w'_1$ corresponds to a halting configuration (i.e.\ undefined transition).
+          As for tapes, $\vdash$ is undefined if $w_{n+1} h w'_1$ corresponds to a halting configuration (i.e.\ undefined transition).
           % Using \eqref{math:formulaTapes}, write as $f=\alpha w_{n+1} h w'_1\beta$, with $\alpha$ (resp. $\beta$) the uniquely-defined beginning (resp.ending) of the formula tape $f$. Then, $f \vdash \alpha \tilde{w}_{n+1} \tilde{h} \tilde{w}'_1 \beta = f'$ if $w_{n+1} h w'_1 \vdash \tilde{w}_{n+1} \tilde{h} \tilde{w}'_1$ with $\tilde{w}_{n+1}, \tilde{w} \in \Sigma^*$ and $\tilde{h} \in \Delta$.
     \item (Shift rule) Two cases:
           \begin{enumerate}
@@ -248,13 +248,17 @@ For a given formula tape, using the notation of Equation~\ref{math:formulaTapes}
 
 We denote an infinite sequence $u_0, u_1, \dots u_n, \dots$ with $n\in\N$ by $(u_n)_{n\in\N}$. We define the difference operator $D: \Z^\N \to \Z^\N$ via $D((u_n)_{n\in\N})=(u_{n+1}-u_{n})_{n\in\N}$. The \textit{length} of a tape $t$ is the number of symbols of $\Sigma$ in $t$, i.e.\ ignoring head and $0^\infty$.
 
-Theorem~\ref{th:bouncers} characterises bouncers but we lack a practical criterion for recognising a bouncer from its sequence of successive tapes starting from $0^\infty \rhead{\text{A}} 0^\infty$. We make a step in that direction by showing that if a bouncer is not a cycler (Section~\ref{sec:cyclers}), solved by formula tape $f$, we can expect to see tapes of the form $C_{\tilde{f}}(k)$ for all successive $k\in\mathbb{N}$ with $\tilde{f}$ a slight transformation of $f$, as a subsequence of the sequence of all tapes visited by the bouncer. Importantly for being detected in practice, the length of tapes $C_{\tilde{f}}(k)$ grows linearly in quadratic time:
+\newcommand{\sync}[1]{\operatorname{sync}(#1)}
+
+Theorem~\ref{th:bouncers} characterises bouncers but we lack a practical criterion for recognising a bouncer from its sequence of successive tapes starting from $0^\infty \rhead{\text{A}} 0^\infty$. We make a step in that direction by showing that if a bouncer solved by formula tape $f$ that is not a cycler (Section~\ref{sec:cyclers}),then, we can construct from $f$ a new formula tape $\sync{f}$, that also solves the bouncer but such that tapes $C_{\sync{f}}(k)$, where all repeaters are synchronously repeated $k$ times, are reached by the machine for all successive $k\in\mathbb{N}$. Importantly for being detected in practice, the length of tapes $C_{\sync{f}}(k)$ grows linearly in quadratic time:
+
+
 
 \begin{theorem}[Linear-quadratic growth]\label{th:linquad}
-    Let $M$ be a bouncer that is not a cycler, solved by some formula tape $f$. Call $(t_n)_{n\in\N}$ the sequence of tapes that it visits starting from $t_0 = 0^\infty \rhead{\text{A}} 0^\infty$. Call $l_n$ the length of $t_n$. Then, there is a formula tape called $\operatorname{linquad}(f)$, obtained from $f$, that also solves the bouncer such that there is an extraction function $g: \mathbb{N} \to \mathbb{N}$ with $g(n) \geq n$ for all $n\in\N$, satisfying:
+    Let $M$ be a bouncer that is not a cycler, solved by some formula tape $f$. Call $(t_n)_{n\in\N}$ the sequence of tapes that it visits starting from $t_0 = 0^\infty \rhead{\text{A}} 0^\infty$. Call $l_n$ the length of $t_n$. Then, there is a formula tape called $\sync(f)$, obtained from $f$, that also solves the bouncer such that there is an extraction function $g: \mathbb{N} \to \mathbb{N}$ with $g(n) \geq n$ for all $n\in\N$, satisfying:
 
     \begin{enumerate}
-        \item For all $n\in\N$, $t_{g(n)} = C_{\operatorname{linquad}(f)}(n)$.
+        \item For all $n\in\N$, $t_{g(n)} = C_{\sync(f)}(n)$.
         \item $(l_{g(n)})_{n\in\N}$ is an arithmetic progression, i.e.\ $D((l_{g(n)})_{n\in\N}) = (K)_{n\in\N}$ for some constant $K\in\N$.
         \item $(g(n))_{n\in\N}$ is a quadratic progression, i.e.\ $D(D((g(n))_{n\in\N})) = (K')_{n\in\N}$ for some constant $K'\in\N$.
     \end{enumerate}
@@ -265,21 +269,21 @@ Theorem~\ref{th:bouncers} characterises bouncers but we lack a practical criteri
 
     Because $f$ solves the bouncer, by Definition~\ref{def:bouncers}, the machine eventually reaches tape $t$ of the form $t = w_1 r_1^{k_1} w_2 r_2^{k_2} \dots r_n^{k_n} w_{n+1} h w$ with $k_1, \dots, k_n \in \N$. Because $f \vdash_\mathcal{A}^* f'$ and $f'$ is a special case of $f$, we have $t \vdash^* t'$ with $t' \in \mathcal{L}(f')$ and $t' = w_1 r_1^{k_1 + p_1} w_2 r_2^{k_2 + p_2} \dots r_n^{k_n + p_n} w_{n+1} h w$ with $p_1, \dots, p_n \in \N$ and same $w_i$ and $r_i$ than $f$ because $f$ is aligned. Note that $p_i$ is positive because shift rules preserve the size of repeaters. Because $t'\in\mathcal{L}(f') \subseteq \mathcal{L}(f)$ we can repeat this indefinitely and get $t \vdash^* w_1 r_1^{k_1 + Np_1} w_2 r_2^{k_2 + Np_2} \dots r_n^{k_n + Np_n} w_{n+1} h w$ for all $N \in \N$.
 
-    Hence, define $\operatorname{linquad}(f) = w_1 r_1^{k_1} (r^{p_1}) w_2 r_2^{k_2} (r^{p_2}) \dots w_n r_n^{k_n} (r^{p_n}) w_{n+1} h w$. When $p_i=0$, then $r^{p_i} = \varnothing$ and we discard it. All $p_i$ cannot be $0$, otherwise the machine is a cycler which is excluded. Altogether, we can write: $\operatorname{linquad}(f) = \tilde{w_1} (\tilde{r}_1) \tilde{w}_2 (\tilde{r}_2) \dots \tilde{w}_m (\tilde{r}_m) \tilde{w}_{m+1} h w$ with $2 \leq m \leq n$ and nonempty $\tilde{r}_i$, which is a valid formula tape which also solves the bouncer. By construction, the machine will reach tapes of the form $C_{\tilde{f}}(n)$ for all $n\in\N$ at increasing time steps. We immediately get Point 2 because $C_{\tilde{f}}(n+1)$ contains $K = \sum_{i=1}^n |\tilde{r}_i|$ more symbols than $C_{\tilde{f}}(n)$, which is a constant.
+    Hence, define $\sync(f) = w_1 r_1^{k_1} (r^{p_1}) w_2 r_2^{k_2} (r^{p_2}) \dots w_n r_n^{k_n} (r^{p_n}) w_{n+1} h w$. When $p_i=0$, then $r^{p_i} = \varnothing$ and we discard it. All $p_i$ cannot be $0$, otherwise the machine is a cycler which is excluded. Altogether, we can write: $\sync(f) = \tilde{w_1} (\tilde{r}_1) \tilde{w}_2 (\tilde{r}_2) \dots \tilde{w}_m (\tilde{r}_m) \tilde{w}_{m+1} h w$ with $2 \leq m \leq n$ and nonempty $\tilde{r}_i$, which is a valid formula tape which also solves the bouncer. By construction, the machine will reach tapes of the form $C_{\tilde{f}}(n)$ for all $n\in\N$ at increasing time steps. We immediately get Point 2 because $C_{\tilde{f}}(n+1)$ contains $K = \sum_{i=1}^n |\tilde{r}_i|$ more symbols than $C_{\tilde{f}}(n)$, which is a constant.
 
-    Concerning Point 3, call $g(n)$ the time step at which $C_{\tilde{f}}(n)$ is reached. By construction, $g(n) \geq n$. The number of macro steps $M \geq 1$ such that we get $\operatorname{linquad}(f) \vdash_\mathcal{A}^M f''$ with $f''$ special case of $\operatorname{linquad}(f)$ is a constant. We write $M = M_u + M_s$ with $ M_u$ the number of usual steps and $M_s$ the number of shift rule applications. Call $M'_s$ the number of Turing machine steps taken in total to perform the base case (i.e.\ the steps needed to prove that a shift rule is correct) of each of the $M_s$ shift rules. When processing $C_{\tilde{f}}(n)$, each shift rule is confronted to $n$ repetitions of a repeater (because shift rules preserve the number of repetitions), hence we get: $g(n+1) - g(n) = M_u + n M'_s$, which means $D(D((g(n))_{n\in\N})) = (M'_s)_{n\in\N}$ which is constant, as needed.
+    Concerning Point 3, call $g(n)$ the time step at which $C_{\tilde{f}}(n)$ is reached. By construction, $g(n) \geq n$. The number of macro steps $M \geq 1$ such that we get $\sync(f) \vdash_\mathcal{A}^M f''$ with $f''$ special case of $\sync(f)$ is a constant. We write $M = M_u + M_s$ with $ M_u$ the number of usual steps and $M_s$ the number of shift rule applications. Call $M'_s$ the number of Turing machine steps taken in total to perform the base case (i.e.\ the steps needed to prove that a shift rule is correct) of each of the $M_s$ shift rules. When processing $C_{\tilde{f}}(n)$, each shift rule is confronted to $n$ repetitions of a repeater (because shift rules preserve the number of repetitions), hence we get: $g(n+1) - g(n) = M_u + n M'_s$, which means $D(D((g(n))_{n\in\N})) = (M'_s)_{n\in\N}$ which is constant, as needed.
 
 \end{proof}
 
 % with formula tape $f=0^\infty 111(111)01111(11)\rhead{\text{C}}0^\infty$, which is another formula tape that decides the bouncer (different from the one given in Example~\ref{ex:bouncerTheory}),
 
 \begin{example}\label{ex:linquad}
-    Using Example~\ref{ex:bouncerTheory}, we get that $f = 0^\infty (111)1110(11)00\rhead{\text{D}}0^\infty$ solves the bouncer given in Example~\ref{ex:bouncer88427177}. Using Theorem~\ref{th:linquad}, we have $\operatorname{linquad}(f)= 0^\infty (111)1111110(11)11 00\rhead{\text{D}}0^\infty$.
-    We have $\operatorname{linquad}(f) \vdash_\mathcal{A}^{M} f'$ with $M = 47$ and $f'$ special case of $\operatorname{linquad}(f)$. Note that $47 > 41$ found in Example~\ref{ex:bouncerTheory} because $\operatorname{linquad}(f)$ is a bit bigger than $f$.
+    Using Example~\ref{ex:bouncerTheory}, we get that $f = 0^\infty (111)1110(11)00\rhead{\text{D}}0^\infty$ solves the bouncer given in Example~\ref{ex:bouncer88427177}. Using Theorem~\ref{th:linquad}, we have $\sync(f)= 0^\infty (111)1111110(11)11 00\rhead{\text{D}}0^\infty$.
+    We have $\sync(f) \vdash_\mathcal{A}^{M} f'$ with $M = 47$ and $f'$ special case of $\sync(f)$. Note that $47 > 41$ found in Example~\ref{ex:bouncerTheory} because $\sync(f)$ is a bit bigger than $f$.
 
     We can decompose $M = M_u + M_s$ with $M_u = 45$ usual steps and $M_s = 2$ shift rule applications. The shift rules that are used are $0 \rhead{\text{D}}(01) \to (11)0\rhead{\text{D}}$ which takes $4$ Turing machine steps to execute (Example~\ref{ex:shiftRules}) and $(11) \lhead{\text{A}}\; \to \;  \lhead{\text{A}} (01)$ which takes $2$, hence $M'_s = 6$.
 
-    Calling $g(n)$ the time step at which $C_{\operatorname{linquad}(f)}(n)$ is reached, we have $g(0)= 64$. Using the proof of Theorem~\ref{th:linquad}, $g(n+1)-g(n) = M_u + n M'_s = 45 + 6n$, hence, $g(n) = 3n^2 + 42n + 64$. We also have $l_{g(n)} = 11 + 5n$. One can check by simulation that tapes $C_{\operatorname{linquad}(f)}(n)$ are reached at time steps $g(n)$.
+    Calling $g(n)$ the time step at which $C_{\sync(f)}(n)$ is reached, we have $g(0)= 64$. Using the proof of Theorem~\ref{th:linquad}, $g(n+1)-g(n) = M_u + n M'_s = 45 + 6n$, hence, $g(n) = 3n^2 + 42n + 64$. We also have $l_{g(n)} = 11 + 5n$. One can check by simulation that tapes $C_{\sync(f)}(n)$ are reached at time steps $g(n)$.
 
 
 \end{example}
@@ -624,7 +628,7 @@ Algorithm~\ref{alg:greedy-formula-tape-fitting} is a greedy algorithm which fits
 \subsubsection{Bouncers decider}
 
 We finally piece all the elements of this text together and describe a decider for bouncers (excluding cyclers, decided in Section~\ref{sec:cyclers}), Algorithm~\ref{alg:decider-bouncers} which is proven correct in Theorem~\ref{th:bouncer-decider}.
-%If a machine is a bouncer that is not a cycler, solved by some formula tape $f$, we know that it is also solved by $f'$ a right-aligned formula tape with nonempty intermediary walls that we can obtain from $f$ (Lemma~\ref{lem:formula-tapes-WLOG}). By Theorem~\ref{th:linquad}, we know that formula tape $\operatorname{linquad}(f')$ also solves the bouncer and that $(C_{\text{linquad(f')}}(n))_{n\in\N}$ is a subsequence of the tapes visited by the machine from $0^\infty \rhead{\text{A}} 0^\infty$ and that we can detect such subsequence because it grows linearly in quadratic time. Hence, given enough time, we can eventually find $(C_{\text{linquad(f')}}(0), C_{\text{linquad(f')}}(1), C_{\text{linquad(f')}}(2))$ from all \textit{plausible} subsequences of tapes (i.e.\ subsequences that grow linearly in quadratic time), run the formula tape fitting Algorithm~\ref{alg:greedy-formula-tape-fitting}, deduce $f'$ and verify it satisfies Theorem~\ref{th:bouncers}, hence deciding the bouncer.
+%If a machine is a bouncer that is not a cycler, solved by some formula tape $f$, we know that it is also solved by $f'$ a right-aligned formula tape with nonempty intermediary walls that we can obtain from $f$ (Lemma~\ref{lem:formula-tapes-WLOG}). By Theorem~\ref{th:linquad}, we know that formula tape $\sync(f')$ also solves the bouncer and that $(C_{\text{linquad(f')}}(n))_{n\in\N}$ is a subsequence of the tapes visited by the machine from $0^\infty \rhead{\text{A}} 0^\infty$ and that we can detect such subsequence because it grows linearly in quadratic time. Hence, given enough time, we can eventually find $(C_{\text{linquad(f')}}(0), C_{\text{linquad(f')}}(1), C_{\text{linquad(f')}}(2))$ from all \textit{plausible} subsequences of tapes (i.e.\ subsequences that grow linearly in quadratic time), run the formula tape fitting Algorithm~\ref{alg:greedy-formula-tape-fitting}, deduce $f'$ and verify it satisfies Theorem~\ref{th:bouncers}, hence deciding the bouncer.
 
 In order to drastically limit the amount of plausible subsequences to check, we limit our interest to \textit{record-breaking} formula tapes, which are formula tapes where the head is pointing at $0^\infty$. In order to fit them, we can simply track record-breaking tapes that share the same head, i.e.\ tapes where the head is pointing at $0^\infty$. We first show that this is without loss of generality:
 
@@ -636,10 +640,10 @@ In order to drastically limit the amount of plausible subsequences to check, we 
 \end{proof}
 
 \begin{lemma}\label{lem:linquad-intermediary-walls}
-    Let $f$ be a formula tape with nonempty intermediary walls then $\operatorname{linquad}(f)$ built in Theorem~\ref{th:linquad} has nonempty intermediary walls.
+    Let $f$ be a formula tape with nonempty intermediary walls then $\sync(f)$ built in Theorem~\ref{th:linquad} has nonempty intermediary walls.
 \end{lemma}
 \begin{proof}
-    The construction of $\operatorname{linquad}(f)$ only involves (1) removing some repeaters (2) replacing some repeaters by some powers of themselves (3) increasing the size of some walls. Hence, $\operatorname{linquad}(f)$ has nonempty intermediary walls.
+    The construction of $\sync(f)$ only involves (1) removing some repeaters (2) replacing some repeaters by some powers of themselves (3) increasing the size of some walls. Hence, $\sync(f)$ has nonempty intermediary walls.
 \end{proof}
 
 Algorithm~\ref{alg:decider-bouncers} proceeds by (1) tracking record-breaking tapes with same head (i.e.\ same state and pointing-direction) that grow linearly in quadratic time, (2) fitting formula tapes from triples from these plausible subsequences until a formula tape solves the bouncer is found or some limits are met.
@@ -728,16 +732,16 @@ Algorithm~\ref{alg:decider-bouncers} proceeds by (1) tracking record-breaking ta
     Because $M$ is a bouncer, using Lemma~\ref{lem:record-breaking} we know that there is a record-breaking formula tape $\tilde{f}$ that solves the bouncer. By Lemma~\ref{lem:formula-tapes-WLOG} we know that we can transform $\tilde{f}$ into $f$ with nonempty intermediary walls and that also solves the bouncer.
 
     Algorithm~\ref{alg:decider-bouncers} enumerates all record-breaking tapes triple that grow linearly in quadratic time. If $s$ and $l$ are large enough, by Theorem~\ref{th:linquad}, we know that it will, eventually meet a triple of the form: \begin{align*}
-        t_0 & = C_{\operatorname{linquad}(f)}(0)  \\
-        t_1 & = C_{\operatorname{linquad}(f)}f(1) \\
-        t_2 & = C_{\operatorname{linquad}(f)}f(2)
+        t_0 & = C_{\sync(f)}(0)  \\
+        t_1 & = C_{\sync(f)}f(1) \\
+        t_2 & = C_{\sync(f)}f(2)
     \end{align*}
 
-    By Lemma~\ref{lem:linquad-intermediary-walls}, $f'=\operatorname{linquad}(f)$ is with nonempty intermediary walls and, at line 23, Algorithm~\ref{alg:decider-bouncers} will feed $(\mathcal{S}(C_{f'}(0)),\mathcal{S}(C_{f'}(1)),\mathcal{S}(C_{f'}(2)))$ to Algorithm~\ref{alg:greedy-formula-tape-fitting}, which, by Theorem~\ref{th:greedy-formula-tape-fitting}, will output $\mathcal{S}(\mathcal{A}_r(\operatorname{linquad}(f)))$ which be reconstructed into $\mathcal{A}_r(\operatorname{linquad}(f))$ at line 27. By Theorem~\ref{th:linquad}, we know that $\operatorname{linquad}(f)$ also solves the bouncer, and by Lemma~\ref{lem:right-alignement}, $\mathcal{A}_r(\operatorname{linquad}(f))$ also solves the bouncer. Theorem~\ref{th:bouncers} will be verified on $\mathcal{A}_r(\operatorname{linquad}(f))$ using \textbf{reaches\_special\_case} at line 28, which, by hypothesis will output \textbf{true}, and we have the result.
+    By Lemma~\ref{lem:linquad-intermediary-walls}, $f'=\sync(f)$ is with nonempty intermediary walls and, at line 23, Algorithm~\ref{alg:decider-bouncers} will feed $(\mathcal{S}(C_{f'}(0)),\mathcal{S}(C_{f'}(1)),\mathcal{S}(C_{f'}(2)))$ to Algorithm~\ref{alg:greedy-formula-tape-fitting}, which, by Theorem~\ref{th:greedy-formula-tape-fitting}, will output $\mathcal{S}(\mathcal{A}_r(\sync(f)))$ which be reconstructed into $\mathcal{A}_r(\sync(f))$ at line 27. By Theorem~\ref{th:linquad}, we know that $\sync(f)$ also solves the bouncer, and by Lemma~\ref{lem:right-alignement}, $\mathcal{A}_r(\sync(f))$ also solves the bouncer. Theorem~\ref{th:bouncers} will be verified on $\mathcal{A}_r(\sync(f))$ using \textbf{reaches\_special\_case} at line 28, which, by hypothesis will output \textbf{true}, and we have the result.
 \end{proof}
 
 \begin{remark}
-    While Theorem~\ref{th:bouncer-decider} assures us that the decider will be able to detect a bouncer, if given enough time, the formula tapes found in practice by the algorithm can be smaller than the ones constructed using $\operatorname{linquad}(f)$ with nonempty intermediary walls in the proof.
+    While Theorem~\ref{th:bouncer-decider} assures us that the decider will be able to detect a bouncer, if given enough time, the formula tapes found in practice by the algorithm can be smaller than the ones constructed using $\sync(f)$ with nonempty intermediary walls in the proof.
 \end{remark}
 
 \begin{remark}[Implementation details of Algorithm~\ref{alg:decider-bouncers}]
