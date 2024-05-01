@@ -250,10 +250,10 @@ We denote an infinite sequence $u_0, u_1, \dots u_n, \dots$ with $n\in\N$ by $(u
 Theorem~\ref{th:bouncers} characterises bouncers but we lack a practical criterion for recognising a bouncer from its sequence of successive tapes starting from $0^\infty \rhead{\text{A}} 0^\infty$. We make a step in that direction by showing that if a bouncer is not a cycler (Section~\ref{sec:cyclers}), solved by formula tape $f$, we can expect to see tapes of the form $C_{\tilde{f}}(k)$ for all successive $k\in\mathbb{N}$ with $\tilde{f}$ a slight transformation of $f$, as a subsequence of the sequence of all tapes visited by the bouncer. Importantly for being detected in practice, the length of tapes $C_{\tilde{f}}(k)$ grows linearly in quadratic time:
 
 \begin{theorem}[Linear-quadratic growth]\label{th:linquad}
-    Let $M$ be a bouncer, solved by some formula tape $f$. Call $(t_n)_{n\in\N}$ the sequence of tapes that it visits starting from $t_0 = 0^\infty \rhead{\text{A}} 0^\infty$. Call $l_n$ the length of $t_n$ and suppose that $\text{lim}_{n\to\infty} l_n = +\infty$, i.e.\ $M$ is not a cycler. Then, there is a formula tape $\tilde{f}$, called $\text{linquad}(f)$, that also solves the bouncer such that there is an extraction function $g: \mathbb{N} \to \mathbb{N}$ with $g(n) \geq n$ for all $n\in\N$, satisfying:
+    Let $M$ be a bouncer that is not a cycler, solved by some formula tape $f$. Call $(t_n)_{n\in\N}$ the sequence of tapes that it visits starting from $t_0 = 0^\infty \rhead{\text{A}} 0^\infty$. Call $l_n$ the length of $t_n$. Then, there is a formula tape called $\text{linquad}(f)$, obtained from $f$, that also solves the bouncer such that there is an extraction function $g: \mathbb{N} \to \mathbb{N}$ with $g(n) \geq n$ for all $n\in\N$, satisfying:
 
     \begin{enumerate}
-        \item For all $n\in\N$, $t_{g(n)} = C_{\tilde{f}}(n)$.
+        \item For all $n\in\N$, $t_{g(n)} = C_{\text{linquad}(f)}(n)$.
         \item $(l_{g(n)})_{n\in\N}$ is an arithmetic progression, i.e.\ $D((l_{g(n)})_{n\in\N}) = (K)_{n\in\N}$ for some constant $K\in\N$.
         \item $(g(n))_{n\in\N}$ is a quadratic progression, i.e.\ $D(D((g(n))_{n\in\N})) = (K')_{n\in\N}$ for some constant $K'\in\N$.
     \end{enumerate}
