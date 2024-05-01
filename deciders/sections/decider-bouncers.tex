@@ -349,15 +349,15 @@ In this section, we give a greedy algorithm (Algorithm~\ref{alg:greedy-formula-t
     \caption{Greedy formula tape fitting algorithm {\sc Fit-FormulaTape}}\label{alg:greedy-formula-tape-fitting}
     \begin{algorithmic}[1]
 
-        \Procedure{\textbf{HeadLessFormulaTape} {\sc Fit-FormulaTape}}{\textbf{Word} t0, \textbf{Word} t1, \textbf{Word} t2}
+        \Procedure{\textbf{HeadlessFormulaTape} {\sc Fit-FormulaTape}}{\textbf{Word} t0, \textbf{Word} t1, \textbf{Word} t2}
 
         \If{t0.\textbf{empty}() \&\& t1.\textbf{empty}() \&\& t2.\textbf{empty}()}
-        \State \Return \textbf{HeadLessFormulaTape}::\textbf{empty}()
+        \State \Return \textbf{HeadlessFormulaTape}::\textbf{empty}()
 
         \EndIf
         \State
         \If{t0.\textbf{len}() $>$ 0 \&\& t1.\textbf{len}() $>$ 0 \&\& t2.\textbf{len}() $>$ 0 \&\& t0[0] == t1[0] \&\& t1[0] == t2[0]}
-        \State \Return \textbf{HeadLessFormulaTape}::\textbf{symbol}(t0[0]).\textbf{concat}(\Call{{\sc Fit-FormulaTape}}{t0[1:], t1[1:], t2[1:]})
+        \State \Return \textbf{HeadlessFormulaTape}::\textbf{symbol}(t0[0]).\textbf{concat}(\Call{{\sc Fit-FormulaTape}}{t0[1:], t1[1:], t2[1:]})
         \EndIf
         \State
         \State
@@ -366,7 +366,7 @@ In this section, we give a greedy algorithm (Algorithm~\ref{alg:greedy-formula-t
         \For{l = longest\_prefix\_size; k $\geq$ 1; k -= 1 }
 
         \If{2*l $<$ t2.\textbf{len}() \&\& t2[:l] == t2[l:2*l] }
-        \State \Return \textbf{HeadLessFormulaTape}::\textbf{repeater}(t2[:l]).\textbf{concat}(\Call{{\sc Fit-FormulaTape}}{t0, t1[l:], t2[2*l:]})
+        \State \Return \textbf{HeadlessFormulaTape}::\textbf{repeater}(t2[:l]).\textbf{concat}(\Call{{\sc Fit-FormulaTape}}{t0, t1[l:], t2[2*l:]})
         \EndIf
 
         \EndFor
@@ -381,7 +381,7 @@ Given a tape $t$, we call $\mathcal{S}(t) \in \Sigma^*$ the \textit{headless} ve
 
 
 \begin{remark}[Implementation details of Algorithm~\ref{alg:greedy-formula-tape-fitting}]
-    We assume that we are given a \textbf{HeadLessFormulaTape} construct, and a function \textbf{get\_longest\_match\_size} which returns the size of the longest prefix of two words. Furthermore, for an array \texttt{a}, we use the notation \texttt{a[b:e]} to mean the slice of this array between indices \texttt{b} and \texttt{e}, excluding \texttt{e}.
+    We assume that we are given a \textbf{HeadlessFormulaTape} construct, and a function \textbf{get\_longest\_match\_size} which returns the size of the longest prefix of two words. Furthermore, for an array \texttt{a}, we use the notation \texttt{a[b:e]} to mean the slice of this array between indices \texttt{b} and \texttt{e}, excluding \texttt{e}.
 \end{remark}
 
 Algorithm~\ref{alg:greedy-formula-tape-fitting} is a greedy algorithm which fits a headless formula tape given three headless tapes $t_0, t_1, t_2$. The algorithm proceeds by recursively constructs the left-most wall using the biggest common prefix of $t_0, t_1$ and $t_2$ and then fits the left-most repeater using the longest prefix $r$ of $t_1$ such that $rr$ is a prefix of $t_2$, we have:
