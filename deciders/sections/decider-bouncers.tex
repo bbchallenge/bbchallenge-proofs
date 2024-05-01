@@ -54,7 +54,7 @@ We define a \textit{tape}\footnote{Note that in the terminology of Section~\ref{
     \end{tabular}\\
 \end{table}
 
-Given a tape $t=uvw$ and a word $t'=uv'w$, with $u,w\in \overline{\Sigma}^*$, $v,v' \in ( \overline \Sigma \cup \Delta)^*$, suppose that there is a rewrite rule $v \to v'$. Then $t'$ is also a tape and in this situation we write $t \vdash t'$ meaning that $t'$ is obtained from $t$ by one simulation step; note that the definition is sound because, to any given tape, at most one rewrite rule applies, hence $v \to v'$ is defined uniquely and so is $t \vdash t'$. Note that the only case where $\vdash$ is not defined on a tape is if the machine halts in this configuration, i.e.\ an undefined transition is reached. Applying $\vdash$ successively $n\in\mathbb{N}$ times is written $\vdash^n$. The transitive closure of $\vdash$ (i.e.\ applying $\vdash$ \textit{some} nonzero number of times) is written $\vdash^*$.
+Given a tape $t=uvw$ and a word $t'=uv'w$, with $u,w\in \overline{\Sigma}^*$, $v,v' \in ( \overline \Sigma \cup \Delta)^*$, suppose that there is a rewrite rule $v \to v'$. Then $t'$ is also a tape and in this situation we write $t \vdash t'$ meaning that $t'$ is obtained from $t$ by one simulation step; note that the definition is sound because, to any given tape, at most one rewrite rule applies, hence $v \to v'$ is defined uniquely and so is $t \vdash t'$. Note that the only case where $\vdash$ is not defined on a tape is if the machine halts in this configuration, i.e.\ an undefined transition is reached. Applying $\vdash$ successively $n\in\mathbb{N}$ times is written $\vdash^n$. The transitive closure of $\vdash$ (i.e.\ applying $\vdash$ one or more times) is written $\vdash^+$; applying $\vdash$ zero or more times is written $\vdash^*$.
 
 \begin{example}\label{ex:bouncer88427177}
     Consider \texttt{bbchallenge} machine\footnote{Accessible at \url{https://bbchallenge.org/88427177}} \#88,427,177 (Figure~\ref{fig:bouncers}~(d)), that has the following transition table:
@@ -114,8 +114,8 @@ Given a formula tape $f$ let $\mathcal{L}(f)$ denote the language described by $
 
 \paragraph*{Extending $\vdash$ to formula tapes: \textit{shift rules}.} We wish to extend the Turing machine step relation $\vdash$ (see Section~\ref{sec:bouncers:directionalTM}) to formula tapes. This is quite straightforward when the head is pointing at a symbol of a wall (one of the $w_i, w'_j$ in \eqref{math:formulaTapes}): we simply apply a standard Turing machine step, leaving the definition of $\vdash$ unchanged.
 
-However, we need to handle the case where the head is pointing at a repeater (one of the $r_i, r'_j$ in \eqref{math:formulaTapes}). Suppose that for some $u\in\Sigma^*$ and $r,\tilde{r}\in\Sigma^+$ and some state $s\in S$ we have $u \rhead{s} r \vdash^* \tilde{r} u \rhead{s}$. Then, for any $n\geq 0$, we have $u \rhead{s} r^n \vdash^* \tilde{r}^n u \rhead{s}$. This motivates the definition of
-(right) \textit{shift rules}, that is, rewrite rules for formula tapes, which rewrite a subword $u \rhead{s}(r)$ into $(\tilde{r})u\rhead{s}$, denoted by $u \rhead{s}(r) \to (\tilde{r})u\rhead{s}$. Similarly, left shift rules are of the form $(r)\lhead{s}u \to \;\lhead{s}u(\tilde{r})$ given that $r\lhead{s}u \vdash^* \;\lhead{s}u\tilde{r}$. Note that repeaters $r$ and $\tilde{r}$ of a shift rule necessarily have the same size.
+However, we need to handle the case where the head is pointing at a repeater (one of the $r_i, r'_j$ in \eqref{math:formulaTapes}). Suppose that for some $u\in\Sigma^*$ and $r,\tilde{r}\in\Sigma^+$ and some state $s\in S$ we have $u \rhead{s} r \vdash^+ \tilde{r} u \rhead{s}$. Then, for any $n\geq 0$, we have $u \rhead{s} r^n \vdash^* \tilde{r}^n u \rhead{s}$. This motivates the definition of
+(right) \textit{shift rules}, that is, rewrite rules for formula tapes, which rewrite a subword $u \rhead{s}(r)$ into $(\tilde{r})u\rhead{s}$, denoted by $u \rhead{s}(r) \to (\tilde{r})u\rhead{s}$. Similarly, left shift rules are of the form $(r)\lhead{s}u \to \;\lhead{s}u(\tilde{r})$ given that $r\lhead{s}u \vdash^+ \;\lhead{s}u\tilde{r}$. Note that repeaters $r$ and $\tilde{r}$ of a shift rule necessarily have the same size.
 
 Hence, we have two cases to consider for defining $\vdash$ on the following formula tape $f$ (as defined in~\eqref{math:formulaTapes}):
 $$f = w_1(r_1)w_2(r_2)\dots w_n(r_n) w_{n+1} h w'_1(r'_1)w'_2(r'_2)\dots w'_m(r'_m) w'_{m+1}$$
@@ -136,10 +136,11 @@ $$f = w_1(r_1)w_2(r_2)\dots w_n(r_n) w_{n+1} h w'_1(r'_1)w'_2(r'_2)\dots w'_m(r'
 
 From the above definition of $\vdash$ on a formula tape $f$, it is clear that (i) for usual tapes our new definition of $\vdash$ coincides with the old one, (ii) there is at most one formula tape $f'$ such that $f \vdash f'$, and (iii) the only cases where $\vdash$ is not defined on a formula tape are when the machine halts (usual step case) or no shift rule applies (shift rule case). Moreover, we get the following result:
 
-\begin{lemma}\label{lem:vdashFormulaTapes} Let $f$ and $f'$ be formula tapes with $f \vdash f'$. Then, for all $t \in \mathcal{L}(f)$, there exists some $t' \in \mathcal{L}(f')$ such that $t \vdash^* t'$.
+\begin{lemma}\label{lem:vdashFormulaTapes} Let $f$ and $f'$ be formula tapes with $f \vdash f'$. Then, for all $t \in \mathcal{L}(f)$, there exists some $t' \in \mathcal{L}(f')$ such that $t \vdash^* t'$
+	and, in case $f \vdash f'$ via usual step, $t \vdash^+ t'$.
 \end{lemma}
 \begin{proof}
-    If $f'$ follows from $f$ by a usual step, then applying one usual step to $t$ yields $t'\in\mathcal{L}(f')$. If $f'$ follows from $f$ by a shift rule, we apply several steps to $t$ (as many as there are in the shift rule) to obtain $t' \in \mathcal{L}(f')$.
+    If $f'$ follows from $f$ by a usual step, then applying one usual step to $t$ yields $t'\in\mathcal{L}(f')$. If $f'$ follows from $f$ by a shift rule (of the form $u \rhead{s}(r) \vdash^k (\tilde{r})u\rhead{s}$ or $(r)\lhead{s}u \vdash^k \;\lhead{s}u(\tilde{r})$), and the corresponding repeater $(r)$ is used $n$ times in the match $t\ \in \mathcal{L}(f)$, we apply $nk$ steps to $t$ to obtain $t' \in \mathcal{L}(f')$. This amounts to a positive number of steps (justifying $\vdash^+$)  except in case of a shift rule applied $k=0$ times.
 \end{proof}
 
 % Ambiguity in shift rule application:
@@ -189,7 +190,7 @@ We finally get to the main result of this section, which characterises bouncers 
     A bouncer is a Turing machine such that there exists a wall-repeater formula tape $f$ which satisfies:
     \begin{enumerate}
         \item There is a reachable tape $t\in\mathcal{L}(f)$, i.e.\ $0^\infty \rhead{\text{A}} 0^\infty \vdash^* t$
-        \item There is a formula tape $f'$ such that $f \vdash_\mathcal{A}^* f'$ and $f'$ is a special case of $f$
+        \item There is a formula tape $f'$ such that $f \vdash_\mathcal{A}^+ f'$ and $f'$ is a special case of $f$
     \end{enumerate}
     We say that formula tape $f$ \textit{solves} the bouncer.
 \end{definition}
@@ -199,8 +200,12 @@ We finally get to the main result of this section, which characterises bouncers 
 \end{theorem}
 
 \begin{proof}
-    Unraveling $f \vdash_\mathcal{A}^* f'$ gives $n\in\N$ and $f_1, \dots, f_n$ with $f_n = f'$ and $\mathcal{A}(f_i) \vdash f_{i+1}$ for $0 \leq i < n$.
-    It follows from Lemma~\ref{lem:vdashFormulaTapes} and Lemma~\ref{lem:sameLanguage} that there exist tapes $t_0, \dots, t_n$, such that $t_0 = t$ and $t_i\in \mathcal{L}(f_i)$ for $0 \leq i \leq n$, and $t_i \vdash^* t_{i+1}$ for $0 \leq i < n$, giving $t_0 \vdash^* t_n$. Since $f_n$ is a special case of $f_0$, we have $\mathcal{L}(\mathcal{A}(f_n)) \subseteq \mathcal{L}(\mathcal{A}(f_0))$, and using Lemma~\ref{lem:sameLanguage}, we have $\mathcal{L}(f_n) \subseteq \mathcal{L}(f_0)$ and thus, $t_n \in \mathcal{L}(f_0)$. We can repeat this construction indefinitely and yield an infinite sequence of tapes $(t_n)_{n\in\mathbb{N}}$ such that $t \vdash^* t_i$ for all $i\in\mathbb{N}$ hence the machine does not halt.
+    Unraveling $f \vdash_\mathcal{A}^+ f'$ gives $n\in\N$ and $f_1, \dots, f_n$ with $f_n = f'$ and $\mathcal{A}(f_i) \vdash f_{i+1}$ for $0 \leq i < n$.
+    It follows from Lemma~\ref{lem:vdashFormulaTapes} and Lemma~\ref{lem:sameLanguage} that there exist tapes $t_0, \dots, t_n$, such that $t_0 = t$ and $t_i\in \mathcal{L}(f_i)$ for $0 \leq i \leq n$, and $t_i \vdash^* t_{i+1}$ for $0 \leq i < n$, giving $t_0 \vdash^* t_n$. Moreover, $t_0 \vdash^+ t_n$ if the any of the $\mathcal{A}(f_i) \vdash f_{i+1}$ relations are via usual steps.
+    
+    Indeed, this must be the case. Suppose instead we had a sequence of shift rules. Each one would preserve the direction of the head, and increment the number of repeaters behind the head in the formula tape. However, these properties are unchanged by passing from a formula tape $f$ to $\mathcal{A}(f)$ or a special case of $f$. It would follow that $f_1$ has strictly more repeaters behind the head than $f_1$, a contradiction.
+    
+    Since $f_n$ is a special case of $f_0$, we have $\mathcal{L}(\mathcal{A}(f_n)) \subseteq \mathcal{L}(\mathcal{A}(f_0))$, and using Lemma~\ref{lem:sameLanguage}, we have $\mathcal{L}(f_n) \subseteq \mathcal{L}(f_0)$ and thus, $t_n \in \mathcal{L}(f_0)$. We can repeat this construction indefinitely and yield an infinite sequence of tapes $(t_n)_{n\in\mathbb{N}}$ such that $t \vdash^+ t_i$ for all $i\in\mathbb{N}$ hence the machine does not halt.
 \end{proof}
 
 
@@ -267,7 +272,7 @@ Theorem~\ref{th:bouncers} characterises bouncers but we lack a practical criteri
 \begin{proof}
     For simplicity of notations, we suppose that there are no repeaters after the tape head in $f$, as we would apply exactly the same transformations after the head. Using Equation~\eqref{math:formulaTapes}, we write $f=w_1(r_1)w_2(r_2)\dots w_n(r_n) w_{n+1} h w$ with $n \geq 1$, $w_i \in \Sigma^*$ for $2 \leq i \leq n+1$, $w_1,w \in \overline{\Sigma}^*$ and $r_i \in \Sigma^+$ for $1 \leq i \leq n$ and $h\in\Delta$. Without loss of generality we suppose that $f$ is aligned (otherwise we just apply $\mathcal{A}$ to it).
 
-    Because $f$ solves the bouncer, by Definition~\ref{def:bouncers}, the machine eventually reaches tape $t$ of the form $t = w_1 r_1^{k_1} w_2 r_2^{k_2} \dots r_n^{k_n} w_{n+1} h w$ with $k_1, \dots, k_n \in \N$. Because $f \vdash_\mathcal{A}^* f'$ and $f'$ is a special case of $f$, we have $t \vdash^* t'$ with $t' \in \mathcal{L}(f')$ and $t' = w_1 r_1^{k_1 + p_1} w_2 r_2^{k_2 + p_2} \dots r_n^{k_n + p_n} w_{n+1} h w$ with $p_1, \dots, p_n \in \N$ and same $w_i$ and $r_i$ as $f$ because $f$ is aligned. Note that $p_i$ is positive because shift rules preserve the size of repeaters. Because $t'\in\mathcal{L}(f') \subseteq \mathcal{L}(f)$ we can repeat this indefinitely and get $t \vdash^* w_1 r_1^{k_1 + Np_1} w_2 r_2^{k_2 + Np_2} \dots r_n^{k_n + Np_n} w_{n+1} h w$ for all $N \in \N$.
+    Because $f$ solves the bouncer, by Definition~\ref{def:bouncers}, the machine reaches tape $t$ of the form $t = w_1 r_1^{k_1} w_2 r_2^{k_2} \dots r_n^{k_n} w_{n+1} h w$ with $k_1, \dots, k_n \in \N$. By Theorem~\ref{th:bouncers}, we have $t \vdash^+ t'$ with $t' \in \mathcal{L}(f')$ and $t' = w_1 r_1^{k_1 + p_1} w_2 r_2^{k_2 + p_2} \dots r_n^{k_n + p_n} w_{n+1} h w$ with $p_1, \dots, p_n \in \N$ and same $w_i$ and $r_i$ as $f$ because $f$ is aligned. Note that $p_i$ is positive because shift rules preserve the size of repeaters. Because $t'\in\mathcal{L}(f') \subseteq \mathcal{L}(f)$ we can repeat this indefinitely and get $t \vdash^+ w_1 r_1^{k_1 + Np_1} w_2 r_2^{k_2 + Np_2} \dots r_n^{k_n + Np_n} w_{n+1} h w$ for all $N \in \N$.
 
     Hence, define $\sync{f} = w_1 r_1^{k_1} (r^{p_1}) w_2 r_2^{k_2} (r^{p_2}) \dots w_n r_n^{k_n} (r^{p_n}) w_{n+1} h w$. When $p_i=0$, then $r^{p_i} = \varnothing$ and we discard it. All $p_i$ cannot be $0$, otherwise the machine is a cycler which is excluded. Altogether, we can write: $\sync{f} = \tilde{w_1} (\tilde{r}_1) \tilde{w}_2 (\tilde{r}_2) \dots \tilde{w}_m (\tilde{r}_m) \tilde{w}_{m+1} h w$ with $2 \leq m \leq n$ and nonempty $\tilde{r}_i$, which is a valid formula tape which also solves the bouncer. By construction, the machine will reach tapes of the form $C_{\tilde{f}}(n)$ for all $n\in\N$ at increasing time steps. We immediately get Point 2 because $C_{\tilde{f}}(n+1)$ contains $K = \sum_{i=1}^n |\tilde{r}_i|$ more symbols than $C_{\tilde{f}}(n)$, which is a constant.
 
@@ -336,7 +341,7 @@ In this section, we give a greedy algorithm (Algorithm~\ref{alg:greedy-formula-t
     \begin{enumerate}
         \item There is $k\geq 1$ such that right-aligning $(r_1)r_2^k(r_2)$ yields a non-empty intermediary wall, replace $(r_1)(r_2)$ by $\mathcal{A}_r((r_1)r_2^k(r_2))$, yielding a new formula tape $f'$. Noticing that $(r_1)r_2^k(r_2)$ is a special case of $(r_1)(r_2)$ and combining both points of Lemma~\ref{lem:right-alignement} we get that $f'$ still solves the bouncer.
 
-        \item For all $k\geq 1$ there's $r'_k\in\Sigma^+$ such that we have $\mathcal{A}_r((r_1)r_2^k(r_2)) = r_2^k (r'_k)(r_2)$. We deduce that $r_1[i \text{ mod } |r_1|] = r_2^\infty[i]$ for all $i\in\N$. By Lemma~\ref{lem:word-theory} we get that there is $c$ such that $r_1 = c^m$ and $r_2 = c^n$. Hence, we can replace $(r_1)(r_2) = (c^m)(c^n)$ by $(c^m c^n) = (r_1 r_2)$ in the formula tape and still solve the bouncer with this new formula tape. Indeed, because $f$ solves the bouncer we have $u \in\Sigma^*$, $s\in S$, $r', r'' \in \Sigma^+$ and two shift rules, for instance, right shift rules: $u \rhead{s} (c^m) \to (r') u \rhead{s}$ and $u \rhead{s} (c^n) \to (r'') u \rhead{s}$. Hence, considering $u  \rhead{s} c^m c^n$, we get $u  \rhead{s} c^m c^n \vdash^* r' u  \rhead{s} c^n \vdash^* r' r'' u  \rhead{s}$, meaning that we have a right shift rule $u \rhead{s} (c^m c^n) \to (r'r'') u \rhead{s}$, as needed.
+        \item For all $k\geq 1$ there's $r'_k\in\Sigma^+$ such that we have $\mathcal{A}_r((r_1)r_2^k(r_2)) = r_2^k (r'_k)(r_2)$. We deduce that $r_1[i \text{ mod } |r_1|] = r_2^\infty[i]$ for all $i\in\N$. By Lemma~\ref{lem:word-theory} we get that there is $c$ such that $r_1 = c^m$ and $r_2 = c^n$. Hence, we can replace $(r_1)(r_2) = (c^m)(c^n)$ by $(c^m c^n) = (r_1 r_2)$ in the formula tape and still solve the bouncer with this new formula tape. Indeed, because $f$ solves the bouncer we have $u \in\Sigma^*$, $s\in S$, $r', r'' \in \Sigma^+$ and two shift rules, for instance, right shift rules: $u \rhead{s} (c^m) \to (r') u \rhead{s}$ and $u \rhead{s} (c^n) \to (r'') u \rhead{s}$. Hence, considering $u  \rhead{s} c^m c^n$, we get $u  \rhead{s} c^m c^n \vdash^* r' u  \rhead{s} c^n \vdash^+ r' r'' u  \rhead{s}$, meaning that we have a right shift rule $u \rhead{s} (c^m c^n) \to (r'r'') u \rhead{s}$, as needed.
 
     \end{enumerate}
 
