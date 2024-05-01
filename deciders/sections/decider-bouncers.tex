@@ -121,7 +121,8 @@ Hence, we have two cases to consider for defining $\vdash$ on the following form
 $$f = w_1(r_1)w_2(r_2)\dots w_n(r_n) w_{n+1} h w'_1(r'_1)w'_2(r'_2)\dots w'_m(r'_m) w'_{m+1}$$
 
 \begin{enumerate}
-    \item (Usual step) If $h$ points at nonempty $w_{n+1}$ or $w'_1$, then $f \vdash \alpha \tilde{w}_{n+1} \tilde{h} \tilde{w}'_1\beta$ if $w_{n+1} h w'_1 \vdash \tilde{w}_{n+1} \tilde{h} w'_1$, $\tilde{w}_{n+1}, \tilde{w} \in \Sigma^*$, $\tilde{h} \in \Delta$, and $\alpha=w_1(r_1)w_2(r_2)\dots w_n(r_n)$ and $\beta=(r'_1)w'_2(r'_2)\dots w'_m(r'_m) w'_{m+1}$. As for tapes, $\vdash$ is undefined if $w_{n+1} h w'_1$ corresponds to a halting configuration (i.e.\ undefined transition).
+    \item (Usual step) If $h$ points at nonempty $w_{n+1}$ or $w'_1$, and $w_{n+1} h w'_1 \vdash \tilde{w}_{n+1} \tilde{h} \tilde{w}'_1$ as tapes, replace the terms $w_{n+1} h w'_1(r'_1)$ of $f$ with $\tilde{w}_{n+1} \tilde{h} \tilde{w}'_1$. Call the new formula $f'$, and define $f \vdash f'$.
+    As for tapes, $\vdash$ is undefined if $w_{n+1} h w'_1$ corresponds to a halting configuration (i.e.\ undefined transition).
           % Using \eqref{math:formulaTapes}, write as $f=\alpha w_{n+1} h w'_1\beta$, with $\alpha$ (resp. $\beta$) the uniquely-defined beginning (resp.ending) of the formula tape $f$. Then, $f \vdash \alpha \tilde{w}_{n+1} \tilde{h} \tilde{w}'_1 \beta = f'$ if $w_{n+1} h w'_1 \vdash \tilde{w}_{n+1} \tilde{h} \tilde{w}'_1$ with $\tilde{w}_{n+1}, \tilde{w} \in \Sigma^*$ and $\tilde{h} \in \Delta$.
     \item (Shift rule) Two cases:
           \begin{enumerate}
