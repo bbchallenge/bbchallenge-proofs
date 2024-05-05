@@ -682,10 +682,11 @@ Algorithm~\ref{alg:decider-bouncers} proceeds by (1) tracking record-breaking ta
 
         \State \textbf{Map[TMHead,Vec[Tape]]} record\_breaking\_tapes = \textbf{get\_record\_breaking\_tapes}(machine, step\_limit)
 
-        \State \textbf{uint} num\_tested\_formula = 0
         \For{\textbf{TMHead} head \textbf{in} record\_breaking\_tapes}
+        \State \textbf{uint} num\_tested\_formula = 0
         \For{\textbf{uint} i, \textbf{Tape} tape4 \textbf{in} record\_breaking\_tapes[head].\textbf{enumerate}()}
         \State \textbf{if} i $<$ 3 \textbf{then continue}
+        \State \textbf{bool} break\_outer = \textbf{false}
         \For{\textbf{uint} j, \textbf{Tape} tape3 \textbf{in} record\_breaking\_tapes[head][:i].\textbf{enumerate}()}
         \State \textbf{if} j $<$ 2 \textbf{then continue}
         \State \textbf{uint} len\_diff = tape4.\textbf{len}() - tape3.\textbf{len}()
@@ -707,7 +708,7 @@ Algorithm~\ref{alg:decider-bouncers} proceeds by (1) tracking record-breaking ta
 
         \State
 
-        \State \textbf{try} \textbf{FormulaTape} f = {\sc FitFormulaTape}(tape\_1, tape\_2, tape\_3).\textbf{headless}())
+        \State \textbf{try} \textbf{FormulaTape} f = {\sc FitFormulaTape}(tape\_1, tape\_2, tape\_3).\textbf{headless}()
         \If{\textbf{Failure} was raised}
         \State \textbf{continue}
         \EndIf
@@ -724,11 +725,16 @@ Algorithm~\ref{alg:decider-bouncers} proceeds by (1) tracking record-breaking ta
 
         \State
         \If{num\_tested\_formula == max\_formula\_tapes}
-        \State \Return \textbf{false}
+        \State break\_outer = \textbf{true}
+        \State \textbf{break}
         \EndIf
 
 
         \EndFor
+        \State
+        \If{break\_outer}
+        \State \textbf{break}
+        \EndIf
         \EndFor
         \EndFor
         \State \Return \textbf{false}
