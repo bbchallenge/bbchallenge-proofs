@@ -137,7 +137,7 @@ $$f = w_1(r_1)w_2(r_2)\dots w_n(r_n) w_{n+1} h w'_1(r'_1)w'_2(r'_2)\dots w'_m(r'
 From the above definition of $\vdash$ on a formula tape $f$, it is clear that (i) for usual tapes our new definition of $\vdash$ coincides with the old one, (ii) there is at most one formula tape $f'$ such that $f \vdash f'$, and (iii) the only cases where $\vdash$ is not defined on a formula tape are when the machine halts (usual step case) or no shift rule applies (shift rule case). Moreover, we get the following result:
 
 \begin{lemma}\label{lem:vdashFormulaTapes} Let $f$ and $f'$ be formula tapes with $f \vdash f'$. Then, for all $t \in \mathcal{L}(f)$, there exists some $t' \in \mathcal{L}(f')$ such that $t \vdash^* t'$
-	and, in case $f \vdash f'$ via usual step, $t \vdash^+ t'$.
+    and, in case $f \vdash f'$ via usual step, $t \vdash^+ t'$.
 \end{lemma}
 \begin{proof}
     If $f'$ follows from $f$ by a usual step, then applying one usual step to $t$ yields $t'\in\mathcal{L}(f')$. If $f'$ follows from $f$ by a shift rule (of the form $u \rhead{s}(r) \vdash^k (\tilde{r})u\rhead{s}$ or $(r)\lhead{s}u \vdash^k \;\lhead{s}u(\tilde{r})$), and the corresponding repeater $(r)$ is used $n$ times in the match $t\ \in \mathcal{L}(f)$, we apply $nk$ steps to $t$ to obtain $t' \in \mathcal{L}(f')$. This amounts to a positive number of steps (justifying $\vdash^+$)  except in case of a shift rule applied $k=0$ times.
@@ -202,9 +202,9 @@ We finally get to the main result of this section, which characterises bouncers 
 \begin{proof}
     Unraveling $f \vdash_\mathcal{A}^+ f'$ gives $n>0$ and $f=f_0, \dots, f_n$ with $f_n = f'$ and $\mathcal{A}(f_i) \vdash f_{i+1}$ for $0 \leq i < n$.
     It follows from Lemma~\ref{lem:vdashFormulaTapes} and Lemma~\ref{lem:sameLanguage} that there exist tapes $t_0, \dots, t_n$, such that $t_0 = t$ and $t_i\in \mathcal{L}(f_i)$ for $0 \leq i \leq n$, and $t_i \vdash^* t_{i+1}$ for $0 \leq i < n$, giving $t_0 \vdash^* t_n$. Moreover, $t_0 \vdash^+ t_n$ if the any of the $\mathcal{A}(f_i) \vdash f_{i+1}$ relations are via usual steps.
-    
+
     Indeed, this must be the case. Suppose instead we had a sequence of shift rules. Each one would preserve the direction of the head, and increment the number of repeaters behind the head in the formula tape. However, these properties are unchanged by passing from a formula tape $f$ to $\mathcal{A}(f)$ or a special case of $f$. It would follow that $f_0$ has strictly more repeaters behind the head than $f_0$, a contradiction.
-    
+
     Since $f_n$ is a special case of $f_0$, we have $\mathcal{L}(\mathcal{A}(f_n)) \subseteq \mathcal{L}(\mathcal{A}(f_0))$, and using Lemma~\ref{lem:sameLanguage}, we have $\mathcal{L}(f_n) \subseteq \mathcal{L}(f_0)$ and thus, $t_n \in \mathcal{L}(f_0)$. We can repeat this construction indefinitely and yield an infinite sequence of tapes $(t_n)_{n\in\mathbb{N}}$ such that $t \vdash^+ t_i$ for all $i\in\mathbb{N}$, hence the machine does not halt.
 \end{proof}
 
@@ -255,7 +255,7 @@ We denote an infinite sequence $u_0, u_1, \dots u_n, \dots$ with $n\in\N$ by $(u
 
 \newcommand{\sync}[1]{\operatorname{sync}(#1)}
 
-Theorem~\ref{th:bouncers} characterises bouncers but we lack a practical criterion for recognising a bouncer from its sequence of successive tapes starting from $0^\infty \rhead{\text{A}} 0^\infty$. We make a step in that direction by showing that if a bouncer solved by formula tape $f$ that is not a cycler (Section~\ref{sec:cyclers}),then, we can construct from $f$ a new formula tape $\sync{f}$, that also solves the bouncer but such that tapes $C_{\sync{f}}(k)$, where all repeaters are synchronously repeated $k$ times, are reached by the machine for all successive $k\in\mathbb{N}$. Importantly for being detected in practice, the length of tapes $C_{\sync{f}}(k)$ grows linearly in quadratic time:
+Theorem~\ref{th:bouncers} characterises bouncers but we lack a practical criterion for recognising a bouncer from its sequence of successive tapes starting from $0^\infty \rhead{\text{A}} 0^\infty$. We make a step in that direction by showing that if a bouncer solved by formula tape $f$ that is not a cycler (Section~\ref{sec:cyclers}), then we can construct from $f$ a new formula tape $\sync{f}$, that also solves the bouncer but such that tapes $C_{\sync{f}}(k)$, where all repeaters are synchronously repeated $k$ times, are reached by the machine for all successive $k\in\mathbb{N}$. Importantly for being detected in practice, the length of tapes $C_{\sync{f}}(k)$ grows linearly in quadratic time:
 
 
 
@@ -302,7 +302,7 @@ In this section, we use the theory presented above in order to give a practical 
 
 We introduce $\mathcal{A}_r$, the \textit{right-alignment} operator on formula tapes which only applies rule of type 1 in Definition~\ref{def:alignment} to all repeaters, both before and after the formula's head, bubbling them to the right.
 
-In this section, we give a greedy algorithm (Algorithm~\ref{alg:greedy-formula-tape-fitting}) that fits a formula tape $f$ only given three tapes: $C_f(0)$, $C_f(1)$ and $C_f(2)$. The algorithm is guaranteed to work on right-aligned formula tapes with nonempty \textit{intermediary walls}, which are all walls but the first and last one, see Theorem~\ref{th:greedy-formula-tape-fitting}. First, we must show that the precondition of having nonempty intermediary walls is without loss of generality, i.e.\ that all bouncers can be solved using such formulas. We prove this result in Lemma~\ref{lem:formula-tapes-WLOG}, using two technical lemmas, Lemmas~\ref{lem:right-alignement}~and~\ref{lem:word-theory}.
+In this section, we give a greedy algorithm (Algorithm~\ref{alg:greedy-formula-tape-fitting}) that fits a formula tape $f$ only given three tapes: $C_f(0)$, $C_f(1)$ and $C_f(2)$. The algorithm is guaranteed to work on right-aligned formula tapes with nonempty \textit{intermediary walls}, which are all walls but the first and last one, see Theorem~\ref{th:greedy-formula-tape-fitting}. First, we show that the precondition of having nonempty intermediary walls is without loss of generality, i.e.\ that all bouncers can be solved using such formulas. We prove this result in Lemma~\ref{lem:formula-tapes-WLOG}, using two technical lemmas, Lemmas~\ref{lem:right-alignement}~and~\ref{lem:word-theory}.
 
 
 
@@ -318,13 +318,13 @@ In this section, we give a greedy algorithm (Algorithm~\ref{alg:greedy-formula-t
 
     \begin{enumerate}
         \item We have $\mathcal{A}(\mathcal{A}_r(f)) = \mathcal{A}(f)$ hence, Theorem~\ref{th:bouncers} will reach $\mathcal{A}(f)$ after one application of $\mathcal{A}$ in any case and the bouncer will get solved in the same way.
-        \item By definition of special case $f'$ can be constructed from $f$ by replacing any $(r)$ by $r^n(r)r^m$ for some $n,m\in\N$. Aligning $f'$ will have the same effect as aligning $f$ with the addition that repeaters before the head will look like $(r)r^{n+m}$  and after the head $r^{n+m}(r)$. Then, shift rule will apply similarly to $f'$ and $f$, with the addition in $f'$ that segments of the form $r^{n+m}$ will be handled by simulating the same shift rule as for $(r)$ through usual steps. Hence, $f'$ solves the bouncer.
+        \item By definition of special case $f'$ can be constructed from $f$ by replacing any $(r)$ by $r^n(r)r^m$ for some $n,m\in\N$. Aligning $f'$ will have the same effect as aligning $f$ with the addition that repeaters before the head will look like $(r)r^{n+m}$  and after the head $r^{n+m}(r)$. Then, shift rules will apply similarly to $f'$ and $f$, with the addition in $f'$ that segments of the form $r^{n+m}$ will be handled by simulating the same shift rule as for $(r)$ through usual steps. Hence, $f'$ solves the bouncer.
     \end{enumerate}
 
 \end{proof}
 
 \begin{lemma}\label{lem:word-theory}
-    Let $a,b \in \Sigma^+$ be two nonempty words such that we have $a[i \text{ mod } |a|] = b^\infty [i]$ for all $i\in\N$, with $b^\infty [i]$ being the character at position $i$ in the infinite concatenation of word $b$ with itself. Call $k=\operatorname{gcd}(|a|,|b|)$. Then, $a$ and $b$ are powers of the same word $c$ such that $a = c^m$ and $b = c^n$, with $c$ the first $k$ characters of $a$ and $b$, and $m = |a|/k \geq 1$ and $n = |b|/k \geq 1$.
+    Let $a,b \in \Sigma^+$ be two nonempty words such that we have $a[i \text{ mod } |a|] = b^\infty [i]$ for all $i\in\N$, with $b^\infty [i]$ being the character at position $i$ in the infinite concatenation of word $b$ with itself. Call $k=\operatorname{gcd}(|a|,|b|)$. Then, $a$ and $b$ are powers of the same word $c$ such that $a = c^m$ and $b = c^n$, with $c$ the first $k$ characters of $a$ and $b$, and $m = |a|/k$ and $n = |b|/k$.
 \end{lemma}
 \begin{proof}
     Note that $|a| \neq 0$ and $|b| \neq 0$ by hypothesis. Call $f(i) = b^\infty[i]$. It is immediate that $|b|$ is a period of $f$. By hypothesis, we also have that $|a|$ is a period of $f$. Hence, any linear combination that has positive value of $|a|$ and $|b|$ is also a period of $f$. Hence, by Euclid's algorithm, $k=\operatorname{gcd}(|a|,|b|)$ is a period of $f$, from which we get $b = c^{|b|/k}$ with $c$ the first $k$ characters of $b$ since $k \leq |b|$. By hypothesis, we know that $a^{\infty} = b^{\infty}$, hence, we have $a = c^{|a|/k}$, as needed.
@@ -333,7 +333,7 @@ In this section, we give a greedy algorithm (Algorithm~\ref{alg:greedy-formula-t
 \end{proof}
 
 \begin{lemma}\label{lem:formula-tapes-WLOG}
-    Let a machine $M$ be a bouncer solved by formula tape $f$, then, $f$ can be transformed into a formula tape $f'$ such that $\mathcal{A}_r(f')$ has nonempty intermediary walls that solves the bouncer.
+    Let a machine $M$ be a bouncer solved by formula tape $f$, then $f$ can be transformed into a formula tape $f'$ such that $\mathcal{A}_r(f')$ has nonempty intermediary walls that solves the bouncer.
 \end{lemma}
 \begin{proof}
     By Lemma~\ref{lem:right-alignement}, $\mathcal{A}_r(f)$ also solves the bouncer. For each case $\dots (r_1)(r_2) \dots$ where two repeaters in $\mathcal{A}_r(f)$ are separated by an empty wall, apply the following transformation to $\mathcal{A}_r(f)$, according to two cases:
@@ -341,7 +341,7 @@ In this section, we give a greedy algorithm (Algorithm~\ref{alg:greedy-formula-t
     \begin{enumerate}
         \item There is $k\geq 1$ such that right-aligning $(r_1)r_2^k(r_2)$ yields a non-empty intermediary wall, replace $(r_1)(r_2)$ by $\mathcal{A}_r((r_1)r_2^k(r_2))$, yielding a new formula tape $f'$. Noticing that $(r_1)r_2^k(r_2)$ is a special case of $(r_1)(r_2)$ and combining both points of Lemma~\ref{lem:right-alignement} we get that $f'$ still solves the bouncer.
 
-        \item For all $k\geq 1$ there's $r'_k\in\Sigma^+$ such that we have $\mathcal{A}_r((r_1)r_2^k(r_2)) = r_2^k (r'_k)(r_2)$. We deduce that $r_1[i \text{ mod } |r_1|] = r_2^\infty[i]$ for all $i\in\N$. By Lemma~\ref{lem:word-theory} we get that there is $c$ such that $r_1 = c^m$ and $r_2 = c^n$. Hence, we can replace $(r_1)(r_2) = (c^m)(c^n)$ by $(c^m c^n) = (r_1 r_2)$ in the formula tape and still solve the bouncer with this new formula tape. Indeed, because $f$ solves the bouncer we have $u \in\Sigma^*$, $s\in S$, $r', r'' \in \Sigma^+$ and two shift rules, for instance, right shift rules: $u \rhead{s} (c^m) \to (r') u \rhead{s}$ and $u \rhead{s} (c^n) \to (r'') u \rhead{s}$. Hence, considering $u  \rhead{s} c^m c^n$, we get $u  \rhead{s} c^m c^n \vdash^* r' u  \rhead{s} c^n \vdash^+ r' r'' u  \rhead{s}$, meaning that we have a right shift rule $u \rhead{s} (c^m c^n) \to (r'r'') u \rhead{s}$, as needed.
+        \item For all $k\geq 1$ there is $r'_k\in\Sigma^+$ such that we have $\mathcal{A}_r((r_1)r_2^k(r_2)) = r_2^k (r'_k)(r_2)$. We deduce that $r_1[i \text{ mod } |r_1|] = r_2^\infty[i]$ for all $i\in\N$. By Lemma~\ref{lem:word-theory} we get that there is $c$ such that $r_1 = c^m$ and $r_2 = c^n$. Hence, we can replace $(r_1)(r_2) = (c^m)(c^n)$ by $(c^m c^n) = (r_1 r_2)$ in the formula tape and still solve the bouncer with this new formula tape. Indeed, because $f$ solves the bouncer we have $u \in\Sigma^*$, $s\in S$, $r', r'' \in \Sigma^+$ and two shift rules, for instance, right shift rules: $u \rhead{s} (c^m) \to (r') u \rhead{s}$ and $u \rhead{s} (c^n) \to (r'') u \rhead{s}$. Hence, considering $u  \rhead{s} c^m c^n$, we get $u  \rhead{s} c^m c^n \vdash^* r' u  \rhead{s} c^n \vdash^+ r' r'' u  \rhead{s}$, meaning that we have a right shift rule $u \rhead{s} (c^m c^n) \to (r'r'') u \rhead{s}$, as needed.
 
     \end{enumerate}
 
@@ -355,13 +355,13 @@ To simplify the procedure, we wish to drop the head and $0^\infty$ symbols from 
 
 Given a tape $t$, we call $\mathcal{S}(t) \in \Sigma^*$ the \textit{headless} version of $t$ which is the tape without head and $0^\infty$ symbols. We also introduce headless formula tapes: $\mathcal{S}(f)$ is $f$ without head and $0^\infty$ symbols.
 
-Algorithm~\ref{alg:greedy-formula-tape-fitting} is a greedy algorithm which fits a headless formula tape given three headless tapes $t_0, t_1, t_2$. It proceeds by recursively constructing the left-most wall using the longest common prefix of $t_0, t_1$ and $t_2$ and then fits the left-most repeater using the longest prefix $r$ of $t_1$ such that $rr$ is a prefix of $t_2$, we have:
+Algorithm~\ref{alg:greedy-formula-tape-fitting} is a greedy algorithm which fits a headless formula tape given three headless tapes $t_0, t_1, t_2$. It proceeds by recursively constructing the leftmost wall using the longest common prefix of $t_0, t_1$ and $t_2$ and then fits the leftmost repeater using the longest prefix $r$ of $t_1$ such that $rr$ is a prefix of $t_2$, we have:
 
 \begin{algorithm}
-    \caption{Greedy formula tape fitting algorithm {\sc Fit-FormulaTape}}\label{alg:greedy-formula-tape-fitting}
+    \caption{Greedy formula tape fitting algorithm {\sc FitFormulaTape}}\label{alg:greedy-formula-tape-fitting}
     \begin{algorithmic}[1]
 
-        \Procedure{\textbf{HeadlessFormulaTape} {\sc Fit-FormulaTape}}{\textbf{Word} t0, \textbf{Word} t1, \textbf{Word} t2}
+        \Procedure{\textbf{HeadlessFormulaTape} {\sc FitFormulaTape}}{\textbf{Word} t0, \textbf{Word} t1, \textbf{Word} t2}
 
         \If{t0.\textbf{empty}() \&\& t1.\textbf{empty}() \&\& t2.\textbf{empty}()}
         \State \Return \textbf{HeadlessFormulaTape}::\textbf{empty}()
@@ -369,7 +369,7 @@ Algorithm~\ref{alg:greedy-formula-tape-fitting} is a greedy algorithm which fits
         \EndIf
         \State
         \If{t0.\textbf{len}() $>$ 0 \&\& t1.\textbf{len}() $>$ 0 \&\& t2.\textbf{len}() $>$ 0 \&\& t0[0] == t1[0] \&\& t1[0] == t2[0]}
-        \State \Return \textbf{HeadlessFormulaTape}::\textbf{symbol}(t0[0]).\textbf{concat}(\Call{{\sc Fit-FormulaTape}}{t0[1:], t1[1:], t2[1:]})
+        \State \Return \textbf{HeadlessFormulaTape}::\textbf{symbol}(t0[0]).\textbf{concat}(\Call{{\sc FitFormulaTape}}{t0[1:], t1[1:], t2[1:]})
         \EndIf
         \State
         \State
@@ -378,7 +378,7 @@ Algorithm~\ref{alg:greedy-formula-tape-fitting} is a greedy algorithm which fits
         \For{l = longest\_prefix\_size; k $\geq$ 1; k -= 1 }
 
         \If{2*l $<$ t2.\textbf{len}() \&\& t2[:l] == t2[l:2*l] }
-        \State \Return \textbf{HeadlessFormulaTape}::\textbf{repeater}(t2[:l]).\textbf{concat}(\Call{{\sc Fit-FormulaTape}}{t0, t1[l:], t2[2*l:]})
+        \State \Return \textbf{HeadlessFormulaTape}::\textbf{repeater}(t2[:l]).\textbf{concat}(\Call{{\sc FitFormulaTape}}{t0, t1[l:], t2[2*l:]})
         \EndIf
 
         \EndFor
@@ -417,7 +417,7 @@ Algorithm~\ref{alg:greedy-formula-tape-fitting} is a greedy algorithm which fits
 %             f   & = \mathcal{A}(w_1r(r) w_2)
 %         \end{align*}
 %     \end{multicols}
-%     Meaning that Algorithm~\ref{alg:greedy-formula-tape-fitting} function call {\sc Fit-FormulaTape}($t_0$, $t_1$, $t_2$) does not raise failure and returns the right-aligned headless formula tape $\mathcal{A}(w_1r(r) w_2)$.
+%     Meaning that Algorithm~\ref{alg:greedy-formula-tape-fitting} function call {\sc FitFormulaTape}($t_0$, $t_1$, $t_2$) does not raise failure and returns the right-aligned headless formula tape $\mathcal{A}(w_1r(r) w_2)$.
 % \end{lemma}
 % \begin{proof}
 
@@ -428,13 +428,13 @@ Algorithm~\ref{alg:greedy-formula-tape-fitting} is a greedy algorithm which fits
 
 
 \begin{theorem}[Greedy formula tape fitting]\label{th:greedy-formula-tape-fitting}
-    Let $f$ be a headless formula tape with nonempty intermediary walls such that $\mathcal{A}_r(f) = w_1 (r_1) w_2 (r_2)\dots w_m (r_m) w$ with $m\in\N$, $r_i, w_i \in \Sigma^+$ with $1 \leq i \leq m$, and $w_1, w \in \overline{\Sigma}^*$. Take $t_0, t_1, t_2 \in \Sigma^+$ satisfying:
+    Let $f$ be a headless formula tape with nonempty intermediary walls such that $\mathcal{A}_r(f) = w_1 (r_1) w_2 (r_2)\dots w_m (r_m) w$ with $m\in\N$, $r_i, w_i \in \Sigma^+$ with $2 \leq i \leq m$, and $w_1, w \in \Sigma^*$. Take $t_0, t_1, t_2 \in \Sigma^+$ satisfying:
     \begin{align*}
         t_0 & = \mathcal{S}(C_f(0))  = w_1\; w_2 \dots w_m\; w                       \\
         t_1 & = \mathcal{S}(C_f(1))  = w_1\; r_1\; w_2\; \dots w_m\; r_m\; w         \\
         t_2 & = \mathcal{S}(C_f(2))  = w_1\; r_1 r_1\; w_2\; \dots w_m\; r_m r_m\; w
     \end{align*}
-    Then Algorithm~\ref{alg:greedy-formula-tape-fitting} ran on {\sc Fit-FormulaTape}($t_0$, $t_1$, $t_2$) does not raise failure and returns $\mathcal{A}_r(f)$.
+    Then Algorithm~\ref{alg:greedy-formula-tape-fitting}, {\sc FitFormulaTape}($t_0$, $t_1$, $t_2$) does not raise failure and returns $\mathcal{A}_r(f)$.
 
 \end{theorem}
 \begin{proof}
@@ -460,11 +460,14 @@ Algorithm~\ref{alg:greedy-formula-tape-fitting} is a greedy algorithm which fits
             f_\text{out} & = w_1
         \end{align*}
     \end{multicols}
-    From there, we have two cases: (1) if $w = \varnothing$ then the greedy algorithm returns $f_\text{out} = w_1 (r) = \mathcal{A}_r(f)$, as needed, (2) if $w \neq \varnothing$, because $\mathcal{A}_r(f)$ is right-aligned, we must have $w[0] \neq r[0]$ ($r$ is not empty by hypothesis), and then the greedy algorithm returns $f_\text{out} = w_1 (r) w = \mathcal{A}_r(f)$, as needed.
+
+    Indeed, this is because $w_1$ is the biggest prefix shared by $t_0, t_1$ and $t_2$; otherwise, it means that $w_1w[0]$ is a prefix of $t_1$ and we get $r[0] = w[0]$ which is excluded by right-alignment.
+
+    From there, we have two cases: (1) if $w = \varnothing$ then the greedy algorithm returns $f_\text{out} = w_1 (r) = \mathcal{A}_r(f)$, as needed, (2) if $w \neq \varnothing$, because $\mathcal{A}_r(f)$ is right-aligned, we must have $w[0] \neq r[0]$ ($r$ is not empty by hypothesis), and $r$ is the longest prefix common to $t_1$ and $t_2$ since otherwise, using $t_2$ we get $w[0] = r[0]$. Hence, the greedy algorithm returns $f_\text{out} = w_1 (r) w = \mathcal{A}_r(f)$, as needed.
 
 
     % With $\tilde{r} = rr$, $|\tilde{r}| > |r|$, which contradicts the hypothesis that $r$ was as long as possible. This justifies why prefixes are enumerated from longest match in Algorithm~\ref{alg:greedy-formula-tape-fitting}, line 16. Hence, $r'$ is never empty, and we have the result for $m=1$.
-    Assuming $m\geq 2$, we have:
+    Assuming $m\geq 2$, as above because of right-alignment, we get that $w_1$ is the longest prefix common to $t_0$, $t_1$ and $t_2$, hence:
     \setlength{\columnsep}{-1.9cm}
     \begin{multicols}{3}
         \noindent
@@ -486,7 +489,8 @@ Algorithm~\ref{alg:greedy-formula-tape-fitting} is a greedy algorithm which fits
             f_\text{out} & = w_1
         \end{align*}
     \end{multicols}
-    By hypothesis, $w_2$ and $r_1$ are not empty and, because $\mathcal{A}_r(f)$ is right-aligned, we get $w_2[0] \neq r_1[0]$. Hence, Algorithm~\ref{alg:greedy-formula-tape-fitting} enters the repeater-fitting case on line 8 and goes to:
+    By hypothesis, $w_2$ and $r_1$ are not empty and, because $\mathcal{A}_r(f)$ is right-aligned, we get $w_2[0] \neq r_1[0]$.
+    Hence, Algorithm~\ref{alg:greedy-formula-tape-fitting} enters the repeater-fitting case on line 8. Necessarily, $r_1$ is the longest prefix to $t_1$ and $t_2$ otherwise using $t_2$ we get $r_1[0] = w_2[0]$ which contradicts right-alignment, hence:
     \begin{align*}
         t_0          & = w_2\;\dots w_m\; w                     \\
         t_1          & = w_2\; r_2\; \dots w_m\; r_m\; w        \\
@@ -634,16 +638,16 @@ Algorithm~\ref{alg:greedy-formula-tape-fitting} is a greedy algorithm which fits
 
 \subsubsection{Bouncers decider}
 
-We finally piece all the elements of this text together and describe a decider for bouncers (excluding cyclers, decided in Section~\ref{sec:cyclers}), Algorithm~\ref{alg:decider-bouncers} which is proven correct in Theorem~\ref{th:bouncer-decider}.
+We finally piece all the elements of this chapter together and describe a decider for bouncers (excluding cyclers, decided in Section~\ref{sec:cyclers}), Algorithm~\ref{alg:decider-bouncers} which is proven correct in Theorem~\ref{th:bouncer-decider}.
 %If a machine is a bouncer that is not a cycler, solved by some formula tape $f$, we know that it is also solved by $f'$ a right-aligned formula tape with nonempty intermediary walls that we can obtain from $f$ (Lemma~\ref{lem:formula-tapes-WLOG}). By Theorem~\ref{th:linquad}, we know that formula tape $\sync(f')$ also solves the bouncer and that $(C_{\text{linquad(f')}}(n))_{n\in\N}$ is a subsequence of the tapes visited by the machine from $0^\infty \rhead{\text{A}} 0^\infty$ and that we can detect such subsequence because it grows linearly in quadratic time. Hence, given enough time, we can eventually find $(C_{\text{linquad(f')}}(0), C_{\text{linquad(f')}}(1), C_{\text{linquad(f')}}(2))$ from all \textit{plausible} subsequences of tapes (i.e.\ subsequences that grow linearly in quadratic time), run the formula tape fitting Algorithm~\ref{alg:greedy-formula-tape-fitting}, deduce $f'$ and verify it satisfies Theorem~\ref{th:bouncers}, hence deciding the bouncer.
 
-In order to drastically limit the amount of plausible subsequences to check, we limit our interest to \textit{record-breaking} formula tapes, which are formula tapes where the head is pointing at $0^\infty$. In order to fit them, we can simply track record-breaking tapes that share the same head, i.e.\ tapes where the head is pointing at $0^\infty$. We first show that this is without loss of generality:
+In order to drastically limit the amount of plausible subsequences to check, we limit our interest to \textit{record-breaking} formula tapes, which are formula tapes where the head is pointing at $0^\infty$. In order to fit them, we can simply track record-breaking tapes that share the same head state and direction, i.e.\ tapes where the head is pointing at $0^\infty$. We first show that this is without loss of generality:
 
 \begin{lemma}\label{lem:record-breaking}
     If $M$ is a bouncer that is not a cycler, solved by a formula tape $f$, then there is a record-breaking formula tape that also solves it.
 \end{lemma}
 \begin{proof}
-    Let $M$ be a bouncer that is not a cycler and $f$ a formula tape that solves it. Then we have $f \vdash_\mathcal{A} f_1 \vdash_\mathcal{A} f_2 \dots \vdash_\mathcal{A} f_n$ with $n \geq 1$ and $f_n$ is a special case of $f$. There is $1 \leq i \leq n$ such that $f_{i}$ is record-breaking otherwise, the formula tapes do not grow and $M$ is a cycler, which is excluded. Because $f_n$ is a special case of $f$, it will eventually reach, under applications of $\vdash_\mathcal{A}$,  $f'$ that is special case of $f_i$ and we have the result.
+    We have $f \vdash_\mathcal{A} f_1 \vdash_\mathcal{A} f_2 \dots \vdash_\mathcal{A} f_n$ with $n \geq 1$ and $f_n$ is a special case of $f$. There is $1 \leq i \leq n$ such that $f_{i}$ is record-breaking otherwise, the formula tapes do not grow and $M$ is a cycler, which is excluded. Because $f_n$ is a special case of $f$, it will eventually reach, under applications of $\vdash_\mathcal{A}$, a formula tape $f'$ that is special case of $f_i$ and we have the result.
 \end{proof}
 
 \begin{lemma}\label{lem:linquad-intermediary-walls}
@@ -678,10 +682,11 @@ Algorithm~\ref{alg:decider-bouncers} proceeds by (1) tracking record-breaking ta
 
         \State \textbf{Map[TMHead,Vec[Tape]]} record\_breaking\_tapes = \textbf{get\_record\_breaking\_tapes}(machine, step\_limit)
 
-        \State \textbf{uint} num\_tested\_formula = 0
         \For{\textbf{TMHead} head \textbf{in} record\_breaking\_tapes}
+        \State \textbf{uint} num\_tested\_formula = 0
         \For{\textbf{uint} i, \textbf{Tape} tape4 \textbf{in} record\_breaking\_tapes[head].\textbf{enumerate}()}
         \State \textbf{if} i $<$ 3 \textbf{then continue}
+        \State \textbf{bool} break\_outer = \textbf{false}
         \For{\textbf{uint} j, \textbf{Tape} tape3 \textbf{in} record\_breaking\_tapes[head][:i].\textbf{enumerate}()}
         \State \textbf{if} j $<$ 2 \textbf{then continue}
         \State \textbf{uint} len\_diff = tape4.\textbf{len}() - tape3.\textbf{len}()
@@ -703,7 +708,7 @@ Algorithm~\ref{alg:decider-bouncers} proceeds by (1) tracking record-breaking ta
 
         \State
 
-        \State \textbf{try} \textbf{FormulaTape} f = {\sc Fit-FormulaTape}(tape\_1, tape\_2, tape\_3).\textbf{headless}())
+        \State \textbf{try} \textbf{FormulaTape} f = {\sc FitFormulaTape}(tape\_1, tape\_2, tape\_3).\textbf{headless}()
         \If{\textbf{Failure} was raised}
         \State \textbf{continue}
         \EndIf
@@ -720,11 +725,16 @@ Algorithm~\ref{alg:decider-bouncers} proceeds by (1) tracking record-breaking ta
 
         \State
         \If{num\_tested\_formula == max\_formula\_tapes}
-        \State \Return \textbf{false}
+        \State break\_outer = \textbf{true}
+        \State \textbf{break}
         \EndIf
 
 
         \EndFor
+        \State
+        \If{break\_outer}
+        \State \textbf{break}
+        \EndIf
         \EndFor
         \EndFor
         \State \Return \textbf{false}
@@ -739,12 +749,12 @@ Algorithm~\ref{alg:decider-bouncers} proceeds by (1) tracking record-breaking ta
     Because $M$ is a bouncer, using Lemma~\ref{lem:record-breaking} we know that there is a record-breaking formula tape $\tilde{f}$ that solves the bouncer. By Lemma~\ref{lem:formula-tapes-WLOG} we know that we can transform $\tilde{f}$ into $f$ with nonempty intermediary walls and that also solves the bouncer.
 
     Algorithm~\ref{alg:decider-bouncers} enumerates all record-breaking tapes triple that grow linearly in quadratic time. If $s$ and $l$ are large enough, by Theorem~\ref{th:linquad}, we know that it will, eventually meet a triple of the form: \begin{align*}
-        t_0 & = C_{\sync{f}}(0)  \\
-        t_1 & = C_{\sync{f}}f(1) \\
-        t_2 & = C_{\sync{f}}f(2)
+        t_0 & = C_{\sync{f}}(0) \\
+        t_1 & = C_{\sync{f}}(1) \\
+        t_2 & = C_{\sync{f}}(2)
     \end{align*}
 
-    By Lemma~\ref{lem:linquad-intermediary-walls}, $f'=\sync{f}$ is with nonempty intermediary walls and, at line 23, Algorithm~\ref{alg:decider-bouncers} will feed $(\mathcal{S}(C_{f'}(0)),\mathcal{S}(C_{f'}(1)),\mathcal{S}(C_{f'}(2)))$ to Algorithm~\ref{alg:greedy-formula-tape-fitting}, which, by Theorem~\ref{th:greedy-formula-tape-fitting}, will output $\mathcal{S}(\mathcal{A}_r(\sync{f}))$ which be reconstructed into $\mathcal{A}_r(\sync{f})$ at line 27. By Theorem~\ref{th:linquad}, we know that $\sync{f}$ also solves the bouncer, and by Lemma~\ref{lem:right-alignement}, $\mathcal{A}_r(\sync{f})$ also solves the bouncer. Theorem~\ref{th:bouncers} will be verified on $\mathcal{A}_r(\sync{f})$ using \textbf{reaches\_special\_case} at line 28, which, by hypothesis will output \textbf{true}, and we have the result.
+    By Lemma~\ref{lem:linquad-intermediary-walls}, $f'=\sync{f}$ is with nonempty intermediary walls and, at line 23, Algorithm~\ref{alg:decider-bouncers} will feed $(\mathcal{S}(C_{f'}(0)),\mathcal{S}(C_{f'}(1)),\mathcal{S}(C_{f'}(2)))$ to Algorithm~\ref{alg:greedy-formula-tape-fitting}, which, by Theorem~\ref{th:greedy-formula-tape-fitting}, will output $\mathcal{S}(\mathcal{A}_r(\sync{f}))$ which can be reconstructed into $\mathcal{A}_r(\sync{f})$ at line 27. By Theorem~\ref{th:linquad}, we know that $\sync{f}$ also solves the bouncer, and by Lemma~\ref{lem:right-alignement}, $\mathcal{A}_r(\sync{f})$ also solves the bouncer. Theorem~\ref{th:bouncers} will be verified on $\mathcal{A}_r(\sync{f})$ using \textbf{reaches\_special\_case} at line 28, which, by hypothesis will output \textbf{true}, and we have the result.
 \end{proof}
 
 \begin{remark}
@@ -752,10 +762,8 @@ Algorithm~\ref{alg:decider-bouncers} proceeds by (1) tracking record-breaking ta
 \end{remark}
 
 \begin{remark}[Implementation details of Algorithm~\ref{alg:decider-bouncers}]
-    In Algorithm~\ref{alg:decider-bouncers}, we assume that we are given (1) a \textbf{get\_record breaking\_tapes} routine which returns the record-breaking tapes for each tape head $h\in\Delta$ (i.e.\ tape head state and pointing-direction), in increasing length (2) a \textbf{binary\_search\_len} routine which finds by binary search a tape of a given length, or returns \textbf{None} if it does not exist and (3) a \textbf{is\_quadratic} which tests that a sequence of integers is in quadratic progression (for instance by computing second differences and testing they are constant), (4) routines \textbf{headless} and \textbf{attach\_head} to manipulate tapes/formula tapes with and without head, and (5) a \textbf{reaches\_special\_case} routine on formula tapes which returns \textbf{true} if successive simulation and alignment of the formula tape, as described in Theorem~\ref{th:bouncers}, reaches a special case in a given amount of macro steps, where a macro step consists in performing alignment followed by either performing a usual step or a shift rule step as. We can note that when detecting shift rules (see Section~\ref{sec:bouncers:formula-tapes}), it is important to implement cycler detection which as it is possible for a machine to cycle indefinitely on a finite tape.
+    In Algorithm~\ref{alg:decider-bouncers}, we assume that we are given (1) a \textbf{get\_record breaking\_tapes} routine which returns the record-breaking tapes for each tape head $h\in\Delta$ (i.e.\ tape head state and pointing-direction), in increasing length (2) a \textbf{binary\_search\_len} routine which finds by binary search a tape of a given length, or returns \textbf{None} if it does not exist and (3) a \textbf{is\_quadratic} which tests that a sequence of integers is in quadratic progression (for instance by computing second differences and testing they are constant), (4) routines \textbf{headless} and \textbf{attach\_head} to manipulate tapes/formula tapes with and without head, and (5) a \textbf{reaches\_special\_case} routine on formula tapes which returns \textbf{true} if successive simulation and alignment of the formula tape, as described in Theorem~\ref{th:bouncers}, reaches a special case in a given amount of macro steps, where a macro step consists in performing alignment followed by either performing a usual step or a shift rule step. We can note that when detecting shift rules (see Section~\ref{sec:bouncers:formula-tapes}), it is important to implement cycler detection since it is possible for a machine to cycle indefinitely on a finite tape.
 \end{remark}
-
-
 
 
 
@@ -783,7 +791,7 @@ Here are the implementations of the decider that were realised:
 % Acknowledgements should point to djmati1111 and mateon1 implementations (pinned in Discord)
 \textbf{Verifiers.} Verifiers for Theorem~\ref{th:bouncers}, i.e.\ programs that verify bouncer certificates (Definition~\ref{def:bouncer-certificate}) have also been given as part of the above implementations. Mei's implementation provides a Coq implementation of the verifier. There is an ongoing effort for standardising the format of bouncers certificates (and certificates in general).
 
-\paragraph*{Results.} Using limits of 250,000 steps and 50,000 macro steps and 20 formula tapes tested per head machine, the method decides 29,799 machines out of the 32,632 remaining machines (91\%) after FAR (Section~\ref{sec:finite-automata-reduction}), in less than 3 seconds using mei's implementation\footnote{Only step limit is used in this implementation, macro step limit is deduced from step limit and there is no formula tapes limit.} and in approximatively 1 minute using cosmo's on a standard laptop. Hence, after bouncers, we have 29,799 machines left to be decided.
+\paragraph*{Results.} Using limits of 250,000 steps and 50,000 macro steps and 20 formula tapes tested per head machine, the method decides 29,799 machines out of the 32,632 remaining machines (91\%) after FAR (Section~\ref{sec:finite-automata-reduction}), in less than 3 seconds using Implementation~4 implementation\footnote{Only step limit is used in this implementation, macro step limit is deduced from step limit and there is no formula tapes limit.} and in approximatively 1 minute using Implementation~5 on a laptop (16Gb RAM, 2.75 GHz). Hence, after bouncers, we have 2,833 machines left to be decided.
 
 \begin{figure}[h!]
     \centering
