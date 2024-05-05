@@ -461,7 +461,7 @@ Algorithm~\ref{alg:greedy-formula-tape-fitting} is a greedy algorithm which fits
         \end{align*}
     \end{multicols}
 
-    Indeed, this is because $w_1$ is the biggest prefix shared by $t_0, t_1$ and $t_2$, otherwise, it means that $w_1w[0]$ is a prefix of $t_1$ and we get $r[0] = w[0]$ which is excluded by right-alignment.
+    Indeed, this is because $w_1$ is the biggest prefix shared by $t_0, t_1$ and $t_2$; otherwise, it means that $w_1w[0]$ is a prefix of $t_1$ and we get $r[0] = w[0]$ which is excluded by right-alignment.
 
     From there, we have two cases: (1) if $w = \varnothing$ then the greedy algorithm returns $f_\text{out} = w_1 (r) = \mathcal{A}_r(f)$, as needed, (2) if $w \neq \varnothing$, because $\mathcal{A}_r(f)$ is right-aligned, we must have $w[0] \neq r[0]$ ($r$ is not empty by hypothesis), and $r$ is the longest prefix common to $t_1$ and $t_2$ since otherwise, using $t_2$ we get $w[0] = r[0]$. Hence, the greedy algorithm returns $f_\text{out} = w_1 (r) w = \mathcal{A}_r(f)$, as needed.
 
