@@ -137,7 +137,7 @@ $$f = w_1(r_1)w_2(r_2)\dots w_n(r_n) w_{n+1} h w'_1(r'_1)w'_2(r'_2)\dots w'_m(r'
 From the above definition of $\vdash$ on a formula tape $f$, it is clear that (i) for usual tapes our new definition of $\vdash$ coincides with the old one, (ii) there is at most one formula tape $f'$ such that $f \vdash f'$, and (iii) the only cases where $\vdash$ is not defined on a formula tape are when the machine halts (usual step case) or no shift rule applies (shift rule case). Moreover, we get the following result:
 
 \begin{lemma}\label{lem:vdashFormulaTapes} Let $f$ and $f'$ be formula tapes with $f \vdash f'$. Then, for all $t \in \mathcal{L}(f)$, there exists some $t' \in \mathcal{L}(f')$ such that $t \vdash^* t'$
-	and, in case $f \vdash f'$ via usual step, $t \vdash^+ t'$.
+    and, in case $f \vdash f'$ via usual step, $t \vdash^+ t'$.
 \end{lemma}
 \begin{proof}
     If $f'$ follows from $f$ by a usual step, then applying one usual step to $t$ yields $t'\in\mathcal{L}(f')$. If $f'$ follows from $f$ by a shift rule (of the form $u \rhead{s}(r) \vdash^k (\tilde{r})u\rhead{s}$ or $(r)\lhead{s}u \vdash^k \;\lhead{s}u(\tilde{r})$), and the corresponding repeater $(r)$ is used $n$ times in the match $t\ \in \mathcal{L}(f)$, we apply $nk$ steps to $t$ to obtain $t' \in \mathcal{L}(f')$. This amounts to a positive number of steps (justifying $\vdash^+$)  except in case of a shift rule applied $k=0$ times.
@@ -202,9 +202,9 @@ We finally get to the main result of this section, which characterises bouncers 
 \begin{proof}
     Unraveling $f \vdash_\mathcal{A}^+ f'$ gives $n\in\N$ and $f_1, \dots, f_n$ with $f_n = f'$ and $\mathcal{A}(f_i) \vdash f_{i+1}$ for $0 \leq i < n$.
     It follows from Lemma~\ref{lem:vdashFormulaTapes} and Lemma~\ref{lem:sameLanguage} that there exist tapes $t_0, \dots, t_n$, such that $t_0 = t$ and $t_i\in \mathcal{L}(f_i)$ for $0 \leq i \leq n$, and $t_i \vdash^* t_{i+1}$ for $0 \leq i < n$, giving $t_0 \vdash^* t_n$. Moreover, $t_0 \vdash^+ t_n$ if the any of the $\mathcal{A}(f_i) \vdash f_{i+1}$ relations are via usual steps.
-    
+
     Indeed, this must be the case. Suppose instead we had a sequence of shift rules. Each one would preserve the direction of the head, and increment the number of repeaters behind the head in the formula tape. However, these properties are unchanged by passing from a formula tape $f$ to $\mathcal{A}(f)$ or a special case of $f$. It would follow that $f_1$ has strictly more repeaters behind the head than $f_1$, a contradiction.
-    
+
     Since $f_n$ is a special case of $f_0$, we have $\mathcal{L}(\mathcal{A}(f_n)) \subseteq \mathcal{L}(\mathcal{A}(f_0))$, and using Lemma~\ref{lem:sameLanguage}, we have $\mathcal{L}(f_n) \subseteq \mathcal{L}(f_0)$ and thus, $t_n \in \mathcal{L}(f_0)$. We can repeat this construction indefinitely and yield an infinite sequence of tapes $(t_n)_{n\in\mathbb{N}}$ such that $t \vdash^+ t_i$ for all $i\in\mathbb{N}$ hence the machine does not halt.
 \end{proof}
 
@@ -739,9 +739,9 @@ Algorithm~\ref{alg:decider-bouncers} proceeds by (1) tracking record-breaking ta
     Because $M$ is a bouncer, using Lemma~\ref{lem:record-breaking} we know that there is a record-breaking formula tape $\tilde{f}$ that solves the bouncer. By Lemma~\ref{lem:formula-tapes-WLOG} we know that we can transform $\tilde{f}$ into $f$ with nonempty intermediary walls and that also solves the bouncer.
 
     Algorithm~\ref{alg:decider-bouncers} enumerates all record-breaking tapes triple that grow linearly in quadratic time. If $s$ and $l$ are large enough, by Theorem~\ref{th:linquad}, we know that it will, eventually meet a triple of the form: \begin{align*}
-        t_0 & = C_{\sync{f}}(0)  \\
-        t_1 & = C_{\sync{f}}f(1) \\
-        t_2 & = C_{\sync{f}}f(2)
+        t_0 & = C_{\sync{f}}(0) \\
+        t_1 & = C_{\sync{f}}(1) \\
+        t_2 & = C_{\sync{f}}(2)
     \end{align*}
 
     By Lemma~\ref{lem:linquad-intermediary-walls}, $f'=\sync{f}$ is with nonempty intermediary walls and, at line 23, Algorithm~\ref{alg:decider-bouncers} will feed $(\mathcal{S}(C_{f'}(0)),\mathcal{S}(C_{f'}(1)),\mathcal{S}(C_{f'}(2)))$ to Algorithm~\ref{alg:greedy-formula-tape-fitting}, which, by Theorem~\ref{th:greedy-formula-tape-fitting}, will output $\mathcal{S}(\mathcal{A}_r(\sync{f}))$ which be reconstructed into $\mathcal{A}_r(\sync{f})$ at line 27. By Theorem~\ref{th:linquad}, we know that $\sync{f}$ also solves the bouncer, and by Lemma~\ref{lem:right-alignement}, $\mathcal{A}_r(\sync{f})$ also solves the bouncer. Theorem~\ref{th:bouncers} will be verified on $\mathcal{A}_r(\sync{f})$ using \textbf{reaches\_special\_case} at line 28, which, by hypothesis will output \textbf{true}, and we have the result.
@@ -754,8 +754,6 @@ Algorithm~\ref{alg:decider-bouncers} proceeds by (1) tracking record-breaking ta
 \begin{remark}[Implementation details of Algorithm~\ref{alg:decider-bouncers}]
     In Algorithm~\ref{alg:decider-bouncers}, we assume that we are given (1) a \textbf{get\_record breaking\_tapes} routine which returns the record-breaking tapes for each tape head $h\in\Delta$ (i.e.\ tape head state and pointing-direction), in increasing length (2) a \textbf{binary\_search\_len} routine which finds by binary search a tape of a given length, or returns \textbf{None} if it does not exist and (3) a \textbf{is\_quadratic} which tests that a sequence of integers is in quadratic progression (for instance by computing second differences and testing they are constant), (4) routines \textbf{headless} and \textbf{attach\_head} to manipulate tapes/formula tapes with and without head, and (5) a \textbf{reaches\_special\_case} routine on formula tapes which returns \textbf{true} if successive simulation and alignment of the formula tape, as described in Theorem~\ref{th:bouncers}, reaches a special case in a given amount of macro steps, where a macro step consists in performing alignment followed by either performing a usual step or a shift rule step as. We can note that when detecting shift rules (see Section~\ref{sec:bouncers:formula-tapes}), it is important to implement cycler detection which as it is possible for a machine to cycle indefinitely on a finite tape.
 \end{remark}
-
-
 
 
 
