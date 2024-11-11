@@ -17,7 +17,7 @@ Others have contributed to this method by producing alternative implementations 
 Intuitively, a \emph{bouncer} is a Turing machine that populates a tape with
 linearly-expanding patterns, called \textit{repeaters}, possibly separated or enclosed by fixed patterns called \textit{walls}. This intuitive definition corresponds to a wide range of behaviors, from simply bouncing back and forth between the tape's expanding extremities, Figure~\ref{fig:bouncers}~(a), to complex traversal of \textit{repeater} and \textit{wall} patterns, Figure~\ref{fig:bouncers}~(b)-(d), and possibly a delayed onset of the \textit{bouncing} pattern, Figure~\ref{fig:bouncers}~(e). What we call bouncers is a generalisation of the various classes of ``Christmas trees'' used to solve $\text{BB}(4)$ \cite{Brady83}.
 
-The goal of this section is to formally characterise bouncers and show that they do not halt, see Theorem~\ref{th:bouncers}. Then, in Section~\ref{sec:bouncers-implem}, we show how do detect bouncers algorithmically in practice, see Algorithm~\ref{alg:decider-bouncers}.
+The goal of this section is to formally characterise bouncers and show that they do not halt, see Theorem~\ref{th:bouncers}. Then, in Section~\ref{sec:bouncers-implem}, we show how to detect bouncers algorithmically in practice, see Algorithm~\ref{alg:decider-bouncers}.
 
 \subsubsection{Directional Turing machines}\label{sec:bouncers:directionalTM}
 
