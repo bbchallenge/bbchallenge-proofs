@@ -1,11 +1,13 @@
 % !TeX root = correctness-deciders.tex
 
-\title{Correctness of bbchallenge's deciders}
+\title{Turing machines deciders, part I}
 \author{
-        bbchallenge's contributors
+        The bbchallenge Collaboration\thanks{\url{bbchallenge.org}, email: \texttt{bbchallenge@bbchallenge.org}}
 }
 
 \documentclass[a4paper,british]{article}
+
+
 
 \usepackage{babel}
 \usepackage[utf8]{inputenc}
@@ -73,14 +75,18 @@
 \definecolor{colorD}{RGB}{0,255,0}
 \definecolor{colorE}{RGB}{255,0,255}
 
+\usepackage{titling}
+\setlength{\droptitle}{-3em}
+
 \begin{document}
 \date{}
 \maketitle
-
+\vspace{-3.7em}
 \begin{abstract}
-  The Busy Beaver Challenge (or bbchallenge) aims at collaboratively solving the following conjecture: ``BB(5) = 47,176,870'' [Marxen and Buntrock, 1990]\nocite{Marxen_1990}, [Aaronson, 2020]\nocite{BusyBeaverFrontier}. This conjecture says that if a 5-state Turing machine runs for more than 47,176,870 steps without halting then it will never halt (starting from all-0 memory tape). Proving this conjecture amounts to decide whether or not 88,664,064 Turing machines with 5 states halt or not -- starting from all-0 tape. In order to decide the behavior of these machines we write \textit{deciders}. A decider is a program that takes as input a Turing machine and outputs either \texttt{halt}, \texttt{non-halt}, or \texttt{undecided}. Each decider is specialised in recognising a particular type of behavior that can be decided.
+  The Busy Beaver Challenge (or bbchallenge) aims at collaboratively solving the following conjecture: ``S(5) = 47,176,870'' [Radó, 1962]\nocite{Rado_1962}, [Marxen and Buntrock, 1990]\nocite{Marxen_1990}, [Aaronson, 2020]\nocite{BusyBeaverFrontier}. This conjecture says that if a 5-state Turing machine runs for more than 47,176,870 steps without halting then it will never halt (starting from all-0 memory tape). Proving this conjecture amounts to decide whether or not 181,385,789  Turing machines with 5 states halt or not -- starting from all-0 tape \cite{bbchallenge2025}. In order to decide the behavior of these machines we write \textit{deciders}, programs that takes as input a Turing machine and output either \texttt{HALT}, \texttt{NONHALT}, or \texttt{UNKNOWN}. Each decider is specialised in recognising a particular type of behavior that can be decided.
 
-  In this document we are concerned with proving the correctness of these deciders programs. More context and information about this methodology are available at \url{https://bbchallenge.org}.
+  After two years of work, the Busy Beaver Challenge achieved its goal in July 2024 by delivering a proof of ``S(5) = 47,176,870'' formalised in Coq\footnote{Renamed Rocq.} \cite{bbchallenge2025}. In this document, we present deciders that were developed before the Coq proof and which did not end up being used in the proof\footnote{Apart from the verifier part of Finite Automata Reduction, Section~\ref{sec:finite-automata-reduction}, which is used in \cite{bbchallenge2025}.}; nonetheless, they are relevant techniques for analysing Turing machines. Part II of this work is the decider section of our paper showing ``S(5) = 47,176,870'' \cite{bbchallenge2025}, presenting the deciders that were used in the Coq proof.
+
 \end{abstract}
 
 \setcounter{tocdepth}{2}
@@ -136,7 +142,7 @@ $0^\infty\; 1 \lhead A 0^\infty$ or $0^\infty \rhead A 1\; 0^\infty$.
 \input{sections/decider-bouncers.tex}
 
 \bibliographystyle{abbrv}
-\newpage
+
 \bibliography{correctness-deciders}
 
 \end{document}

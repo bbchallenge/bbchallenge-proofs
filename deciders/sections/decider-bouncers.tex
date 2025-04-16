@@ -1,5 +1,5 @@
 % !TeX root = ../correctness-deciders.tex
-
+\newpage
 \section{Bouncers}\label{sec:bouncers}
 
 \paragraph{Acknowledgement.}  Sincere thanks to Tony Guilfoyle who initially implemented a decider for bouncers\footnote{See: \url{https://github.com/TonyGuil/bbchallenge/tree/main/Bouncers}.}.
@@ -791,7 +791,7 @@ Here are the implementations of the decider that were realised:
 % Acknowledgements should point to djmati1111 and mateon1 implementations (pinned in Discord)
 \textbf{Verifiers.} Verifiers for Theorem~\ref{th:bouncers}, i.e.\ programs that verify bouncer certificates (Definition~\ref{def:bouncer-certificate}) have also been given as part of the above implementations. Mei's implementation provides a Coq implementation of the verifier. There is an ongoing effort for standardising the format of bouncers certificates (and certificates in general).
 
-\paragraph*{Results.} Using limits of 250,000 steps and 50,000 macro steps and 20 formula tapes tested per head machine, the method decides 29,799 machines out of the 32,632 remaining machines (91\%) after FAR (Section~\ref{sec:finite-automata-reduction}), in less than 3 seconds using Implementation~4 implementation\footnote{Only step limit is used in this implementation, macro step limit is deduced from step limit and there is no formula tapes limit.} and in approximatively 1 minute using Implementation~5 on a laptop (16Gb RAM, 2.75 GHz). Hence, after bouncers, we have 2,833 machines left to be decided.
+% \paragraph*{Results.} Using limits of 250,000 steps and 50,000 macro steps and 20 formula tapes tested per head machine, the method decides 29,799 machines out of the 32,632 remaining machines (91\%) after FAR (Section~\ref{sec:finite-automata-reduction}), in less than 3 seconds using Implementation~4 implementation\footnote{Only step limit is used in this implementation, macro step limit is deduced from step limit and there is no formula tapes limit.} and in approximatively 1 minute using Implementation~5 on a laptop (16Gb RAM, 2.75 GHz). Hence, after bouncers, we have 2,833 machines left to be decided.
 
 \begin{figure}[h!]
     \centering

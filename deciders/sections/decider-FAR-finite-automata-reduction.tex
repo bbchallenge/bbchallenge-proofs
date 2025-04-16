@@ -1,7 +1,7 @@
 % !TeX root = ../correctness-deciders.tex
 
 \newpage
-\section{Finite automata reduction}\label{sec:finite-automata-reduction}
+\section{Finite Automata Reduction (FAR)}\label{sec:finite-automata-reduction}
 
 \paragraph{Acknowledgement.} Sincere thanks to bbchallenge's contributor Justin Blanchard who initially presented this method and the first implementation\footnote{See: \url{https://discuss.bbchallenge.org/t/decider-finite-automata-reduction/}.}. Others have contributed to this method by producing alternative implementations (see Section~\ref{sec:far-implem}) or discussing and writing the formal proof presented here: Tony Guilfoyle, Tristan Stérin (cosmo), Nathan Fenner, Mateusz Naściszewski (Mateon1), Konrad Deka, Iijil, Shawn Ligocki. %, savask.
 
@@ -203,7 +203,7 @@ One important aspect of the technique is that, given a Turing machine and its co
   %   \label{fig:far_scan}
   % \end{subfigure}
   \centering
-  \includegraphics*[scale=0.65]{figures/FAR-finite-automata-reduction/FAR-texts.pdf}
+  \includegraphics*[width=\textwidth]{figures/FAR-finite-automata-reduction/FAR-texts.pdf}
 
   \caption{\small A Nondeterministic Finite Automaton, used as follows to decide a 4-state Turing machine\protect\footnotemark:
     (a) Space-time diagram showing the first few descendants of the all-0 configuration for the machine. The machine actually runs forever from the all-0 configuration, adopting a ``counting'' behavior.
@@ -291,6 +291,7 @@ With $c, c_1, c_2$ configurations of the TM (with finite support) and $\hat{c}, 
 \end{align*}
 
 Which algebraically becomes:
+{\small
 \begin{align*}
   \forall u,z\in\{0, 1\}^*: \; q_0 T_u T_f T_r T_z a\T = 1, \;                                                                           & \text{if $(f,r) \to \bot$ is a halting transition of $\mathcal{M}$}
   \\
@@ -298,6 +299,7 @@ Which algebraically becomes:
   \\
   \forall u,z\in\{0, 1\}^*,\,\forall b \in \{0, 1\}: q_0 T_{u} T_w T_t T_{z} a\T = 1 \implies q_0 T_{u} T_f T_r T_{z} a\T = 1,\;         & \text{if $(f,r) \to (t,w,\text{right})$ is a transition of $\mathcal{M}$}
 \end{align*}
+}
 
 These conditions are unwieldy. Let's seek stronger (thus still sufficient) conditions which are simpler:
 
@@ -618,240 +620,240 @@ So, Algorithm \ref{alg:search-dfa} searches such DFAs incrementally (avoiding pa
 \end{algorithm}
 
 
-% \subsection{Generality of the method}
-% In the preceding sections, we started from the idea of a closed language of word-representations of TM configurations, made a series of simplifying assumptions, and obtained a search algorithm.
-% This raises a question: if \emph{any} regular language proves a given TM infinite by co-CTL argument\footnote{
-%   As regular languages' complements are regular, this is the same as a regular CTL (in the strict sense of \S\ref{far-overview}) existing.
-% },
-% must a proof of the form used in Theorem~\ref{far-main-theorem}, let alone in \S\ref{far-algo-direct}, exist?
+\subsection{Generality of the method}
+In the preceding sections, we started from the idea of a closed language of word-representations of TM configurations, made a series of simplifying assumptions, and obtained a search algorithm.
+This raises a question: if \emph{any} regular language proves a given TM infinite by co-CTL argument\footnote{
+  As regular languages' complements are regular, this is the same as a regular CTL (in the strict sense of \S\ref{far-overview}) existing.
+},
+must a proof of the form used in Theorem~\ref{far-main-theorem}, let alone in \S\ref{far-algo-direct}, exist?
 
-% The answer is yes, and we sketch the proof below.
-% The following definitions and results aren't needed to prove this decider method's soundness---or outside of this subsection at all---but they justify using Remark~\ref{far-remark-verification} to build a universal (regular) CTL verification scheme.
-% Historically, they were discovered together with Algorithm~\ref{alg:finite-automata-reduction-direct}, and motivated its development.
+The answer is yes, and we sketch the proof below.
+The following definitions and results aren't needed to prove this decider method's soundness---or outside of this subsection at all---but they justify using Remark~\ref{far-remark-verification} to build a universal (regular) CTL verification scheme.
+Historically, they were discovered together with Algorithm~\ref{alg:finite-automata-reduction-direct}, and motivated its development.
 
-% Any closed language $\mathcal{L}$ classifies the binary words $w\in\{0,1\}^*$ by Nerode congruence: $w\sim_\mathcal{L} w'$ if for every $z\in\{0,1,A,\ldots,E\}^*$, $wz\in\mathcal{L}\iff w'z\in\mathcal{L}$.
-% We may form a modified version of the Turing machine $\mathcal{M}$, herein called $\mathcal{M}/\sim_\mathcal{L}$, with the following semantics:
+Any closed language $\mathcal{L}$ classifies the binary words $w\in\{0,1\}^*$ by Nerode congruence: $w\sim_\mathcal{L} w'$ if for every $z\in\{0,1,A,\ldots,E\}^*$, $wz\in\mathcal{L}\iff w'z\in\mathcal{L}$.
+We may form a modified version of the Turing machine $\mathcal{M}$, herein called $\mathcal{M}/\sim_\mathcal{L}$, with the following semantics:
 
-% A \textit{configuration} of $\mathcal{M}/\sim_\mathcal{L}$ is defined by the 3-tuple: (i) a state of $\mathcal{M}$, (ii) an equivalence class $[w]_{\sim_\mathcal{L}}$ of some $w\in\{0,1\}^*$ representing the (strictly) left-of-head portion of the tape,  (iii) a finite word $w\in\{0,1\}^*$, representing the remainder of the tape.
-% We additionally define one distinct configuration, named $\bot$, which represents the machine in a halted state.
+A \textit{configuration} of $\mathcal{M}/\sim_\mathcal{L}$ is defined by the 3-tuple: (i) a state of $\mathcal{M}$, (ii) an equivalence class $[w]_{\sim_\mathcal{L}}$ of some $w\in\{0,1\}^*$ representing the (strictly) left-of-head portion of the tape,  (iii) a finite word $w\in\{0,1\}^*$, representing the remainder of the tape.
+We additionally define one distinct configuration, named $\bot$, which represents the machine in a halted state.
 
-% Note that any finitely supported configuration $c$ of $\mathcal{M}$ maps to a configuration $[c]$ of $\mathcal{M}/\sim_{\mathcal{L}}$, by sending the left-of-head contents to their equivalence class modulo $\sim_\mathcal{L}$.
-% This is a many-to-one mapping.
+Note that any finitely supported configuration $c$ of $\mathcal{M}$ maps to a configuration $[c]$ of $\mathcal{M}/\sim_{\mathcal{L}}$, by sending the left-of-head contents to their equivalence class modulo $\sim_\mathcal{L}$.
+This is a many-to-one mapping.
 
-% The \emph{transitions} of $\mathcal{M}/\sim_{\mathcal{L}}$ are the images of those of $\mathcal{M}$: that is, if $c_1\vdash_\mathcal{M} c_2$, $[c_1]\vdash_{\mathcal{M}/\sim_\mathcal{L}} [c_2]$. Since $c_1\mapsto[c_1]$ is a many-to-one mapping, this definition makes $\mathcal{M}/\sim_\mathcal{L}$ a nondeterministic machine.
-% In case $c_1\vdash_\mathcal{M}\bot$ (i.e., the $\mathcal{M}$-transition from $c_1$ is undefined), we also define $[c_1]\vdash_{\mathcal{M}/\sim_\mathcal{L}}\bot$.
+The \emph{transitions} of $\mathcal{M}/\sim_{\mathcal{L}}$ are the images of those of $\mathcal{M}$: that is, if $c_1\vdash_\mathcal{M} c_2$, $[c_1]\vdash_{\mathcal{M}/\sim_\mathcal{L}} [c_2]$. Since $c_1\mapsto[c_1]$ is a many-to-one mapping, this definition makes $\mathcal{M}/\sim_\mathcal{L}$ a nondeterministic machine.
+In case $c_1\vdash_\mathcal{M}\bot$ (i.e., the $\mathcal{M}$-transition from $c_1$ is undefined), we also define $[c_1]\vdash_{\mathcal{M}/\sim_\mathcal{L}}\bot$.
 
-% For any configurations $c_1,c_2$ of $\mathcal{M}$, if $[c_1]\vdash_\mathcal{M}/\sim_\mathcal{L} [c_2]$ and a word-representation of $c_2$ is in $\mathcal{L}$, observe that a word-representation of $c_1$ is also in $\mathcal{L}$.
-% This follows because the $\mathcal{M}/\sim_\mathcal{L}$-transition must come from some transition $c_1'\vdash_\mathcal{M}c'_2$ of $\mathcal{M}$, where $[c_1]=[c_1']$ and $[c_2]=[c_2']$. Now, $c'_2$ has a word-representation which differs from one of $c_2$ only by substituting a Nerode-congruent prefix, so $c'_2$ also has a word-representation in $\mathcal{L}$. By closure of $\mathcal{L}$, this is true of $c'_1$, and similarly by Nerode congruence this is true of $c_1$.
+For any configurations $c_1,c_2$ of $\mathcal{M}$, if $[c_1]\vdash_\mathcal{M}/\sim_\mathcal{L} [c_2]$ and a word-representation of $c_2$ is in $\mathcal{L}$, observe that a word-representation of $c_1$ is also in $\mathcal{L}$.
+This follows because the $\mathcal{M}/\sim_\mathcal{L}$-transition must come from some transition $c_1'\vdash_\mathcal{M}c'_2$ of $\mathcal{M}$, where $[c_1]=[c_1']$ and $[c_2]=[c_2']$. Now, $c'_2$ has a word-representation which differs from one of $c_2$ only by substituting a Nerode-congruent prefix, so $c'_2$ also has a word-representation in $\mathcal{L}$. By closure of $\mathcal{L}$, this is true of $c'_1$, and similarly by Nerode congruence this is true of $c_1$.
 
-% Similarly, if $[c_1]\vdash_\mathcal{M}/\sim_\mathcal{L}\bot$, $c_1$ has a word-representation in $\mathcal{L}$.
+Similarly, if $[c_1]\vdash_\mathcal{M}/\sim_\mathcal{L}\bot$, $c_1$ has a word-representation in $\mathcal{L}$.
 
-% Say that $\mathcal{M}/\sim_\mathcal{L}$ halts from its initial configuration (which is the image of $\mathcal{M}$'s initial configuration) if there exists a sequence of $\mathcal{M}/\sim_\mathcal{L}$-transitions from it to $\bot$.
-% The point of this is: if $\mathcal{L}$ is a closed language for $\mathcal{M}$, separating its initial configuration from all halting configurations, then that's impossible!
-% For that would imply a sequence $[c_0]\vdash_{\mathcal{M}/\sim_\mathcal{L}}\dots\vdash_{\mathcal{M}/\sim_\mathcal{L}}[c_n]\vdash_{\mathcal{M}/\sim_\mathcal{L}}\bot$, where $c_0$ is the initial configuration of $\mathcal{M}$ and $\{c_i\}_{i=1}^n$ is a sequence of other configurations.
-% By the above, this would imply that $c_0$ has a word-representation in $\mathcal{L}$, contrary to assumption that $\mathcal{L}$ provides a CTL proof that $c_0\not\vdash^*_\mathcal{M}\bot$.
+Say that $\mathcal{M}/\sim_\mathcal{L}$ halts from its initial configuration (which is the image of $\mathcal{M}$'s initial configuration) if there exists a sequence of $\mathcal{M}/\sim_\mathcal{L}$-transitions from it to $\bot$.
+The point of this is: if $\mathcal{L}$ is a closed language for $\mathcal{M}$, separating its initial configuration from all halting configurations, then that's impossible!
+For that would imply a sequence $[c_0]\vdash_{\mathcal{M}/\sim_\mathcal{L}}\dots\vdash_{\mathcal{M}/\sim_\mathcal{L}}[c_n]\vdash_{\mathcal{M}/\sim_\mathcal{L}}\bot$, where $c_0$ is the initial configuration of $\mathcal{M}$ and $\{c_i\}_{i=1}^n$ is a sequence of other configurations.
+By the above, this would imply that $c_0$ has a word-representation in $\mathcal{L}$, contrary to assumption that $\mathcal{L}$ provides a CTL proof that $c_0\not\vdash^*_\mathcal{M}\bot$.
 
-% We now seek to recover $\mathcal{L}$, or another regular language which leads to a CTL proof, by studying the halting problem of $\mathcal{M}/\sim_\mathcal{L}$.
-% In fact, the work has been done already: observe that, just as any Turing machine $\mathcal{M}$ is equivalent to a PDA equipped with two stacks (corresponding to the strict left-hand side of the tape and the rest of it), the machine $\mathcal{M}/\sim_\mathcal{L}$ is equivalent to a  standard nondeterministic PDA. (The control-state space of the PDA to is simply $\{0,1\}^*/\sim_\mathcal{L} \times \{A,\ldots,E\}$---which is a finite set by the Myhill-Nerode theorem. A transition of $\mathcal{M}/\sim_\mathcal{L}$ corresponding to a leftward TM transition pushes the written bit onto the stack. A transition of $\mathcal{M}/\sim_\mathcal{L}$ corresponding to a rightward TM transition pops the read bit off the stack.)
-% The halting problem of a PDA is solved in  \cite{BEM_1997}: the eventually-halting configurations of any PDA are in fact described by a regular language, whose construction corresponds exactly to the procedure of \S\ref{far-algo-direct}.
+We now seek to recover $\mathcal{L}$, or another regular language which leads to a CTL proof, by studying the halting problem of $\mathcal{M}/\sim_\mathcal{L}$.
+In fact, the work has been done already: observe that, just as any Turing machine $\mathcal{M}$ is equivalent to a PDA equipped with two stacks (corresponding to the strict left-hand side of the tape and the rest of it), the machine $\mathcal{M}/\sim_\mathcal{L}$ is equivalent to a  standard nondeterministic PDA. (The control-state space of the PDA to is simply $\{0,1\}^*/\sim_\mathcal{L} \times \{A,\ldots,E\}$---which is a finite set by the Myhill-Nerode theorem. A transition of $\mathcal{M}/\sim_\mathcal{L}$ corresponding to a leftward TM transition pushes the written bit onto the stack. A transition of $\mathcal{M}/\sim_\mathcal{L}$ corresponding to a rightward TM transition pops the read bit off the stack.)
+The halting problem of a PDA is solved in  \cite{BEM_1997}: the eventually-halting configurations of any PDA are in fact described by a regular language, whose construction corresponds exactly to the procedure of \S\ref{far-algo-direct}.
 
-% In summary: we may take the Myhill-Nerode DFA for the original language $\mathcal{L}$, restrict it to the alphabet $\{0,1\}$, apply the construction from \S\ref{far-algo-direct} to obtain an NFA which recognizes precisely the halting configurations of $\mathcal{M}/\sim_\mathcal{L}$, and combine the DFA/NFA to form a recognizer for some closed language $\mathcal{L}'$ for $\mathcal{M}$; that is, it satisfies \eqref{far-cond-first}--\eqref{far-cond-last}. We also know that a language solving the halting problem of $\mathcal{M}/\sim_\mathcal{L}$ rejects its initial configuration, and so \eqref{far-cond-reject-start} is also satisfied and the constructed $\mathcal{L}'$ provides a CTL proof for $\mathcal{M}$.
+In summary: we may take the Myhill-Nerode DFA for the original language $\mathcal{L}$, restrict it to the alphabet $\{0,1\}$, apply the construction from \S\ref{far-algo-direct} to obtain an NFA which recognizes precisely the halting configurations of $\mathcal{M}/\sim_\mathcal{L}$, and combine the DFA/NFA to form a recognizer for some closed language $\mathcal{L}'$ for $\mathcal{M}$; that is, it satisfies \eqref{far-cond-first}--\eqref{far-cond-last}. We also know that a language solving the halting problem of $\mathcal{M}/\sim_\mathcal{L}$ rejects its initial configuration, and so \eqref{far-cond-reject-start} is also satisfied and the constructed $\mathcal{L}'$ provides a CTL proof for $\mathcal{M}$.
 
-% \subsection{Search algorithm \ts{II}: meet-in-the-middle DFA}
-% \label{far-algo-mtim_dfa}
-% A symmetric recognizer construction has also shown good results.
-% Again, pass the left half-tape through a DFA with $l$ states.
-% Imagine a DFA with $d$ states scanning the (strict) right half-tape right-to-left.
+\subsection{Search algorithm II: meet-in-the-middle DFA}
+\label{far-algo-mtim_dfa}
+A symmetric recognizer construction has also shown good results.
+Again, pass the left half-tape through a DFA with $l$ states.
+Imagine a DFA with $d$ states scanning the (strict) right half-tape right-to-left.
 
-% \begin{remark}
-%   Our definitions require a left-to-right scan direction.
-%   Any NFA $(e_0, \{R_b\})$ can be transposed.
-%   (Transposing transition matrices reverses the arrows in the diagram, as with graph adjacency matrices.)
-%   We can shoehorn this into the preceding framework by making an accept state from R's transposed initial state $e_0\T$,
-%   defining middle transitions $M_{fr}$ for the configuration's head state/bit,
-%   superposing all states of R to get our $s$ vector,
-%   and trying to satisfy conditions like
-%   $e_0 M_{A0} e_0\T = 0$, $M_{fr}=\sum_L e_q\T s$ (for halt rules),
-%   $L_b M_{fr} \succeq M_{tb} R^T_w$ (for left rules),
-%   $M_{fr} R^T_b \succeq L_w M_{tb}$ (for right rules).
-%   What follows is more intuitive.
-%   \todo{JEB: Is this remark needed?}
-% \end{remark}
+\begin{remark}
+  Our definitions require a left-to-right scan direction.
+  Any NFA $(e_0, \{R_b\})$ can be transposed.
+  (Transposing transition matrices reverses the arrows in the diagram, as with graph adjacency matrices.)
+  We can shoehorn this into the preceding framework by making an accept state from R's transposed initial state $e_0\T$,
+  defining middle transitions $M_{fr}$ for the configuration's head state/bit,
+  superposing all states of R to get our $s$ vector,
+  and trying to satisfy conditions like
+  $e_0 M_{A0} e_0\T = 0$, $M_{fr}=\sum_L e_q\T s$ (for halt rules),
+  $L_b M_{fr} \succeq M_{tb} R^T_w$ (for left rules),
+  $M_{fr} R^T_b \succeq L_w M_{tb}$ (for right rules).
+  What follows is more intuitive.
+  % \todo{JEB: Is this remark needed?}
+\end{remark}
 
-% \begin{figure}
-%   \begin{tikzpicture}[shorten >=1pt, shorten <=1pt]]
-%     % The commented code below turns this into a complete NFA diagram, if the 2nd "initial above" also becomes "accepting".
-%     \node[state,initial above] (0L) at (-2, 2) {$0_L$};
-%     \node[state]           (1L) at (-2, -2) {$1_L$};
-%     \node[state,initial above] (0R) at (10, 0) {$0_R$};
-%     \node[state]           (1R) at (8, 0) {$1_R$};
-%     \node[state]           (2R) at (6, 0) {$2_R$};
-%     \node[state]           (3R) at (4, 0) {$3_R$};
-%     \node[state]           (4R) at (2, 2) {$4_R$};
-%     \node[state]           (5R) at (2, -2) {$5_R$};
-%     %\node[state]           (mid)at (0, 0) {Censored};
+\begin{figure}
+  \begin{tikzpicture}[shorten >=1pt, shorten <=1pt]]
+    % The commented code below turns this into a complete NFA diagram, if the 2nd "initial above" also becomes "accepting".
+    \node[state,initial above] (0L) at (-2, 2) {$0_L$};
+    \node[state]           (1L) at (-2, -2) {$1_L$};
+    \node[state,initial above] (0R) at (10, 0) {$0_R$};
+    \node[state]           (1R) at (8, 0) {$1_R$};
+    \node[state]           (2R) at (6, 0) {$2_R$};
+    \node[state]           (3R) at (4, 0) {$3_R$};
+    \node[state]           (4R) at (2, 2) {$4_R$};
+    \node[state]           (5R) at (2, -2) {$5_R$};
+    %\node[state]           (mid)at (0, 0) {Censored};
 
-%     \path[->]  (0L)  edge [loop left]        node {$0$} (0L)
-%     edge                    node [right] {$1$} (1L)
-%     %edge                    (mid)
-%     (1L)  edge [bend left=15]     node [left] {$0|1$} (0L)
-%     %edge                    (mid)
-%     %; \path[-]   (mid) edge (5R) edge (4R) edge [dotted] (3R)
-%     %; \path[<-]
-%     (0R)  edge [loop right]       node {$0$} (0R)
-%     edge                    node [above] {$1$} (1R)
-%     (1R)  edge [bend right]       node [below] {$0$} (0R)
-%     edge                    node [above] {$1$} (2R)
-%     (2R)  edge [loop above]       node {$0$} (2R)
-%     edge                    node [above] {$1$} (3R)
-%     (3R)  edge                    node [above left] {$1$} (5R)
-%     (4R)  edge [bend right=15]    node [below left] {$1$} (3R)
-%     (5R)  edge [loop right]       node {$0|1$} (5R)
-%     ;
-%     \path[<->]   (3R)  edge                    node [above right] {$0$} (4R);
-%   \end{tikzpicture}
-%   \caption{This pair of DFAs can also recognize halting configurations for the TM of figure \ref{fig:finite-automata-reduction}.
-%     Configurations are classified by their head state, head bit, and the two half-tapes (processed outside-in by the DFAs.)}
-%   \label{fig:far_mitm_dfa}
-% \end{figure}
+    \path[->]  (0L)  edge [loop left]        node {$0$} (0L)
+    edge                    node [right] {$1$} (1L)
+    %edge                    (mid)
+    (1L)  edge [bend left=15]     node [left] {$0|1$} (0L)
+    %edge                    (mid)
+    %; \path[-]   (mid) edge (5R) edge (4R) edge [dotted] (3R)
+    %; \path[<-]
+    (0R)  edge [loop right]       node {$0$} (0R)
+    edge                    node [above] {$1$} (1R)
+    (1R)  edge [bend right]       node [below] {$0$} (0R)
+    edge                    node [above] {$1$} (2R)
+    (2R)  edge [loop above]       node {$0$} (2R)
+    edge                    node [above] {$1$} (3R)
+    (3R)  edge                    node [above left] {$1$} (5R)
+    (4R)  edge [bend right=15]    node [below left] {$1$} (3R)
+    (5R)  edge [loop right]       node {$0|1$} (5R)
+    ;
+    \path[<->]   (3R)  edge                    node [above right] {$0$} (4R);
+  \end{tikzpicture}
+  \caption{This pair of DFAs can also recognize halting configurations for the TM of figure \ref{fig:finite-automata-reduction}.
+    Configurations are classified by their head state, head bit, and the two half-tapes (processed outside-in by the DFAs.)}
+  \label{fig:far_mitm_dfa}
+\end{figure}
 
-% As in Figure \ref{fig:far_mitm_dfa}, let's consider the DFAs on their own terms.
-% Each one partitions its input into a family of regular languages (one per state).
-% Accounting for the head state/bit and right half-tape, we obtain $l\cdot 5\cdot 2\cdot d$ classes of TM configuration.
-% Propose a recognizer which distils this classification into a result.
-% We'll work out conditions for a good ``accepted'' set $A\subseteq[l]\times\{A,\ldots,E\}\times\{0,1\}\times[d]$.
-% If they're satisfiable, even if we don't prove the scheme sound, we can feed the left DFA into Algorithm \ref{alg:finite-automata-reduction-direct} to check the result.
+As in Figure \ref{fig:far_mitm_dfa}, let's consider the DFAs on their own terms.
+Each one partitions its input into a family of regular languages (one per state).
+Accounting for the head state/bit and right half-tape, we obtain $l\cdot 5\cdot 2\cdot d$ classes of TM configuration.
+Propose a recognizer which distils this classification into a result.
+We'll work out conditions for a good ``accepted'' set $A\subseteq[l]\times\{A,\ldots,E\}\times\{0,1\}\times[d]$.
+If they're satisfiable, even if we don't prove the scheme sound, we can feed the left DFA into Algorithm \ref{alg:finite-automata-reduction-direct} to check the result.
 
-% Despite the new setting, we can write out closure conditions analogous to \S\ref{far-defs-recognizer}'s, each $\forall i\in[l],j\in[d]$:
-% \begin{align}
-%                                          & (i,f,r,j)\in A
-%                                          &                               & \text{if $\ldots fr\ldots\vdash_\mathcal{M}\bot$ is a halt rule}
-%   \tag{\ref{far-cond-halt}''}
-%   \\
-%   (i, t, b, \delta_R(j,w))\in A \implies & (\delta_L(i,b), f, r, j)\in A
-%                                          &                               & \text{if $\ldots bfr\ldots\vdash_\mathcal{M}\ldots tbw\ldots$ is a left rule}
-%   \tag{\ref{far-cond-left}''}
-%   \\
-%   (\delta_L(i,w), t, b, j)\in A \implies & (i, f, r, \delta_R(j,b))\in A
-%                                          &                               & \text{if $\ldots frb\ldots\vdash_\mathcal{M}\ldots wtb\ldots$ is a right rule}
-%   %\label{far-cond-right}
-%   \tag{\ref{far-cond-last}''}
-% \end{align}
+Despite the new setting, we can write out closure conditions analogous to \S\ref{far-defs-recognizer}'s, each $\forall i\in[l],j\in[d]$:
+\begin{align}
+                                                                  & (i,f,r,j)\in A
+                                                                  &                               & \text{if $(f,r) \to \bot$ is a halting transition of $\mathcal{M}$}
+  \tag{\ref{far-cond-halt}''}
+  \\
+  \forall b \in \{0,1\},\, (i, t, b, \delta_R(j,w))\in A \implies & (\delta_L(i,b), f, r, j)\in A
+                                                                  &                               & \text{if $(f,r) \to (t,w,\text{left})$ is a transition of $\mathcal{M}$}
+  \tag{\ref{far-cond-left}''}
+  \\
+  \forall b \in \{0,1\},\, (\delta_L(i,w), t, b, j)\in A \implies & (i, f, r, \delta_R(j,b))\in A
+                                                                  &                               & \text{if $(f,r) \to (t,w,\text{right})$ is a transition of $\mathcal{M}$}
+  %\label{far-cond-right}
+  \tag{\ref{far-cond-last}''}
+\end{align}
 
-% The goal, analogous to \eqref{far-cond-reject-start}, is $(0, A, 0, 0)\notin A$.
+The goal, analogous to \eqref{far-cond-reject-start}, is $(0, A, 0, 0)\notin A$.
 
-% We could now search all DFA pairs, checking if the smallest $A$ closed under (\ref{far-cond-halt}'')--(\ref{far-cond-last}'') rejects $(0,A,0,0)$.
-% However, to get decent performance, we must express the above as a boolean satisfiability ({\sc sat}) problem.
+We could now search all DFA pairs, checking if the smallest $A$ closed under (\ref{far-cond-halt}'')--(\ref{far-cond-last}'') rejects $(0,A,0,0)$.
+However, to get decent performance, we must express the above as a boolean satisfiability ({\sc sat}) problem.
 
-% Other lessons learned in practice:
-% it was most effective to use the same state count on both sides ($l=d=n$),
-% and it was decisively faster to impose the canonical form restrictions of Lemma \ref{far-dfa-canonical form}.
+Other lessons learned in practice:
+it was most effective to use the same state count on both sides ($l=d=n$),
+and it was decisively faster to impose the canonical form restrictions of Lemma \ref{far-dfa-canonical form}.
 
-% Algorithm \ref{alg:finite-automata-reduction-mitm_dfa} shows how this works.
-% Here especially, actual code can vary from the given pseudocode:
-% \begin{itemize}
-%   \item If {\sc sat} solvers use integers for literals (variables and their negations), one needn't ``allocate variables''.
-%   \item It may be possible to simplify by adding propositional variables for more edge cases.
-%   \item The ``outcomes are mutually exclusive'' condition may be represented differently.
-%   \item Checking a solution is valid needn't involve Algorithm \ref{alg:finite-automata-reduction-direct}, if the author proves more.
-% \end{itemize}
+Algorithm \ref{alg:finite-automata-reduction-mitm_dfa} shows how this works.
+Here especially, actual code can vary from the given pseudocode:
+\begin{itemize}
+  \item If {\sc sat} solvers use integers for literals (variables and their negations), one needn't ``allocate variables''.
+  \item It may be possible to simplify by adding propositional variables for more edge cases.
+  \item The ``outcomes are mutually exclusive'' condition may be represented differently.
+  \item Checking a solution is valid needn't involve Algorithm \ref{alg:finite-automata-reduction-direct}, if the author proves more.
+\end{itemize}
 
-% \begin{algorithm}
-%   \caption{{\sc decider-finite-automata-reduction-MitM-DFA}}\label{alg:finite-automata-reduction-mitm_dfa}
+\begin{algorithm}
+  \caption{{\sc decider-finite-automata-reduction-MitM-DFA}}\label{alg:finite-automata-reduction-mitm_dfa}
 
-%   \begin{algorithmic}[1]
-%     \Procedure{\textbf{bool} {\sc decider-finite-MitM-DFA}}{\textbf{TM} machine, \textbf{int} n}
-%     % The next line is a hacky attempt at a full-line comment:
-%     \State \(\triangleright\) Allocate variables.
-%     \State\textbf{Map$\boldsymbol<$tuple, int$\boldsymbol>$} tk\_eq, tk\_le, mk\_eq, A
-%     \ForAll{$(\textrm{lr}, \textrm{k}, \textrm{y})\in[2]\times[n]\times[2*n]\times[n+1]$}
-%     \If{(k, y) == (0, 0)}
-%     tk\_eq[lr, k, y] = true
-%     \ElsIf{$0\le y\le\min(k,n-1)$}
-%     tk\_eq[lr, k, y] = \Call{new-variable}{}
-%     \Else\;
-%     tk\_eq[lr, k, y] = false
-%     \EndIf
+  \begin{algorithmic}[1]
+    \Procedure{\textbf{bool} {\sc decider-finite-MitM-DFA}}{\textbf{TM} machine, \textbf{int} n}
+    % The next line is a hacky attempt at a full-line comment:
+    \State \(\triangleright\) Allocate variables.
+    \State\textbf{Map$\boldsymbol<$tuple, int$\boldsymbol>$} tk\_eq, tk\_le, mk\_eq, A
+    \ForAll{$(\textrm{lr}, \textrm{k}, \textrm{y})\in[2]\times[n]\times[2*n]\times[n+1]$}
+    \If{(k, y) == (0, 0)}
+    tk\_eq[lr, k, y] = true
+    \ElsIf{$0\le y\le\min(k,n-1)$}
+    tk\_eq[lr, k, y] = \Call{new-variable}{}
+    \Else\;
+    tk\_eq[lr, k, y] = false
+    \EndIf
 
-%     \If{$y\le 0$}
-%     tk\_le[lr, k, y] = tk\_eq[lr, k, y]
-%     \ElsIf{$0\le y\le\min(k-1,n-2)$}
-%     tk\_le[lr, k, y] = \Call{new-variable}{}
-%     \Else\;
-%     tk\_le[lr, k, y] = true
-%     \EndIf
+    \If{$y\le 0$}
+    tk\_le[lr, k, y] = tk\_eq[lr, k, y]
+    \ElsIf{$0\le y\le\min(k-1,n-2)$}
+    tk\_le[lr, k, y] = \Call{new-variable}{}
+    \Else\;
+    tk\_le[lr, k, y] = true
+    \EndIf
 
-%     \If{(k, y) == (2*n-1, n-1)}
-%     mk\_eq[lr, k, y] = true
-%     \ElsIf{\textbf{not} $\left\lceil\frac{k}{2}\right\rceil\le y<\min(n,k+1)$}
-%     mk\_eq[lr, k, y] = false
-%     \ElsIf{$\min(n, k+1)-((k+1)/2) \le 1$}
-%     mk\_eq[lr, k, y] = true
-%     \Else\;
-%     mk\_eq[lr, k, y] = \Call{new-variable}{}
-%     \EndIf
-%     \EndFor
+    \If{(k, y) == (2*n-1, n-1)}
+    mk\_eq[lr, k, y] = true
+    \ElsIf{\textbf{not} $\left\lceil\frac{k}{2}\right\rceil\le y<\min(n,k+1)$}
+    mk\_eq[lr, k, y] = false
+    \ElsIf{$\min(n, k+1)-((k+1)/2) \le 1$}
+    mk\_eq[lr, k, y] = true
+    \Else\;
+    mk\_eq[lr, k, y] = \Call{new-variable}{}
+    \EndIf
+    \EndFor
 
-%     \ForAll{$(\textrm{i}, \textrm{f}, \textrm{r}, \textrm{j})\in[n]\times[5]\times[2]\times[n]$}
-%     \If{(k, y) == (2*n-1, n-1)}
-%     A[i, f, r, j] = false
-%     \Else\;
-%     A[i, f, r, j] = \Call{new-variable}{}
-%     \EndIf
-%     \EndFor
+    \ForAll{$(\textrm{i}, \textrm{f}, \textrm{r}, \textrm{j})\in[n]\times[5]\times[2]\times[n]$}
+    \If{(k, y) == (2*n-1, n-1)}
+    A[i, f, r, j] = false
+    \Else\;
+    A[i, f, r, j] = \Call{new-variable}{}
+    \EndIf
+    \EndFor
 
-%     % The next line is a hacky attempt at a full-line comment:
-%     \State \(\triangleright\) Transition validity: outcomes are mutually exclusive.
-%     \ForAll{$(\textrm{lr}, k, \textrm{y})\in[2]\times[2*n]\times[n]$}
-%     \State \Call{new-clause}{$\textrm{tk\_eq}(\textrm{lr}, k, y)\implies \textrm{tk\_le}(\textrm{lr}, k, y)$}
-%     \State \Call{new-clause}{$\textrm{tk\_le}(\textrm{lr}, k, y)\implies \textrm{tk\_le}(\textrm{lr}, k, y+1)$}
-%     \State \Call{new-clause}{$\textrm{tk\_eq}(\textrm{lr}, k, y+1)\implies \neg\textrm{tk\_le}(\textrm{lr}, k, y)$}
-%     \EndFor
-%     \State \(\triangleright\) Transition validity: an outcome occurs.
-%     \ForAll{$(\textrm{lr}, k)\in[2]\times\{1,\ldots,2*n-1\}$}
-%     \Call{new-clause}{$\bigvee_{y=0}^{\min(k,n-1)} \textrm{tk\_eq}(\textrm{lr}, k, y)$}
-%     \EndFor
+    % The next line is a hacky attempt at a full-line comment:
+    \State \(\triangleright\) Transition validity: outcomes are mutually exclusive.
+    \ForAll{$(\textrm{lr}, k, \textrm{y})\in[2]\times[2*n]\times[n]$}
+    \State \Call{new-clause}{$\textrm{tk\_eq}(\textrm{lr}, k, y)\implies \textrm{tk\_le}(\textrm{lr}, k, y)$}
+    \State \Call{new-clause}{$\textrm{tk\_le}(\textrm{lr}, k, y)\implies \textrm{tk\_le}(\textrm{lr}, k, y+1)$}
+    \State \Call{new-clause}{$\textrm{tk\_eq}(\textrm{lr}, k, y+1)\implies \neg\textrm{tk\_le}(\textrm{lr}, k, y)$}
+    \EndFor
+    \State \(\triangleright\) Transition validity: an outcome occurs.
+    \ForAll{$(\textrm{lr}, k)\in[2]\times\{1,\ldots,2*n-1\}$}
+    \Call{new-clause}{$\bigvee_{y=0}^{\min(k,n-1)} \textrm{tk\_eq}(\textrm{lr}, k, y)$}
+    \EndFor
 
-%     % The next line is a hacky attempt at a full-line comment:
-%     \State \(\triangleright\) Closure conditions.
-%     \ForAll{$(i,j,(f,r))\in[n]^2\times$\Call{halt-rules}{machine}}
-%     \State\Call{new-clause}{$A[i, f, r, j]$}
-%     \EndFor
-%     \ForAll{$(i,j,\textrm{ib},\textrm{jw},(f,r,w,L,t))\in[n]^4\times$\Call{left-rules}{machine}}
-%     \State\Call{new-clause}{$
-%         \textrm{tk\_eq}[L, i, b, \textrm{ib}]
-%         \land \textrm{tk\_eq}[R, j, w, \textrm{jw}]
-%         \land A[i, t, b, \textrm{jw}]
-%         \implies A[\textrm{ib}, f, r, j]
-%       $}
-%     \EndFor
-%     \ForAll{$(i,j,\textrm{iw},\textrm{jb},(f,r,w,R,t))\in[n]^4\times$\Call{right-rules}{machine}}
-%     \State\Call{new-clause}{$
-%         \textrm{tk\_eq}[R, j, b, \textrm{jb}]
-%         \land \textrm{tk\_eq}[L, i, w, \textrm{iw}]
-%         \land A[\textrm{iw}, t, b, j]
-%         \implies A[i, f, r, \textrm{jb}]
-%       $}
-%     \EndFor
+    % The next line is a hacky attempt at a full-line comment:
+    \State \(\triangleright\) Closure conditions.
+    \ForAll{$(i,j,(f,r))\in[n]^2\times$\Call{halt-rules}{machine}}
+    \State\Call{new-clause}{$A[i, f, r, j]$}
+    \EndFor
+    \ForAll{$(i,j,\textrm{ib},\textrm{jw},(f,r,w,L,t))\in[n]^4\times$\Call{left-rules}{machine}}
+    \State\Call{new-clause}{$
+        \textrm{tk\_eq}[L, i, b, \textrm{ib}]
+        \land \textrm{tk\_eq}[R, j, w, \textrm{jw}]
+        \land A[i, t, b, \textrm{jw}]
+        \implies A[\textrm{ib}, f, r, j]
+      $}
+    \EndFor
+    \ForAll{$(i,j,\textrm{iw},\textrm{jb},(f,r,w,R,t))\in[n]^4\times$\Call{right-rules}{machine}}
+    \State\Call{new-clause}{$
+        \textrm{tk\_eq}[R, j, b, \textrm{jb}]
+        \land \textrm{tk\_eq}[L, i, w, \textrm{iw}]
+        \land A[\textrm{iw}, t, b, j]
+        \implies A[i, f, r, \textrm{jb}]
+      $}
+    \EndFor
 
-%     % The next line is a hacky attempt at a full-line comment:
-%     \State \(\triangleright\) DFA is in canonical form (Lemma \ref{far-dfa-canonical form}).
-%     \ForAll{$(\textrm{lr},k)\in[2]\times\{1,\ldots,2*n-1\}$}
-%     \For{$m=\lfloor k/2\rfloor,\ldots,\min(n, k)$}
-%     \State\Call{new-clause}{$\textrm{mk\_eq}(\textrm{lr}, k-1, m) \implies \textrm{tk\_le}(\textrm{lr}, k, m+1)$}
-%     \State\Call{new-clause}{$\textrm{mk\_eq}(\textrm{lr}, k-1, m) \land \textrm{tk\_le}(\textrm{lr}, k, m) \implies \textrm{mk\_eq}(\textrm{lr}, k, m)$}
-%     \State\Call{new-clause}{$\textrm{mk\_eq}(\textrm{lr}, k-1, m) \land \textrm{tk\_eq}(\textrm{lr}, k, m+1) \implies \textrm{mk\_eq}(\textrm{lr}, k, m+1)$}
-%     \EndFor
-%     \EndFor
+    % The next line is a hacky attempt at a full-line comment:
+    \State \(\triangleright\) DFA is in canonical form (Lemma \ref{far-dfa-canonical form}).
+    \ForAll{$(\textrm{lr},k)\in[2]\times\{1,\ldots,2*n-1\}$}
+    \For{$m=\lfloor k/2\rfloor,\ldots,\min(n, k)$}
+    \State\Call{new-clause}{$\textrm{mk\_eq}(\textrm{lr}, k-1, m) \implies \textrm{tk\_le}(\textrm{lr}, k, m+1)$}
+    \State\Call{new-clause}{$\textrm{mk\_eq}(\textrm{lr}, k-1, m) \land \textrm{tk\_le}(\textrm{lr}, k, m) \implies \textrm{mk\_eq}(\textrm{lr}, k, m)$}
+    \State\Call{new-clause}{$\textrm{mk\_eq}(\textrm{lr}, k-1, m) \land \textrm{tk\_eq}(\textrm{lr}, k, m+1) \implies \textrm{mk\_eq}(\textrm{lr}, k, m+1)$}
+    \EndFor
+    \EndFor
 
-%     \If{\Call{check-sat}{}}
-%     \State Assert L DFA from the model proves the machine using Algorithm \ref{alg:finite-automata-reduction-direct}.
-%     \State \Return true
-%     \Else\;\Return false
-%     \EndIf
-%     \EndProcedure
-%   \end{algorithmic}
-% \end{algorithm}
+    \If{\Call{check-sat}{}}
+    \State Assert L DFA from the model proves the machine using Algorithm \ref{alg:finite-automata-reduction-direct}.
+    \State \Return true
+    \Else\;\Return false
+    \EndIf
+    \EndProcedure
+  \end{algorithmic}
+\end{algorithm}
 
 
 % \subsection{Correctness}
@@ -859,9 +861,7 @@ So, Algorithm \ref{alg:search-dfa} searches such DFAs incrementally (avoiding pa
 % independent of the proof-search algorithm, it checks the recognizer it returns satisfies \eqref{far-cond-first}--\eqref{far-cond-last}.
 % By theorem \ref{far-main-theorem}, this prevents false proofs.
 
-
-
-\subsection{Implementations and results}\label{sec:far-implem}
+\subsection{Implementations}\label{sec:far-implem}
 
 Here are the implementations of the decider that were realised:
 
@@ -878,5 +878,5 @@ Here are the implementations of the decider that were realised:
 Verifiers for Theorem~\ref{far-main-theorem} -- i.e. programs that check that a given NFA gives a valid nonhalting proof for a given machine, see Remark~\ref{far-remark-verification} -- have also been given with each of the above deciders and, Nathan Fenner provided one verifier formally verified in Dafny: \url{https://github.com/Nathan-Fenner/busy-beaver-dafny-regex-verifier}.
 
 
-\paragraph*{Results.} In order to achieve reasonable compute time, the DFA search space (see Section~\ref{far-algo-direct}) was searched up to 6 DFA states. The method decides 503,169 machines out of the 535,801 remaining machines (94\%) after halting segment, in a bit less than 30 minutes using Justin Blanchard's Rust implementation on a 4-core i7 laptop. Hence, after FAR, we have 32,632 machines left to be decided.
+% \paragraph*{Results.} In order to achieve reasonable compute time, the DFA search space (see Section~\ref{far-algo-direct}) was searched up to 6 DFA states. The method decides 503,169 machines out of the 535,801 remaining machines (94\%) after halting segment, in a bit less than 30 minutes using Justin Blanchard's Rust implementation on a 4-core i7 laptop. Hence, after FAR, we have 32,632 machines left to be decided.
 % More information about these results is available at: \url{https://discuss.bbchallenge.org/t/decider-finite-automata-reduction/123}.

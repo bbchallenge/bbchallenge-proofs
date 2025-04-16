@@ -2,5 +2,6 @@
   "latex-workshop.latex.outDir": ".",
   "editor.quickSuggestions": {
     "other": "off"
-  }
+  },
+  "latex-workshop.formatting.latex": "latexindent"
 }

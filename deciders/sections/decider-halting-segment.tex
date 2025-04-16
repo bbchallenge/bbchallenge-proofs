@@ -81,7 +81,7 @@ Interestingly, \HS is the method that was used by Newcomb Greenleaf to prove\foo
   Some non-halting machines cannot be decided using \HS for any segment size. Such a machine is for instance \url{https://bbchallenge.org/1RB---_1LC0RB_1LB1LA}.
 \end{remark}
 
-\subsection{Implementations and results}\label{sec:hs-implem}
+\subsection{Implementations}\label{sec:hs-implem}
 
 
 Here are the implementations of the method that were realised. Almost all of them construct the \HS graph from the halting nodes (backward implementation) instead of from the initial nodes (forward implementation):
@@ -93,8 +93,6 @@ Here are the implementations of the method that were realised. Almost all of the
   \item Tony Guilfoyle: \url{https://github.com/TonyGuil/bbchallenge/tree/main/HaltingSegments} (backward implementation)
 \end{enumerate}
 
-We will be only discussing the details and results of Iijil's implementation (1) as it was the first implementation to be proposed and that it also was reproduced independently with exactly matching results.
+Iijil's implementation (1) is a bit different from what is presented in this document because the \HS graph is constructed backward (i.e. from the halting nodes instead of from the initial nodes). Also, the method adopts a lazy strategy consisting in testing only odd segment sizes (up to size $n_\text{max}$) and placing the head's position at the center of the tape. Finally, the information of state is not stored for nodes where the head is outside the segment. These implementation choices make the implementation a bit weaker than what was presented here.
 
-This implementation is a bit different from what is presented in this document because the \HS graph is constructed backward (i.e. from the halting nodes instead of from the initial nodes). Also, the method adopts a lazy strategy consisting in testing only odd segment sizes (up to size $n_\text{max}$) and placing the head's position at the center of the tape. Finally, the information of state is not stored for nodes where the head is outside the segment. These implementation choices make the implementation a bit weaker than what was presented here.
-
-Nonetheless, results are impressive, for $n_\texttt{max} = 13$, the method decides 1,002,808 machines out of the 1,538,624 remaining after backward reasoning (see Section~\ref{sec:backward-reasoning-results}). Hence, after \HS, we have 535,816 machines left to be decided\footnote{In fact 535,801 because 15 additional translated cyclers were decided, including some Skelet's machines.}.
+% Nonetheless, results are impressive, for $n_\texttt{max} = 13$, the method decides 1,002,808 machines out of the 1,538,624 remaining after backward reasoning (see Section~\ref{sec:backward-reasoning-results}). Hence, after \HS, we have 535,816 machines left to be decided\footnote{In fact 535,801 because 15 additional translated cyclers were decided, including some Skelet's machines.}.

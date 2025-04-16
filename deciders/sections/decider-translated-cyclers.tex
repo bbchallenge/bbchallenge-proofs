@@ -14,7 +14,7 @@
 
 The goal of this decider is to recognise Turing machines that translate a bounded pattern forever. We call such machines ``Translated cyclers''. They are close to ``Cyclers'' (Section~\ref{sec:cyclers}) in the sense that they are only repeating a pattern but there is added complexity as they are able to translate the pattern in space at the same time, hence the decider for Cyclers cannot directly apply here.
 
-The main idea for this decider is illustrated in Figure~\ref{fig:translated-cyclers} which gives the space-time diagram of a ``Translated cycler'': bbchallenge's machine \#44,394,115 (c.f. \url{https://bbchallenge.org/44394115}). The idea is to find two configurations that break a record (i.e. visit a memory cell that was never visited before) in the same state (here state \textcolor{colorD}{D}) such that the content of the memory tape at distance $L$ from the record positions is the same in both record configurations. Distance $L$ is defined as being the maximum distance to record position 1 that was visited between the configuration of record 1 and record 2. In those conditions, we can prove that the machine will never halt.
+The main idea for this decider is illustrated in Figure~\ref{fig:translated-cyclers} which gives the space-time diagram of a ``Translated cycler'': bbchallenge's machine \#44,394,115 (c.f. \url{https://bbchallenge.org/44394115}). The idea is to find two configurations that break a record (i.e. visit a memory cell that was never visited before) in the same state (here state \textcolor{colorD}{D}) such that the content of the memory tape at distance $L$ from the record positions is the same in both record configurations. Distance $L$ is defined as being the maximum distance to record position 1 that was visited between the configuration of record 1 and record 2. In those conditions, we can prove that the machine will never halt. Similar ideas have been developed in \cite{Lin1963}.
 
 The translated cycler of Figure~\ref{fig:translated-cyclers} features a relatively simple repeating pattern and transient pattern (pattern occurring before the repeating patterns starts). The translated cycler of Figure~\ref{fig:translated-cyclers-more} features a significantly more complex pattern. The method for detecting the behavior is the same but more resources are needed.
 
@@ -185,8 +185,8 @@ We also assume that we are given a routine {\sc get-extreme-position}(tape,sideO
   Immediate by combining Lemma~\ref{lem:translated-cyclers} and Theorem~\ref{th:translated-cyclers}.
 \end{proof}
 
-\subsection{Results}
+\subsection{Implementation}
 
 The decider was coded in \texttt{golang} and is accessible at this link: \url{https://github.com/bbchallenge/bbchallenge-deciders/tree/main/decider-translated-cyclers}.
 
-The decider found 73,860,604 ``Translated cyclers'', out of 88,664,064 machines in the seed database of the Busy Beaver Challenge (c.f. \url{https://bbchallenge.org/method#seed-database}). Time limit was set to 1000 in a first run then increased to 10000 for the remaining machines and an additional memory limit (max number of visited cells) was set to 500 then 5000. More information about these results are available at: \url{https://discuss.bbchallenge.org/t/decider-translated-cyclers/34}.
+% The decider found 73,860,604 ``Translated cyclers'', out of 88,664,064 machines in the seed database of the Busy Beaver Challenge (c.f. \url{https://bbchallenge.org/method#seed-database}). Time limit was set to 1000 in a first run then increased to 10000 for the remaining machines and an additional memory limit (max number of visited cells) was set to 500 then 5000. More information about these results are available at: \url{https://discuss.bbchallenge.org/t/decider-translated-cyclers/34}.
