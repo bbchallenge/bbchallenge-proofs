@@ -17,7 +17,7 @@ Others have contributed to this method by producing alternative implementations 
 Intuitively, a \emph{bouncer} is a Turing machine that populates a tape with
 linearly-expanding patterns, called \textit{repeaters}, possibly separated or enclosed by fixed patterns called \textit{walls}. This intuitive definition corresponds to a wide range of behaviors, from simply bouncing back and forth between the tape's expanding extremities, Figure~\ref{fig:bouncers}~(a), to complex traversal of \textit{repeater} and \textit{wall} patterns, Figure~\ref{fig:bouncers}~(b)-(d), and possibly a delayed onset of the \textit{bouncing} pattern, Figure~\ref{fig:bouncers}~(e). What we call bouncers is a generalisation of the various classes of ``Christmas trees'' used to solve $\text{BB}(4)$ \cite{Brady83}.
 
-The goal of this section is to formally characterise bouncers and show that they do not halt, see Theorem~\ref{th:bouncers}. Then, in Section~\ref{sec:bouncers-implem}, we show how do detect bouncers algorithmically in practice, see Algorithm~\ref{alg:decider-bouncers}.
+The goal of this section is to formally characterise bouncers and show that they do not halt, see Theorem~\ref{th:bouncers}. Then, in Section~\ref{sec:bouncers-implem}, we show how to detect bouncers algorithmically in practice, see Algorithm~\ref{alg:decider-bouncers}.
 
 \subsubsection{Directional Turing machines}\label{sec:bouncers:directionalTM}
 
@@ -801,7 +801,7 @@ Here are the implementations of the decider that were realised:
 \vspace{-2.5ex}
 \paragraph*{Remarkable bouncers.} Out of the 29,799 bouncers that were decided using Algorithm~\ref{alg:decider-bouncers}, here are some remarkable facts:
 \begin{enumerate}
-    \item Using Algorithm~\ref{alg:decider-bouncers}, only two bouncers with 3 repeaters were found (and that's the maximum): \url{https://bbchallenge.org/347505} and \url{https://bbchallenge.org/8131743}. Otherwise, 2132 bouncers have 2 repeaters and the rest has only 1.
+    \item Using Algorithm~\ref{alg:decider-bouncers}, only two bouncers with 3 repeaters were found (and that's the maximum): \url{https://bbchallenge.org/347505} and \url{https://bbchallenge.org/8131743}. Otherwise, 2132 bouncers have 2 repeaters and the rest have only 1.
     \item\label{pt:big-formula-tape} The biggest fitted formula tapes by the algorithm have 328 symbols (summing walls and repeater symbols, not counting head and $0^\infty$), there are two of them, such as for machine \url{https://bbchallenge.org/5608043}, see Figure~\ref{fig:big-bounce}:
           \begin{align*}
                & 0^\infty\lhead{\text{A}}  10000011100011100000011100001110111001110111001110000111 \\ &0000111011100111000011101110011101110011100001110000111011100\\ &1110000111000011100001110000111011100111011100111011100111011\\ &100111011100111011100(111011100111011100111011100111011100)000\\ &1110000111000000111001111111111111110000111(111111111111)00111\\ &000000011100000011111100111111(0)^\infty
